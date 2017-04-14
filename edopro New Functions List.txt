@@ -2,4 +2,4 @@ New Functions:
 Special Summon Position Limit (core-handled)
 
 
-Duel.RockPaperScissors() - returns int (winner)
+Duel.RockPaperScissors([repeat = true]) - returns int (winner or PLAYER_NONE)
