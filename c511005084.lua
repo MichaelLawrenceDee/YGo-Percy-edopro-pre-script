@@ -66,7 +66,7 @@ function c511005084.damop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c511005084.sumtg(e,c,tp,sumtp,sumpos)
-	return bit.band(sumpos,POS_DEFENSE)==POS_DEFENSE
+	return bit.band(sumpos,POS_FACEUP_ATTACK)~=POS_FACEUP_ATTACK
 end
 function c511005084.descon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(Card.IsCode,1,nil,511005082)
