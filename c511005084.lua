@@ -1,7 +1,7 @@
 --Infection Extension
 --インフェクション・エクステンション
 --  By Shad3
---cleaned up and fixed by MLD
+--cleaned up and fixed by MLD and edo9300
 function c511005084.initial_effect(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)
@@ -19,7 +19,8 @@ function c511005084.initial_effect(c)
 	e2:SetRange(LOCATION_SZONE)
 	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
 	e2:SetTargetRange(0,1)
-	e2:SetTarget(c511005084.sumtg)
+	e2:SetTarget(c511005084.splimit)
+	e2:SetValue(0xff-POS_FACEUP_ATTACK)
 	c:RegisterEffect(e2)
 	--[[local e3=e2:Clone()
 	e3:SetCode(EFFECT_CANNOT_SUMMON)
@@ -65,8 +66,8 @@ function c511005084.damop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ChangeBattleDamage(1-tp,0)
 	end
 end
-function c511005084.sumtg(e,c,tp,sumtp,sumpos)
-	return bit.band(sumpos,POS_FACEUP_ATTACK)~=POS_FACEUP_ATTACK
+function c511005084.splimit(e,c,sump,sumtype,sumpos,targetp,se)
+	return bit.band(sumpos,bit.bnot(0xff-POS_FACEUP_ATTACK))==0
 end
 function c511005084.descon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(Card.IsCode,1,nil,511005082)
