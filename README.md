@@ -11,7 +11,8 @@ Duel.GetPlayerEffect(int tp, int code) returns all the effect with that code app
 Effects:
 
 EFFECT_CANNOT_SPECIAL_SUMMON now can accept the position as filter by putting it as the value, the inserted position will be the one blocked, example target: 
-```function (e,c,sump,sumtype,sumpos,targetp,se)
+```
+function (e,c,sump,sumtype,sumpos,targetp,se)
 	return bit.band(sumpos,bit.bnot(0xff-POSITION_TO_ALLOW))==0
 end
 ```
