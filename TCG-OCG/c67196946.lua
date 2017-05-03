@@ -11,7 +11,7 @@ function c67196946.initial_effect(c)
 	c:RegisterEffect(e1)
 end
 function c67196946.con(e,tp,eg,ep,ev,re,r,rp)
-	if not Duel.GetPlayerEffect(tp,EFFECT_LPCOST_CHANGE) then return true end
+	if not Duel.IsPlayerAffectedByEffect(tp,EFFECT_LPCOST_CHANGE) then return true end
 	local g={Duel.GetPlayerEffect(tp,EFFECT_LPCOST_CHANGE)}
 	for i=1,#g do
 		local te=g[i]
