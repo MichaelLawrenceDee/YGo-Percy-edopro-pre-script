@@ -18,6 +18,8 @@ Duel.GetMasterRule() returns the current master rule
 
 Card.SetUniqueOnField(Card c, int s, int o, int unique_code|function unique_function[, int unique_location=LOCATIOIN_ONFIELD]) now this function other than accepting the usual unique code, will work with functions too
 
+Duel.MoveToField(Card c, int move_player, int target_player, int dest, int pos, bool enabled[,int sequence]) Now accepts sequence. 0-5 for SZONE, 0 to 6 for MZONE and use LOCATION_PZONE for Pendulum Zones.
+
 # Effects:
 
 EFFECT_CANNOT_SPECIAL_SUMMON now can accept the position as filter by putting it as the value, the inserted position will be the one blocked, example target: 
