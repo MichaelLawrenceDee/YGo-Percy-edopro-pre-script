@@ -74,22 +74,22 @@ function c511002571.activate(e,tp,eg,ep,ev,re,r,rp)
 		local op=te:GetOperation()
 		if tg then tg(te,tp,Group.CreateGroup(),PLAYER_NONE,0,eff[1],REASON_EFFECT,PLAYER_NONE,1) end
 		Duel.BreakEffect()
-		tc:CreateEffectRelation(e)
+		tc:CreateEffectRelation(te)
 		Duel.BreakEffect()
 		local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS)
 		if g then
 			local etc=g:GetFirst()
 			while etc do
-				etc:CreateEffectRelation(e)
+				etc:CreateEffectRelation(te)
 				etc=g:GetNext()
 			end
 		end
 		if op then op(te,tp,Group.CreateGroup(),PLAYER_NONE,0,eff[1],REASON_EFFECT,PLAYER_NONE,1) end
-		tc:ReleaseEffectRelation(e)
+		tc:ReleaseEffectRelation(te)
 		if etc then	
 			etc=g:GetFirst()
 			while etc do
-				etc:ReleaseEffectRelation(e)
+				etc:ReleaseEffectRelation(te)
 				etc=g:GetNext()
 			end
 		end
