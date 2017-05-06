@@ -35,4 +35,4 @@ EFFECT_TUNE_MAGICIAN_X this effect is a filter for the xyz materials
 
 EFFECT_BECOME_LINKED: This effect, only useful under mr4, accept as value the zone that will be treated as a linked zone, even if there's no link monster
 
-##### Place cards with official card number in TCG-OCG, Beta and Anime Cards in respective folders.
+##### Place cards with official card number in TCG-OCG, Beta and Anime Cards in respective folders. Also, all pics (TCG/OCG/Anime/etc) are placed in the pics folder.
