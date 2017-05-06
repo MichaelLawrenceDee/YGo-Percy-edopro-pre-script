@@ -25,7 +25,9 @@ function c88177324.initial_effect(c)
 	c:RegisterEffect(e2)
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_SINGLE)
+	e3:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_SET_AVAILABLE)
 	e3:SetCode(511002571)
+	e3:SetLabel(c:GetOriginalCode())
 	e3:SetLabelObject(e1)
 	c:RegisterEffect(e3)
 end
@@ -47,8 +49,7 @@ function c88177324.filter3(c)
 	return c:IsFaceup() and c:IsType(TYPE_EFFECT)
 end
 function c88177324.negtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return
-		Duel.IsExistingMatchingCard(c88177324.filter1,tp,LOCATION_MZONE,LOCATION_MZONE,1,e:GetHandler())
+	if chk==0 then return Duel.IsExistingMatchingCard(c88177324.filter1,tp,LOCATION_MZONE,LOCATION_MZONE,1,e:GetHandler())
 		or Duel.IsExistingMatchingCard(c88177324.filter2,tp,LOCATION_MZONE,LOCATION_MZONE,1,e:GetHandler())
 	end
 end
