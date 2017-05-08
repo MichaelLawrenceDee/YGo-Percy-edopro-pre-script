@@ -2,7 +2,7 @@
 function c511002403.initial_effect(c)
 	--Activate
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_DESTROY+CATEGORY_COIN+CATEGORY_DAMAGE)
+	e2:SetCategory(CATEGORY_DESTROY+CATEGORY_DICE+CATEGORY_DAMAGE)
 	e2:SetType(EFFECT_TYPE_ACTIVATE)
 	e2:SetCode(EVENT_FREE_CHAIN)
 	e2:SetTarget(c511002403.target)
@@ -12,14 +12,22 @@ end
 function c511002403.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetFieldGroupCount(tp,LOCATION_MZONE,LOCATION_MZONE)>0 end
 	local g=Duel.GetMatchingGroup(aux.TRUE,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
-	Duel.SetOperationInfo(0,CATEGORY_COIN,nil,0,tp,1)
+	Duel.SetOperationInfo(0,CATEGORY_DICE,nil,0,tp,1)
 	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,1,0,0)
 end
 function c511002403.activate(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SELECTMSG,tp,aux.Stringid(71625222,1))
-	local coin=Duel.SelectOption(tp,60,61)
-	local res=Duel.TossCoin(tp,1)
-	if coin~=res then
+	local t={}
+	local i=1
+	local p=1
+	for i=1,6 do t[i]=i end
+	local a1=Duel.AnnounceNumber(tp,table.unpack(t))
+	for i=1,6 do 
+		if a1~=i then t[p]=i p=p+1 end
+	end
+	t[p]=nil
+	local a2=Duel.AnnounceNumber(tp,table.unpack(t))
+	local dc=Duel.TossDice(tp,1)
+	if dc==a1 or dc==a2 then
 		local g=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
 		local tc=g:GetFirst()
 		while tc do
