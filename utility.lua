@@ -529,7 +529,7 @@ function Auxiliary.XyzCondition(f,lv,minc,maxc,mustbemat)
 					maxc=maxc+minusg:GetCount()
 					mg:Merge(minusg)
 				end
-				if min then
+				if min and min~=99 then
 					return mg:IsExists(Auxiliary.XyzRecursionChk1,1,nil,mg,c,tp,min,max,minc,maxc,Group.CreateGroup(),0,0,mustbemat)
 				else
 					return mg:IsExists(Auxiliary.XyzRecursionChk2,1,nil,mg,c,tp,minc,maxc,Group.CreateGroup(),0,mustbemat)
