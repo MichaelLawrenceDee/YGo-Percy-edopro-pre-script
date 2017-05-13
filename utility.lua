@@ -517,7 +517,7 @@ function Auxiliary.XyzCondition(f,lv,minc,maxc,mustbemat)
 				local minc=minc-minusg:GetCount()
 				local maxc=maxc-minusg:GetCount()
 				local sg=mg:Filter(Auxiliary.XyzFreeMatFilter,nil)
-				if (not min or sg:GetCount()>=min) and sg:GetCount()>=minc 
+				if (not min or min==99 or sg:GetCount()>=min) and sg:GetCount()>=minc 
 					and (Duel.GetLocationCount(tp,LOCATION_MZONE)>0 or sg:IsExists(Auxiliary.FieldChk,1,nil,tp)) then return true end
 				if mustbemat then
 					if not mg:IsExists(Auxiliary.NeedRecursionXyz,1,nil,73941492+TYPE_XYZ,91110378) then return false end
@@ -675,7 +675,7 @@ function Auxiliary.XyzTarget(f,lv,minc,maxc,mustbemat)
 					if not mustbemat then
 						mg:Merge(Duel.GetMatchingGroup(Card.IsHasEffect,tp,LOCATION_ONFIELD+LOCATION_GRAVE+LOCATION_REMOVED,0,nil,511002116))
 					end
-					if not og or min==0 then
+					if not og or min==99 then
 						if mustbemat then
 							if not mg:IsExists(Auxiliary.NeedRecursionXyz,1,nil,73941492+TYPE_XYZ,91110378) 
 								or (not mg:IsExists(Auxiliary.CheckRecursionCode,1,nil,73941492+TYPE_XYZ,mg,c,tp,minc,maxc,Group.CreateGroup(),0,mustbemat) 
