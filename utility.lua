@@ -518,7 +518,7 @@ function Auxiliary.XyzCondition(f,lv,minc,maxc,mustbemat)
 				local maxc=maxc-minusg:GetCount()
 				local sg=mg:Filter(Auxiliary.XyzFreeMatFilter,nil)
 				if (not min or min==99 or (sg:GetCount()>=min and min>=minc)) and sg:GetCount()>=minc 
-					and (Duel.GetLocationCount(tp,LOCATION_MZONE)>0 or sg:IsExists(Auxiliary.FieldChk,1,nil,tp)) then return true end
+					and (Duel.GetLocationCountFromEx(tp)>0 or sg:IsExists(Auxiliary.FieldChk,1,nil,tp,c)) then return true end
 				if mustbemat then
 					if not mg:IsExists(Auxiliary.NeedRecursionXyz,1,nil,73941492+TYPE_XYZ,91110378) then return false end
 				else
@@ -541,8 +541,8 @@ function Auxiliary.CheckRecursionCode(c,code,mg,xyz,tp,minc,maxc,matg,ct,mustbem
 	if not c:IsHasEffect(code) then return false end
 	return Auxiliary.XyzRecursionChk2(c,mg,xyz,tp,minc,maxc,matg,ct,mustbemat)
 end
-function Auxiliary.FieldChk(c,tp)
-	return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 or (c:IsLocation(LOCATION_MZONE) and c:IsControler(tp))
+function Auxiliary.FieldChk(c,tp,xyzc)
+	return Duel.GetLocationCountFromEx(tp,tp,Group.FromCards(c),xyzc)>0 and (c:IsLocation(LOCATION_MZONE) and c:IsControler(tp))
 end
 function Auxiliary.CheckMultiXyzMaterial(c,xyz)
 	if not c:IsHasEffect(511001225) then return false end
@@ -681,12 +681,12 @@ function Auxiliary.XyzTarget(f,lv,minc,maxc,mustbemat)
 								or (not mg:IsExists(Auxiliary.CheckRecursionCode,1,nil,73941492+TYPE_XYZ,mg,c,tp,minc,maxc,Group.CreateGroup(),0,mustbemat) 
 								and not mg:IsExists(Auxiliary.CheckRecursionCode,1,nil,91110378,mg,c,tp,minc,maxc,Group.CreateGroup(),0,mustbemat)) then
 								local matg
-								if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
+								if Duel.GetLocationCountFromEx(tp)>0 then
 									Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
 									matg=mg:Select(tp,minc,maxc,nil)
 								else
 									Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
-									matg=mg:FilterSelect(tp,Auxiliary.FieldChk,1,1,nil,tp)
+									matg=mg:FilterSelect(tp,Auxiliary.FieldChk,1,1,nil,tp,c)
 									if minc>1 then
 										Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
 										mg2=mg:Select(tp,minc-1,maxc-1,matg:GetFirst())
@@ -730,12 +730,12 @@ function Auxiliary.XyzTarget(f,lv,minc,maxc,mustbemat)
 								if not mg:IsExists(Card.IsHasEffect,1,nil,511001175) and not multichkg:IsExists(Auxiliary.Check2XyzMaterial,1,nil,c) then
 									--no multi material and no Equip Material
 									local matg
-									if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
+									if Duel.GetLocationCountFromEx(tp)>0 then
 										Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
 										matg=mg:Select(tp,minc,maxc,nil)
 									else
 										Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
-										matg=mg:FilterSelect(tp,Auxiliary.FieldChk,1,1,nil,tp)
+										matg=mg:FilterSelect(tp,Auxiliary.FieldChk,1,1,nil,tp,c)
 										if minc>1 then
 											Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
 											mg2=mg:Select(tp,minc-1,maxc-1,matg:GetFirst())
@@ -746,7 +746,7 @@ function Auxiliary.XyzTarget(f,lv,minc,maxc,mustbemat)
 									e:SetLabelObject(matg)
 									return true
 								else
-									local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
+									local ft=Duel.GetLocationCountFromEx(tp)
 									mg:Remove(Card.IsHasEffect,nil,511001175)
 									local matg=Group.CreateGroup()
 									for i=1,minc do
@@ -755,7 +755,7 @@ function Auxiliary.XyzTarget(f,lv,minc,maxc,mustbemat)
 										if ft>0 then
 											sg=mg:Select(tp,1,1,nil)
 										else
-											sg=mg:FilterSelect(tp,Auxiliary.FieldChk,1,1,nil,tp)
+											sg=mg:FilterSelect(tp,Auxiliary.FieldChk,1,1,nil,tp,c)
 											ft=1
 										end
 										local sc=sg:GetFirst()
@@ -876,7 +876,7 @@ function Auxiliary.XyzCondition2(alterf,op)
 	return	function(e,c,og,min,max)
 				if c==nil then return true end
 				local tp=c:GetControler()
-				local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
+				local ft=Duel.GetLocationCountFromEx(tp)
 				local ct=-ft
 				local mg=nil
 				if og then
