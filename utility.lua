@@ -1257,7 +1257,6 @@ function Auxiliary.AddFusionProcCode4(c,code1,code2,code3,code4,sub,insf)
 end
 --Fusion monster, name * n
 function Auxiliary.AddFusionProcCodeRep(c,code1,cc,sub,insf)
-	if c:IsStatus(STATUS_COPYING_EFFECT) then return end
 	local code={}
 	for i=1,cc do
 		code[i]=code1
@@ -1332,7 +1331,7 @@ function Auxiliary.RPGFilter(c,filter,e,tp,m,ft)
 	end
 end
 function Auxiliary.RPGFilterF(c,tp,mg,rc)
-	if c:IsControler(tp) and c:IsLocation(LOCATION_MZONE) then
+	if c:IsControler(tp) and c:IsLocation(LOCATION_MZONE) and c:GetSequence()<5 then
 		Duel.SetSelectedCard(c)
 		return mg:CheckWithSumGreater(Card.GetRitualLevel,rc:GetOriginalLevel(),rc)
 	else return false end
@@ -1404,7 +1403,7 @@ function Auxiliary.RPEFilter(c,filter,e,tp,m,ft)
 	end
 end
 function Auxiliary.RPEFilterF(c,tp,mg,rc)
-	if c:IsControler(tp) and c:IsLocation(LOCATION_MZONE) then
+	if c:IsControler(tp) and c:IsLocation(LOCATION_MZONE) and c:GetSequence()<5 then
 		Duel.SetSelectedCard(c)
 		return mg:CheckWithSumEqual(Card.GetRitualLevel,rc:GetOriginalLevel(),0,99,rc)
 	else return false end
@@ -1476,7 +1475,7 @@ function Auxiliary.RPEFilter2(c,filter,e,tp,m,ft)
 	end
 end
 function Auxiliary.RPEFilter2F(c,tp,mg,rc)
-	if c:IsControler(tp) and c:IsLocation(LOCATION_MZONE) then
+	if c:IsControler(tp) and c:IsLocation(LOCATION_MZONE) and c:GetSequence()<5 then
 		Duel.SetSelectedCard(c)
 		return mg:CheckWithSumEqual(Card.GetRitualLevel,rc:GetLevel(),0,99,rc)
 	else return false end
