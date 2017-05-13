@@ -517,7 +517,7 @@ function Auxiliary.XyzCondition(f,lv,minc,maxc,mustbemat)
 				local minc=minc-minusg:GetCount()
 				local maxc=maxc-minusg:GetCount()
 				local sg=mg:Filter(Auxiliary.XyzFreeMatFilter,nil)
-				if (not min or min==99 or sg:GetCount()>=min) and sg:GetCount()>=minc 
+				if (not min or min==99 or (sg:GetCount()>=min and min>=minc)) and sg:GetCount()>=minc 
 					and (Duel.GetLocationCount(tp,LOCATION_MZONE)>0 or sg:IsExists(Auxiliary.FieldChk,1,nil,tp)) then return true end
 				if mustbemat then
 					if not mg:IsExists(Auxiliary.NeedRecursionXyz,1,nil,73941492+TYPE_XYZ,91110378) then return false end
