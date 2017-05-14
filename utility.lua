@@ -613,7 +613,7 @@ function Auxiliary.XyzTarget(f,lv,minc,maxc,mustbemat)
 							elseif sc:IsHasEffect(511001225) then
 								matg:AddCard(sc)
 								ct=ct+1
-								if not Auxiliary.CheckValidMultiXyzMaterial(sc,c) or (min>=ct and minct>=matct+1) then
+								if not Auxiliary.CheckValidMultiXyzMaterial(sc,c) or (min>=ct and minc>=matct+1) then
 									matct=matct+1
 								else
 									local multi={}
@@ -626,7 +626,7 @@ function Auxiliary.XyzTarget(f,lv,minc,maxc,mustbemat)
 										local tgf=te:GetOperation()
 										local val=te:GetValue()
 										if val>0 and (not tgf or tgf(te,xyz)) then
-											if (min>=ct and minct>=matct+1+val) 
+											if (min>=ct and minc>=matct+1+val) 
 												or mg:IsExists(Auxiliary.XyzRecursionChk1,1,nil,mg,c,tp,min,max,minc,maxc,matg,ct,matct+1+val,mustbemat) then
 												table.insert(multi,1+val)
 											end
