@@ -417,7 +417,7 @@ function Auxiliary.XyzRecursionChk2(c,mg,xyz,tp,minc,maxc,matg,ct,mustbemat)
 		end
 		if ok and tg:IsExists(Auxiliary.FieldChk,1,nil,tp,xyz) then return true end
 	end
-	if not mustbemat and (c:IsHasEffect(91110378) or c:IsHasEffect(73941492+TYPE_XYZ)) then
+	if not mustbemat then
 		local eqg=c:GetEquipGroup():Filter(Card.IsHasEffect,nil,511001175)
 		g:Merge(eqg)
 	end
