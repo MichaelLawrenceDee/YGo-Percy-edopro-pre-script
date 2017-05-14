@@ -52,7 +52,7 @@ end
 function c85004150.xyzcon(e,c,og,min,max)
 	if c==nil then return true end
 	local tp=c:GetControler()
-	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
+	local ft=Duel.GetLocationCountFromEx(tp)
 	local ct=-ft
 	local mg=nil
 	if og then
@@ -66,7 +66,7 @@ function c85004150.xyztg(e,tp,eg,ep,ev,re,r,rp,chk,c,og,min,max)
 	if og and not min then
 		return true
 	end
-	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
+	local ft=Duel.GetLocationCountFromEx(tp)
 	local ct=-ft
 	local mg=nil
 	if og then
