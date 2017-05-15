@@ -928,14 +928,8 @@ function Auxiliary.XyzOperation2(alterf,op)
 				g:DeleteGroup()
 			end
 end
-function Auxiliary.FConditionFilterF2(c,g2)
-	return g2:IsExists(aux.TRUE,1,c)
-end
-function Auxiliary.FConditionFilterF2c(c,f1,f2)
-	return f1(c) or f2(c)
-end
-function Auxiliary.FConditionCheckF(c,chkf)
-	return c:IsLocation(LOCATION_MZONE) and c:IsControler(chkf)
+function Auxiliary.TuneMagFilterFus(c,e,f)
+	return not f or f(e,c)
 end
 --material_count: number of different names in material list
 --material: names in material list
@@ -947,14 +941,11 @@ function Auxiliary.AddFusionProcMix(c,sub,insf,...)
 	local mat={}
 	for i=1,#val do
 		if type(val[i])=='function' then
-			fun[i]=function(c) return val[i](c) and not c:IsHasEffect(6205579) end
+			fun[i]=function(c,fc,sub1,sub2) return (val[i](c) or (sub2 and c:IsHasEffect(511002961))) and not c:IsHasEffect(6205579) end
 		else
 			local addmat=true
-			if sub then
-				fun[i]=function(c,fc,sub) return c:IsFusionCode(val[i]) or (sub and c:CheckFusionSubstitute(fc)) end
-			else
-				fun[i]=function(c) return c:IsFusionCode(val[i]) end
-			end
+			fun[i]=function(c,fc,sub1,sub2) return c:IsFusionCode(val[i]) or (sub1 and c:CheckFusionSubstitute(fc)) 
+				or (sub2 and c:IsHasEffect(511002961)) end
 			for index, value in ipairs(mat) do
 				if value==val[i] then
 					addmat=false
@@ -968,6 +959,9 @@ function Auxiliary.AddFusionProcMix(c,sub,insf,...)
 		local mt=_G["c" .. code]
 		mt.material_count=#mat
 		mt.material=mat
+		--for cards that check number of required materials (Ultra Poly/ Ancient Gear Chaos Fusion)
+		mt.min_material_count=#val
+		mt.max_material_count=#val
 	end
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
@@ -1009,58 +1003,91 @@ function Auxiliary.FOperationMix(insf,sub,...)
 				local sub=sub or notfusion
 				local mg=eg:Filter(Auxiliary.FConditionFilterMix,c,c,sub,table.unpack(funs))
 				local sg=Group.CreateGroup()
-				if gc then sg:AddCard(gc) end
+				if gc then sg:AddCard(gc) mg:RemoveCard(gc) end
+				local p=tp
+				local sfhchk=false
+				if Duel.IsPlayerAffectedByEffect(tp,511004008) and Duel.SelectYesNo(1-tp,65) then
+					p=1-tp Duel.ConfirmCards(1-tp,mg)
+					if mg:IsExists(Card.IsLocation,1,nil,LOCATION_HAND) then sfhchk=true end
+				end
 				while sg:GetCount()<#funs do
-					Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FMATERIAL)
-					local tc=Group.SelectUnselect(mg:Filter(Auxiliary.FSelectMix,sg,tp,mg,sg,c,sub,table.unpack(funs)),sg,tp)
+					Duel.Hint(HINT_SELECTMSG,p,HINTMSG_FMATERIAL)
+					local tc=Group.SelectUnselect(mg:Filter(Auxiliary.FSelectMix,nil,tp,mg,sg,c,sub,table.unpack(funs)),sg,p)
 					if not tc then break end
 					if not sg:IsContains(tc) then
 						sg:AddCard(tc)
 					else
 						sg:RemoveCard(tc)
 					end
+					if tc:IsHasEffect(73941492+TYPE_FUSION) then
+						local eff={tc:GetCardEffect(73941492+TYPE_FUSION)}
+						for i=1,#eff do
+							local f=eff[i]:GetValue()
+							mg=mg:Filter(Auxiliary.TuneMagFilterFus,tc,eff[i],f)
+						end
+					end
 				end
+				if sfhchk then Duel.ShuffleHand(tp) end
 				Duel.SetFusionMaterial(sg)
 			end
 end
 function Auxiliary.FConditionFilterMix(c,fc,sub,...)
 	if not c:IsCanBeFusionMaterial(fc) then return false end
 	for i,f in ipairs({...}) do
-		if f(c,fc,sub) then return true end
+		if f(c,fc,sub,sub) then return true end
 	end
 	return false
 end
-function Auxiliary.FCheckMix(c,mg,sg,fc,sub,fun1,fun2,...)
+function Auxiliary.FCheckMix(c,mg,sg,fc,sub1,sub2,fun1,fun2,...)
 	if fun2 then
 		sg:AddCard(c)
+		mg:RemoveCard(c)
 		local res=false
-		if fun1(c,fc,false) then
-			res=mg:IsExists(Auxiliary.FCheckMix,1,sg,mg,sg,fc,sub,fun2,...)
-		elseif sub and fun1(c,fc,true) then
-			res=mg:IsExists(Auxiliary.FCheckMix,1,sg,mg,sg,fc,false,fun2,...)
+		if fun1(c,fc,false,sub2) then
+			res=mg:IsExists(Auxiliary.FCheckMix,1,nil,mg,sg,fc,sub1,sub2,fun2,...)
+		elseif sub1 and fun1(c,fc,true,sub2) then
+			res=mg:IsExists(Auxiliary.FCheckMix,1,nil,mg,sg,fc,false,sub2,fun2,...)
 		end
 		sg:RemoveCard(c)
+		mg:AddCard(c)
 		return res
 	else
-		return fun1(c,fc,sub)
+		return fun1(c,fc,sub1,sub2)
 	end
 end
 Auxiliary.FCheckAdditional=nil
 --if sg1 is subset of sg2 then not Auxiliary.FCheckAdditional(tp,sg1,fc) -> not Auxiliary.FCheckAdditional(tp,sg2,fc)
 function Auxiliary.FCheckMixGoal(tp,sg,fc,sub,...)
 	local g=Group.CreateGroup()
-	return sg:IsExists(Auxiliary.FCheckMix,1,nil,sg,g,fc,sub,...) and Duel.GetLocationCountFromEx(tp,tp,sg,fc)>0
+	return sg:IsExists(Auxiliary.FCheckMix,1,nil,sg,g,fc,sub,sub,...) and Duel.GetLocationCountFromEx(tp,tp,sg,fc)>0
 		and (not Auxiliary.FCheckAdditional or Auxiliary.FCheckAdditional(tp,sg,fc))
 end
 function Auxiliary.FSelectMix(c,tp,mg,sg,fc,sub,...)
 	sg:AddCard(c)
+	mg:RemoveCard(c)
 	local res
+	local rg=Group.CreateGroup()
+	if c:IsHasEffect(73941492+TYPE_FUSION) then
+		local eff={c:GetCardEffect(73941492+TYPE_FUSION)}
+		for i=1,#eff do
+			local f=eff[i]:GetValue()
+			if sg:IsExists(Auxiliary.TuneMagFilter,1,c,eff[i],f) then
+				sg:Merge(rg)
+				return false
+			end
+			local sg2=sg:Filter(function(c) return not Auxiliary.TuneMagFilterFus(c,eff[i],f) end,nil)
+			rg:Merge(sg2)
+			sg:Sub(sg2)
+		end
+	end
 	if sg:GetCount()<#{...} then
-		res=mg:IsExists(Auxiliary.FSelectMix,1,sg,tp,mg,sg,fc,sub,...)
+		res=mg:IsExists(Auxiliary.FSelectMix,1,nil,tp,mg,sg,fc,sub,...)
 	else
 		res=Auxiliary.FCheckMixGoal(tp,sg,fc,sub,...)
 	end
 	sg:RemoveCard(c)
+	mg:AddCard(c)
+	sg:Merge(rg)
 	return res
 end
 --Fusion monster, mixed material * minc to maxc + material + ...
@@ -1314,6 +1341,29 @@ end
 --Fusion monster, name + name + condition * minc to maxc
 function Auxiliary.AddFusionProcCode2FunRep(c,code1,code2,f,minc,maxc,sub,insf)
 	Auxiliary.AddFusionProcMixRep(c,sub,insf,f,minc,maxc,code1,code2)
+end
+--Fusion monster, any number of name/condition * n - fixed
+function Auxiliary.AddFusionProcMixN(c,sub,insf,...)
+	if c:IsStatus(STATUS_COPYING_EFFECT) then return end
+	local val={...}
+	local t={}
+	local n={}
+	if #val%2~=0 then return end
+	for i=1,#val do
+		if i%2~=0 then
+			table.insert(t,val[i])
+		else
+			table.insert(n,val[i])
+		end
+	end
+	if #t~=#n then return end
+	local fun={}
+	for i=1,#t do
+		for j=1,n[i] do
+			table.insert(fun,t[i])
+		end
+	end
+	Auxiliary.AddFusionProcMix(c,sub,insf,table.unpack(fun))
 end
 --Ritual Summon, geq fixed lv
 function Auxiliary.AddRitualProcGreater(c,filter)
