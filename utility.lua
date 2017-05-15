@@ -358,7 +358,7 @@ function Auxiliary.XyzRecursionChk1(c,mg,xyz,tp,min,max,minc,maxc,matg,ct,matct,
 		if tg:IsExists(Card.IsHasEffect,1,nil,91110378) then
 			ok=Auxiliary.MatNumChkF(tg)
 		end
-		if ok and tg:IsExists(Auxiliary.FieldChk,1,nil,tp,xyz) then return true end
+		if ok and (Duel.GetLocationCountFromEx(tp)>0 or tg:IsExists(Auxiliary.FieldChk,1,nil,tp,xyz)) then return true end
 	end
 	local retchknum={0}
 	local retchk={g:IsExists(Auxiliary.XyzRecursionChk1,1,nil,g,xyz,tp,min,max,minc,maxc,tg,xct,xmatct,mustbemat)}
@@ -378,7 +378,7 @@ function Auxiliary.XyzRecursionChk1(c,mg,xyz,tp,min,max,minc,maxc,matg,ct,matct,
 					if tg:IsExists(Card.IsHasEffect,1,nil,91110378) then
 						ok=Auxiliary.MatNumChkF(tg)
 					end
-					if ok and tg:IsExists(Auxiliary.FieldChk,1,nil,tp,xyz) then return true end
+					if ok and (Duel.GetLocationCountFromEx(tp)>0 or tg:IsExists(Auxiliary.FieldChk,1,nil,tp,xyz)) then return true end
 				end
 				if xmatct+val<=maxc then
 					table.insert(retchknum,val)
@@ -415,9 +415,9 @@ function Auxiliary.XyzRecursionChk2(c,mg,xyz,tp,minc,maxc,matg,ct,mustbemat)
 		if tg:IsExists(Card.IsHasEffect,1,nil,91110378) then
 			ok=Auxiliary.MatNumChkF(tg)
 		end
-		if ok and tg:IsExists(Auxiliary.FieldChk,1,nil,tp,xyz) then return true end
+		if ok and (Duel.GetLocationCountFromEx(tp)>0 or tg:IsExists(Auxiliary.FieldChk,1,nil,tp,xyz)) then return true end
 	end
-	if not mustbemat then
+	if not mustbemat and (c:IsHasEffect(91110378) or c:IsHasEffect(73941492+TYPE_XYZ)) then
 		local eqg=c:GetEquipGroup():Filter(Card.IsHasEffect,nil,511001175)
 		g:Merge(eqg)
 	end
@@ -439,7 +439,7 @@ function Auxiliary.XyzRecursionChk2(c,mg,xyz,tp,minc,maxc,matg,ct,mustbemat)
 					if tg:IsExists(Card.IsHasEffect,1,nil,91110378) then
 						ok=Auxiliary.MatNumChkF(tg)
 					end
-					if ok and tg:IsExists(Auxiliary.FieldChk,1,nil,tp,xyz) then return true end
+					if ok and (Duel.GetLocationCountFromEx(tp)>0 or tg:IsExists(Auxiliary.FieldChk,1,nil,tp,xyz)) then return true end
 				end
 				if xct+val<=maxc then
 					retchknum[#retchknum+1]=val
@@ -788,8 +788,6 @@ function Auxiliary.XyzTarget(f,lv,minc,maxc,mustbemat)
 								local ct=0
 								local tempg=Group.CreateGroup()
 								local matg=Group.CreateGroup()
-								local matg=Group.CreateGroup()
-								local ct=0
 								while (matg:IsExists(Card.IsHasEffect,1,nil,91110378) and not Auxiliary.MatNumChkF(matg)) 
 									or ct<minc or (mg:IsExists(Auxiliary.XyzRecursionChk2,1,nil,mg,c,tp,minc,maxc,matg,ct,mustbemat) and Duel.SelectYesNo(tp,513)) do
 									Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
