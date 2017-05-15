@@ -187,10 +187,11 @@ function c511000192.xyztg(e,tp,eg,ep,ev,re,r,rp,chk,c,og,min,max)
 							end
 						end
 						if #multi==1 then
-							matct=multi[1]
+							matct=matct+multi[1]
 						else
 							Duel.Hint(HINT_SELECTMSG,tp,513)
-							Duel.AnnounceNumber(tp,table.unpack(multi))
+							local num=Duel.AnnounceNumber(tp,table.unpack(multi))
+							matct=matct+num
 						end
 					end
 				else
@@ -309,10 +310,15 @@ function c511000192.xyztg(e,tp,eg,ep,ev,re,r,rp,chk,c,og,min,max)
 						end
 					end
 					if #multi==1 then
-						matct=multi[1]
+						if multi[1]>1 then
+							ct=ct+multi[1]-1
+						end
 					else
 						Duel.Hint(HINT_SELECTMSG,tp,513)
-						Duel.AnnounceNumber(tp,table.unpack(multi))
+						local num=Duel.AnnounceNumber(tp,table.unpack(multi))
+						if num>1 then
+							ct=ct+num-1
+						end
 					end
 				end
 			end

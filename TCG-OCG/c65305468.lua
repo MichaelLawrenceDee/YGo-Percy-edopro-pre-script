@@ -54,7 +54,9 @@ function c65305468.xyzfilter1(c,mg,xyz,tp,min,max,matg,ct,matct)
 	local g=mg:Clone()
 	local tg=matg:Clone()
 	g:RemoveCard(c)
-	g=g:Filter(c65305468.xyzfilterchk,nil,c:GetRank())
+	if not c:IsHasEffect(511002116) then
+		g=g:Filter(c65305468.xyzfilterchk,nil,c:GetRank())
+	end
 	local xct=ct
 	if not c:IsHasEffect(511002116) then
 		tg:AddCard(c)
@@ -75,7 +77,7 @@ function c65305468.xyzfilter1(c,mg,xyz,tp,min,max,matg,ct,matct)
 		if tg:IsExists(Card.IsHasEffect,1,nil,91110378) then
 			ok=aux.MatNumChkF(tg)
 		end
-		if ok and tg:IsExists(aux.FieldChk,1,nil,tp,xyz) then return true end
+		if ok and (Duel.GetLocationCountFromEx(tp)>0 or tg:IsExists(Auxiliary.FieldChk,1,nil,tp,xyz)) then return true end
 	end
 	local retchknum={0}
 	local retchk={g:IsExists(c65305468.xyzfilter1,1,nil,g,xyz,tp,min,max,tg,xct,xmatct)}
@@ -95,7 +97,7 @@ function c65305468.xyzfilter1(c,mg,xyz,tp,min,max,matg,ct,matct)
 					if tg:IsExists(Card.IsHasEffect,1,nil,91110378) then
 						ok=aux.MatNumChkF(tg)
 					end
-					if ok and tg:IsExists(aux.FieldChk,1,nil,tp,xyz) then return true end
+					if ok and (Duel.GetLocationCountFromEx(tp)>0 or tg:IsExists(Auxiliary.FieldChk,1,nil,tp,xyz)) then return true end
 				end
 				if xmatct+val<=2 then
 					table.insert(retchknum,val)
@@ -110,10 +112,14 @@ function c65305468.xyzfilter1(c,mg,xyz,tp,min,max,matg,ct,matct)
 	return false
 end
 function c65305468.xyzfilter2(c,mg,xyz,tp,matg,ct)
-	local g=mg:Clone()
+	local g
+	if not c:IsHasEffect(511002116) and not c:IsHasEffect(511001175) then
+		g=mg:Filter(c65305468.xyzfilterchk,nil,c:GetRank())
+	else
+		g=mg:Clone()
+	end
 	local tg=matg:Clone()
 	g:RemoveCard(c)
-	g=g:Filter(c65305468.xyzfilterchk,nil,c:GetRank())
 	if not c:IsHasEffect(511001175) and not c:IsHasEffect(511002116) then
 		tg:AddCard(c)
 	end
@@ -127,12 +133,12 @@ function c65305468.xyzfilter2(c,mg,xyz,tp,matg,ct)
 		end
 	end
 	if xct>2 then return false end
-	if xct>=2 then
+	if xct==2 then
 		local ok=true
 		if tg:IsExists(Card.IsHasEffect,1,nil,91110378) then
 			ok=aux.MatNumChkF(tg)
 		end
-		if ok and tg:IsExists(aux.FieldChk,1,nil,tp,xyz) then return true end
+		if ok and (Duel.GetLocationCountFromEx(tp)>0 or tg:IsExists(Auxiliary.FieldChk,1,nil,tp,xyz)) then return true end
 	end
 	local eqg=c:GetEquipGroup():Filter(Card.IsHasEffect,nil,511001175)
 	g:Merge(eqg)
@@ -149,12 +155,12 @@ function c65305468.xyzfilter2(c,mg,xyz,tp,matg,ct)
 				if retchknum[j]==val then redun=true break end
 			end
 			if val>0 and (not tgf or tgf(te,xyz)) and not redun then
-				if xct+val>=2 and xct+val<=2 then
+				if xct+val==2 then
 					local ok=true
 					if tg:IsExists(Card.IsHasEffect,1,nil,91110378) then
 						ok=aux.MatNumChkF(tg)
 					end
-					if ok and tg:IsExists(aux.FieldChk,1,nil,tp,xyz) then return true end
+					if ok and (Duel.GetLocationCountFromEx(tp)>0 or tg:IsExists(Auxiliary.FieldChk,1,nil,tp,xyz)) then return true end
 				end
 				if xct+val<=2 then
 					retchknum[#retchknum+1]=val
@@ -253,10 +259,11 @@ function c65305468.xyztg(e,tp,eg,ep,ev,re,r,rp,chk,c,og,min,max)
 							end
 						end
 						if #multi==1 then
-							matct=multi[1]
+							matct=matct+multi[1]
 						else
 							Duel.Hint(HINT_SELECTMSG,tp,513)
-							Duel.AnnounceNumber(tp,table.unpack(multi))
+							local num=Duel.AnnounceNumber(tp,table.unpack(multi))
+							matct=matct+num
 						end
 					end
 				else
@@ -265,6 +272,10 @@ function c65305468.xyztg(e,tp,eg,ep,ev,re,r,rp,chk,c,og,min,max)
 					matct=matct+1
 				end
 			end
+			matg:Merge(tempg)
+			matg:KeepAlive()
+			e:SetLabelObject(matg)
+			return true
 		end
 		return false
 	else
@@ -279,13 +290,14 @@ function c65305468.xyztg(e,tp,eg,ep,ev,re,r,rp,chk,c,og,min,max)
 			local ct=0
 			local tempg=Group.CreateGroup()
 			local matg=Group.CreateGroup()
-			while (matg:IsExists(Card.IsHasEffect,1,nil,91110378) and not aux.MatNumChkF(matg)) 
-				or ct<2 or (mg:IsExists(c65305468.xyzfilter2,1,nil,mg,c,tp,matg,ct) and Duel.SelectYesNo(tp,513)) do
+			while (matg:IsExists(Card.IsHasEffect,1,nil,91110378) and not aux.MatNumChkF(matg)) or ct<2 do
 				Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
 				local sg=mg:FilterSelect(tp,c65305468.xyzfilter2,1,1,nil,mg,c,tp,matg,ct)
 				local sc=sg:GetFirst()
 				mg:RemoveCard(sc)
-				mg=mg:Filter(c65305468.xyzfilterchk,nil,sc:GetRank())
+				if not sc:IsHasEffect(511002116) and not sc:IsHasEffect(511001175) then
+					mg=mg:Filter(c65305468.xyzfilterchk,nil,sc:GetRank())
+				end
 				mg:Merge(sc:GetEquipGroup():Filter(Card.IsHasEffect,nil,511001175))
 				if sc:IsHasEffect(73941492+TYPE_XYZ) then
 					local eff={sc:GetCardEffect(73941492+TYPE_XYZ)}
@@ -294,7 +306,7 @@ function c65305468.xyztg(e,tp,eg,ep,ev,re,r,rp,chk,c,og,min,max)
 						mg=mg:Filter(aux.TuneMagFilterXyz,sc,eff[i],f)
 					end
 				end
-				if sc:IsHasEffect(511002116) then
+				if sc:IsHasEffect(511002116) or sc:IsHasEffect(511001175) then
 					tempg:AddCard(sc)
 				else
 					matg:AddCard(sc)
@@ -317,19 +329,25 @@ function c65305468.xyztg(e,tp,eg,ep,ev,re,r,rp,chk,c,og,min,max)
 						end
 					end
 					if #multi==1 then
-						matct=multi[1]
+						if multi[1]>1 then
+							ct=ct+multi[1]-1
+						end
 					else
 						Duel.Hint(HINT_SELECTMSG,tp,513)
-						Duel.AnnounceNumber(tp,table.unpack(multi))
+						local num=Duel.AnnounceNumber(tp,table.unpack(multi))
+						if num>1 then
+							ct=ct+num-1
+						end
 					end
 				end
 			end
+			matg:Merge(tempg)
 			matg:KeepAlive()
 			e:SetLabelObject(matg)
 			return true
 		end
+		return false
 	end
-	return false
 end
 function c65305468.xyzop(e,tp,eg,ep,ev,re,r,rp,c,og,min,max)
 	local g=e:GetLabelObject()
