@@ -1003,7 +1003,16 @@ function Auxiliary.FOperationMix(insf,sub,...)
 				local sub=sub or notfusion
 				local mg=eg:Filter(Auxiliary.FConditionFilterMix,c,c,sub,table.unpack(funs))
 				local sg=Group.CreateGroup()
-				if gc then sg:AddCard(gc) mg:RemoveCard(gc) end
+				if gc then
+					sg:AddCard(gc) mg:RemoveCard(gc)
+					if gc:IsHasEffect(73941492+TYPE_FUSION) then
+						local eff={gc:GetCardEffect(73941492+TYPE_FUSION)}
+						for i=1,#eff do
+							local f=eff[i]:GetValue()
+							mg=mg:Filter(Auxiliary.TuneMagFilterFus,gc,eff[i],f)
+						end
+					end
+				end
 				local p=tp
 				local sfhchk=false
 				if Duel.IsPlayerAffectedByEffect(tp,511004008) and Duel.SelectYesNo(1-tp,65) then
