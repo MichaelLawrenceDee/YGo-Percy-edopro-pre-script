@@ -1072,7 +1072,7 @@ function Auxiliary.FSelectMix(c,tp,mg,sg,fc,sub,...)
 		for i=1,#eff do
 			local f=eff[i]:GetValue()
 			if sg:IsExists(Auxiliary.TuneMagFilter,1,c,eff[i],f) then
-				sg:Merge(rg)
+				mg:Merge(rg)
 				return false
 			end
 			local sg2=sg:Filter(function(c) return not Auxiliary.TuneMagFilterFus(c,eff[i],f) end,nil)
