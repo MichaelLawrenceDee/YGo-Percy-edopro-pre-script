@@ -1012,7 +1012,7 @@ function Auxiliary.FOperationMix(insf,sub,...)
 				end
 				while sg:GetCount()<#funs do
 					Duel.Hint(HINT_SELECTMSG,p,HINTMSG_FMATERIAL)
-					local tc=Group.SelectUnselect(mg:Filter(Auxiliary.FSelectMix,nil,tp,mg,sg,c,sub,table.unpack(funs)),sg,p)
+					local tc=Group.SelectUnselect(mg:Filter(Auxiliary.FSelectMix,sg,tp,mg,sg,c,sub,table.unpack(funs)),sg,p)
 					if not tc then break end
 					if not sg:IsContains(tc) then
 						sg:AddCard(tc)
@@ -1044,9 +1044,9 @@ function Auxiliary.FCheckMix(c,mg,sg,fc,sub1,sub2,fun1,fun2,...)
 		mg:RemoveCard(c)
 		local res=false
 		if fun1(c,fc,false,sub2) then
-			res=mg:IsExists(Auxiliary.FCheckMix,1,nil,mg,sg,fc,sub1,sub2,fun2,...)
+			res=mg:IsExists(Auxiliary.FCheckMix,1,sg,mg,sg,fc,sub1,sub2,fun2,...)
 		elseif sub1 and fun1(c,fc,true,sub2) then
-			res=mg:IsExists(Auxiliary.FCheckMix,1,nil,mg,sg,fc,false,sub2,fun2,...)
+			res=mg:IsExists(Auxiliary.FCheckMix,1,sg,mg,sg,fc,false,sub2,fun2,...)
 		end
 		sg:RemoveCard(c)
 		mg:AddCard(c)
@@ -1077,17 +1077,17 @@ function Auxiliary.FSelectMix(c,tp,mg,sg,fc,sub,...)
 			end
 			local sg2=sg:Filter(function(c) return not Auxiliary.TuneMagFilterFus(c,eff[i],f) end,nil)
 			rg:Merge(sg2)
-			sg:Sub(sg2)
+			mg:Sub(sg2)
 		end
 	end
 	if sg:GetCount()<#{...} then
-		res=mg:IsExists(Auxiliary.FSelectMix,1,nil,tp,mg,sg,fc,sub,...)
+		res=mg:IsExists(Auxiliary.FSelectMix,1,sg,tp,mg,sg,fc,sub,...)
 	else
 		res=Auxiliary.FCheckMixGoal(tp,sg,fc,sub,...)
 	end
 	sg:RemoveCard(c)
 	mg:AddCard(c)
-	sg:Merge(rg)
+	mg:Merge(rg)
 	return res
 end
 --Fusion monster, mixed material * minc to maxc + material + ...
