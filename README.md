@@ -20,6 +20,8 @@ Card.SetUniqueOnField(Card c, int s, int o, int unique_code|function unique_func
 
 Duel.MoveToField(Card c, int move_player, int target_player, int dest, int pos, bool enabled[,int sequence]) Now accepts sequence. 0-5 for SZONE, 0 to 6 for MZONE and use LOCATION_PZONE for Pendulum Zones.
 
+Card.GetFreeLinkedZone() returns the useable linkes zones of a link monster
+
 # Effects:
 
 EFFECT_CANNOT_SPECIAL_SUMMON now can accept the position as filter by putting it as the value, the inserted position will be the one blocked, example target: 
@@ -34,5 +36,7 @@ EFFECT_TUNER_MATERIAL_LIMIT: instead of using the EFFECT_SYNCHRO_MATERIAL_CUSTOM
 EFFECT_TUNE_MAGICIAN_X this effect is a filter for the xyz materials
 
 EFFECT_BECOME_LINKED: This effect, only useful under mr4, accept as value the zone that will be treated as a linked zone, even if there's no link monster
+
+EFFECT_FUSION_MATERIAnow a monster can have more than 1 of this effect
 
 ##### Place cards with official card number in TCG-OCG, Beta and Anime Cards in respective folders. Also, all pics (TCG/OCG/Anime/etc) are placed in the pics folder.
