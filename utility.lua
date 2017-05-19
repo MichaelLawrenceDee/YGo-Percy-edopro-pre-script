@@ -1047,11 +1047,19 @@ function Auxiliary.AddFusionProcMix(c,sub,insf,...)
 	local mat={}
 	for i=1,#val do
 		if type(val[i])=='function' then
-			fun[i]=function(c,fc,sub1,sub2) return (val[i](c) or (sub2 and c:IsHasEffect(511002961))) and not c:IsHasEffect(6205579) end
+			if sub then
+				fun[i]=function(c) return (val[i](c) or c:IsHasEffect(511002961)) and not c:IsHasEffect(6205579) end
+			else
+				fun[i]=function(c) return val[i](c) and not c:IsHasEffect(6205579) end
+			end
 		else
 			local addmat=true
-			fun[i]=function(c,fc,sub1,sub2) return c:IsFusionCode(val[i]) or (sub1 and c:CheckFusionSubstitute(fc)) 
-				or (sub2 and c:IsHasEffect(511002961)) end
+			if sub then
+				fun[i]=function(c,fc,sub) return c:IsFusionCode(val[i]) or (sub and c:CheckFusionSubstitute(fc))
+				or c:IsHasEffect(511002961) end
+			else
+				fun[i]=function(c) return c:IsFusionCode(val[i]) end
+			end
 			for index, value in ipairs(mat) do
 				if value==val[i] then
 					addmat=false
@@ -1086,14 +1094,12 @@ function Auxiliary.FConditionMix(insf,sub,...)
 	local funs={...}
 	return	function(e,g,gc,chkfnf)
 				if g==nil then return insf end
-				local chkf=bit.band(chkfnf,0xff)
 				local c=e:GetHandler()
 				local tp=c:GetControler()
 				local notfusion=bit.rshift(chkfnf,8)~=0
 				local sub=sub or notfusion
 				local mg=g:Filter(Auxiliary.FConditionFilterMix,c,c,sub,table.unpack(funs))
 				if gc then
-					if not mg:IsContains(gc) then return false end
 					local sg=Group.CreateGroup()
 					return Auxiliary.FSelectMix(gc,tp,mg,sg,c,sub,table.unpack(funs))
 				end
@@ -1109,11 +1115,9 @@ function Auxiliary.FOperationMix(insf,sub,...)
 				local notfusion=bit.rshift(chkfnf,8)~=0
 				local sub=sub or notfusion
 				local mg=eg:Filter(Auxiliary.FConditionFilterMix,c,c,sub,table.unpack(funs))
-				local omg=mg:Clone() --original group
 				local sg=Group.CreateGroup()
-				local rg={}
 				if gc then
-					sg:AddCard(gc) mg:RemoveCard(gc)
+					sg:AddCard(gc)
 					if gc:IsHasEffect(73941492+TYPE_FUSION) then
 						local eff={gc:GetCardEffect(73941492+TYPE_FUSION)}
 						for i=1,#eff do
@@ -1121,7 +1125,6 @@ function Auxiliary.FOperationMix(insf,sub,...)
 							mg=mg:Filter(Auxiliary.TuneMagFilterFus,gc,eff[i],f)
 						end
 					end
-					omg=mg:Clone()
 				end
 				local p=tp
 				local sfhchk=false
@@ -1133,27 +1136,11 @@ function Auxiliary.FOperationMix(insf,sub,...)
 					Duel.Hint(HINT_SELECTMSG,p,HINTMSG_FMATERIAL)
 					local tc=Group.SelectUnselect(mg:Filter(Auxiliary.FSelectMix,sg,tp,mg,sg,c,sub,table.unpack(funs)),sg,p)
 					if not tc then break end
-					if tc~=gc then
+					if not gc or (gc and tc~=gc) then
 						if not sg:IsContains(tc) then
 							sg:AddCard(tc)
-							if tc:IsHasEffect(73941492+TYPE_FUSION) then
-								local eff={tc:GetCardEffect(73941492+TYPE_FUSION)}
-								for i=1,#eff do
-									local f=eff[i]:GetValue()
-									local rmg=omg:Filter(function(rc) return Auxiliary.TuneMagFilterFus(rc,eff[i],f) end,tc)
-									if rg[tc]==nil then
-										rg[tc]=rmg
-									else
-										rg[tc]:Merge(rmg)
-									end
-									mg=mg:Filter(Auxiliary.TuneMagFilterFus,tc,eff[i],f)
-								end
-							end
 						else
 							sg:RemoveCard(tc)
-							local ag=rg[tc]:Clone()
-							ag:Sub(sg)
-							mg:Merge(ag)
 						end
 					end
 				end
@@ -1165,59 +1152,69 @@ end
 function Auxiliary.FConditionFilterMix(c,fc,sub,...)
 	if not c:IsCanBeFusionMaterial(fc) then return false end
 	for i,f in ipairs({...}) do
-		if f(c,fc,sub,sub) then return true end
+		if f(c,fc,sub) then return true end
 	end
 	return false
 end
-function Auxiliary.FCheckMix(c,mg,sg,fc,sub1,sub2,fun1,fun2,...)
+function Auxiliary.FCheckMix(c,mg,sg,fc,sub,fun1,fun2,...)
 	if fun2 then
 		sg:AddCard(c)
-		mg:RemoveCard(c)
 		local res=false
-		if fun1(c,fc,false,sub2) then
-			res=mg:IsExists(Auxiliary.FCheckMix,1,sg,mg,sg,fc,sub1,sub2,fun2,...)
-		elseif sub1 and fun1(c,fc,true,sub2) then
-			res=mg:IsExists(Auxiliary.FCheckMix,1,sg,mg,sg,fc,false,sub2,fun2,...)
+		if fun1(c,fc,false) then
+			res=mg:IsExists(Auxiliary.FCheckMix,1,sg,mg,sg,fc,sub,fun2,...)
+		elseif sub and fun1(c,fc,true) then
+			res=mg:IsExists(Auxiliary.FCheckMix,1,sg,mg,sg,fc,false,fun2,...)
 		end
 		sg:RemoveCard(c)
-		mg:AddCard(c)
 		return res
 	else
-		return fun1(c,fc,sub1,sub2)
+		return fun1(c,fc,sub)
 	end
 end
 Auxiliary.FCheckAdditional=nil
 --if sg1 is subset of sg2 then not Auxiliary.FCheckAdditional(tp,sg1,fc) -> not Auxiliary.FCheckAdditional(tp,sg2,fc)
 function Auxiliary.FCheckMixGoal(tp,sg,fc,sub,...)
 	local g=Group.CreateGroup()
-	return sg:IsExists(Auxiliary.FCheckMix,1,nil,sg,g,fc,sub,sub,...) and Duel.GetLocationCountFromEx(tp,tp,sg,fc)>0
+	return sg:IsExists(Auxiliary.FCheckMix,1,nil,sg,g,fc,sub,...) and Duel.GetLocationCountFromEx(tp,tp,sg,fc)>0
 		and (not Auxiliary.FCheckAdditional or Auxiliary.FCheckAdditional(tp,sg,fc))
 end
 function Auxiliary.FSelectMix(c,tp,mg,sg,fc,sub,...)
-	sg:AddCard(c)
-	mg:RemoveCard(c)
 	local res
 	local rg=Group.CreateGroup()
+	--c has the fusion limit
 	if c:IsHasEffect(73941492+TYPE_FUSION) then
 		local eff={c:GetCardEffect(73941492+TYPE_FUSION)}
-		for i=1,#eff do
-			local f=eff[i]:GetValue()
-			if sg:IsExists(Auxiliary.TuneMagFilter,1,c,eff[i],f) then
+		for i,f in ipairs(eff) do
+			if sg:IsExists(Auxiliary.TuneMagFilter,1,c,f,f:GetValue()) then
 				mg:Merge(rg)
 				return false
 			end
-			local sg2=sg:Filter(function(c) return not Auxiliary.TuneMagFilterFus(c,eff[i],f) end,nil)
+			local sg2=mg:Filter(function(c) return not Auxiliary.TuneMagFilterFus(c,f,f:GetValue()) end,nil)
 			rg:Merge(sg2)
 			mg:Sub(sg2)
 		end
 	end
+	--A card in the selected group has the fusion lmit
+	local g2=sg:Filter(Card.IsHasEffect,nil,73941492+TYPE_FUSION)
+	if g2:GetCount()>0 then
+		local tc=g2:GetFirst()
+		while tc do
+			local eff={tc:GetCardEffect(73941492+TYPE_FUSION)}
+			for i,f in ipairs(eff) do
+				if Auxiliary.TuneMagFilter(c,f,f:GetValue()) then
+					return false
+				end
+			end
+			tc=g2:GetNext()
+		end	
+	end
+	sg:AddCard(c)
 	if sg:GetCount()<#{...} then
 		res=mg:IsExists(Auxiliary.FSelectMix,1,sg,tp,mg,sg,fc,sub,...)
 	else
 		res=Auxiliary.FCheckMixGoal(tp,sg,fc,sub,...)
 	end
 	sg:RemoveCard(c)
-	mg:AddCard(c)
 	mg:Merge(rg)
 	return res
 end
@@ -1227,14 +1224,21 @@ function Auxiliary.AddFusionProcMixRep(c,sub,insf,fun1,minc,maxc,...)
 	local val={fun1,...}
 	local fun={}
 	local mat={}
-	local funs={}
 	for i=1,#val do
 		if type(val[i])=='function' then
-			fun[i]=function(c,fc,sub1,sub2) return (val[i](c) or (sub2 and c:IsHasEffect(511002961))) and not c:IsHasEffect(6205579) end
+			if sub then
+				fun[i]=function(c) return (val[i](c) or c:IsHasEffect(511002961)) and not c:IsHasEffect(6205579) end
+			else
+				fun[i]=function(c) return val[i](c) and not c:IsHasEffect(6205579) end
+			end
 		else
 			local addmat=true
-			fun[i]=function(c,fc,sub1,sub2) return c:IsFusionCode(val[i]) or (sub and c:CheckFusionSubstitute(fc)) 
-				or (sub2 and c:IsHasEffect(511002961)) end
+			if sub then
+				fun[i]=function(c,fc,sub) return c:IsFusionCode(val[i]) or (sub and c:CheckFusionSubstitute(fc))
+				or c:IsHasEffect(511002961) end
+			else
+				fun[i]=function(c) return c:IsFusionCode(val[i]) end
+			end
 			for index, value in ipairs(mat) do
 				if value==val[i] then
 					addmat=false
@@ -1242,12 +1246,6 @@ function Auxiliary.AddFusionProcMixRep(c,sub,insf,fun1,minc,maxc,...)
 			end
 			if addmat then table.insert(mat,val[i]) end
 		end
-		if i~=1 then
-			table.insert(funs,fun[i])
-		end
-	end
-	for i=1,minc do
-		table.insert(funs,fun[1])
 	end
 	if c.material_count==nil then
 		local code=c:GetOriginalCode()
@@ -1263,80 +1261,56 @@ function Auxiliary.AddFusionProcMixRep(c,sub,insf,fun1,minc,maxc,...)
 	e1:SetType(EFFECT_TYPE_SINGLE)
 	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e1:SetCode(EFFECT_FUSION_MATERIAL)
-	e1:SetCondition(Auxiliary.FConditionMix(insf,sub,table.unpack(funs)))
-	e1:SetOperation(Auxiliary.FOperationMixRep(insf,sub,fun[1],maxc-minc,table.unpack(funs)))
+	e1:SetCondition(Auxiliary.FConditionMixRep(insf,sub,fun[1],minc,maxc,table.unpack(fun,2)))
+	e1:SetOperation(Auxiliary.FOperationMixRep(insf,sub,fun[1],minc,maxc,table.unpack(fun,2)))
 	c:RegisterEffect(e1)
 end
-function Auxiliary.FOperationMixRep(insf,sub,fun1,extrac,...)
-	local funt={...}
-	return	function(e,tp,eg,ep,ev,re,r,rp,gc,chkfnf)
-				local funs={}
-				for i,v in ipairs(funt) do
-					table.insert(funs,v)
-				end
+function Auxiliary.FConditionMixRep(insf,sub,fun1,minc,maxc,...)
+	local funs={...}
+	return	function(e,g,gc,chkfnf)
+				if g==nil then return insf end
 				local c=e:GetHandler()
 				local tp=c:GetControler()
 				local notfusion=bit.rshift(chkfnf,8)~=0
 				local sub=sub or notfusion
-				local mg=eg:Filter(Auxiliary.FConditionFilterMix,c,c,sub,table.unpack(funs))
-				local sg=Group.CreateGroup()
-				local omg=mg:Clone()
-				local rg={}
+				local mg=g:Filter(Auxiliary.FConditionFilterMix,c,c,sub,fun1,table.unpack(funs))
 				if gc then
-					sg:AddCard(gc) mg:RemoveCard(gc)
-					if gc:IsHasEffect(73941492+TYPE_FUSION) then
-						local eff={gc:GetCardEffect(73941492+TYPE_FUSION)}
-						for i=1,#eff do
-							local f=eff[i]:GetValue()
-							mg=mg:Filter(Auxiliary.TuneMagFilterFus,gc,eff[i],f)
-						end
-					end
-					omg=mg:Clone()
+					local sg=Group.CreateGroup()
+					return Auxiliary.FSelectMixRep(gc,tp,mg,sg,c,sub,fun1,minc,maxc,table.unpack(funs))
 				end
+				local sg=Group.CreateGroup()
+				return mg:IsExists(Auxiliary.FSelectMixRep,1,nil,tp,mg,sg,c,sub,fun1,minc,maxc,table.unpack(funs))
+			end
+end
+function Auxiliary.FOperationMixRep(insf,sub,fun1,minc,maxc,...)
+	local funs={...}
+	return	function(e,tp,eg,ep,ev,re,r,rp,gc,chkfnf)
+				local chkf=bit.band(chkfnf,0xff)
+				local c=e:GetHandler()
+				local tp=c:GetControler()
+				local notfusion=bit.rshift(chkfnf,8)~=0
+				local sub=sub or notfusion
+				local mg=eg:Filter(Auxiliary.FConditionFilterMix,c,c,sub,fun1,table.unpack(funs))
+				local sg=Group.CreateGroup()
+				if gc then sg:AddCard(gc) end
 				local p=tp
 				local sfhchk=false
 				if Duel.IsPlayerAffectedByEffect(tp,511004008) and Duel.SelectYesNo(1-tp,65) then
 					p=1-tp Duel.ConfirmCards(1-tp,mg)
 					if mg:IsExists(Card.IsLocation,1,nil,LOCATION_HAND) then sfhchk=true end
 				end
-				local cancel=false
-				local okg=Group.CreateGroup()
-				local matc=#funs
-				while sg:GetCount()<matc+extrac do
-					Duel.Hint(HINT_SELECTMSG,p,HINTMSG_FMATERIAL)
-					local tc=Group.SelectUnselect(mg:Filter(Auxiliary.FSelectMix,sg,tp,mg,sg,c,sub,table.unpack(funs)),sg,p,cancel,cancel)
+				while sg:GetCount()<maxc+#funs do
+					local cg=mg:Filter(Auxiliary.FSelectMixRep,sg,tp,mg,sg,c,sub,fun1,minc,maxc,table.unpack(funs))
+					if cg:GetCount()==0 then break end
+					local cancel=Auxiliary.FCheckMixRepGoal(tp,sg,c,sub,fun1,minc,maxc,table.unpack(funs))
+					Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FMATERIAL)
+					local tc=Group.SelectUnselect(cg,sg,p,cancel,cancel)
 					if not tc then break end
-					if not okg:IsContains(tc) then
+					if not gc or (gc and tc~=gc) then
 						if not sg:IsContains(tc) then
 							sg:AddCard(tc)
-							if tc:IsHasEffect(73941492+TYPE_FUSION) then
-								local eff={tc:GetCardEffect(73941492+TYPE_FUSION)}
-								for i=1,#eff do
-									local f=eff[i]:GetValue()
-									local rmg=omg:Filter(function(rc) return Auxiliary.TuneMagFilterFus(rc,eff[i],f) end,tc)
-									if rg[tc]==nil then
-										rg[tc]=rmg
-									else
-										rg[tc]:Merge(rmg)
-									end
-									mg=mg:Filter(Auxiliary.TuneMagFilterFus,tc,eff[i],f)
-								end
-							end
-							if sg:GetCount()==matc then
-								okg:Merge(sg)
-								cancel=true
-							end
-							if sg:GetCount()>=matc then
-								table.insert(funs,fun1)
-							end
 						else
 							sg:RemoveCard(tc)
-							local ag=rg[tc]:Clone()
-							ag:Sub(sg)
-							mg:Merge(ag)
-							if sg:GetCount()>=matc then
-								table.remove(funs,#funs)
-							end
 						end
 					end
 				end
@@ -1432,6 +1406,34 @@ function Auxiliary.FCheckSelectMixRepM(c,tp,...)
 		and Auxiliary.FCheckMixRepTemplate(c,Auxiliary.FCheckSelectMixRep,tp,...)
 end
 function Auxiliary.FSelectMixRep(c,tp,mg,sg,fc,sub,...)
+	local rg=Group.CreateGroup()
+	--c has the fusion limit
+	if c:IsHasEffect(73941492+TYPE_FUSION) then
+		local eff={c:GetCardEffect(73941492+TYPE_FUSION)}
+		for i,f in ipairs(eff) do
+			if sg:IsExists(Auxiliary.TuneMagFilter,1,c,f,f:GetValue()) then
+				mg:Merge(rg)
+				return false
+			end
+			local sg2=mg:Filter(function(c) return not Auxiliary.TuneMagFilterFus(c,f,f:GetValue()) end,nil)
+			rg:Merge(sg2)
+			mg:Sub(sg2)
+		end
+	end
+	--A card in the selected group has the fusion lmit
+	local g2=sg:Filter(Card.IsHasEffect,nil,73941492+TYPE_FUSION)
+	if g2:GetCount()>0 then
+		local tc=g2:GetFirst()
+		while tc do
+			local eff={tc:GetCardEffect(73941492+TYPE_FUSION)}
+			for i,f in ipairs(eff) do
+				if Auxiliary.TuneMagFilter(c,f,f:GetValue()) then
+					return false
+				end
+			end
+			tc=g2:GetNext()
+		end	
+	end
 	sg:AddCard(c)
 	local res=false
 	if Auxiliary.FCheckAdditional and not Auxiliary.FCheckAdditional(tp,sg,fc) then
@@ -1443,6 +1445,7 @@ function Auxiliary.FSelectMixRep(c,tp,mg,sg,fc,sub,...)
 		res=sg:IsExists(Auxiliary.FCheckMixRepSelected,1,nil,tp,mg,sg,g,fc,sub,...)
 	end
 	sg:RemoveCard(c)
+	mg:Merge(rg)
 	return res
 end
 --Fusion monster, name + name
