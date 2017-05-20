@@ -58,7 +58,8 @@ function c16114248.filterchk(c,tp,mg,sg,fc,...)
 end
 function c16114248.fscon(e,g,gc)
 	if g==nil then return true end
-	local mg=g:Filter(c16114248.mfilter,nil,e:GetHandler())
+	local c=e:GetHandler()
+	local mg=g:Filter(c16114248.mfilter,nil,c)
 	if gc then return mg:IsContains(gc) and c16114248.filterchk(gc,tp,mg,Group.CreateGroup(),c) end
 	local sg=Group.CreateGroup()
 	return mg:IsExists(c16114248.filterchk,1,nil,tp,mg,sg,c)
