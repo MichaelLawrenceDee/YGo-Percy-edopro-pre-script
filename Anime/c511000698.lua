@@ -19,15 +19,17 @@ function c511000698.filter(c,g,tp)
 end
 function c511000698.mfilter(c,g,tg,ct,tp)
 	local mg=g:Filter(Card.IsCode,nil,c:GetCode())
-	local matg=tg:Clone()
 	local xct=ct+1
 	mg:RemoveCard(c)
-	matg:AddCard(c)
+	tg:AddCard(c)
+	local res=false
 	if xct==3 then
-		return Duel.IsExistingMatchingCard(c511000698.xyzfilter,tp,LOCATION_EXTRA,0,1,nil,matg)
+		local res=Duel.IsExistingMatchingCard(c511000698.xyzfilter,tp,LOCATION_EXTRA,0,1,nil,tg)
 	else
-		return mg:IsExists(c511000698.mfilter,1,c,mg,matg,xct,tp)
+		local res=mg:IsExists(c511000698.mfilter,1,c,mg,tg,xct,tp)
 	end
+	tg:RemoveCard(c)
+	return res
 end
 function c511000698.xyzfilter(c,g)
 	return c:IsXyzSummonable(g,3,3)

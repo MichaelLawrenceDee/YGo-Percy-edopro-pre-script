@@ -17,13 +17,14 @@ function c100000490.cfilter(c)
 	return not c:IsHasEffect(EFFECT_XYZ_MATERIAL)
 end
 function c100000490.mfilter(c,g,matg,tp)
-	local mg=g:Clone()
-	local tg=matg:Clone()
-	mg:RemoveCard(c)
-	tg:AddCard(c)
-	return Duel.IsExistingMatchingCard(c100000490.xyzfilterchk,tp,LOCATION_EXTRA,0,1,nil,tg)
+	g:RemoveCard(c)
+	matg:AddCard(c)
+	local res=Duel.IsExistingMatchingCard(c100000490.xyzfilterchk,tp,LOCATION_EXTRA,0,1,nil,tg)
 		and (Duel.IsExistingMatchingCard(c100000490.xyzfilter,tp,LOCATION_EXTRA,0,1,nil,tg,tg:GetCount(),PLAYER_NONE) 
 		or g:IsExists(c100000490.mfilter,1,nil,mg,tg,tp))
+	g:AddCard(c)
+	matg:RemoveCard(c)
+	return res
 end
 function c100000490.xyzfilterchk(c,mg)
 	return not mg:IsExists(function(mc) return c.xyz_filter and not c.xyz_filter(mc) end,1,nil) and c.maxxyzct and mg:GetCount()<=c.maxxyzct
