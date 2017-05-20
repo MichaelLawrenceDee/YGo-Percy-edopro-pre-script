@@ -90,11 +90,7 @@ function c18386170.filterchk(c,tp,mg,sg,fc,...)
 	local rg=Group.CreateGroup()
 	local codes={...}
 	if not c:IsHasEffect(511002961) then
-		if #codes>0 then
-			for i,v in ipairs(codes) do
-				if c:IsFusionCode(v) then return false end
-			end
-		end
+		if #codes>0 and c:IsFusionCode(table.unpack(codes)) then return false end
 		codes[c]=c:GetFusionCode()
 		rg=mg:Filter(function(rc) return rc:IsFusionCode(c:GetFusionCode()) and not rc:IsHasEffect(511002961) end,nil)
 		mg:Sub(rg)
@@ -111,6 +107,19 @@ function c18386170.filterchk(c,tp,mg,sg,fc,...)
 			rg:Merge(sg2)
 			mg:Sub(sg2)
 		end
+	end
+	local g2=sg:Filter(Card.IsHasEffect,nil,73941492+TYPE_FUSION)
+	if g2:GetCount()>0 then
+		local tc=g2:GetFirst()
+		while tc do
+			local eff={tc:GetCardEffect(73941492+TYPE_FUSION)}
+			for i,f in ipairs(eff) do
+				if Auxiliary.TuneMagFilter(c,f,f:GetValue()) then
+					return false
+				end
+			end
+			tc=g2:GetNext()
+		end	
 	end
 	sg:AddCard(c)
 	local res

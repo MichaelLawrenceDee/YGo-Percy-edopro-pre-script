@@ -18,16 +18,11 @@ end
 function c16114248.mfilter(c,fc)
 	return (c:IsRace(RACE_MACHINE) or c:IsHasEffect(511002961)) and not c:IsHasEffect(6205579) and c:IsCanBeFusionMaterial(fc)
 end
-function c16114248.filterchk(c,tp,mg,sg,fc,...)
+function c16114248.filterchk(c,tp,mg,sg,fc,code)
 	local rg=Group.CreateGroup()
-	local codes={...}
 	if not c:IsHasEffect(511002961) then
-		if #codes>0 then
-			for i,v in ipairs(codes) do
-				if not c:IsFusionCode(v) then return false end
-			end
-		end
-		codes[c]=c:GetFusionCode()
+		if code and not c:IsFusionCode(code) then return false end
+		code=c:GetFusionCode()
 		rg=mg:Filter(function(rc) return not rc:IsFusionCode(c:GetFusionCode()) and not rc:IsHasEffect(511002961) end,nil)
 		mg:Sub(rg)
 	end
@@ -44,16 +39,29 @@ function c16114248.filterchk(c,tp,mg,sg,fc,...)
 			mg:Sub(sg2)
 		end
 	end
+	local g2=sg:Filter(Card.IsHasEffect,nil,73941492+TYPE_FUSION)
+	if g2:GetCount()>0 then
+		local tc=g2:GetFirst()
+		while tc do
+			local eff={tc:GetCardEffect(73941492+TYPE_FUSION)}
+			for i,f in ipairs(eff) do
+				if Auxiliary.TuneMagFilter(c,f,f:GetValue()) then
+					return false
+				end
+			end
+			tc=g2:GetNext()
+		end	
+	end
 	sg:AddCard(c)
 	local res
 	if sg:GetCount()<2 then
-		res=mg:IsExists(c16114248.filterchk,1,sg,tp,mg,sg,fc,table.unpack(codes))
+		res=mg:IsExists(c16114248.filterchk,1,sg,tp,mg,sg,fc,code)
 	else
 		res=Duel.GetLocationCountFromEx(tp,tp,sg,fc)>0 and (not aux.FCheckAdditional or aux.FCheckAdditional(tp,sg,fc))
 	end
 	sg:RemoveCard(c)
 	mg:Merge(rg)
-	codes[c]=nil
+	code=nil
 	return res
 end
 function c16114248.fscon(e,g,gc)
@@ -68,7 +76,7 @@ function c16114248.fsop(e,tp,eg,ep,ev,re,r,rp,gc)
 	local mg=eg:Filter(c16114248.mfilter,nil,e:GetHandler())
 	local p=tp
 	local sfhchk=false
-	local codes={}
+	local code
 	if Duel.IsPlayerAffectedByEffect(tp,511004008) and Duel.SelectYesNo(1-tp,65) then
 		p=1-tp Duel.ConfirmCards(1-tp,g)
 		if g:IsExists(Card.IsLocation,1,nil,LOCATION_HAND) then sfhchk=true end
@@ -85,21 +93,21 @@ function c16114248.fsop(e,tp,eg,ep,ev,re,r,rp,gc)
 		end
 		if not gc:IsHasEffect(511002961) then
 			mg=mg:Filter(function(c) return c:IsFusionCode(gc:GetFusionCode()) or c:IsHasEffect(511002961) end,nil)
-			codes[gc]=gc:GetFusionCode()
+			code=gc:GetFusionCode()
 		end
 	end
 	while sg:GetCount()<2 do
 		Duel.Hint(HINT_SELECTMSG,p,HINTMSG_FMATERIAL)
-		local tc=Group.SelectUnselect(mg:Filter(c16114248.filterchk,sg,tp,mg,sg,e:GetHandler(),table.unpack(codes)),sg,p)
+		local tc=Group.SelectUnselect(mg:Filter(c16114248.filterchk,sg,tp,mg,sg,e:GetHandler(),code),sg,p)
 		if not gc or tc~=gc then
 			if not sg:IsContains(tc) then
 				sg:AddCard(tc)
 				if not tc:IsHasEffect(511002961) then
-					codes[tc]=tc:GetFusionCode()
+					code=tc:GetFusionCode()
 				end
 			else
 				sg:RemoveCard(tc)
-				codes[tc]=nil
+				code=nil
 			end
 		end
 	end
