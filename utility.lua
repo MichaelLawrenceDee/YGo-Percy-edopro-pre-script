@@ -1202,6 +1202,7 @@ function Auxiliary.FSelectMix(c,tp,mg,sg,fc,sub,...)
 			local eff={tc:GetCardEffect(73941492+TYPE_FUSION)}
 			for i,f in ipairs(eff) do
 				if Auxiliary.TuneMagFilter(c,f,f:GetValue()) then
+					mg:Merge(rg)
 					return false
 				end
 			end
@@ -1428,6 +1429,7 @@ function Auxiliary.FSelectMixRep(c,tp,mg,sg,fc,sub,...)
 			local eff={tc:GetCardEffect(73941492+TYPE_FUSION)}
 			for i,f in ipairs(eff) do
 				if Auxiliary.TuneMagFilter(c,f,f:GetValue()) then
+					mg:Merge(rg)
 					return false
 				end
 			end
