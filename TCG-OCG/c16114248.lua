@@ -89,7 +89,7 @@ function c16114248.fsop(e,tp,eg,ep,ev,re,r,rp,gc)
 			table.insert(codes,gc:GetFusionCode())
 		end
 	end
-	while sg:GetCount()<3 do
+	while sg:GetCount()<2 do
 		Duel.Hint(HINT_SELECTMSG,p,HINTMSG_FMATERIAL)
 		local tc=Group.SelectUnselect(mg:Filter(c16114248.filterchk,sg,tp,mg,sg,e:GetHandler(),table.unpack(codes)),sg,p)
 		if not gc or tc~=gc then
