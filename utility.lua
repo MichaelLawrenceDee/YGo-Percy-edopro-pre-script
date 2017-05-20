@@ -1180,18 +1180,13 @@ function Auxiliary.FCheckMixGoal(tp,sg,fc,sub,...)
 end
 function Auxiliary.FSelectMix(c,tp,mg,sg,fc,sub,...)
 	local res
-	local rg=Group.CreateGroup()
 	--c has the fusion limit
 	if c:IsHasEffect(73941492+TYPE_FUSION) then
 		local eff={c:GetCardEffect(73941492+TYPE_FUSION)}
 		for i,f in ipairs(eff) do
 			if sg:IsExists(Auxiliary.TuneMagFilter,1,c,f,f:GetValue()) then
-				mg:Merge(rg)
 				return false
 			end
-			local sg2=mg:Filter(function(c) return not Auxiliary.TuneMagFilterFus(c,f,f:GetValue()) end,nil)
-			rg:Merge(sg2)
-			mg:Sub(sg2)
 		end
 	end
 	--A card in the selected group has the fusion lmit
@@ -1215,7 +1210,6 @@ function Auxiliary.FSelectMix(c,tp,mg,sg,fc,sub,...)
 		res=Auxiliary.FCheckMixGoal(tp,sg,fc,sub,...)
 	end
 	sg:RemoveCard(c)
-	mg:Merge(rg)
 	return res
 end
 --Fusion monster, mixed material * minc to maxc + material + ...
@@ -1406,18 +1400,13 @@ function Auxiliary.FCheckSelectMixRepM(c,tp,...)
 		and Auxiliary.FCheckMixRepTemplate(c,Auxiliary.FCheckSelectMixRep,tp,...)
 end
 function Auxiliary.FSelectMixRep(c,tp,mg,sg,fc,sub,...)
-	local rg=Group.CreateGroup()
 	--c has the fusion limit
 	if c:IsHasEffect(73941492+TYPE_FUSION) then
 		local eff={c:GetCardEffect(73941492+TYPE_FUSION)}
 		for i,f in ipairs(eff) do
 			if sg:IsExists(Auxiliary.TuneMagFilter,1,c,f,f:GetValue()) then
-				mg:Merge(rg)
 				return false
 			end
-			local sg2=mg:Filter(function(c) return not Auxiliary.TuneMagFilterFus(c,f,f:GetValue()) end,nil)
-			rg:Merge(sg2)
-			mg:Sub(sg2)
 		end
 	end
 	--A card in the selected group has the fusion lmit
@@ -1445,7 +1434,6 @@ function Auxiliary.FSelectMixRep(c,tp,mg,sg,fc,sub,...)
 		res=sg:IsExists(Auxiliary.FCheckMixRepSelected,1,nil,tp,mg,sg,g,fc,sub,...)
 	end
 	sg:RemoveCard(c)
-	mg:Merge(rg)
 	return res
 end
 --Fusion monster, name + name
