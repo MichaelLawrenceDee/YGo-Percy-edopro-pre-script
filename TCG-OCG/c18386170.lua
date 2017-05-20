@@ -86,30 +86,16 @@ end
 function c18386170.ffilter(c,fc)
 	return (c:IsFusionSetCard(0xb1) or c:IsHasEffect(511002961)) and not c:IsHasEffect(6205579) and c:IsCanBeFusionMaterial(fc)
 end
-function c18386170.filterchk1(c,mg,g2,ct,chkf)
-	local tg
-	if g2==nil or g2:GetCount()==0 then tg=Group.CreateGroup() else tg=g2:Clone() end
-	local g=mg:Clone()
-	tg:AddCard(c)
-	g:RemoveCard(c)
-	local ctc=ct+1
-	if ctc==3 then
-		return c18386170.filterchk2(tg,chkf)
-	else
-		return g:IsExists(c18386170.filterchk1,1,nil,g,tg,ctc,chkf)
-	end
-end
-function c18386170.filterchk2(g,chkf)
-	if g:IsExists(aux.TuneMagFusFilter,1,nil,g,chkf) then return false end
-	local fs=false
-	if g:IsExists(aux.FConditionCheckF,1,nil,chkf) then fs=true end
-	return g:IsExists(c18386170.namechk,1,nil,g) and (fs or chkf==PLAYER_NONE)
-end
-function c18386170.filterchk(c,tp,mg,sg,fc)
-	sg:AddCard(c)
-	mg:RemoveCard(c)
+function c18386170.filterchk(c,tp,mg,sg,fc,...)
 	local rg=Group.CreateGroup()
+	local codes={...}
 	if not c:IsHasEffect(511002961) then
+		if #codes>0 then
+			for i,v in ipairs(codes) do
+				if c:IsFusionCode(v) then return false end
+			end
+		end
+		table.insert(codes,c:GetFusionCode())
 		rg=mg:Filter(function(rc) return rc:IsFusionCode(c:GetFusionCode()) and not rc:IsHasEffect(511002961) end,nil)
 		mg:Sub(rg)
 	end
@@ -126,15 +112,18 @@ function c18386170.filterchk(c,tp,mg,sg,fc)
 			mg:Sub(sg2)
 		end
 	end
+	sg:AddCard(c)
 	local res
 	if sg:GetCount()<3 then
-		res=mg:IsExists(c18386170.filterchk,1,sg,tp,mg,sg,fc)
+		res=mg:IsExists(c18386170.filterchk,1,sg,tp,mg,sg,fc,table.unpack(codes))
 	else
 		res=Duel.GetLocationCountFromEx(tp,tp,sg,fc)>0 and (not aux.FCheckAdditional or aux.FCheckAdditional(tp,sg,fc))
 	end
 	sg:RemoveCard(c)
-	mg:AddCard(c)
 	mg:Merge(rg)
+	if not c:IsHasEffect(511002961) then
+		table.remove(codes,#codes)
+	end
 	return res
 end
 function c18386170.fscon(e,g,gc,chkf)
@@ -150,6 +139,7 @@ function c18386170.fsop(e,tp,eg,ep,ev,re,r,rp,gc,chkf)
 	local mg=eg:Filter(c18386170.ffilter,nil,e:GetHandler())
 	local p=tp
 	local sfhchk=false
+	local codes={}
 	if Duel.IsPlayerAffectedByEffect(tp,511004008) and Duel.SelectYesNo(1-tp,65) then
 		p=1-tp Duel.ConfirmCards(1-tp,g)
 		if g:IsExists(Card.IsLocation,1,nil,LOCATION_HAND) then sfhchk=true end
@@ -166,26 +156,24 @@ function c18386170.fsop(e,tp,eg,ep,ev,re,r,rp,gc,chkf)
 		end
 		if not gc:IsHasEffect(511002961) then
 			mg=mg:Filter(function(c) return not c:IsFusionCode(gc:GetFusionCode()) or c:IsHasEffect(511002961) end,nil)
+			table.insert(codes,gc:GetFusionCode())
 		end
 	end
 	while sg:GetCount()<3 do
 		Duel.Hint(HINT_SELECTMSG,p,HINTMSG_FMATERIAL)
-		local tc=Group.SelectUnselect(mg:Filter(c18386170.filterchk,sg,tp,mg,sg,e:GetHandler()),sg,p)
-		if not tc then break end
-		if not sg:IsContains(tc) then
-			sg:AddCard(tc)
-		else
-			sg:RemoveCard(tc)
-		end
-		if tc:IsHasEffect(73941492+TYPE_FUSION) then
-			local eff={tc:GetCardEffect(73941492+TYPE_FUSION)}
-			for i=1,#eff do
-				local f=eff[i]:GetValue()
-				mg=mg:Filter(aux.TuneMagFilterFus,tc,eff[i],f)
+		local tc=Group.SelectUnselect(mg:Filter(c18386170.filterchk,sg,tp,mg,sg,e:GetHandler(),table.unpack(codes)),sg,p)
+		if not gc or tc~=gc then
+			if not sg:IsContains(tc) then
+				sg:AddCard(tc)
+				if not tc:IsHasEffect(511002961) then
+					table.insert(codes,tc:GetFusionCode())
+				end
+			else
+				sg:RemoveCard(tc)
+				if not tc:IsHasEffect(511002961) then
+					table.remove(codes,#codes)
+				end
 			end
-		end
-		if not tc:IsHasEffect(511002961) then
-			mg=mg:Filter(function(c) return not c:IsFusionCode(tc:GetFusionCode()) or c:IsHasEffect(511002961) end,nil)
 		end
 	end
 	if sfhchk then Duel.ShuffleHand(tp) end
