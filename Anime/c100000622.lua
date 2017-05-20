@@ -109,12 +109,16 @@ function c100000622.fop(e,tp,eg,ep,ev,re,r,rp,gc,chkf)
 				mg=mg:Filter(Auxiliary.TuneMagFilterFus,gc,eff[i],f)
 			end
 		end
-		Duel.Hint(HINT_SELECTMSG,p,HINTMSG_FMATERIAL)
-		local tc=Group.SelectUnselect(mg:Filter(c100000622.filterchk,sg,tp,mg,sg,c),sg,p)
+		local tc
+		while not tc or tc==gc do
+			Duel.Hint(HINT_SELECTMSG,p,HINTMSG_FMATERIAL)
+			tc=Group.SelectUnselect(mg:Filter(c100000622.filterchk,sg,tp,mg,sg,c),sg,p)
+		end
 		sg:AddCard(tc)
 	else
 		local g1=mg:Filter(c100000622.filter1,nil,tp)
 		local g2=mg:Filter(c100000622.filter2,nil,tp)
+		::start::
 		Duel.Hint(HINT_SELECTMSG,p,HINTMSG_FMATERIAL)
 		sg=g1:FilterSelect(p,c100000622.filterchk,1,1,nil,tp,g2,sg,c)
 		local sc=sg:GetFirst()
@@ -125,9 +129,12 @@ function c100000622.fop(e,tp,eg,ep,ev,re,r,rp,gc,chkf)
 				g2=g2:Filter(Auxiliary.TuneMagFilterFus,sc,eff[i],f)
 			end
 		end
+		::sec::
 		Duel.Hint(HINT_SELECTMSG,p,HINTMSG_FMATERIAL)
-		local sg2=g2:FilterSelect(p,c100000622.filterchk,1,1,nil,tp,mg,sg,c)
-		sg:Merge(sg2)
+		local sc2=Group.SelectUnselect(g2:Filter(c100000622.filterchk,sg,tp,mg,sg,c),sg,p,true,true)
+		if not sc2 then goto start end
+		if sg:IsContains(sc2) then goto sec end
+		sg:AddCard(sc2)
 	end
 	if sfhchk then Duel.ShuffleHand(tp) end
 	if gc then sg:RemoveCard(gc) end
