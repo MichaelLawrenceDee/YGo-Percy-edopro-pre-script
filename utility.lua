@@ -1134,7 +1134,7 @@ function Auxiliary.FOperationMix(insf,sub,...)
 				end
 				while sg:GetCount()<#funs do
 					Duel.Hint(HINT_SELECTMSG,p,HINTMSG_FMATERIAL)
-					local tc=Group.SelectUnselect(mg:Filter(Auxiliary.FSelectMix,sg,tp,mg,sg,c,sub,table.unpack(funs)),sg,p)
+					local tc=Group.SelectUnselect(mg:Filter(Auxiliary.FSelectMix,sg,tp,mg,sg,c,sub,table.unpack(funs)),sg,p,false,false,#funs,#funs)
 					if not tc then break end
 					if not gc or (gc and tc~=gc) then
 						if not sg:IsContains(tc) then
