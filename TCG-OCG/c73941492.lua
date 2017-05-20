@@ -1,9 +1,5 @@
 --調弦の魔術師
 --Tune Magician
---Script by mercury233
---fusion limit not implemented
---xyz limit by edo9300
---add fusion and xyz limit by MLD
 function c73941492.initial_effect(c)
 	--pendulum summon
 	aux.EnablePendulumAttribute(c)
@@ -26,7 +22,7 @@ function c73941492.initial_effect(c)
 	e3:SetCode(EFFECT_SPSUMMON_CONDITION)
 	e3:SetValue(aux.FALSE)
 	c:RegisterEffect(e3)
-	--fusion and xyz custom not implemented, or is it?
+	--fusion, synchro and xyz limit
 	local e4=Effect.CreateEffect(c)
 	e4:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e4:SetType(EFFECT_TYPE_SINGLE)
@@ -37,9 +33,8 @@ function c73941492.initial_effect(c)
 	e5:SetCode(73941492+TYPE_XYZ)
 	c:RegisterEffect(e5)
 	local e6=e4:Clone()
-	e6:SetCode(73941492+TYPE_SYNCHRO)
+	e6:SetCode(EFFECT_TUNER_MATERIAL_LIMIT)
 	c:RegisterEffect(e6)
-	--local e6=Effect.CreateEffect(c)
 	--spsummon success
 	local e7=Effect.CreateEffect(c)
 	e7:SetDescription(aux.Stringid(73941492,0))
@@ -54,15 +49,6 @@ function c73941492.initial_effect(c)
 end
 function c73941492.filter(e,c)
 	return c:IsSetCard(0x98) and c:IsType(TYPE_PENDULUM)
-end
-function c73941492.xyzfil(c,xyzc,lv)
-	return c:IsSetCard(0x98) and c:IsXyzLevel(xyzc,lv) and c:IsType(TYPE_PENDULUM)
-end
-function c73941492.xyzfil2(c,tp)
-	return c:IsFaceup() and not c:IsType(TYPE_TOKEN) and c:GetControler()==tp or (c:IsHasEffect(EFFECT_XYZ_MATERIAL) and c:GetControler()~=tp)
-end
-function c73941492.xyzfil3(c)
-	return not c:IsCode(73941492)
 end
 function c73941492.tuner_filter(c)
 	return c:IsSetCard(0x98) and c:IsType(TYPE_PENDULUM)
