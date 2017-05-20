@@ -1,7 +1,7 @@
 --流星竜メテオ・ブラック・ドラゴン
 function c30086349.initial_effect(c)
 	--fusion material
-	aux.AddFusionProcMix(true,true,c30086349.mfilter1,c30086349.mfilter2)
+	aux.AddFusionProcMix(c,true,true,c30086349.mfilter1,c30086349.mfilter2)
 	c:EnableReviveLimit()
 	--damage
 	local e1=Effect.CreateEffect(c)

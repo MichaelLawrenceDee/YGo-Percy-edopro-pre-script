@@ -1,6 +1,6 @@
 --Valkyrion the Magna Warrior (Anime)
 function c511000462.initial_effect(c)
-	aux.AddFusionProcMix(true,true,99785935,39256679,11549357)
+	aux.AddFusionProcMix(c,true,true,99785935,39256679,11549357)
 	c:EnableReviveLimit()
 	--spsummon condition
 	local e1=Effect.CreateEffect(c)

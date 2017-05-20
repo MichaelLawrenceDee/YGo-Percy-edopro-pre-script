@@ -2,7 +2,7 @@
 function c170000154.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcMix(true,true,11082056,44095762)
+	aux.AddFusionProcMix(c,true,true,11082056,44095762)
 	--Mirror Force Power!
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_DESTROY)

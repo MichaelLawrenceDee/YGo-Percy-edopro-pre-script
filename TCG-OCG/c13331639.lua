@@ -4,7 +4,7 @@
 --fixed by MLD
 function c13331639.initial_effect(c)
 	c:EnableReviveLimit()
-	aux.AddFusionProcMix(true,true,c13331639.fusfilter1,c13331639.fusfilter2,c13331639.fusfilter3,c13331639.fusfilter4)
+	aux.AddFusionProcMix(c,true,true,c13331639.fusfilter1,c13331639.fusfilter2,c13331639.fusfilter3,c13331639.fusfilter4)
 	aux.EnablePendulumAttribute(c,false)
 	--fusion procedure
 	local e0=Effect.CreateEffect(c)

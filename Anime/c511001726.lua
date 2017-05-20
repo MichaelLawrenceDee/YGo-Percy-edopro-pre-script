@@ -2,7 +2,7 @@
 function c511001726.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcMix(true,true,511001544,aux.FilterBoolFunction(Card.IsSetCard,0x7))
+	aux.AddFusionProcMix(c,true,true,511001544,aux.FilterBoolFunction(Card.IsSetCard,0x7))
 	--halve lp
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(511001726,0))

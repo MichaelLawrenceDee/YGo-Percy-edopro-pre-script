@@ -4,7 +4,7 @@
 function c45014450.initial_effect(c)
 	c:EnableReviveLimit()
 	aux.EnablePendulumAttribute(c,false)
-	aux.AddFusionProcMix(true,true,c45014450.matfilter,aux.FilterBoolFunction(Card.IsFusionSetCard,0x99))
+	aux.AddFusionProcMix(c,true,true,c45014450.matfilter,aux.FilterBoolFunction(Card.IsFusionSetCard,0x99))
 	--spsummon condition
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)

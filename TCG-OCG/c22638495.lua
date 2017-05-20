@@ -2,7 +2,7 @@
 function c22638495.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcMix(true,true,c22638495.ffilter,aux.FilterBoolFunction(Card.IsFusionType,TYPE_PENDULUM))
+	aux.AddFusionProcMix(c,true,true,c22638495.ffilter,aux.FilterBoolFunction(Card.IsFusionType,TYPE_PENDULUM))
 	--spsummon condition
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)

@@ -2,7 +2,7 @@
 function c170000155.initial_effect(c)
   	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcMix(true,true,57470761,11082056)
+	aux.AddFusionProcMix(c,true,true,57470761,11082056)
     --Give Power to a Dragon
    	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_ATKCHANGE)

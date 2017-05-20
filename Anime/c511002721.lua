@@ -2,7 +2,7 @@
 function c511002721.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcMix(true,true,c511002721.fusfilter1,c511002721.fusfilter2)
+	aux.AddFusionProcMix(c,true,true,c511002721.fusfilter1,c511002721.fusfilter2)
 	--atkdown
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_ATKCHANGE)

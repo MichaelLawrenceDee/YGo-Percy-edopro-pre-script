@@ -3,7 +3,7 @@
 --Scripted by Eerie Code
 function c68507541.initial_effect(c)
 	c:EnableReviveLimit()
-	aux.AddFusionProcMix(true,true,10979723,aux.FilterBoolFunction(Card.IsFusionSetCard,0x4))
+	aux.AddFusionProcMix(c,true,true,10979723,aux.FilterBoolFunction(Card.IsFusionSetCard,0x4))
 	--atk up
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(68507541,0))

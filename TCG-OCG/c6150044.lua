@@ -2,7 +2,7 @@
 function c6150044.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcMix(false,false,25652259,90876561,64788463)
+	aux.AddFusionProcMix(c,false,false,25652259,90876561,64788463)
 	--negate
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(6150044,0))

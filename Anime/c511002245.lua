@@ -1,6 +1,6 @@
 --Solidroid beta
 function c511002245.initial_effect(c)
-	aux.AddFusionProcMix(true,true,98049038,511002240,511000660)
+	aux.AddFusionProcMix(c,true,true,98049038,511002240,511000660)
 	c:EnableReviveLimit()
 	--spsummon condition
 	local e1=Effect.CreateEffect(c)
