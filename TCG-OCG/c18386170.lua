@@ -95,7 +95,7 @@ function c18386170.filterchk(c,tp,mg,sg,fc,...)
 				if c:IsFusionCode(v) then return false end
 			end
 		end
-		table.insert(codes,c:GetFusionCode())
+		codes[c]=c:GetFusionCode()
 		rg=mg:Filter(function(rc) return rc:IsFusionCode(c:GetFusionCode()) and not rc:IsHasEffect(511002961) end,nil)
 		mg:Sub(rg)
 	end
@@ -121,9 +121,7 @@ function c18386170.filterchk(c,tp,mg,sg,fc,...)
 	end
 	sg:RemoveCard(c)
 	mg:Merge(rg)
-	if not c:IsHasEffect(511002961) then
-		table.remove(codes,#codes)
-	end
+	codes[c]=nil
 	return res
 end
 function c18386170.fscon(e,g,gc,chkf)
@@ -156,7 +154,7 @@ function c18386170.fsop(e,tp,eg,ep,ev,re,r,rp,gc,chkf)
 		end
 		if not gc:IsHasEffect(511002961) then
 			mg=mg:Filter(function(c) return not c:IsFusionCode(gc:GetFusionCode()) or c:IsHasEffect(511002961) end,nil)
-			table.insert(codes,gc:GetFusionCode())
+			codes[gc]=gc:GetFusionCode()
 		end
 	end
 	while sg:GetCount()<3 do
@@ -166,13 +164,11 @@ function c18386170.fsop(e,tp,eg,ep,ev,re,r,rp,gc,chkf)
 			if not sg:IsContains(tc) then
 				sg:AddCard(tc)
 				if not tc:IsHasEffect(511002961) then
-					table.insert(codes,tc:GetFusionCode())
+					codes[tc]=tc:GetFusionCode()
 				end
 			else
 				sg:RemoveCard(tc)
-				if not tc:IsHasEffect(511002961) then
-					table.remove(codes,#codes)
-				end
+				codes[tc]=nil
 			end
 		end
 	end
