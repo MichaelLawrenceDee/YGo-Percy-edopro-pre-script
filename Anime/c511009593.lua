@@ -2,7 +2,7 @@
 --cleaned up by MLD
 function c511009593.initial_effect(c)
 	--Fusion summon
-	aux.FConditionMix(true,true,aux.FilterBoolFunction(Card.IsFusionSetCard,0x10af),aux.FilterBoolFunction(Card.IsFusionSetCard,0xaf))
+	aux.AddFusionProcMix(true,true,aux.FilterBoolFunction(Card.IsFusionSetCard,0x10af),aux.FilterBoolFunction(Card.IsFusionSetCard,0xaf))
 	c:EnableReviveLimit()
 	--pendulum summon
 	aux.EnablePendulumAttribute(c,false)

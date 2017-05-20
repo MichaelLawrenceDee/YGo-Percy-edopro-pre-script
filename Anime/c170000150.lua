@@ -2,7 +2,7 @@
 function c170000150.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.FConditionMix(true,true,57728570,11082056)
+	aux.AddFusionProcMix(true,true,57728570,11082056)
 	--Doom Virus (Faceup)
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_DESTROY)

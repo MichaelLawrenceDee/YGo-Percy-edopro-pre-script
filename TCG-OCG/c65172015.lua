@@ -1,7 +1,7 @@
 --AtoZ−ドラゴン・バスターキャノン
 function c65172015.initial_effect(c)
 	c:EnableReviveLimit()
-	aux.FConditionMix(true,true,1561110,91998119)
+	aux.AddFusionProcMix(true,true,1561110,91998119)
 	--spsummon condition
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)

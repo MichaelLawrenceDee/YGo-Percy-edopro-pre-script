@@ -2,7 +2,7 @@
 function c40101111.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.FConditionMix(true,true,c40101111.ffilter,aux.FilterBoolFunction(Card.IsRace,RACE_PSYCHO))
+	aux.AddFusionProcMix(true,true,c40101111.ffilter,aux.FilterBoolFunction(Card.IsRace,RACE_PSYCHO))
 	--pierce
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_SINGLE)

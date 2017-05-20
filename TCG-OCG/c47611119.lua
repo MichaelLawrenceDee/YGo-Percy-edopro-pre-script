@@ -3,7 +3,7 @@ function c47611119.initial_effect(c)
 	c:SetSPSummonOnce(47611119)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.FConditionMix(false,false,99645428,aux.FilterBoolFunction(Card.IsFusionSetCard,0x1047))
+	aux.AddFusionProcMix(false,false,99645428,aux.FilterBoolFunction(Card.IsFusionSetCard,0x1047))
 	--spsummon condition
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)

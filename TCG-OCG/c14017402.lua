@@ -2,7 +2,7 @@
 function c14017402.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.FConditionMix(true,true,c14017402.ffilter,aux.FilterBoolFunction(Card.IsRace,RACE_WARRIOR))
+	aux.AddFusionProcMix(true,true,c14017402.ffilter,aux.FilterBoolFunction(Card.IsRace,RACE_WARRIOR))
 	--copy
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(14017402,0))

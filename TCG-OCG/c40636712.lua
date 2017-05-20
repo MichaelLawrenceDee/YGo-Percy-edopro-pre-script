@@ -2,7 +2,7 @@
 function c40636712.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.FConditionMix(true,true,aux.FilterBoolFunction(Card.IsFusionSetCard,0xc3),aux.FilterBoolFunction(Card.IsFusionSetCard,0xa9))
+	aux.AddFusionProcMix(true,true,aux.FilterBoolFunction(Card.IsFusionSetCard,0xc3),aux.FilterBoolFunction(Card.IsFusionSetCard,0xa9))
 	--send to grave
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(40636712,0))

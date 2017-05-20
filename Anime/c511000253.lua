@@ -1,7 +1,7 @@
 --Chaos Phantom Demon Armityle
 function c511000253.initial_effect(c)
 	c:EnableReviveLimit()
-	aux.FConditionMix(true,true,6007213,32491822,69890967)
+	aux.AddFusionProcMix(true,true,6007213,32491822,69890967)
 	--Special Summon with Dimension Fusion Destruction
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)

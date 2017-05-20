@@ -3,7 +3,7 @@
 function c511009587.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.FConditionMix(true,true,16178681,41209827)
+	aux.AddFusionProcMix(true,true,16178681,41209827)
 	--pendulum summon
 	aux.EnablePendulumAttribute(c,false)
 	--no damage

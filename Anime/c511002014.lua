@@ -2,7 +2,7 @@
 function c511002014.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.FConditionMix(true,true,c511002014.ffilter1,c511002014.ffilter2)
+	aux.AddFusionProcMix(true,true,c511002014.ffilter1,c511002014.ffilter2)
 	--pierce
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)

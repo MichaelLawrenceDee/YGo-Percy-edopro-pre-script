@@ -3,7 +3,7 @@
 function c511009391.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.FConditionMix(true,true,511009400,c511009391.ffilter)
+	aux.AddFusionProcMix(true,true,511009400,c511009391.ffilter)
 	--adup
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_ATKCHANGE)

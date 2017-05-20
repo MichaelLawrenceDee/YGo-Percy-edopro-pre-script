@@ -2,7 +2,7 @@
 function c1561110.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.FConditionMix(true,true,30012506,77411244,3405259)
+	aux.AddFusionProcMix(true,true,30012506,77411244,3405259)
 	--spsummon condition
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)

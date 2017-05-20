@@ -2,7 +2,7 @@
 function c511009109.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.FConditionMix(true,true,511002013,c511009109.ffilter)
+	aux.AddFusionProcMix(true,true,511002013,c511009109.ffilter)
 	--half atk
 	local e4=Effect.CreateEffect(c)
 	e4:SetType(EFFECT_TYPE_FIELD)

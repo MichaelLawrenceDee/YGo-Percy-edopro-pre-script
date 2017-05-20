@@ -2,7 +2,7 @@
 --fixed by MLD
 function c511009382.initial_effect(c)
 	c:EnableReviveLimit()
-	aux.FConditionMix(true,true,511009400,c511009382.ffilter)
+	aux.AddFusionProcMix(true,true,511009400,c511009382.ffilter)
 	--multiattack
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)

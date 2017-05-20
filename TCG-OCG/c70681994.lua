@@ -2,5 +2,5 @@
 function c70681994.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.FConditionMix(true,true,53153481,33064647)
+	aux.AddFusionProcMix(true,true,53153481,33064647)
 end

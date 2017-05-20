@@ -1,6 +1,6 @@
 --Solidroid gamma
 function c511002246.initial_effect(c)
-	aux.FConditionMix(true,true,511002240,511000660,98049038)
+	aux.AddFusionProcMix(true,true,511002240,511000660,98049038)
 	c:EnableReviveLimit()
 	--spsummon condition
 	local e1=Effect.CreateEffect(c)

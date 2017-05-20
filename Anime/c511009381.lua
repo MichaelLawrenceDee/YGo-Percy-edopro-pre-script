@@ -3,7 +3,7 @@
 --refixed by MLD
 function c511009381.initial_effect(c)
 	--Fusion Proc
-	aux.FConditionMix(true,true,aux.FilterBoolFunction(Card.IsFusionSetCard,0x10f3),c511009381.ffilter)
+	aux.AddFusionProcMix(true,true,aux.FilterBoolFunction(Card.IsFusionSetCard,0x10f3),c511009381.ffilter)
 	c:EnableReviveLimit()
 	--give effect to material
 	local e1=Effect.CreateEffect(c)

@@ -2,7 +2,7 @@
 function c170000158.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.FConditionMix(true,true,1784686,46986414)
+	aux.AddFusionProcMix(true,true,1784686,46986414)
     --Spell Power
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_ATKCHANGE+CATEGORY_REMOVE)

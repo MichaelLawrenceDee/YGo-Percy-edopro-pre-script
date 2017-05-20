@@ -3,7 +3,7 @@ function c511009372.initial_effect(c)
 	c:EnableReviveLimit()
 	aux.EnablePendulumAttribute(c,false)
 	--fusion material
-	aux.FConditionMix(true,true,511009366,c511009372.fusfilter)
+	aux.AddFusionProcMix(true,true,511009366,c511009372.fusfilter)
 	c:EnableReviveLimit()	
 	--cannot be destroyed
 	local e3=Effect.CreateEffect(c)
