@@ -74,14 +74,20 @@ function c100000490.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 		tc=g:GetNext()
 	end
 	local tg=Group.CreateGroup()
-	while not Duel.IsExistingMatchingCard(c100000490.xyzfilter,tp,LOCATION_EXTRA,0,1,nil,tg,tg:GetCount()) 
-		or (mg:IsExists(c100000490.mfilter,1,nil,mg,tg,tp) and Duel.SelectYesNo(tp,513)) do
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
-		local sg=mg:FilterSelect(tp,c100000490.mfilter,1,1,nil,mg,tg,tp)
-		local tc=sg:GetFirst()
+	::start::
+	local cancel=Duel.IsExistingMatchingCard(c100000490.xyzfilter,tp,LOCATION_EXTRA,0,1,nil,tg,tg:GetCount())
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
+	local tc=Group.SelectUnselect(mg:Filter(c100000490.mfilter,tg,mg,tg,tp),tg,tp,cancel,cancel)
+	if not tc then goto jump end
+	if mg:IsContains(tc) then
 		mg:RemoveCard(tc)
 		tg:AddCard(tc)
+	else
+		mg:AddCard(tc)
+		tg:RemoveCard(tc)
 	end
+	goto start
+	::jump::
 	Duel.SetTargetCard(g)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 	tc=g:GetFirst()

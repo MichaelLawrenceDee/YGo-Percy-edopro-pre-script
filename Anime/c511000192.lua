@@ -204,8 +204,10 @@ function c511000192.xyztg(e,tp,eg,ep,ev,re,r,rp,chk,c,og,min,max)
 		return false
 	else
 		local mg
+		local cancel=true
 		if og then
 			mg=og:Filter(c511000192.ovfilter1,nil,c,tp)
+			cancel=false
 		else
 			mg=Duel.GetMatchingGroup(c511000192.ovfilter2,tp,LOCATION_MZONE+LOCATION_GRAVE,LOCATION_MZONE,nil,c,tp)
 			local eqg=mg:Filter(aux.XyzFreeMatFilter,nil)
@@ -217,6 +219,7 @@ function c511000192.xyztg(e,tp,eg,ep,ev,re,r,rp,chk,c,og,min,max)
 				tc=eqg:GetNext()
 			end
 			mg:Merge(eqmg)
+			if Duel.GetCurrentChain()>0 then cancel=false end
 		end
 		mg:Merge(Duel.GetMatchingGroup(Card.IsHasEffect,tp,LOCATION_ONFIELD+LOCATION_GRAVE+LOCATION_REMOVED,0,nil,511002116))
 		if not og or min==99 then
@@ -228,16 +231,23 @@ function c511000192.xyztg(e,tp,eg,ep,ev,re,r,rp,chk,c,og,min,max)
 				and not multichkg2:IsExists(aux.CheckRecursionCode,1,nil,511001225,mg,c,tp,2,2,Group.CreateGroup(),0,false)) then
 				mg=mg:Filter(function(c) return not c:IsHasEffect(73941492+TYPE_XYZ) and not c:IsHasEffect(91110378) end,nil)
 				if not mg:IsExists(Card.IsHasEffect,1,nil,511001175) and not multichkg:IsExists(aux.Check2XyzMaterial,1,nil,c) then
-					local matg
-					if Duel.GetLocationCountFromEx(tp)>0 then
+					local matg=Group.CreateGroup()
+					while matg<2 do
+						local tc
 						Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
-						matg=mg:Select(tp,2,2,nil)
-					else
-						Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
-						matg=mg:FilterSelect(tp,aux.FieldChk,1,1,nil,tp,c)
-						Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
-						mg2=mg:Select(tp,1,1,matg:GetFirst())
-						matg:Merge(mg2)
+						if Duel.GetLocationCountFromEx(tp)>0 or matg:IsExists(aux.FieldChk,1,nil,tp,c) then
+							tc=Group.SelectUnselect(mg,matg,tp,cancel,cancel)
+						else
+							tc=Group.SelectUnselect(mg:Filter(aux.FieldChk,matg,tp,c),matg,tp,cancel,cancel)
+						end
+						if not tc then return false end
+						if matg:IsContains(tc) then
+							matg:RemoveCard(tc)
+							mg:AddCard(tc)
+						else
+							matg:AddCard(tc)
+							mg:RemoveCard(tc)
+						end
 					end
 					matg:KeepAlive()
 					e:SetLabelObject(matg)
@@ -245,24 +255,27 @@ function c511000192.xyztg(e,tp,eg,ep,ev,re,r,rp,chk,c,og,min,max)
 				else
 					local ft=Duel.GetLocationCountFromEx(tp)
 					mg:Remove(Card.IsHasEffect,nil,511001175)
+					local ct=0
 					local matg=Group.CreateGroup()
-					for i=1,2 do
+					while ct<2 do
 						Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
-						local sg
-						if ft>0 then
-							sg=mg:Select(tp,1,1,nil)
+						local tc
+						if matg:IsExists(aux.FieldChk,1,nil,tp,c) then
+							tc=Group.SelectUnselect(mg,matg:Filter(function(rc) return rc:GetFlagEffect(511001226)==0 end,nil),tp,cancel,cancel)
 						else
-							sg=mg:FilterSelect(tp,aux.FieldChk,1,1,nil,tp,c)
-							ft=1
+							tc=Group.SelectUnselect(mg:Filter(aux.FieldChk,matg,tp,c),matg:Filter(function(rc) return rc:GetFlagEffect(511001226)==0 end,nil),tp,cancel,cancel)
 						end
-						local sc=sg:GetFirst()
-						mg:Merge(sc:GetEquipGroup():Filter(Card.IsHasEffect,nil,511001175))
-						if not aux.Check2XyzMaterial(sc,c) or sc:GetFlagEffect(511001226)>0 then
-							mg:RemoveCard(sc)
-						else
-							sc:RegisterFlagEffect(511001226,RESET_EVENT+0x1fe0000,0,0)
+						if not tc then return false end
+						if mg:IsContains(tc) then
+							mg:Merge(tc:GetEquipGroup():Filter(Card.IsHasEffect,nil,511001175))
+							if not aux.Check2XyzMaterial(tc,c) or tc:GetFlagEffect(511001226)>0 then
+								mg:RemoveCard(tc)
+							else
+								tc:RegisterFlagEffect(511001226,RESET_EVENT+0x1fe0000,0,0)
+							end
+							matg:AddCard(tc)
+							ct=ct+1
 						end
-						matg:AddCard(sc)
 					end
 					matg:KeepAlive()
 					e:SetLabelObject(matg)
@@ -273,51 +286,55 @@ function c511000192.xyztg(e,tp,eg,ep,ev,re,r,rp,chk,c,og,min,max)
 			local ct=0
 			local tempg=Group.CreateGroup()
 			local matg=Group.CreateGroup()
-			local matg=Group.CreateGroup()
-			while (matg:IsExists(Card.IsHasEffect,1,nil,91110378) and not aux.MatNumChkF(matg)) or ct<2 do
+			local g=Group.CreateGroup()
+			while ct<2 do
 				Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
-				local sg=mg:FilterSelect(tp,aux.XyzRecursionChk2,1,1,nil,mg,c,tp,2,2,matg,ct,false)
-				local sc=sg:GetFirst()
-				mg:RemoveCard(sc)
-				mg:Merge(sc:GetEquipGroup():Filter(Card.IsHasEffect,nil,511001175))
-				if sc:IsHasEffect(73941492+TYPE_XYZ) then
-					local eff={sc:GetCardEffect(73941492+TYPE_XYZ)}
-					for i=1,#eff do
-						local f=eff[i]:GetValue()
-						mg=mg:Filter(aux.TuneMagFilterXyz,sc,eff[i],f)
+				local sc=Group.SelectUnselect(mg:Filter(aux.XyzRecursionChk2,g,mg,c,tp,2,2,matg,ct,false),g,tp,cancel,cancel)
+				if not sc then return false end
+				if not matg:IsContains(sc) then
+					mg:RemoveCard(sc)
+					g:AddCard(sc)
+					mg:Merge(sc:GetEquipGroup():Filter(Card.IsHasEffect,nil,511001175))
+					if sc:IsHasEffect(73941492+TYPE_XYZ) then
+						local eff={sc:GetCardEffect(73941492+TYPE_XYZ)}
+						for i=1,#eff do
+							local f=eff[i]:GetValue()
+							mg=mg:Filter(aux.TuneMagFilterXyz,sc,eff[i],f)
+						end
 					end
-				end
-				if sc:IsHasEffect(511002116) then
-					tempg:AddCard(sc)
-				else
-					matg:AddCard(sc)
-				end
-				ct=ct+1
-				if aux.CheckValidMultiXyzMaterial(sc,c) and ct<2 then
-					local multi={}
-					if mg:IsExists(Auxiliary.XyzRecursionChk2,1,nil,mg,c,tp,2,2,matg,ct,false) then
-						table.insert(multi,1)
+					if sc:IsHasEffect(511002116) then
+						tempg:AddCard(sc)
+					else
+						matg:AddCard(sc)
 					end
-					local eff={sc:GetCardEffect(511001225)}
-					for i=1,#eff do
-						local te=eff[i]
-						local tgf=te:GetOperation()
-						local val=te:GetValue()
-						if val>0 and (not tgf or tgf(te,xyz)) then
-							if 2>=ct+val or mg:IsExists(aux.XyzRecursionChk2,1,nil,mg,c,tp,2,2,matg,ct+val,false) then
-								table.insert(multi,1+val)
+					ct=ct+1
+					if aux.CheckValidMultiXyzMaterial(sc,c) and ct<2 then
+						local multi={}
+						if mg:IsExists(aux.XyzRecursionChk2,1,nil,mg,c,tp,2,2,matg,ct,false) then
+							table.insert(multi,1)
+						end
+						local eff={sc:GetCardEffect(511001225)}
+						for i=1,#eff do
+							local te=eff[i]
+							local tgf=te:GetOperation()
+							local val=te:GetValue()
+							if val>0 and (not tgf or tgf(te,xyz)) then
+								if 2>=ct+val 
+									or mg:IsExists(aux.XyzRecursionChk2,1,nil,mg,c,tp,2,2,matg,ct+val,false) then
+									table.insert(multi,1+val)
+								end
 							end
 						end
-					end
-					if #multi==1 then
-						if multi[1]>1 then
-							ct=ct+multi[1]-1
-						end
-					else
-						Duel.Hint(HINT_SELECTMSG,tp,513)
-						local num=Duel.AnnounceNumber(tp,table.unpack(multi))
-						if num>1 then
-							ct=ct+num-1
+						if #multi==1 then
+							if multi[1]>1 then
+								ct=ct+multi[1]-1
+							end
+						else
+							Duel.Hint(HINT_SELECTMSG,tp,513)
+							local num=Duel.AnnounceNumber(tp,table.unpack(multi))
+							if num>1 then
+								ct=ct+num-1
+							end
 						end
 					end
 				end
