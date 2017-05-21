@@ -72,7 +72,13 @@ function c511010507.retop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS):Filter(c511010507.spcfilterchk,nil,e,tp)
 	local tc=g:GetFirst()
 	while tc do
-		Duel.MoveToField(tc,tp,tp,tc:GetPreviousLocation(),tc:GetPreviousPosition(),true,tc:GetPreviousSequence())
+		if tc:GetPreviousLocation()==LOCATION_SZONE and tc:GetPreviousSequence()>5 then
+			local seq=0
+			if tc:GetPreviousSequence()==7 then seq=1 end
+			Duel.MoveToField(tc,tp,tp,LOCATION_PZONE,tc:GetPreviousPosition(),true,bit.lshift(1,seq))
+		else
+			Duel.MoveToField(tc,tp,tp,tc:GetPreviousLocation(),tc:GetPreviousPosition(),true,bit.lshift(1,tc:GetPreviousSequence()))
+		end
 		tc=g:GetNext()
 	end
 end
