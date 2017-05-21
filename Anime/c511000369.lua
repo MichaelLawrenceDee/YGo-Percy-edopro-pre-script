@@ -111,7 +111,7 @@ function c511000369.retfilter(c)
 end
 function c511000369.retfilter2(c)
 	return c:IsType(TYPE_SPELL+TYPE_TRAP) and c:GetFlagEffect(511000369)>0 
-		and not Duel.IsExistingMatchingCard(function(c,seq)return c:GetSequence()==seq end,tp,LOCATION_SZONE,0,1,c,c:GetFlagEffectLabel(511000370))
+		and not Duel.IsExistingMatchingCard(function(c,seq)return c:GetSequence()==seq end,tp,LOCATION_SZONE,0,1,c,bit.band(bit.rshift(c:GetFlagEffectLabel(511000369),4),0xf))
 end
 function c511000369.destg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
@@ -121,10 +121,11 @@ function c511000369.destg(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_LEAVE_GRAVE,sg2,sg2:GetCount(),0,0)
 end
 function c511000369.fil(c,seq,p)
-	return c:GetFlagEffectLabel(511000370)==seq and c:GetFlagEffectLabel(511000371)==p
+	local lab=c:GetFlagEffectLabel(511000369)
+	return bit.band(bit.rshift(lab,4),0xf)==seq and bit.band(bit.rshift(lab,8),0xf)==p
 end
 function c511000369.fil2(c,seq,p)
-	return c:IsFaceup() and not (c:IsType(TYPE_FIELD+TYPE_CONTINUOUS) or c:IsHasEffect(EFFECT_REMAIN_FIELD))
+	return c:IsFaceup() and not (c:IsType(TYPE_FIELD+TYPE_CONTINUOUS) or c:IsHasEffect(EFFECT_REMAIN_FIELD) or c:IsLocation(LOCATION_PZONE))
 end
 function c511000369.transchk(c)
 	return c:GetFlagEffectLabel(511000368)==0
@@ -136,12 +137,23 @@ function c511000369.desop(e,tp,eg,ep,ev,re,r,rp)
 	--if sg2:IsExists(c511000369.transchk,1,nil) then return end
 	local tc=sg2:GetFirst()
 	while tc do
-		local sgf=sg2:Filter(c511000369.fil,nil,tc:GetFlagEffectLabel(511000370),tc:GetFlagEffectLabel(511000371))
+		local lab=tc:GetFlagEffectLabel(511000369)
+		local pos=bit.band(lab,0xf)
+		local seq=bit.band(bit.rshift(lab,4),0xf)
+		local p=bit.band(bit.rshift(lab,8),0xf)
+		local pzone=bit.band(bit.rshift(lab,16),0xf)
+		local sgf=sg2:Filter(c511000369.fil,nil,seq,p)
 		if sgf:GetCount()>1 then
-			tc=sgf:Select(tc:GetFlagEffectLabel(511000371),1,1,nil):GetFirst()
-			sg2:Remove(c511000369.fil,nil,tc:GetFlagEffectLabel(511000370),tc:GetFlagEffectLabel(511000371))
+			tc=sgf:Select(p,1,1,nil):GetFirst()
+			sg2:Remove(c511000369.fil,nil,seq,p)
 		end
-		Duel.MoveToField(tc,tp,tc:GetFlagEffectLabel(511000371),LOCATION_SZONE,tc:GetFlagEffectLabel(511000369),true,tc:GetFlagEffectLabel(511000370))
+		if pzone==1 then
+			if (seq==4 or seq==7) then seq=1
+			else seq=0 end
+		end
+		local loc=LOCATION_SZONE
+		if pzone==1 then loc=LOCATION_PZONE end
+		Duel.MoveToField(tc,tp,p,loc,pos,true,bit.lshift(1,seq))
 		tc=sg2:GetNext()
 	end
 	Duel.SendtoGrave(sg2:Filter(c511000369.fil2,nil),REASON_RULE)
@@ -182,9 +194,11 @@ function c511000369.stcheck(e,tp,eg,ep,ev,re,r,rp)
 	if g:GetCount()>0 then
 		local tc=g:GetFirst()
 		while tc do
-			tc:RegisterFlagEffect(511000369,RESET_PHASE+PHASE_END,0,1,tc:GetPreviousPosition())
-			tc:RegisterFlagEffect(511000370,RESET_PHASE+PHASE_END,0,1,tc:GetPreviousSequence())
-			tc:RegisterFlagEffect(511000371,RESET_PHASE+PHASE_END,0,1,tc:GetPreviousControler())
+			local pzone=0
+			if tc:IsPreviousLocation(LOCATION_PZONE) then
+				pzone=1
+			end
+			tc:RegisterFlagEffect(511000369,RESET_PHASE+PHASE_END,0,1,tc:GetPreviousPosition()+bit.lshift(tc:GetPreviousSequence(),4)+bit.lshift(tc:GetPreviousControler(),8)+bit.lshift(pzone,16))
 			tc=g:GetNext()
 		end
 	end
