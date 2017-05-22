@@ -31,7 +31,6 @@ function c101002042.initial_effect(c)
 	e4:SetCategory(CATEGORY_CONTROL)
 	e4:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e4:SetCode(EVENT_BATTLE_START)
-	e4:SetCondition(c101002042.ctcon)
 	e4:SetTarget(c101002042.cttg)
 	e4:SetOperation(c101002042.ctop)
 	c:RegisterEffect(e4)
@@ -68,23 +67,16 @@ function c101002042.atkop(e,tp,eg,ep,ev,re,r,rp)
 		tc:RegisterEffect(e2)
 	end
 end
-function c101002042.ctcon(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	local zone=bit.band(c:GetFreeLinkedZone(),0xf)
-	if c:GetSequence()>4 then zone=bit.band(zone,0xfff) end
-	return zone~=0
-end
 function c101002042.cttg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local tc=Duel.GetAttackTarget()
-	if chk==0 then return  Duel.GetAttacker()==e:GetHandler() and tc and tc:IsControlerCanBeChanged() end
+	if chk==0 then return  Duel.GetAttacker()==e:GetHandler() and tc and tc:IsControlerCanBeChanged(false,e:GetHandler():GetLinkedZone()) end
 	Duel.SetOperationInfo(0,CATEGORY_CONTROL,tc,1,0,0)
 end
 function c101002042.ctop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetAttackTarget()
 	local c=e:GetHandler()
 	if tc then
-		local zone=bit.band(c:GetFreeLinkedZone(),0xf)
-		if c:GetSequence()>4 then zone=bit.band(zone,0xfff) end
+		local zone=bit.band(c:GetLinkedZone(),0xf)
 		if Duel.GetControl(tc,tp,0,0,zone)~=0 then
 			local e1=Effect.CreateEffect(c)
 			e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
