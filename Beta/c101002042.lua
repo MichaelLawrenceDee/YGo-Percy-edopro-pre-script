@@ -76,7 +76,7 @@ function c101002042.ctop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetAttackTarget()
 	local c=e:GetHandler()
 	if tc then
-		local zone=bit.band(c:GetLinkedZone(),0xf)
+		local zone=bit.band(c:GetLinkedZone(),0x1f)
 		if Duel.GetControl(tc,tp,0,0,zone)~=0 then
 			local e1=Effect.CreateEffect(c)
 			e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
