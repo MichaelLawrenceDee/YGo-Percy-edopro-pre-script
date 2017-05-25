@@ -270,7 +270,7 @@ function Auxiliary.SynCondition(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,
 					local g2=g:Clone()
 					if not mgchk then
 						local thg=g2:Filter(Card.IsHasEffect,nil,EFFECT_HAND_SYNCHRO)
-						local hg=Duel.GetMatchingGroup(Card.IsCanBeSynchroMaterial,tp,LOCATION_HAND,0,c,c)
+						local hg=Duel.GetMatchingGroup(Card.IsCanBeSynchroMaterial,tp,LOCATION_HAND+LOCATION_GRAVE,0,c,c)
 						local thc=thg:GetFirst()
 						while thc do
 							local te=thc:GetCardEffect(EFFECT_HAND_SYNCHRO)
@@ -282,7 +282,7 @@ function Auxiliary.SynCondition(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,
 					end
 					local res=(not smat or g2:IsContains(smat)) 
 						and g2:IsExists(Auxiliary.SynchroCheckP31,1,nil,g2,Group.CreateGroup(),Group.CreateGroup(),Group.CreateGroup(),f1,sub1,f2,sub2,min1,max1,min2,max2,req1,reqct1,req2,reqct2,reqm,lv,c,tp,smat,pg,mgchk)
-					local hg=Duel.GetMatchingGroup(Card.IsHasEffect,tp,LOCATION_HAND,0,nil,EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)
+					local hg=Duel.GetMatchingGroup(Card.IsHasEffect,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)
 					local hc=hg:GetFirst()
 					while hc do
 						hc:ResetEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK,RESET_CODE)
@@ -306,7 +306,7 @@ function Auxiliary.SynCondition(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,
 						ntg=g:Filter(Auxiliary.NonTunerFilter,nil,f2,sub2)
 						local thg=tg:Filter(Card.IsHasEffect,nil,EFFECT_HAND_SYNCHRO)
 						thg:Merge(ntg:Filter(Card.IsHasEffect,nil,EFFECT_HAND_SYNCHRO))
-						local hg=Duel.GetMatchingGroup(Card.IsCanBeSynchroMaterial,tp,LOCATION_HAND,0,c,c)
+						local hg=Duel.GetMatchingGroup(Card.IsCanBeSynchroMaterial,tp,LOCATION_HAND+LOCATION_GRAVE,0,c,c)
 						local thc=thg:GetFirst()
 						while thc do
 							local te=thc:GetCardEffect(EFFECT_HAND_SYNCHRO)
@@ -321,7 +321,7 @@ function Auxiliary.SynCondition(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,
 					local lv=c:GetLevel()
 					local res=(not smat or tg:IsContains(smat) or ntg:IsContains(smat)) 
 						and tg:IsExists(Auxiliary.SynchroCheckP41,1,nil,tg,ntg,Group.CreateGroup(),Group.CreateGroup(),Group.CreateGroup(),min1,max1,min2,max2,req1,reqct1,req2,reqct2,reqm,lv,c,tp,smat,pg,mgchk)
-					local hg=Duel.GetMatchingGroup(Card.IsHasEffect,tp,LOCATION_HAND,0,nil,EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)
+					local hg=Duel.GetMatchingGroup(Card.IsHasEffect,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)
 					local hc=hg:GetFirst()
 					while hc do
 						hc:ResetEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK,RESET_CODE)
@@ -701,7 +701,7 @@ function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req
 					ntg=g:Filter(Auxiliary.NonTunerFilter,nil,f2,sub2)
 					local thg=tg:Filter(Card.IsHasEffect,nil,EFFECT_HAND_SYNCHRO)
 					thg:Merge(ntg:Filter(Card.IsHasEffect,nil,EFFECT_HAND_SYNCHRO))
-					local hg=Duel.GetMatchingGroup(Card.IsCanBeSynchroMaterial,tp,LOCATION_HAND,0,c,c)
+					local hg=Duel.GetMatchingGroup(Card.IsCanBeSynchroMaterial,tp,LOCATION_HAND+LOCATION_GRAVE,0,c,c)
 					local thc=thg:GetFirst()
 					while thc do
 						local te=thc:GetCardEffect(EFFECT_HAND_SYNCHRO)
@@ -804,7 +804,7 @@ function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req
 						end
 					end
 				end
-				local hg=Duel.GetMatchingGroup(Card.IsHasEffect,tp,LOCATION_HAND,0,nil,EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)
+				local hg=Duel.GetMatchingGroup(Card.IsHasEffect,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)
 				local hc=hg:GetFirst()
 				while hc do
 					hc:ResetEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK,RESET_CODE)
