@@ -25,7 +25,7 @@ function c74509280.synfilter(e,c)
 	return c:IsLocation(LOCATION_HAND) and c:IsSetCard(0x23) and c:IsControler(e:GetHandlerPlayer())
 end
 function c74509280.synval(e,c,sc)
-	if c:IsSetCard(0x23) then
+	if c:IsSetCard(0x23) and c:IsLocation(LOCATION_HAND) then
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)

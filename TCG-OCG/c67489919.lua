@@ -51,13 +51,15 @@ function c67489919.synfilter(e,c)
 		and c:IsSetCard(0x101b)
 end
 function c67489919.synval(e,c,sc)
-	local e1=Effect.CreateEffect(e:GetHandler())
-	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetCode(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)
-	e1:SetLabel(67489919)
-	e1:SetTarget(c67489919.synchktg)
-	c:RegisterEffect(e1)
-	return true
+	if c:IsLocation(LOCATION_HAND) then
+		local e1=Effect.CreateEffect(e:GetHandler())
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetCode(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)
+		e1:SetLabel(67489919)
+		e1:SetTarget(c67489919.synchktg)
+		c:RegisterEffect(e1)
+		return true
+	else return false end
 end
 function c67489919.chk2(c)
 	if not c:IsHasEffect(EFFECT_HAND_SYNCHRO) or c:IsHasEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK) then return false end

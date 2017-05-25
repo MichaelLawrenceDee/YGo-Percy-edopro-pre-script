@@ -59,13 +59,15 @@ function c16825874.cop(e,tp,eg,ep,ev,re,r,rp)
 	rc:RegisterEffect(e3)
 end
 function c16825874.synval(e,c,sc)
-	local e1=Effect.CreateEffect(e:GetHandler())
-	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetCode(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)
-	e1:SetLabel(16825874)
-	e1:SetTarget(c16825874.synchktg)
-	c:RegisterEffect(e1)
-	return true
+	if c:IsLocation(LOCATION_HAND) then
+		local e1=Effect.CreateEffect(e:GetHandler())
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetCode(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)
+		e1:SetLabel(16825874)
+		e1:SetTarget(c16825874.synchktg)
+		c:RegisterEffect(e1)
+		return true
+	else return false end
 end
 function c16825874.chk2(c)
 	if not c:IsHasEffect(EFFECT_HAND_SYNCHRO) or c:IsHasEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK) then return false end

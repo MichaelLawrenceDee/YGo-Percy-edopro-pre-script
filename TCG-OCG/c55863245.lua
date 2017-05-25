@@ -28,13 +28,15 @@ function c55863245.efilter(e,te)
 	return te:IsActiveType(TYPE_MONSTER) and te:GetOwner()~=e:GetOwner()
 end
 function c55863245.synval(e,c,sc)
-	local e1=Effect.CreateEffect(e:GetHandler())
-	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetCode(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)
-	e1:SetLabel(55863245)
-	e1:SetTarget(c55863245.synchktg)
-	c:RegisterEffect(e1)
-	return true
+	if c:IsLocation(LOCATION_HAND) then
+		local e1=Effect.CreateEffect(e:GetHandler())
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetCode(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)
+		e1:SetLabel(55863245)
+		e1:SetTarget(c55863245.synchktg)
+		c:RegisterEffect(e1)
+		return true
+	else return false end
 end
 function c55863245.chk(c)
 	if not c:IsHasEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK) then return false end

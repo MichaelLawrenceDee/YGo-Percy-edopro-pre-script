@@ -17,7 +17,7 @@ function c64910482.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 function c64910482.synval(e,c,sc)
-	if sc:IsSetCard(0x27) and c:IsNotTuner() and c:IsSetCard(0x27) then
+	if sc:IsSetCard(0x27) and c:IsNotTuner() and c:IsSetCard(0x27) and c:IsLocation(LOCATION_HAND) then
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)

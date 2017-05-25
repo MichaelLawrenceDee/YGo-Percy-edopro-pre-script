@@ -25,7 +25,7 @@ function c73417207.synfilter(e,c)
 	return c:IsLocation(LOCATION_HAND) and c:IsSetCard(0x42) and c:IsControler(e:GetHandlerPlayer())
 end
 function c73417207.synval(e,c,sc)
-	if c:IsSetCard(0x42) then
+	if c:IsSetCard(0x42) and c:IsLocation(LOCATION_HAND) then
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)
