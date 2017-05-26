@@ -188,7 +188,7 @@ function Auxiliary.NonTuner(f,a,b,c)
 end
 --Synchro monster, m-n tuners + m-n monsters
 --function Auxiliary.AddSynchroProcedure(c,f1,f2,ct)
-function Auxiliary.AddSynchroProcedure(c,f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req2,reqct2,reqm)
+function Auxiliary.AddSynchroProcedure(c,...)
 	--[[local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetCode(EFFECT_SPSUMMON_PROC)
@@ -204,15 +204,15 @@ function Auxiliary.AddSynchroProcedure(c,f1,min1,max1,f2,min2,max2,sub1,sub2,req
 		local code=c:GetOriginalCode()
 		local mt=_G["c" .. code]
 		mt.synchro_type=1
-		mt.synchro_parameters=function() return f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req2,reqct2,reqm end
+		mt.synchro_parameters={...}
 	end	
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetCode(EFFECT_SPSUMMON_PROC)
 	e1:SetProperty(EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_IGNORE_IMMUNE)
 	e1:SetRange(LOCATION_EXTRA)
-	e1:SetCondition(Auxiliary.SynCondition(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req2,reqct2,reqm))
-	e1:SetTarget(Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req2,reqct2,reqm))
+	e1:SetCondition(Auxiliary.SynCondition(...))
+	e1:SetTarget(Auxiliary.SynTarget(...))
 	e1:SetOperation(Auxiliary.SynOperation)
 	e1:SetValue(SUMMON_TYPE_SYNCHRO)
 	c:RegisterEffect(e1)
@@ -718,8 +718,10 @@ function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req
 					local tsg=Group.CreateGroup()
 					local ntsg=Group.CreateGroup()
 					while tsg:GetCount()<max1 do
+						local g2=g:Filter(Auxiliary.SynchroCheckP31,sg,g,tsg,ntsg,sg,f1,sub1,f2,sub2,min1,max1,min2,max2,req1,reqct1,req2,reqct2,reqm,lv,c,tp,smat,pg,mgchk)
+						if g2:GetCount()==0 then break end
 						Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SMATERIAL)
-						local tc=Group.SelectUnselect(g:Filter(Auxiliary.SynchroCheckP31,sg,g,tsg,ntsg,sg,f1,sub1,f2,sub2,min1,max1,min2,max2,req1,reqct1,req2,reqct2,reqm,lv,c,tp,smat,pg,mgchk),sg,tp,cancel,cancel)
+						local tc=Group.SelectUnselect(g2,sg,tp,cancel,cancel)
 						if not tc then
 							if tsg:GetCount()>=min1 and tsg:IsExists(Auxiliary.TunerFilter,tsg:GetCount(),nil,f1,sub1) and (not req1 or tsg:IsExists(req1,reqct1,nil,tp)) 
 								and ntg:IsExists(Auxiliary.SynchroCheckP32,1,sg,g,tsg,ntsg,sg,f2,sub2,min2,max2,req2,reqct2,reqm,lv,c,tp,smat,pg,mgchk) then break end
@@ -737,8 +739,10 @@ function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req
 					end
 					cancel=not mgchk and Duel.GetCurrentChain()<=0
 					while ntsg:GetCount()<max2 do
+						local g2=g:Filter(Auxiliary.SynchroCheckP32,sg,g,tsg,ntsg,sg,f2,sub2,min2,max2,req2,reqct2,reqm,lv,c,tp,smat,pg,mgchk)
+						if g2:GetCount()==0 then break end
 						Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SMATERIAL)
-						local tc=Group.SelectUnselect(g:Filter(Auxiliary.SynchroCheckP32,sg,g,tsg,ntsg,sg,f2,sub2,min2,max2,req2,reqct2,reqm,lv,c,tp,smat,pg,mgchk),sg,tp,cancel,cancel)
+						local tc=Group.SelectUnselect(g2,sg,tp,cancel,cancel)
 						if not tc then
 							if ntsg:GetCount()>=min2 and (not req2 or ntsg:IsExists(req2,reqct2,nil,tp)) and (not reqm or sg:IsExists(reqm,1,nil,tp)) 
 								and (pg:GetCount()<=0 or pg:IsExists(function(mc) return sg:IsContains(mc) end,pg:GetCount(),nil))
@@ -765,8 +769,10 @@ function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req
 					local tsg=Group.CreateGroup()
 					local ntsg=Group.CreateGroup()
 					while tsg:GetCount()<max1 do
+						local g2=tg:Filter(Auxiliary.SynchroCheckP41,sg,tg,ntg,tsg,ntsg,sg,min1,max1,min2,max2,req1,reqct1,req2,reqct2,reqm,lv,c,tp,smat,pg,mgchk)
+						if g2:GetCount()==0 then break end
 						Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SMATERIAL)
-						local tc=Group.SelectUnselect(tg:Filter(Auxiliary.SynchroCheckP41,sg,tg,ntg,tsg,ntsg,sg,min1,max1,min2,max2,req1,reqct1,req2,reqct2,reqm,lv,c,tp,smat,pg,mgchk),sg,tp,cancel,cancel)
+						local tc=Group.SelectUnselect(g2,sg,tp,cancel,cancel)
 						if not tc then
 							if tsg:GetCount()>=min1 and (not req1 or tsg:IsExists(req1,reqct1,nil,tp)) 
 								and ntg:IsExists(Auxiliary.SynchroCheckP42,1,sg,ntg,tsg,ntsg,sg,min2,max2,req2,reqct2,reqm,lv,sc,tp,smat,pg,mgchk) then break end
@@ -784,8 +790,10 @@ function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req
 					end
 					cancel=not mgchk and Duel.GetCurrentChain()<=0
 					while ntsg:GetCount()<max2 do
+						local g2=ntg:Filter(Auxiliary.SynchroCheckP42,sg,ntg,tsg,ntsg,sg,min2,max2,req2,reqct2,reqm,lv,c,tp,smat,pg,mgchk)
+						if g2:GetCount()==0 then break end
 						Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SMATERIAL)
-						local tc=Group.SelectUnselect(ntg:Filter(Auxiliary.SynchroCheckP42,sg,ntg,tsg,ntsg,sg,min2,max2,req2,reqct2,reqm,lv,c,tp,smat,pg,mgchk),sg,tp,cancel,cancel)
+						local tc=Group.SelectUnselect(g2,sg,tp,cancel,cancel)
 						if not tc then
 							if ntsg:GetCount()>=min2 and (not req2 or ntsg:IsExists(req2,reqct2,nil,tp)) and (not reqm or sg:IsExists(reqm,1,nil,tp)) 
 								and (pg:GetCount()<=0 or pg:IsExists(function(mc) return sg:IsContains(mc) end,pg:GetCount(),nil))

@@ -102,16 +102,14 @@ function c511002081.synchk(e,tp,eg,ep,ev,re,r,rp)
 	while tc do
 		tc:RegisterFlagEffect(511002082,0,0,0)
 		local tpe=tc.synchro_type
-		local t={c.synchro_parameters()}
-		t[#t]=aux.FilterBoolFunction(Card.IsHasEffect,511002081)
 		if tc.synchro_type==1 then
 			local e1=Effect.CreateEffect(tc)
 			e1:SetType(EFFECT_TYPE_FIELD)
 			e1:SetCode(EFFECT_SPSUMMON_PROC)
 			e1:SetProperty(EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_IGNORE_IMMUNE)
 			e1:SetRange(LOCATION_GRAVE)
-			e1:SetCondition(aux.SynCondition(table.unpack(t)))
-			e1:SetTarget(aux.SynTarget(table.unpack(t)))
+			e1:SetCondition(aux.SynCondition(table.unpack(c.synchro_parameters),aux.FilterBoolFunction(Card.IsHasEffect,511002081)))
+			e1:SetTarget(aux.SynTarget(table.unpack(c.synchro_parameters),aux.FilterBoolFunction(Card.IsHasEffect,511002081)))
 			e1:SetOperation(aux.SynOperation)
 			e1:SetValue(SUMMON_TYPE_SYNCHRO)
 			tc:RegisterEffect(e1)
