@@ -217,20 +217,17 @@ function Auxiliary.AddSynchroProcedure(c,...)
 	e1:SetValue(SUMMON_TYPE_SYNCHRO)
 	c:RegisterEffect(e1)
 end
-Auxiliary.SynchroReset={} --to be removed once Duel.AssumeReset() is made
 function Auxiliary.SynchroCheckFilterChk(c,f1,f2,sub1,sub2)
 	local te=c:GetCardEffect(511000189)
 	if not te then return false end
 	local f=te:GetValue()
 	local reset=false
-	Auxiliary.SynchroReset={}
 	if f(te,c) then
 		reset=true
 	end
 	local res=(c:IsType(TYPE_TUNER) and (not f1 or f1(c))) or not f2 or f2(c) or (sub1 and sub1(c)) or (sub2 and sub2(c))
 	if reset then
-		Auxiliary.SynchroReset[1]:Reset()
-		Auxiliary.SynchroReset={}
+		Duel.AssumeReset()
 	end
 	return res
 end
@@ -288,14 +285,10 @@ function Auxiliary.SynCondition(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,
 						hc:ResetEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK,RESET_CODE)
 						hc=hg:GetNext()
 					end
-					for i,eff in ipairs(Auxiliary.SynchroReset) do
-						eff:Reset()
-					end
-					Auxiliary.SynchroReset={}
+					Duel.AssumeReset()
 					return res
 				else
 					--no race change
-					Auxiliary.SynchroReset={}
 					local tg
 					local ntg
 					if mgchk then
@@ -416,10 +409,7 @@ function Auxiliary.SynchroCheckP31(c,g,tsg,ntsg,sg,f1,sub1,f2,sub2,min1,max1,min
 	g:Merge(rg)
 	tsg:RemoveCard(c)
 	sg:RemoveCard(c)
-	for i,eff in ipairs(Auxiliary.SynchroReset) do
-		eff:Reset()
-	end
-	Auxiliary.SynchroReset={}
+	Duel.AssumeReset()
 	return res
 end
 function Auxiliary.SynchroCheckP32(c,g,tsg,ntsg,sg,f2,sub2,min2,max2,req2,reqct2,reqm,lv,sc,tp,smat,pg,mgchk)
@@ -497,10 +487,7 @@ function Auxiliary.SynchroCheckP32(c,g,tsg,ntsg,sg,f2,sub2,min2,max2,req2,reqct2
 	g:Merge(rg)
 	ntsg:RemoveCard(c)
 	sg:RemoveCard(c)
-	for i,eff in ipairs(Auxiliary.SynchroReset) do
-		eff:Reset()
-	end
-	Auxiliary.SynchroReset={}
+	Duel.AssumeReset()
 	return res
 end
 function Auxiliary.SynchroCheckP41(c,tg,ntg,tsg,ntsg,sg,min1,max1,min2,max2,req1,reqct1,req2,reqct2,reqm,lv,sc,tp,smat,pg,mgchk)
@@ -778,12 +765,9 @@ function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req
 								tsg:RemoveCard(tc)
 								sg:RemoveCard(tc)
 							end
-							for i,eff in ipairs(Auxiliary.SynchroReset) do
-								eff:Reset()
-							end
-							Auxiliary.SynchroReset={}
 						end
 					end
+					Duel.AssumeReset()
 				else
 					local tsg=Group.CreateGroup()
 					local ntsg=Group.CreateGroup()
