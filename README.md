@@ -22,6 +22,8 @@ Duel.MoveToField(Card c, int move_player, int target_player, int dest, int pos, 
 
 Card.GetFreeLinkedZone() returns the useable linkes zones of a link monster
 
+Duel.AssumeReset() manually resets assume effects
+
 # Effects:
 
 EFFECT_CANNOT_SPECIAL_SUMMON now can accept the position as filter by putting it as the value, the inserted position will be the one blocked, example target: 
