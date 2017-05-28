@@ -251,7 +251,7 @@ function Auxiliary.SynCondition(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,
 				local pe={Duel.GetPlayerEffect(tp,EFFECT_MUST_BE_SMATERIAL)}
 				local pg=Group.CreateGroup()
 				local lv=c:GetLevel()
-				if pe[0] then
+				if pe[1] then
 					for i,eff in ipairs(pe) do
 						pg:AddCard(eff:GetOwner())
 					end
@@ -676,7 +676,7 @@ function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req
 				local pe={Duel.GetPlayerEffect(tp,EFFECT_MUST_BE_SMATERIAL)}
 				local pg=Group.CreateGroup()
 				local lv=c:GetLevel()
-				if pe[0] then
+				if pe[1] then
 					for i,eff in ipairs(pe) do
 						pg:AddCard(eff:GetOwner())
 					end
