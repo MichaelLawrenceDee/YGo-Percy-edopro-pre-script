@@ -61,8 +61,8 @@ function c55863245.synchktg(e,c,sg,tg,ntg,tsg,ntsg)
 		local res=true
 		if sg:IsExists(c55863245.chk,1,c) or (not tg:IsExists(c55863245.chk2,1,c) and not ntg:IsExists(c55863245.chk2,1,c) 
 			and not sg:IsExists(c55863245.chk2,1,c)) then return false end
-		local trg=tg:Filter(c55863245.chk,nil)
-		local ntrg=ntg:Filter(c55863245.chk,nil)
+		local trg=tg:Filter(c55863245.chk,c)
+		local ntrg=ntg:Filter(c55863245.chk,c)
 		return res,trg,ntrg
 	else
 		return true
