@@ -9,14 +9,8 @@ function c511002689.initial_effect(c)
 end
 function c511002689.syncheck(e,c)
 	if c~=e:GetHandler() then
-		local e1=Effect.CreateEffect(e:GetHandler())
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetCode(EFFECT_CHANGE_RACE)
-		e1:SetValue(RACE_DRAGON)
-		c:RegisterEffect(e1)
-		table.insert(Auxiliary.SynchroReset,e1)
+		c:AssumeProperty(ASSUME_RACE,RACE_DRAGON)
 		return true
-		--c:AssumeProperty(ASSUME_RACE,RACE_DRAGON)
 	else return false
 	end
 end

@@ -75,12 +75,6 @@ function c42155488.decop(e,tp,eg,ep,ev,re,r,rp,chk)
 	end
 end
 function c42155488.syncheck(e,c)
-	--c:AssumeProperty(ASSUME_RACE,e:GetLabel())
-	local e1=Effect.CreateEffect(e:GetHandler())
-	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetCode(EFFECT_CHANGE_RACE)
-	e1:SetValue(e:GetLabel())
-	c:RegisterEffect(e1)
-	table.insert(Auxiliary.SynchroReset,e1)
+	c:AssumeProperty(ASSUME_RACE,e:GetLabel())
 	return true
 end
