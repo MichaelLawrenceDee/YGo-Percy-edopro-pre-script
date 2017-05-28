@@ -667,7 +667,9 @@ function Auxiliary.SynchroCheckP43(tsg,ntsg,sg,lv,sc,tp)
 			tc=g:GetNext()
 		end
 	end
-	return (lvchk or sg:CheckWithSumEqual(Card.GetSynchroLevel,lv,sg:GetCount(),sg:GetCount(),sc)) and Duel.GetLocationCountFromEx(tp,tp,sg,s
+	return (lvchk or sg:CheckWithSumEqual(Card.GetSynchroLevel,lv,sg:GetCount(),sg:GetCount(),sc))
+	and ((sc:IsLocation(LOCATION_EXTRA) and Duel.GetLocationCountFromEx(tp,tp,sg,sc)>0)
+		or (not sc:IsLocation(LOCATION_EXTRA) and (Duel.GetLocationCount(tp,LOCATION_MZONE)>0 or sg:IsExists(Auxiliary.FConditionCheckF,nil,tp))))
 end
 function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req2,reqct2,reqm)
 --function Auxiliary.SynTarget(f1,f2,minc,maxc)
