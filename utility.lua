@@ -2963,7 +2963,7 @@ function Auxiliary.AddUnionProcedure(c,f,oldrule)
 	c:RegisterEffect(e4)
 	--auxiliary function compatibility
 	if oldrule then
-		local m=_G["c"..c:GetCode()]
+		local m=_G["c"..c:GetOriginalCode()]
 		m.old_union=true
 	end
 end
@@ -2982,7 +2982,7 @@ end
 function Auxiliary.UnionTarget(f,oldrule)
 	return function (e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 		local c=e:GetHandler()
-		local code=c:GetCode()
+		local code=c:GetOriginalCode()
 		if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and Auxiliary.UnionFilter(c,f,oldrule) end
 		if chk==0 then return e:GetHandler():GetFlagEffect(code)==0 and Duel.GetLocationCount(tp,LOCATION_SZONE)>0
 			and Duel.IsExistingTarget(Auxiliary.UnionFilter,tp,LOCATION_MZONE,0,1,c,f,oldrule) end
@@ -3013,7 +3013,7 @@ end
 function Auxiliary.UnionSumTarget(oldrule)
 	return function (e,tp,eg,ep,ev,re,r,rp,chk)
 		local c=e:GetHandler()
-		local code=c:GetCode()
+		local code=c:GetOriginalCode()
 		local pos=POS_FACEUP
 		if oldrule then pos=POS_FACEUP_ATTACK end
 		if chk==0 then return c:GetFlagEffect(code)==0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
