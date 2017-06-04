@@ -1717,6 +1717,7 @@ function Auxiliary.FConditionMix(insf,sub,...)
 	local funs={...}
 	return	function(e,g,gc,chkfnf)
 				if g==nil then return insf end
+				local chkf=bit.band(chkfnf,0xff)
 				local c=e:GetHandler()
 				local tp=c:GetControler()
 				local notfusion=bit.rshift(chkfnf,8)~=0
@@ -1724,15 +1725,16 @@ function Auxiliary.FConditionMix(insf,sub,...)
 				local mg=g:Filter(Auxiliary.FConditionFilterMix,c,c,sub,table.unpack(funs))
 				if gc then
 					local sg=Group.CreateGroup()
-					return Auxiliary.FSelectMix(gc,tp,mg,sg,c,sub,table.unpack(funs))
+					return Auxiliary.FSelectMix(gc,tp,mg,sg,c,sub,chkf,table.unpack(funs))
 				end
 				local sg=Group.CreateGroup()
-				return mg:IsExists(Auxiliary.FSelectMix,1,nil,tp,mg,sg,c,sub,table.unpack(funs))
+				return mg:IsExists(Auxiliary.FSelectMix,1,nil,tp,mg,sg,c,sub,chkf,table.unpack(funs))
 			end
 end
 function Auxiliary.FOperationMix(insf,sub,...)
 	local funs={...}
 	return	function(e,tp,eg,ep,ev,re,r,rp,gc,chkfnf)
+				local chkf=bit.band(chkfnf,0xff)
 				local c=e:GetHandler()
 				local tp=c:GetControler()
 				local notfusion=bit.rshift(chkfnf,8)~=0
@@ -1757,7 +1759,7 @@ function Auxiliary.FOperationMix(insf,sub,...)
 				end
 				while sg:GetCount()<#funs do
 					Duel.Hint(HINT_SELECTMSG,p,HINTMSG_FMATERIAL)
-					local tc=Group.SelectUnselect(mg:Filter(Auxiliary.FSelectMix,sg,tp,mg,sg,c,sub,table.unpack(funs)),sg,p,false,false,#funs,#funs)
+					local tc=Group.SelectUnselect(mg:Filter(Auxiliary.FSelectMix,sg,tp,mg,sg,c,sub,chkf,table.unpack(funs)),sg,p,false,false,#funs,#funs)
 					if not tc then break end
 					if not gc or (gc and tc~=gc) then
 						if not sg:IsContains(tc) then
@@ -1796,12 +1798,12 @@ function Auxiliary.FCheckMix(c,mg,sg,fc,sub,fun1,fun2,...)
 end
 Auxiliary.FCheckAdditional=nil
 --if sg1 is subset of sg2 then not Auxiliary.FCheckAdditional(tp,sg1,fc) -> not Auxiliary.FCheckAdditional(tp,sg2,fc)
-function Auxiliary.FCheckMixGoal(tp,sg,fc,sub,...)
+function Auxiliary.FCheckMixGoal(tp,sg,fc,sub,chkf,...)
 	local g=Group.CreateGroup()
-	return sg:IsExists(Auxiliary.FCheckMix,1,nil,sg,g,fc,sub,...) and Duel.GetLocationCountFromEx(tp,tp,sg,fc)>0
+	return sg:IsExists(Auxiliary.FCheckMix,1,nil,sg,g,fc,sub,...) and (chkf==PLAYER_NONE or Duel.GetLocationCountFromEx(tp,tp,sg,fc)>0)
 		and (not Auxiliary.FCheckAdditional or Auxiliary.FCheckAdditional(tp,sg,fc))
 end
-function Auxiliary.FSelectMix(c,tp,mg,sg,fc,sub,...)
+function Auxiliary.FSelectMix(c,tp,mg,sg,fc,sub,chkf,...)
 	local res
 	local rg=Group.CreateGroup()
 	--c has the fusion limit
@@ -1834,9 +1836,9 @@ function Auxiliary.FSelectMix(c,tp,mg,sg,fc,sub,...)
 	end
 	sg:AddCard(c)
 	if sg:GetCount()<#{...} then
-		res=mg:IsExists(Auxiliary.FSelectMix,1,sg,tp,mg,sg,fc,sub,...)
+		res=mg:IsExists(Auxiliary.FSelectMix,1,sg,tp,mg,sg,fc,sub,chkf,...)
 	else
-		res=Auxiliary.FCheckMixGoal(tp,sg,fc,sub,...)
+		res=Auxiliary.FCheckMixGoal(tp,sg,fc,sub,chkf,...)
 	end
 	sg:RemoveCard(c)
 	mg:Merge(rg)
@@ -1893,6 +1895,7 @@ function Auxiliary.FConditionMixRep(insf,sub,fun1,minc,maxc,...)
 	local funs={...}
 	return	function(e,g,gc,chkfnf)
 				if g==nil then return insf end
+				local chkf=bit.band(chkfnf,0xff)
 				local c=e:GetHandler()
 				local tp=c:GetControler()
 				local notfusion=bit.rshift(chkfnf,8)~=0
@@ -1900,10 +1903,10 @@ function Auxiliary.FConditionMixRep(insf,sub,fun1,minc,maxc,...)
 				local mg=g:Filter(Auxiliary.FConditionFilterMix,c,c,sub,fun1,table.unpack(funs))
 				if gc then
 					local sg=Group.CreateGroup()
-					return Auxiliary.FSelectMixRep(gc,tp,mg,sg,c,sub,fun1,minc,maxc,table.unpack(funs))
+					return Auxiliary.FSelectMixRep(gc,tp,mg,sg,c,sub,chkf,fun1,minc,maxc,table.unpack(funs))
 				end
 				local sg=Group.CreateGroup()
-				return mg:IsExists(Auxiliary.FSelectMixRep,1,nil,tp,mg,sg,c,sub,fun1,minc,maxc,table.unpack(funs))
+				return mg:IsExists(Auxiliary.FSelectMixRep,1,nil,tp,mg,sg,c,sub,chkf,fun1,minc,maxc,table.unpack(funs))
 			end
 end
 function Auxiliary.FOperationMixRep(insf,sub,fun1,minc,maxc,...)
@@ -1924,9 +1927,9 @@ function Auxiliary.FOperationMixRep(insf,sub,fun1,minc,maxc,...)
 					if mg:IsExists(Card.IsLocation,1,nil,LOCATION_HAND) then sfhchk=true end
 				end
 				while sg:GetCount()<maxc+#funs do
-					local cg=mg:Filter(Auxiliary.FSelectMixRep,sg,tp,mg,sg,c,sub,fun1,minc,maxc,table.unpack(funs))
+					local cg=mg:Filter(Auxiliary.FSelectMixRep,sg,tp,mg,sg,c,sub,chkf,fun1,minc,maxc,table.unpack(funs))
 					if cg:GetCount()==0 then break end
-					local cancel=Auxiliary.FCheckMixRepGoal(tp,sg,c,sub,fun1,minc,maxc,table.unpack(funs))
+					local cancel=Auxiliary.FCheckMixRepGoal(tp,sg,c,sub,chkf,fun1,minc,maxc,table.unpack(funs))
 					Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FMATERIAL)
 					local tc=Group.SelectUnselect(cg,sg,p,cancel,cancel)
 					if not tc then break end
@@ -1943,39 +1946,39 @@ function Auxiliary.FOperationMixRep(insf,sub,fun1,minc,maxc,...)
 				Duel.SetFusionMaterial(sg)
 			end
 end
-function Auxiliary.FCheckMixRep(sg,g,fc,sub,fun1,minc,maxc,fun2,...)
+function Auxiliary.FCheckMixRep(sg,g,fc,sub,chkf,fun1,minc,maxc,fun2,...)
 	if fun2 then
-		return sg:IsExists(Auxiliary.FCheckMixRepFilter,1,g,sg,g,fc,sub,fun1,minc,maxc,fun2,...)
+		return sg:IsExists(Auxiliary.FCheckMixRepFilter,1,g,sg,g,fc,sub,chkf,fun1,minc,maxc,fun2,...)
 	else
 		local ct1=sg:FilterCount(fun1,g,fc,sub)
 		local ct2=sg:FilterCount(fun1,g,fc,false)
 		return ct1==sg:GetCount()-g:GetCount() and ct1-ct2<=1
 	end
 end
-function Auxiliary.FCheckMixRepFilter(c,sg,g,fc,sub,fun1,minc,maxc,fun2,...)
+function Auxiliary.FCheckMixRepFilter(c,sg,g,fc,sub,chkf,fun1,minc,maxc,fun2,...)
 	if fun2(c,fc,sub) then
 		g:AddCard(c)
 		local sub=sub and fun2(c,fc,false)
-		local res=Auxiliary.FCheckMixRep(sg,g,fc,sub,fun1,minc,maxc,...)
+		local res=Auxiliary.FCheckMixRep(sg,g,fc,sub,chkf,fun1,minc,maxc,...)
 		g:RemoveCard(c)
 		return res
 	end
 	return false
 end
-function Auxiliary.FCheckMixRepGoal(tp,sg,fc,sub,fun1,minc,maxc,...)
+function Auxiliary.FCheckMixRepGoal(tp,sg,fc,sub,chkf,fun1,minc,maxc,...)
 	if sg:GetCount()<minc+#{...} or sg:GetCount()>maxc+#{...} then return false end
 	local g=Group.CreateGroup()
-	return Auxiliary.FCheckMixRep(sg,g,fc,sub,fun1,minc,maxc,...) and Duel.GetLocationCountFromEx(tp,tp,sg,fc)>0
+	return Auxiliary.FCheckMixRep(sg,g,fc,sub,chkf,fun1,minc,maxc,...) and (chkf==PLAYER_NONE or Duel.GetLocationCountFromEx(tp,tp,sg,fc)>0)
 		and (not Auxiliary.FCheckAdditional or Auxiliary.FCheckAdditional(tp,sg,fc))
 end
-function Auxiliary.FCheckMixRepTemplate(c,cond,tp,mg,sg,g,fc,sub,fun1,minc,maxc,...)
+function Auxiliary.FCheckMixRepTemplate(c,cond,tp,mg,sg,g,fc,sub,chkf,fun1,minc,maxc,...)
 	for i,f in ipairs({...}) do
 		if f(c,fc,sub) then
 			g:AddCard(c)
 			local sub=sub and f(c,fc,false)
 			local t={...}
 			table.remove(t,i)
-			local res=cond(tp,mg,sg,g,fc,sub,fun1,minc,maxc,table.unpack(t))
+			local res=cond(tp,mg,sg,g,fc,sub,chkf,fun1,minc,maxc,table.unpack(t))
 			g:RemoveCard(c)
 			if res then return true end
 		end
@@ -1984,7 +1987,7 @@ function Auxiliary.FCheckMixRepTemplate(c,cond,tp,mg,sg,g,fc,sub,fun1,minc,maxc,
 		if fun1(c,fc,sub) then
 			g:AddCard(c)
 			local sub=sub and fun1(c,fc,false)
-			local res=cond(tp,mg,sg,g,fc,sub,fun1,minc-1,maxc-1,...)
+			local res=cond(tp,mg,sg,g,fc,sub,chkf,fun1,minc-1,maxc-1,...)
 			g:RemoveCard(c)
 			if res then return true end
 		end
@@ -2001,28 +2004,28 @@ end
 function Auxiliary.FCheckMixRepSelected(c,...)
 	return Auxiliary.FCheckMixRepTemplate(c,Auxiliary.FCheckMixRepSelectedCond,...)
 end
-function Auxiliary.FCheckSelectMixRep(tp,mg,sg,g,fc,sub,fun1,minc,maxc,...)
+function Auxiliary.FCheckSelectMixRep(tp,mg,sg,g,fc,sub,chkf,fun1,minc,maxc,...)
 	if Auxiliary.FCheckAdditional and not Auxiliary.FCheckAdditional(tp,g,fc) then return false end
-	if Duel.GetLocationCountFromEx(tp,tp,g,fc)>0 then
+	if chkf==PLAYER_NONE or Duel.GetLocationCountFromEx(tp,tp,g,fc)>0 then
 		if minc<=0 and #{...}==0 then return true end
-		return mg:IsExists(Auxiliary.FCheckSelectMixRepAll,1,g,tp,mg,sg,g,fc,sub,fun1,minc,maxc,...)
+		return mg:IsExists(Auxiliary.FCheckSelectMixRepAll,1,g,tp,mg,sg,g,fc,sub,chkf,fun1,minc,maxc,...)
 	else
-		return mg:IsExists(Auxiliary.FCheckSelectMixRepM,1,g,tp,mg,sg,g,fc,sub,fun1,minc,maxc,...)
+		return mg:IsExists(Auxiliary.FCheckSelectMixRepM,1,g,tp,mg,sg,g,fc,sub,chkf,fun1,minc,maxc,...)
 	end
 end
-function Auxiliary.FCheckSelectMixRepAll(c,tp,mg,sg,g,fc,sub,fun1,minc,maxc,fun2,...)
+function Auxiliary.FCheckSelectMixRepAll(c,tp,mg,sg,g,fc,sub,chkf,fun1,minc,maxc,fun2,...)
 	if fun2 then
 		if fun2(c,fc,sub) then
 			g:AddCard(c)
 			local sub=sub and fun2(c,fc,false)
-			local res=Auxiliary.FCheckSelectMixRep(tp,mg,sg,g,fc,sub,fun1,minc,maxc,...)
+			local res=Auxiliary.FCheckSelectMixRep(tp,mg,sg,g,fc,sub,chkf,fun1,minc,maxc,...)
 			g:RemoveCard(c)
 			return res
 		end
 	elseif maxc>0 and fun1(c,fc,sub) then
 		g:AddCard(c)
 		local sub=sub and fun1(c,fc,false)
-		local res=Auxiliary.FCheckSelectMixRep(tp,mg,sg,g,fc,sub,fun1,minc-1,maxc-1)
+		local res=Auxiliary.FCheckSelectMixRep(tp,mg,sg,g,fc,sub,chkf,fun1,minc-1,maxc-1)
 		g:RemoveCard(c)
 		return res
 	end
@@ -2032,7 +2035,7 @@ function Auxiliary.FCheckSelectMixRepM(c,tp,...)
 	return c:IsControler(tp) and c:IsLocation(LOCATION_MZONE)
 		and Auxiliary.FCheckMixRepTemplate(c,Auxiliary.FCheckSelectMixRep,tp,...)
 end
-function Auxiliary.FSelectMixRep(c,tp,mg,sg,fc,sub,...)
+function Auxiliary.FSelectMixRep(c,tp,mg,sg,fc,sub,chkf,...)
 	local rg=Group.CreateGroup()
 	--c has the fusion limit
 	if c:IsHasEffect(73941492+TYPE_FUSION) then
@@ -2066,11 +2069,11 @@ function Auxiliary.FSelectMixRep(c,tp,mg,sg,fc,sub,...)
 	local res=false
 	if Auxiliary.FCheckAdditional and not Auxiliary.FCheckAdditional(tp,sg,fc) then
 		res=false
-	elseif Auxiliary.FCheckMixRepGoal(tp,sg,fc,sub,...) then
+	elseif Auxiliary.FCheckMixRepGoal(tp,sg,fc,sub,chkf,...) then
 		res=true
 	else
 		local g=Group.CreateGroup()
-		res=sg:IsExists(Auxiliary.FCheckMixRepSelected,1,nil,tp,mg,sg,g,fc,sub,...)
+		res=sg:IsExists(Auxiliary.FCheckMixRepSelected,1,nil,tp,mg,sg,g,fc,sub,chkf,...)
 	end
 	sg:RemoveCard(c)
 	mg:Merge(rg)
