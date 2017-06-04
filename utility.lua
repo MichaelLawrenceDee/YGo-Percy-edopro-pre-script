@@ -1671,9 +1671,9 @@ function Auxiliary.AddFusionProcMix(c,sub,insf,...)
 	for i=1,#val do
 		if type(val[i])=='function' then
 			if sub then
-				fun[i]=function(c) return (val[i](c) or c:IsHasEffect(511002961)) and not c:IsHasEffect(6205579) end
+				fun[i]=function(c,fc,sub,mg,sg) return (val[i](c,fc,sub,mg,sg) or c:IsHasEffect(511002961)) and not c:IsHasEffect(6205579) end
 			else
-				fun[i]=function(c) return val[i](c) and not c:IsHasEffect(6205579) end
+				fun[i]=function(c,fc,sub,mg,sg) return val[i](c,fc,sub,mg,sg) and not c:IsHasEffect(6205579) end
 			end
 		else
 			local addmat=true
@@ -1777,7 +1777,7 @@ end
 function Auxiliary.FConditionFilterMix(c,fc,sub,...)
 	if not c:IsCanBeFusionMaterial(fc) then return false end
 	for i,f in ipairs({...}) do
-		if f(c,fc,sub) then return true end
+		if f(c,fc,sub,mg,sg) then return true end
 	end
 	return false
 end
@@ -1785,15 +1785,15 @@ function Auxiliary.FCheckMix(c,mg,sg,fc,sub,fun1,fun2,...)
 	if fun2 then
 		sg:AddCard(c)
 		local res=false
-		if fun1(c,fc,false) then
+		if fun1(c,fc,false,mg,sg) then
 			res=mg:IsExists(Auxiliary.FCheckMix,1,sg,mg,sg,fc,sub,fun2,...)
-		elseif sub and fun1(c,fc,true) then
+		elseif sub and fun1(c,fc,true,mg,sg) then
 			res=mg:IsExists(Auxiliary.FCheckMix,1,sg,mg,sg,fc,false,fun2,...)
 		end
 		sg:RemoveCard(c)
 		return res
 	else
-		return fun1(c,fc,sub)
+		return fun1(c,fc,sub,mg,sg)
 	end
 end
 Auxiliary.FCheckAdditional=nil
@@ -1853,9 +1853,9 @@ function Auxiliary.AddFusionProcMixRep(c,sub,insf,fun1,minc,maxc,...)
 	for i=1,#val do
 		if type(val[i])=='function' then
 			if sub then
-				fun[i]=function(c) return (val[i](c) or c:IsHasEffect(511002961)) and not c:IsHasEffect(6205579) end
+				fun[i]=function(c,fc,sub,mg,sg) return (val[i](c,fc,sub,mg,sg) or c:IsHasEffect(511002961)) and not c:IsHasEffect(6205579) end
 			else
-				fun[i]=function(c) return val[i](c) and not c:IsHasEffect(6205579) end
+				fun[i]=function(c,fc,sub,mg,sg) return val[i](c,fc,sub,mg,sg) and not c:IsHasEffect(6205579) end
 			end
 		else
 			local addmat=true
@@ -1973,7 +1973,7 @@ function Auxiliary.FCheckMixRepGoal(tp,sg,fc,sub,chkf,fun1,minc,maxc,...)
 end
 function Auxiliary.FCheckMixRepTemplate(c,cond,tp,mg,sg,g,fc,sub,chkf,fun1,minc,maxc,...)
 	for i,f in ipairs({...}) do
-		if f(c,fc,sub) then
+		if f(c,fc,sub,mg,sg) then
 			g:AddCard(c)
 			local sub=sub and f(c,fc,false)
 			local t={...}
@@ -1984,7 +1984,7 @@ function Auxiliary.FCheckMixRepTemplate(c,cond,tp,mg,sg,g,fc,sub,chkf,fun1,minc,
 		end
 	end
 	if maxc>0 then
-		if fun1(c,fc,sub) then
+		if fun1(c,fc,sub,mg,sg) then
 			g:AddCard(c)
 			local sub=sub and fun1(c,fc,false)
 			local res=cond(tp,mg,sg,g,fc,sub,chkf,fun1,minc-1,maxc-1,...)

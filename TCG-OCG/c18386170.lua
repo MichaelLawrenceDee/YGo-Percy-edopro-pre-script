@@ -1,53 +1,47 @@
 --彼岸の巡礼者 ダンテ
 function c18386170.initial_effect(c)
 	c:EnableReviveLimit()
-	c18386170.min_material_count=3
-	c18386170.max_material_count=3
-	--fusion material
+	aux.AddFusionProcMixN(c,false,true,c18386170.ffilter,3)
+	--special summon condition
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetCode(EFFECT_FUSION_MATERIAL)
+	e1:SetCode(EFFECT_SPSUMMON_CONDITION)
 	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
-	e1:SetCondition(c18386170.fscon)
-	e1:SetOperation(c18386170.fsop)
+	e1:SetValue(aux.fuslimit)
 	c:RegisterEffect(e1)
-	--special summon condition
+	--cannot be target
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_SINGLE)
-	e2:SetCode(EFFECT_SPSUMMON_CONDITION)
-	e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
-	e2:SetValue(aux.fuslimit)
+	e2:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
+	e2:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
+	e2:SetRange(LOCATION_MZONE)
+	e2:SetValue(c18386170.tgval)
 	c:RegisterEffect(e2)
-	--cannot be target
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_SINGLE)
-	e3:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
-	e3:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-	e3:SetRange(LOCATION_MZONE)
-	e3:SetValue(c18386170.tgval)
-	c:RegisterEffect(e3)
 	--draw
-	local e4=Effect.CreateEffect(c)
-	e4:SetCategory(CATEGORY_DRAW)
-	e4:SetType(EFFECT_TYPE_QUICK_O)
-	e4:SetCode(EVENT_FREE_CHAIN)
-	e4:SetRange(LOCATION_MZONE)
-	e4:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-	e4:SetCountLimit(1)
-	e4:SetCost(c18386170.drcost)
-	e4:SetTarget(c18386170.drtg)
-	e4:SetOperation(c18386170.drop)
-	c:RegisterEffect(e4)
+	local e3=Effect.CreateEffect(c)
+	e3:SetCategory(CATEGORY_DRAW)
+	e3:SetType(EFFECT_TYPE_QUICK_O)
+	e3:SetCode(EVENT_FREE_CHAIN)
+	e3:SetRange(LOCATION_MZONE)
+	e3:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+	e3:SetCountLimit(1)
+	e3:SetCost(c18386170.drcost)
+	e3:SetTarget(c18386170.drtg)
+	e3:SetOperation(c18386170.drop)
+	c:RegisterEffect(e3)
 	--handes
-	local e5=Effect.CreateEffect(c)
-	e5:SetCategory(CATEGORY_HANDES)
-	e5:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e5:SetCode(EVENT_TO_GRAVE)
-	e5:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
-	e5:SetCondition(c18386170.hdcon)
-	e5:SetTarget(c18386170.hdtg)
-	e5:SetOperation(c18386170.hdop)
-	c:RegisterEffect(e5)
+	local e4=Effect.CreateEffect(c)
+	e4:SetCategory(CATEGORY_HANDES)
+	e4:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e4:SetCode(EVENT_TO_GRAVE)
+	e4:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
+	e4:SetCondition(c18386170.hdcon)
+	e4:SetTarget(c18386170.hdtg)
+	e4:SetOperation(c18386170.hdop)
+	c:RegisterEffect(e4)
+end
+function c18386170.ffilter(c,fc,sub,mg,sg)
+	return c:IsFusionSetCard(0xb1) and (not sg or not sg:IsExists(Card.IsFusionCode,1,c,c:GetFusionCode()))
 end
 function c18386170.tgval(e,re,rp)
 	return rp~=e:GetHandlerPlayer() and not re:GetHandler():IsImmuneToEffect(e)
@@ -82,107 +76,4 @@ function c18386170.hdop(e,tp,eg,ep,ev,re,r,rp)
 	if g:GetCount()==0 then return end
 	local sg=g:RandomSelect(tp,1)
 	Duel.SendtoGrave(sg,REASON_EFFECT)
-end
-function c18386170.ffilter(c,fc)
-	return (c:IsFusionSetCard(0xb1) or c:IsHasEffect(511002961)) and not c:IsHasEffect(6205579) and c:IsCanBeFusionMaterial(fc)
-end
-function c18386170.filterchk(c,tp,mg,sg,fc,...)
-	local rg=Group.CreateGroup()
-	local codes={...}
-	if not c:IsHasEffect(511002961) then
-		if #codes>0 and c:IsFusionCode(table.unpack(codes)) then return false end
-		codes[c]=c:GetFusionCode()
-		rg=mg:Filter(function(rc) return rc:IsFusionCode(c:GetFusionCode()) and not rc:IsHasEffect(511002961) end,nil)
-		mg:Sub(rg)
-	end
-	if c:IsHasEffect(73941492+TYPE_FUSION) then
-		local eff={c:GetCardEffect(73941492+TYPE_FUSION)}
-		for i=1,#eff do
-			local f=eff[i]:GetValue()
-			if sg:IsExists(aux.TuneMagFilter,1,c,eff[i],f) then
-				mg:Merge(rg)
-				return false
-			end
-			local sg2=sg:Filter(function(c) return not aux.TuneMagFilterFus(c,eff[i],f) end,nil)
-			rg:Merge(sg2)
-			mg:Sub(sg2)
-		end
-	end
-	local g2=sg:Filter(Card.IsHasEffect,nil,73941492+TYPE_FUSION)
-	if g2:GetCount()>0 then
-		local tc=g2:GetFirst()
-		while tc do
-			local eff={tc:GetCardEffect(73941492+TYPE_FUSION)}
-			for i,f in ipairs(eff) do
-				if Auxiliary.TuneMagFilter(c,f,f:GetValue()) then
-					mg:Merge(rg)
-					return false
-				end
-			end
-			tc=g2:GetNext()
-		end	
-	end
-	sg:AddCard(c)
-	local res
-	if sg:GetCount()<3 then
-		res=mg:IsExists(c18386170.filterchk,1,sg,tp,mg,sg,fc,table.unpack(codes))
-	else
-		res=Duel.GetLocationCountFromEx(tp,tp,sg,fc)>0 and (not aux.FCheckAdditional or aux.FCheckAdditional(tp,sg,fc))
-	end
-	sg:RemoveCard(c)
-	mg:Merge(rg)
-	codes[c]=nil
-	return res
-end
-function c18386170.fscon(e,g,gc,chkf)
-	if g==nil then return true end
-	local c=e:GetHandler()
-	local mg=g:Filter(c18386170.ffilter,nil,c)
-	local tp=c:GetControler()
-	if gc then return mg:IsContains(gc) and c18386170.filterchk(gc,tp,mg,Group.CreateGroup(),c) end
-	local sg=Group.CreateGroup()
-	return mg:IsExists(c18386170.filterchk,1,nil,tp,mg,sg,c)
-end
-function c18386170.fsop(e,tp,eg,ep,ev,re,r,rp,gc,chkf)
-	local mg=eg:Filter(c18386170.ffilter,nil,e:GetHandler())
-	local p=tp
-	local sfhchk=false
-	local codes={}
-	if Duel.IsPlayerAffectedByEffect(tp,511004008) and Duel.SelectYesNo(1-tp,65) then
-		p=1-tp Duel.ConfirmCards(1-tp,g)
-		if g:IsExists(Card.IsLocation,1,nil,LOCATION_HAND) then sfhchk=true end
-	end
-	local sg=Group.CreateGroup()
-	if gc then
-		sg:AddCard(gc) mg:RemoveCard(gc)
-		if gc:IsHasEffect(73941492+TYPE_FUSION) then
-			local eff={gc:GetCardEffect(73941492+TYPE_FUSION)}
-			for i=1,#eff do
-				local f=eff[i]:GetValue()
-				mg=mg:Filter(aux.TuneMagFilterFus,gc,eff[i],f)
-			end
-		end
-		if not gc:IsHasEffect(511002961) then
-			mg=mg:Filter(function(c) return not c:IsFusionCode(gc:GetFusionCode()) or c:IsHasEffect(511002961) end,nil)
-			codes[gc]=gc:GetFusionCode()
-		end
-	end
-	while sg:GetCount()<3 do
-		Duel.Hint(HINT_SELECTMSG,p,HINTMSG_FMATERIAL)
-		local tc=Group.SelectUnselect(mg:Filter(c18386170.filterchk,sg,tp,mg,sg,e:GetHandler(),table.unpack(codes)),sg,p)
-		if not gc or tc~=gc then
-			if not sg:IsContains(tc) then
-				sg:AddCard(tc)
-				if not tc:IsHasEffect(511002961) then
-					codes[tc]=tc:GetFusionCode()
-				end
-			else
-				sg:RemoveCard(tc)
-				codes[tc]=nil
-			end
-		end
-	end
-	if sfhchk then Duel.ShuffleHand(tp) end
-	if gc then sg:RemoveCard(gc) end
-	Duel.SetFusionMaterial(sg)
 end
