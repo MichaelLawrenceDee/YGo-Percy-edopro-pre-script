@@ -1777,7 +1777,7 @@ end
 function Auxiliary.FConditionFilterMix(c,fc,sub,...)
 	if not c:IsCanBeFusionMaterial(fc) then return false end
 	for i,f in ipairs({...}) do
-		if f(c,fc,sub,mg,sg) then return true end
+		if f(c,fc,sub) then return true end
 	end
 	return false
 end
@@ -1975,7 +1975,7 @@ function Auxiliary.FCheckMixRepTemplate(c,cond,tp,mg,sg,g,fc,sub,chkf,fun1,minc,
 	for i,f in ipairs({...}) do
 		if f(c,fc,sub,mg,sg) then
 			g:AddCard(c)
-			local sub=sub and f(c,fc,false)
+			local sub=sub and f(c,fc,false,mg,sg)
 			local t={...}
 			table.remove(t,i)
 			local res=cond(tp,mg,sg,g,fc,sub,chkf,fun1,minc,maxc,table.unpack(t))
@@ -1986,7 +1986,7 @@ function Auxiliary.FCheckMixRepTemplate(c,cond,tp,mg,sg,g,fc,sub,chkf,fun1,minc,
 	if maxc>0 then
 		if fun1(c,fc,sub,mg,sg) then
 			g:AddCard(c)
-			local sub=sub and fun1(c,fc,false)
+			local sub=sub and fun1(c,fc,false,mg,sg)
 			local res=cond(tp,mg,sg,g,fc,sub,chkf,fun1,minc-1,maxc-1,...)
 			g:RemoveCard(c)
 			if res then return true end
