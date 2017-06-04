@@ -2817,10 +2817,11 @@ function Auxiliary.EquipTarget(tg,p,f)
 					player=PLAYER_ALL
 				end
 				if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsFaceup() and Auxiliary.EquipFilter(chkc,player,f,e,tp) end
-				if chk==0 then return player~=nil and Duel.IsExistingTarget(Auxiliary.EquipFilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil,player,f,e,tp) end
+				if chk==0 then return player~=nil and Duel.IsExistingTarget(Auxiliary.EquipFilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil,player,f,e,tp) 
+					and tg(e,tp,eg,ep,ev,re,r,rp,g:GetFirst(),chk) end
 				Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_EQUIP)
 				local g=Duel.SelectTarget(tp,Auxiliary.EquipFilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil,player,f,e,tp)
-				if tg then tg(e,tp,eg,ep,ev,re,r,rp,g:GetFirst()) end
+				if tg then tg(e,tp,eg,ep,ev,re,r,rp,g:GetFirst(),chk) end
 				local e1=Effect.CreateEffect(e:GetHandler())
 				e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 				e1:SetCode(EVENT_CHAIN_SOLVING)
