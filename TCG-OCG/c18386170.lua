@@ -1,7 +1,7 @@
 --彼岸の巡礼者 ダンテ
 function c18386170.initial_effect(c)
 	c:EnableReviveLimit()
-	aux.AddFusionProcMixN(c,false,true,c18386170.ffilter,3)
+	aux.AddFusionProcMixN(c,true,true,c18386170.ffilter,3)
 	--special summon condition
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
@@ -41,7 +41,10 @@ function c18386170.initial_effect(c)
 	c:RegisterEffect(e4)
 end
 function c18386170.ffilter(c,fc,sub,mg,sg)
-	return c:IsFusionSetCard(0xb1) and (not sg or not sg:IsExists(Card.IsFusionCode,1,c,c:GetFusionCode()))
+	return c:IsFusionSetCard(0xb1) and (not sg or not sg:IsExists(c18386170.fusfilter,1,c,c:GetFusionCode()))
+end
+function c18386170.fusfilter(c,code)
+	return c:IsFusionCode(code) and not c:IsHasEffect(511002961)
 end
 function c18386170.tgval(e,re,rp)
 	return rp~=e:GetHandlerPlayer() and not re:GetHandler():IsImmuneToEffect(e)
