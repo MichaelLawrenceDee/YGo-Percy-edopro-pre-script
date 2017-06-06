@@ -125,8 +125,8 @@ function c511002620.chk(e,tp)
 		and Duel.IsExistingMatchingCard(c511002620.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,g,nil,chkf) 
 		and Duel.IsExistingMatchingCard(c511002620.synfilter,tp,LOCATION_EXTRA,0,1,nil,g,tp)
 end
-function c511002620.filter1(c,e)
-	return c:IsCanBeFusionMaterial() and not c:IsImmuneToEffect(e)
+function c511002620.filter1(c,e,tp)
+	return c:IsLocation(LOCATION_MZONE) and c:IsControler(tp) and not c:IsImmuneToEffect(e)
 end
 function c511002620.filter2(c,e,tp,m,f)
 	return c:IsType(TYPE_FUSION) and (not f or f(c))
@@ -145,7 +145,7 @@ function c511002620.activate(e,tp,eg,ep,ev,re,r,rp)
 	local ect=c29724053 and Duel.IsPlayerAffectedByEffect(tp,29724053) and c29724053[tp]
 	if not c511002620.chk(e,tp) or Duel.IsPlayerAffectedByEffect(tp,29724053) or (ect and ect<2) then return end
 	local chkf=tp
-	local mg1=Duel.GetMatchingGroup(c511002620.filter1,tp,LOCATION_MZONE,0,nil,e)
+	local mg1=Duel.GetFusionMaterial(tp):Filter(c511002620.filter1,nil,e,tp)
 	local sg1=Duel.GetMatchingGroup(c511002620.filter2,tp,LOCATION_EXTRA,0,nil,e,tp,mg1,nil,chkf)
 	if sg1:GetCount()>0 then
 		local sg=sg1:Clone()
