@@ -24,13 +24,18 @@ function c900787.condition(e,tp,eg,ep,ev,re,r,rp)
 		and not Duel.IsDamageCalculated()
 end
 function c900787.cfilter(c)
-	return c:IsRace(RACE_WINDBEAST) and c:IsAbleToRemoveAsCost()
+	if not c:IsRace(RACE_WINDBEAST) or not c:IsAbleToRemoveAsCost() then return false end
+	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
+		return c:IsFaceup() and c:IsLocation(LOCATION_MZONE)
+	else
+		return c:IsLocation(LOCATION_GRAVE)
+	end
 end
 function c900787.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():GetFlagEffect(900787)==0
-		and Duel.IsExistingMatchingCard(c900787.cfilter,tp,LOCATION_GRAVE,0,1,nil) end
+		and Duel.IsExistingMatchingCard(c900787.cfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,e:GetHandler()) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g=Duel.SelectMatchingCard(tp,c900787.cfilter,tp,LOCATION_GRAVE,0,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,c900787.cfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,1,e:GetHandler())
 	e:SetLabel(g:GetFirst():GetAttack())
 	Duel.Remove(g,POS_FACEUP,REASON_COST)
 	e:GetHandler():RegisterFlagEffect(900787,RESET_PHASE+PHASE_DAMAGE,0,1)

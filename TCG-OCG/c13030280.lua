@@ -46,7 +46,7 @@ function c13030280.damcost(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function c13030280.damtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local bc=e:GetHandler():GetBattleTarget()
-	if chk==0 then return bc:IsAbleToRemove() end
+	if chk==0 then return not Duel.IsPlayerAffectedByEffect(bc:GetControler(),69832741) and bc:IsAbleToRemove() end
 	Duel.SetTargetCard(bc)
 	Duel.SetOperationInfo(0,CATEGORY_REMOVE,bc,1,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,bc:GetBaseAttack())

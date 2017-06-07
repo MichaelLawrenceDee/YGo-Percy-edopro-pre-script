@@ -30,12 +30,17 @@ function c59771339.tfilter(c)
 	return c:IsCode(63977008) or c:IsHasEffect(20932152)
 end
 function c59771339.cfilter(c)
-	return c:IsSetCard(0x43) and c:IsType(TYPE_MONSTER) and c:IsAbleToRemoveAsCost()
+	if not c:IsSetCard(0x43) or not c:IsType(TYPE_MONSTER) or not c:IsAbleToRemoveAsCost() then return false end
+	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
+		return c:IsFaceup() and c:IsLocation(LOCATION_MZONE)
+	else
+		return c:IsLocation(LOCATION_GRAVE)
+	end
 end
 function c59771339.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c59771339.cfilter,tp,LOCATION_GRAVE,0,1,nil) end
+	if chk==0 then return Duel.IsExistingMatchingCard(c59771339.cfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g=Duel.SelectMatchingCard(tp,c59771339.cfilter,tp,LOCATION_GRAVE,0,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,c59771339.cfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,1,nil)
 	e:SetLabel(g:GetFirst():GetAttack())
 	Duel.Remove(g,POS_FACEUP,REASON_COST)
 end

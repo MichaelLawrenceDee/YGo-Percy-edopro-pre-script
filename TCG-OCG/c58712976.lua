@@ -51,14 +51,19 @@ function c58712976.rmcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():GetPreviousAttackOnField()>=2500
 end
 function c58712976.filter(c)
-	return c:IsType(TYPE_MONSTER) and c:IsAbleToRemove()
+	if not c:IsType(TYPE_MONSTER) or not c:IsAbleToRemove() then return false end
+	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
+		return c:IsLocation(LOCATION_MZONE)
+	else
+		return c:IsLocation(LOCATION_GRAVE)
+	end
 end
 function c58712976.rmtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and c58712976.filter(chkc) end
+	if chkc then return chkc:IsLocation(LOCATION_MZONE+LOCATION_GRAVE) and c58712976.filter(chkc) end
 	if chk==0 then return true end
-	if Duel.IsExistingTarget(c58712976.filter,tp,LOCATION_GRAVE,LOCATION_GRAVE,3,nil) then
+	if Duel.IsExistingTarget(c58712976.filter,tp,LOCATION_MZONE+LOCATION_GRAVE,LOCATION_MZONE+LOCATION_GRAVE,3,nil) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-		local g=Duel.SelectTarget(tp,c58712976.filter,tp,LOCATION_GRAVE,LOCATION_GRAVE,3,3,nil)
+		local g=Duel.SelectTarget(tp,c58712976.filter,tp,LOCATION_MZONE+LOCATION_GRAVE,LOCATION_MZONE+LOCATION_GRAVE,3,3,nil)
 		Duel.SetOperationInfo(0,CATEGORY_REMOVE,g,3,0,0)
 	end
 end

@@ -25,16 +25,25 @@ function c19974580.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 function c19974580.rfilter(c)
-	return c:IsSetCard(0x25) and c:IsAbleToRemove()
+	if not c:IsSetCard(0x25) or not c:IsType(TYPE_MONSTER) or not c:IsAbleToRemove() then return false end
+	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
+		return c:IsFaceup() and c:IsLocation(LOCATION_MZONE)
+	else
+		return c:IsLocation(LOCATION_GRAVE)
+	end
 end
 function c19974580.attg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c19974580.rfilter,tp,LOCATION_GRAVE,0,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,tp,LOCATION_GRAVE)
+	if chk==0 then return Duel.IsExistingMatchingCard(c19974580.rfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,nil) end
+	if Duel.IsPlayerAffectedByEffect(tp,69832741) then
+		Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,tp,LOCATION_MZONE)
+	else
+		Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,tp,LOCATION_GRAVE)
+	end
 end
 function c19974580.atop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if not c:IsRelateToEffect(e) or c:IsFacedown() then return end
-	local g=Duel.GetMatchingGroup(c19974580.rfilter,tp,LOCATION_GRAVE,0,nil)
+	local g=Duel.GetMatchingGroup(c19974580.rfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil)
 	local ct=Duel.Remove(g,POS_FACEUP,REASON_EFFECT)
 	if ct>0 then
 		local e1=Effect.CreateEffect(c)

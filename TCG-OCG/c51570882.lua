@@ -87,13 +87,18 @@ function c51570882.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_DESTROY,dg,dg:GetCount(),0,0)
 end
 function c51570882.rmfilter(c)
-	return c:IsAttribute(ATTRIBUTE_DARK) and c:IsLevelAbove(8) and c:IsAbleToRemove()
+	if not c:IsAttribute(ATTRIBUTE_DARK) or not c:IsLevelAbove(8) or not c:IsAbleToRemove() then return false end
+	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
+		return c:IsFaceup() and c:IsLocation(LOCATION_MZONE)
+	else
+		return c:IsLocation(LOCATION_GRAVE)
+	end
 end
 function c51570882.spop(e,tp,eg,ep,ev,re,r,rp)
 	local dg=Duel.GetFieldGroup(tp,LOCATION_MZONE,LOCATION_MZONE)
 	if Duel.Destroy(dg,REASON_EFFECT)==0 then return end
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(c51570882.rmfilter,tp,LOCATION_GRAVE,0,c)
+	local g=Duel.GetMatchingGroup(c51570882.rmfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,c)
 	if g:GetCount()>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 		and c:IsLocation(LOCATION_GRAVE) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 		and Duel.SelectYesNo(tp,aux.Stringid(51570882,2)) then

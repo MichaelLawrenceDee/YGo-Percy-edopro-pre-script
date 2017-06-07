@@ -52,7 +52,8 @@ function c1561110.splimit(e,se,sp,st)
 	return not e:GetHandler():IsLocation(LOCATION_EXTRA)
 end
 function c1561110.rmfilter(c)
-	return c:IsAbleToRemoveAsCost() and c:IsCanBeFusionMaterial()
+	if not c:IsAbleToRemoveAsCost() or not c:IsCanBeFusionMaterial() then return false end
+	return not c:IsLocation(LOCATION_GRAVE) or not Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741)
 end
 function c1561110.rmfilter1(c,mg,ft)
 	local mg2=mg:Clone()

@@ -86,14 +86,20 @@ c511010132.collection={
 	[14306092]=true;[84224627]=true;[511001163]=true;[511001169]=true;[511001858]=true;
 }
 function c511010132.rfilter(c)
-	return c:IsType(TYPE_MONSTER) and (c:IsSetCard(0x321) or c511010132.collection[c:GetCode()]) and c:IsAbleToRemoveAsCost()
+	if not c:IsType(TYPE_MONSTER) or (not c:IsSetCard(0x321) and not c511010132.collection[c:GetCode()]) 
+		or not c:IsAbleToRemoveAsCost() then return false end
+	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
+		return c:IsFaceup() and c:IsLocation(LOCATION_MZONE)
+	else
+		return c:IsLocation(LOCATION_GRAVE)
+	end
 end
 function c511010132.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST)
-		and Duel.IsExistingMatchingCard(c511010132.rfilter,tp,LOCATION_GRAVE,0,1,nil) end
+		and Duel.IsExistingMatchingCard(c511010132.rfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,nil) end
 	e:GetHandler():RemoveOverlayCard(tp,1,1,REASON_COST)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g=Duel.SelectMatchingCard(tp,c511010132.rfilter,tp,LOCATION_GRAVE,0,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,c511010132.rfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,1,nil)
 	Duel.Remove(g,POS_FACEUP,REASON_COST)
 	e:SetLabel(g:GetFirst():GetAttack())
 end

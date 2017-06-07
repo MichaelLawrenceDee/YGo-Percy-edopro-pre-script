@@ -59,13 +59,18 @@ function c59843383.repfilter(c,tp)
 		and c:IsRace(RACE_ZOMBIE) and c:IsReason(REASON_BATTLE+REASON_EFFECT)
 end
 function c59843383.repfil2(c)
-	return c:IsSetCard(0xd9) and c:IsType(TYPE_MONSTER) and c:IsAbleToRemove()
+	if not c:IsSetCard(0xd9) or not c:IsType(TYPE_MONSTER) or not c:IsAbleToRemove() then return false end
+	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
+		return c:IsFaceup() and c:IsLocation(LOCATION_MZONE)
+	else
+		return c:IsLocation(LOCATION_GRAVE)
+	end
 end
 function c59843383.reptg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return eg:IsExists(c59843383.repfilter,1,nil,tp) and Duel.IsExistingMatchingCard(c59843383.repfil2,tp,LOCATION_GRAVE,0,1,nil) end
+	if chk==0 then return eg:IsExists(c59843383.repfilter,1,nil,tp) and Duel.IsExistingMatchingCard(c59843383.repfil2,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,nil) end
 	if Duel.SelectYesNo(tp,aux.Stringid(59843383,2)) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-		local g=Duel.SelectMatchingCard(tp,c59843383.repfil2,tp,LOCATION_GRAVE,0,1,1,nil)
+		local g=Duel.SelectMatchingCard(tp,c59843383.repfil2,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,1,nil)
 		Duel.Remove(g,POS_FACEUP,REASON_EFFECT)
 		return true
 	else return false end

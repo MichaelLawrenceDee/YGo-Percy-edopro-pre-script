@@ -19,13 +19,18 @@ function c86805855.rmcon(e,tp,eg,ep,ev,re,r,rp)
 	return ep~=tp
 end
 function c86805855.filter(c)
-	return c:IsType(TYPE_MONSTER) and c:IsAbleToRemove()
+	if not c:IsType(TYPE_MONSTER) or not c:IsAbleToRemove() then return false end
+	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
+		return c:IsLocation(LOCATION_MZONE)
+	else
+		return c:IsLocation(LOCATION_GRAVE)
+	end
 end
 function c86805855.rmtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsControler(1-tp) and chkc:IsLocation(LOCATION_GRAVE) and c86805855.filter(chkc) end
-	if chk==0 then return Duel.IsExistingTarget(c86805855.filter,tp,0,LOCATION_GRAVE,1,nil) end
+	if chkc then return chkc:IsControler(1-tp) and chkc:IsLocation(LOCATION_MZONE+LOCATION_GRAVE) and c86805855.filter(chkc) end
+	if chk==0 then return Duel.IsExistingTarget(c86805855.filter,tp,0,LOCATION_MZONE+LOCATION_GRAVE,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g=Duel.SelectTarget(tp,c86805855.filter,tp,0,LOCATION_GRAVE,1,3,nil)
+	local g=Duel.SelectTarget(tp,c86805855.filter,tp,0,LOCATION_MZONE+LOCATION_GRAVE,1,3,nil)
 	Duel.SetOperationInfo(0,CATEGORY_REMOVE,g,g:GetCount(),0,0)
 end
 function c86805855.rmop(e,tp,eg,ep,ev,re,r,rp)

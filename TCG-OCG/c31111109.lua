@@ -26,20 +26,25 @@ function c31111109.ffilter(c)
 	return c:IsFusionSetCard(0x8) or c:IsFusionSetCard(0x9) or c:IsFusionSetCard(0x1f)
 end
 function c31111109.filter(c)
-	return (c:IsSetCard(0x9) or c:IsSetCard(0x1f) or c:IsSetCard(0x8)) and c:IsType(TYPE_MONSTER)
-		and not c:IsForbidden() and c:IsAbleToRemove()
+	if (not c:IsSetCard(0x9) and not c:IsSetCard(0x1f) and not c:IsSetCard(0x8)) or not c:IsType(TYPE_MONSTER)
+		or c:IsForbidden() or not c:IsAbleToRemove() then return false end
+	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
+		return c:IsFaceup() and c:IsLocation(LOCATION_MZONE)
+	else
+		return c:IsLocation(LOCATION_GRAVE)
+	end
 end
 function c31111109.copytg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and c31111109.filter(chkc) end
-	if chk==0 then return Duel.IsExistingTarget(c31111109.filter,tp,LOCATION_GRAVE,0,1,nil) end
+	if chkc then return chkc:IsLocation(LOCATION_MZONE+LOCATION_GRAVE) and chkc:IsControler(tp) and c31111109.filter(chkc) end
+	if chk==0 then return Duel.IsExistingTarget(c31111109.filter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g=Duel.SelectTarget(tp,c31111109.filter,tp,LOCATION_GRAVE,0,1,1,nil)
+	local g=Duel.SelectTarget(tp,c31111109.filter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,1,nil)
 	Duel.SetOperationInfo(0,CATEGORY_REMOVE,g,1,0,0)
 end
 function c31111109.copyop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
-	if c:IsRelateToEffect(e) and c:IsFaceup() and tc:IsRelateToEffect(e) then
+	if c:IsRelateToEffect(e) and c:IsFaceup() and tc and tc:IsRelateToEffect(e) then
 		if Duel.Remove(tc,POS_FACEUP,REASON_EFFECT)~=1 then	return end
 		local code=tc:GetOriginalCode()
 		local cid=c:CopyEffect(code,RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END,1)

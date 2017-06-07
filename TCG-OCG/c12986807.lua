@@ -35,15 +35,20 @@ function c12986807.operation(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SendtoGrave(g,REASON_EFFECT)
 end
 function c12986807.repfilter(c)
-	return c:IsSetCard(0x39) and c:IsAbleToRemoveAsCost()
+	if not c:IsSetCard(0x39) or not c:IsAbleToRemoveAsCost() then return false end
+	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
+		return c:IsFaceup() and c:IsLocation(LOCATION_MZONE)
+	else
+		return c:IsLocation(LOCATION_GRAVE)
+	end
 end
 function c12986807.desreptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then return not c:IsReason(REASON_REPLACE) and c:IsReason(REASON_EFFECT)
-		and Duel.IsExistingMatchingCard(c12986807.repfilter,tp,LOCATION_GRAVE,0,1,nil) end
+		and Duel.IsExistingMatchingCard(c12986807.repfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,nil) end
 	if Duel.SelectYesNo(tp,aux.Stringid(12986807,1)) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-		local g=Duel.SelectMatchingCard(tp,c12986807.repfilter,tp,LOCATION_GRAVE,0,1,1,nil)
+		local g=Duel.SelectMatchingCard(tp,c12986807.repfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,1,nil)
 		Duel.Remove(g,POS_FACEUP,REASON_COST)
 		return true
 	else return false end

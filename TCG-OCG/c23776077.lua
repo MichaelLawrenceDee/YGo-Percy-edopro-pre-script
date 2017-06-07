@@ -58,7 +58,8 @@ function c23776077.rmcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	e:GetHandler():RemoveOverlayCard(tp,1,1,REASON_COST)
 end
 function c23776077.rmfilter(c)
-	return c:IsType(TYPE_MONSTER) and c:IsAbleToRemove()
+	if not c:IsType(TYPE_MONSTER) or not c:IsAbleToRemove() then return false end
+	return not c:IsLocation(LOCATION_GRAVE) or not Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741)
 end
 function c23776077.rmtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsControler(1-tp) and chkc:IsLocation(LOCATION_MZONE+LOCATION_GRAVE) and c23776077.rmfilter(chkc) end
@@ -69,7 +70,7 @@ function c23776077.rmtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 function c23776077.rmop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
+	if tc and tc:IsRelateToEffect(e) then
 		Duel.Remove(tc,POS_FACEUP,REASON_EFFECT)
 	end
 end

@@ -30,19 +30,24 @@ function c24221808.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 function c24221808.rmfilter(c)
-	return c:IsRace(RACE_PSYCHO) and c:IsAbleToRemove()
+	if not c:IsRace(RACE_PSYCHO) or not c:IsAbleToRemove() then return false end
+	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
+		return c:IsFaceup() and c:IsLocation(LOCATION_MZONE)
+	else
+		return c:IsLocation(LOCATION_GRAVE)
+	end
 end
 function c24221808.rmtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and c24221808.rmfilter(chkc) end
-	if chk==0 then return Duel.IsExistingTarget(c24221808.rmfilter,tp,LOCATION_GRAVE,0,1,nil) end
+	if chkc then return chkc:IsLocation(LOCATION_MZONE+LOCATION_GRAVE) and chkc:IsControler(tp) and c24221808.rmfilter(chkc) end
+	if chk==0 then return Duel.IsExistingTarget(c24221808.rmfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g=Duel.SelectTarget(tp,c24221808.rmfilter,tp,LOCATION_GRAVE,0,1,1,nil)
+	local g=Duel.SelectTarget(tp,c24221808.rmfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,1,nil)
 	Duel.SetOperationInfo(0,CATEGORY_REMOVE,g,1,0,0)
 end
 function c24221808.rmop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) and Duel.Remove(tc,POS_FACEUP,REASON_EFFECT)~=0 and tc:IsLocation(LOCATION_REMOVED) then
+	if tc and tc:IsRelateToEffect(e) and Duel.Remove(tc,POS_FACEUP,REASON_EFFECT)~=0 and tc:IsLocation(LOCATION_REMOVED) then
 		if c:IsRelateToEffect(e) then
 			local sg=e:GetLabelObject()
 			if c:GetFlagEffect(24221808)==0 then

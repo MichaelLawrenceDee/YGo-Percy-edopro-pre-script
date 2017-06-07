@@ -89,16 +89,24 @@ function c38273745.op2(e,tp,eg,ep,ev,re,r,rp)
 	local sg=g:RandomSelect(1-tp,1)
 	Duel.SendtoGrave(sg,REASON_EFFECT)
 end
+function c38273745.rmfilter(c)
+	if not c:IsAbleToRemove() then return false end
+	if c:IsLocation(LOCATION_GRAVE) then
+		return not Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) or not c:IsType(TYPE_MONSTER)
+	else
+		return Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741)
+	end
+end
 function c38273745.tg3(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsControler(1-tp) and chkc:IsLocation(LOCATION_GRAVE) and chkc:IsAbleToRemove() end
-	if chk==0 then return Duel.IsExistingTarget(Card.IsAbleToRemove,tp,0,LOCATION_GRAVE,1,nil) end
+	if chkc then return chkc:IsControler(1-tp) and chkc:IsLocation(LOCATION_MZONE+LOCATION_GRAVE) and c38273745.rmfilter(chkc) end
+	if chk==0 then return Duel.IsExistingTarget(c38273745.rmfilter,tp,0,LOCATION_MZONE+LOCATION_GRAVE,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g=Duel.SelectTarget(tp,Card.IsAbleToRemove,tp,0,LOCATION_GRAVE,1,1,nil)
+	local g=Duel.SelectTarget(tp,c38273745.rmfilter,tp,0,LOCATION_MZONE+LOCATION_GRAVE,1,1,nil)
 	Duel.SetOperationInfo(0,CATEGORY_REMOVE,g,g:GetCount(),0,0)
 end
 function c38273745.op3(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
+	if tc and tc:IsRelateToEffect(e) then
 		Duel.Remove(tc,POS_FACEUP,REASON_EFFECT)
 	end
 end

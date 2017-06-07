@@ -65,7 +65,8 @@ function c511000774.op(e,tp,eg,ep,ev,re,r,rp)
 	e:GetLabelObject():SetLabel(0)
 end
 function c511000774.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():IsAbleToRemoveAsCost() end
+	if chk==0 then return not Duel.IsPlayerAffectedByEffect(e:GetHandlerPlayer(),69832741) 
+		and e:GetHandler():IsAbleToRemoveAsCost() end
 	Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_COST)
 end
 function c511000774.filter(c,e,tp)

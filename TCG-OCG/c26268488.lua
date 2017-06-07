@@ -67,7 +67,8 @@ function c26268488.disop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c26268488.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():IsAbleToRemoveAsCost() end
+	if chk==0 then return not Duel.IsPlayerAffectedByEffect(e:GetHandlerPlayer(),69832741) 
+		and e:GetHandler():IsAbleToRemoveAsCost() end
 	Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_COST)
 end
 function c26268488.spfilter(c,e,tp)

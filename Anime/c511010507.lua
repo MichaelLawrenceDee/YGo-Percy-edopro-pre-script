@@ -4,7 +4,7 @@
 function c511010507.initial_effect(c)
 	--Special Summon
 	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(511012002,0))
+	e1:SetDescription(aux.Stringid(511010507,0))
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e1:SetCode(EVENT_DESTROYED)
@@ -15,7 +15,7 @@ function c511010507.initial_effect(c)
 	c:RegisterEffect(e1)
 	--special summon Zarc
 	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(511012002,2))
+	e2:SetDescription(aux.Stringid(511010507,2))
 	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_MZONE)
@@ -51,13 +51,13 @@ function c511010507.spop(e,tp,eg,ep,ev,re,r,rp)
 		--spsummon
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_F)
-		e1:SetCode(EVENT_CUSTOM+511012002)
+		e1:SetCode(EVENT_CUSTOM+511010507)
 		e1:SetLabelObject(g)
 		e1:SetTarget(c511010507.rettg)
 		e1:SetOperation(c511010507.retop)
 		e1:SetReset(RESET_EVENT+0x1fe0000)
 		c:RegisterEffect(e1)
-		Duel.RaiseSingleEvent(c,EVENT_CUSTOM+511012002,e,r,tp,tp,0)
+		Duel.RaiseSingleEvent(c,EVENT_CUSTOM+511010507,e,r,tp,tp,0)
 	elseif Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false) then
 		Duel.SendtoGrave(c,REASON_RULE)
 	end
@@ -72,12 +72,10 @@ function c511010507.retop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS):Filter(c511010507.spcfilterchk,nil,e,tp)
 	local tc=g:GetFirst()
 	while tc do
-		if tc:IsPreviousLocation(LOCATION_PZONE) then
-			local seq=0
-			if tc:GetPreviousSequence()==7 or tc:GetPreviousSequence()==4 then seq=1 end
-			Duel.MoveToField(tc,tp,tp,LOCATION_PZONE,tc:GetPreviousPosition(),true,bit.lshift(1,seq))
-		else
-			Duel.MoveToField(tc,tp,tp,tc:GetPreviousLocation(),tc:GetPreviousPosition(),true,bit.lshift(1,tc:GetPreviousSequence()))
+		local seq=tc:GetPreviousSequence()
+		Duel.MoveToField(tc,tp,tp,tc:GetPreviousLocation(),tc:GetPreviousPosition(),true)
+		if tc:GetSequence()~=seq then
+			Duel.MoveSequence(tc,seq)
 		end
 		tc=g:GetNext()
 	end
@@ -90,7 +88,8 @@ function c511010507.zarcspfilter(c,e,tp)
 	return c:IsCode(13331639) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function c511010507.zarcremfilter(c,code)
-	return c:IsCode(code) and c:IsAbleToRemove()
+	if not c:IsCode(code) or not c:IsAbleToRemove() then return false end
+	return not c:IsLocation(LOCATION_GRAVE) or not Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741)
 end
 function c511010507.zarctg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c511010507.zarcremfilter,tp,0x5d,0,1,nil,41209827) 

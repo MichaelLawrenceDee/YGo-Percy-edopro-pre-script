@@ -19,13 +19,25 @@ function c26304459.remcon(e,tp,eg,ep,ev,re,r,rp)
 end
 function c26304459.remtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
-	Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,1-tp,LOCATION_GRAVE)
+	if Duel.IsPlayerAffectedByEffect(1-tp,69832741) then
+		Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,1-tp,LOCATION_MZONE+LOCATION_GRAVE)
+	else
+		Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,1-tp,LOCATION_GRAVE)
+	end
+end
+function c26304459.rmfilter(c)
+	if not c:IsAbleToRemove() then return false end
+	if c:IsLocation(LOCATION_GRAVE) then
+		return (not Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) or not c:IsType(TYPE_MONSTER))
+	else
+		return Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741)
+	end
 end
 function c26304459.remop(e,tp,eg,ep,ev,re,r,rp)
 	local ht=Duel.GetFieldGroupCount(tp,0,LOCATION_HAND)
 	if ht==0 then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local rg=Duel.SelectMatchingCard(tp,Card.IsAbleToRemove,tp,0,LOCATION_GRAVE,1,ht,nil)
+	local rg=Duel.SelectMatchingCard(tp,c26304459.rmfilter,tp,0,LOCATION_MZONE+LOCATION_GRAVE,1,ht,nil)
 	local c=e:GetHandler()
 	if rg:GetCount()>0 then
 		Duel.Remove(rg,POS_FACEUP,REASON_EFFECT)

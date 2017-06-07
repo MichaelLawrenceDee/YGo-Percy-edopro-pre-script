@@ -67,7 +67,8 @@ function c66141736.spop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c66141736.spcost2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():IsAbleToRemoveAsCost() end
+	if chk==0 then return not Duel.IsPlayerAffectedByEffect(e:GetHandlerPlayer(),69832741) 
+		and e:GetHandler():IsAbleToRemoveAsCost() end
 	Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_COST)
 end
 function c66141736.spfilter2(c,e,tp)

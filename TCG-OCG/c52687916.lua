@@ -18,12 +18,30 @@ function c52687916.remcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():GetSummonType()==SUMMON_TYPE_SYNCHRO
 end
 function c52687916.remtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsAbleToRemove,tp,0,0x1e,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,0,0x1e)
+	if chk==0 then
+		if Duel.IsPlayerAffectedByEffect(1-tp,69832741) then
+			return Duel.IsExistingMatchingCard(Card.IsAbleToRemove,tp,0,0x0e,1,nil)
+		else
+			return Duel.IsExistingMatchingCard(Card.IsAbleToRemove,tp,0,0x1e,1,nil)
+		end
+	end
+	if Duel.IsPlayerAffectedByEffect(1-tp,69832741) then
+		Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,0,0x0e)
+	else
+		Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,0,0x1e)
+	end
+end
+function c52687916.rmfilter(c)
+	if not c:IsAbleToRemove() then return false end
+	if c:IsLocation(LOCATION_GRAVE) then
+		return (not Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) or not c:IsType(TYPE_MONSTER))
+	else
+		return Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741)
+	end
 end
 function c52687916.remop(e,tp,eg,ep,ev,re,r,rp)
 	local g1=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_ONFIELD,nil)
-	local g2=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_GRAVE,nil)
+	local g2=Duel.GetMatchingGroup(c52687916.rmfilter,tp,0,LOCATION_MZONE+LOCATION_GRAVE,nil)
 	local g3=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_HAND,nil)
 	local sg=Group.CreateGroup()
 	if g1:GetCount()>0 and ((g2:GetCount()==0 and g3:GetCount()==0) or Duel.SelectYesNo(tp,aux.Stringid(52687916,1))) then

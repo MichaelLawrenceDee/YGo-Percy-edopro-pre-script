@@ -27,10 +27,15 @@ function c511001948.atkcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetCurrentPhase()~=PHASE_DAMAGE or not Duel.IsDamageCalculated()
 end
 function c511001948.cfilter(c)
-	return c:IsSetCard(0x214) and c:IsType(TYPE_MONSTER)
+	if not c:IsSetCard(0x214) or not c:IsType(TYPE_MONSTER) then return false end
+	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
+		return c:IsFaceup() and c:IsLocation(LOCATION_MZONE)
+	else
+		return c:IsLocation(LOCATION_GRAVE)
+	end
 end
 function c511001948.atkcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(c511001948.cfilter,tp,LOCATION_GRAVE,0,e:GetHandler())
+	local g=Duel.GetMatchingGroup(c511001948.cfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil)
 	if chk==0 then return g:GetCount()>0 and g:FilterCount(Card.IsAbleToRemoveAsCost,nil)==g:GetCount() end
 	e:SetLabel(g:GetCount())
 	Duel.Remove(g,POS_FACEUP,REASON_COST)

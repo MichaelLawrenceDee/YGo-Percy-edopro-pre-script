@@ -38,21 +38,26 @@ function c511002245.splimit(e,se,sp,st)
 	return not e:GetHandler():IsLocation(LOCATION_EXTRA)
 end
 function c511002245.spfilter(c,code)
-	return c:IsCode(code) and c:IsAbleToRemoveAsCost()
+	if not c:IsCode(code) or not c:IsAbleToRemoveAsCost() then return false end
+	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
+		return c:IsFaceup() and c:IsLocation(LOCATION_MZONE)
+	else
+		return c:IsLocation(LOCATION_GRAVE)
+	end
 end
 function c511002245.spcon(e,c)
 	if c==nil then return true end 
 	local tp=c:GetControler()
-	local g1=Duel.GetMatchingGroup(c511002245.spfilter,tp,LOCATION_GRAVE,0,nil,98049038)
-	local g2=Duel.GetMatchingGroup(c511002245.spfilter,tp,LOCATION_GRAVE,0,nil,511002240)
-	local g3=Duel.GetMatchingGroup(c511002245.spfilter,tp,LOCATION_GRAVE,0,nil,511000660)
+	local g1=Duel.GetMatchingGroup(c511002245.spfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil,98049038)
+	local g2=Duel.GetMatchingGroup(c511002245.spfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil,511002240)
+	local g3=Duel.GetMatchingGroup(c511002245.spfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil,511000660)
 	if g1:GetCount()==0 or g2:GetCount()==0 or g3:GetCount()==0 then return false end
-	return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+	return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 or Duel.IsPlayerAffectedByEffect(tp,69832741)
 end
 function c511002245.spop(e,tp,eg,ep,ev,re,r,rp,c)
-	local g1=Duel.GetMatchingGroup(c511002245.spfilter,tp,LOCATION_GRAVE,0,nil,98049038)
-	local g2=Duel.GetMatchingGroup(c511002245.spfilter,tp,LOCATION_GRAVE,0,nil,511002240)
-	local g3=Duel.GetMatchingGroup(c511002245.spfilter,tp,LOCATION_GRAVE,0,nil,511000660)
+	local g1=Duel.GetMatchingGroup(c511002245.spfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil,98049038)
+	local g2=Duel.GetMatchingGroup(c511002245.spfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil,511002240)
+	local g3=Duel.GetMatchingGroup(c511002245.spfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil,511000660)
 	g1:Merge(g2)
 	g1:Merge(g3)
 	local g=Group.CreateGroup()

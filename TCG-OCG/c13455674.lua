@@ -38,7 +38,8 @@ function c13455674.rmcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():GetSummonType()==SUMMON_TYPE_SYNCHRO
 end
 function c13455674.rmfilter(c)
-	return c:IsType(TYPE_MONSTER) and c:IsAbleToRemove()
+	if not c:IsType(TYPE_MONSTER) or not c:IsAbleToRemove() then return false end
+	return not c:IsLocation(LOCATION_GRAVE) or not Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741)
 end
 function c13455674.rmtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local ct=e:GetHandler():GetMaterialCount()

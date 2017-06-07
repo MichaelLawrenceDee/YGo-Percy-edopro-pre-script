@@ -40,8 +40,10 @@ function c11270236.splimit(e,se,sp,st)
 end
 function c11270236.rmfilter1(c,tp)
 	local att=c:GetAttribute()
-	return c:IsSetCard(0xf4) and c:IsType(TYPE_MONSTER) and (c:IsLocation(LOCATION_GRAVE) or c:IsFaceup()) and c:IsAbleToRemove()
-		and Duel.IsExistingMatchingCard(c11270236.rmfilter2,tp,0,LOCATION_MZONE,1,nil,att)
+	if not c:IsSetCard(0xf4) or not c:IsType(TYPE_MONSTER) or (not c:IsLocation(LOCATION_GRAVE) and c:IsFacedown()) or not c:IsAbleToRemove()
+		or not Duel.IsExistingMatchingCard(c11270236.rmfilter2,tp,0,LOCATION_MZONE,1,nil,att) then return false end
+	if c:IsLocation(LOCATION_MZONE) then return true end
+	return not Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741)
 end
 function c11270236.rmfilter2(c,att)
 	return c:IsFaceup() and c:IsAttribute(att) and c:IsAbleToRemove()

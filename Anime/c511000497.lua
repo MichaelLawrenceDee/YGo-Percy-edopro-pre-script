@@ -32,7 +32,7 @@ function c511000497.initial_effect(c)
 	e5:SetDescription(aux.Stringid(511000497,0))
 	e5:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e5:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e5:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e5:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_F)
 	e5:SetCode(EVENT_BATTLE_DESTROYED)
 	e5:SetCost(c511000497.cost)
 	e5:SetTarget(c511000497.target)
@@ -78,15 +78,20 @@ function c511000497.damop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Recover(tp,def,REASON_EFFECT)
 end
 function c511000497.filter(c,e,tp)
-	return c:GetCode()==89943723 and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsCode(89943723) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function c511000497.cfilter(c)
-	return c:GetCode()==78371393 and c:IsAbleToRemoveAsCost()
+	if not c:IsCode(78371393) or not c:IsAbleToRemoveAsCost() then return false end
+	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
+		return c:IsFaceup() and c:IsLocation(LOCATION_MZONE)
+	else
+		return c:IsLocation(LOCATION_GRAVE)
+	end
 end
 function c511000497.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c511000497.cfilter,tp,LOCATION_GRAVE,0,1,nil) end
+	if chk==0 then return Duel.IsExistingMatchingCard(c511000497.cfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g=Duel.SelectMatchingCard(tp,c511000497.cfilter,tp,LOCATION_GRAVE,0,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,c511000497.cfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,1,nil)
 	Duel.Remove(g,POS_FACEUP,REASON_COST)
 end
 function c511000497.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

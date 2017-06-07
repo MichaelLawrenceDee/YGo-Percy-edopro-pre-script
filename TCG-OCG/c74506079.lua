@@ -82,12 +82,17 @@ function c74506079.spop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c74506079.costfilter(c)
-	return c:IsRace(RACE_REPTILE) and c:IsAbleToRemoveAsCost()
+	if not c:IsRace(RACE_REPTILE) or not c:IsAbleToRemoveAsCost() then return false end
+	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
+		return c:IsFaceup() and c:IsLocation(LOCATION_MZONE)
+	else
+		return c:IsLocation(LOCATION_GRAVE)
+	end
 end
 function c74506079.tgcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c74506079.costfilter,tp,LOCATION_GRAVE,0,1,nil) end
+	if chk==0 then return Duel.IsExistingMatchingCard(c74506079.costfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local rg=Duel.SelectMatchingCard(tp,c74506079.costfilter,tp,LOCATION_GRAVE,0,1,1,nil)
+	local rg=Duel.SelectMatchingCard(tp,c74506079.costfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,1,nil)
 	Duel.Remove(rg,POS_FACEUP,REASON_COST)
 end
 function c74506079.tgtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
@@ -99,7 +104,7 @@ function c74506079.tgtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 function c74506079.tgop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
+	if tc and tc:IsRelateToEffect(e) then
 		Duel.SendtoGrave(tc,REASON_EFFECT)
 	end
 end
