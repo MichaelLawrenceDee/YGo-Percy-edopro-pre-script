@@ -9,15 +9,16 @@ function c511002620.initial_effect(c)
 	e1:SetOperation(c511002620.activate)
 	c:RegisterEffect(e1)
 end
-function c511002620.fusfilter(c,e,tp,g)
+function c511002620.fusfilter(c,e,tp,fe)
 	return c:IsType(TYPE_FUSION) and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,false) 
-		and Duel.IsExistingMatchingCard(c511002620.synfilter,tp,LOCATION_EXTRA,0,1,c,e,tp,g,c)
+		and Duel.IsExistingMatchingCard(c511002620.synfilter,tp,LOCATION_EXTRA,0,1,c,e,tp,c,fe)
 end
-function c511002620.synfilter(c,e,tp,g,fc)
+function c511002620.synfilter(c,e,tp,fc,fe)
+	local g=Duel.GetMatchingGroup(c511002620.filter,tp,LOCATION_MZONE,0,nil,fe,fc,c)
 	return c:IsType(TYPE_SYNCHRO) and g:IsExists(c511002620.filterchk,1,nil,g,Group.CreateGroup(),e,tp,fc,c)
 end
-function c511002620.filter(c,e)
-	return c:IsFaceup() and c:IsCanBeSynchroMaterial() and c:IsCanBeFusionMaterial() and (not e or not c:IsImmuneToEffect(e))
+function c511002620.filter(c,e,fc,sc)
+	return c:IsFaceup() and c:IsCanBeSynchroMaterial(sc) and c:IsCanBeFusionMaterial(fc) and (not e or not c:IsImmuneToEffect(e))
 end
 function c511002620.filterchk(c,g,sg,e,tp,fc,sc)
 	sg:AddCard(c)
@@ -51,21 +52,20 @@ function c511002620.matchk(fc,sc,sg,tp)
 	return res
 end
 function c511002620.target(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(c511002620.filter,tp,LOCATION_MZONE,0,nil)
 	local ect=c29724053 and Duel.IsPlayerAffectedByEffect(tp,29724053) and c29724053[tp]
 	if chk==0 then return (not ect or ect>=2) and not Duel.IsPlayerAffectedByEffect(tp,59822133) 
-		and Duel.IsExistingMatchingCard(c511002620.fusfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp,g) end
+		and Duel.IsExistingMatchingCard(c511002620.fusfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,2,tp,LOCATION_EXTRA)
 end
 function c511002620.activate(e,tp,eg,ep,ev,re,r,rp)
 	local ect=c29724053 and Duel.IsPlayerAffectedByEffect(tp,29724053) and c29724053[tp]
 	if Duel.IsPlayerAffectedByEffect(tp,29724053) or (ect and ect<2) then return end
-	local g=Duel.GetMatchingGroup(c511002620.filter,tp,LOCATION_MZONE,0,nil,e)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local fc=Duel.SelectMatchingCard(tp,c511002620.fusfilter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp,g):GetFirst()
+	local fc=Duel.SelectMatchingCard(tp,c511002620.fusfilter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp,e):GetFirst()
 	if not fc then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local sc=Duel.SelectMatchingCard(tp,c511002620.synfilter,tp,LOCATION_EXTRA,0,1,1,fc,e,tp,g,fc):GetFirst()
+	local sc=Duel.SelectMatchingCard(tp,c511002620.synfilter,tp,LOCATION_EXTRA,0,1,1,fc,e,tp,fc,e):GetFirst()
+	local g=Duel.GetMatchingGroup(c511002620.filter,tp,LOCATION_MZONE,0,nil,e,fc,sc)
 	local mat=Group.CreateGroup()
 	::start::
 		local cancel=mat:GetCount()>0 and c511002620.matchk(fc,sc,mat,tp)
