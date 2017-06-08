@@ -10,7 +10,8 @@ function c101002051.initial_effect(c)
 	e0:SetCode(EFFECT_SPSUMMON_PROC)
 	e0:SetRange(LOCATION_EXTRA)
 	e0:SetCondition(c101002051.lkcon)
-	e0:SetOperation(c101002051.lkop)
+	e0:SetTarget(c101002051.linktg)
+	e0:SetOperation(aux.LinkOperation())
 	e0:SetValue(SUMMON_TYPE_LINK)
 	c:RegisterEffect(e0)
 	--splimit
@@ -63,7 +64,7 @@ function c101002051.lkfilter1(c,lc,tp)
 end
 function c101002051.lkfilter2(c,lc,mc,tp)
 	local mg=Group.FromCards(c,mc)
-	return c:IsFaceup() and c:IsRace(lc:GetRace()) and not c:IsType(TYPE_TOKEN) and Duel.GetLocationCountFromEx(tp,tp,mg,lc)>0
+	return c:IsFaceup() and c:IsRace(mc:GetRace()) and not c:IsType(TYPE_TOKEN) and Duel.GetLocationCountFromEx(tp,tp,mg,lc)>0
 end
 function c101002051.lkcon(e,c)
 	if c==nil then return true end
@@ -71,12 +72,25 @@ function c101002051.lkcon(e,c)
 	local tp=c:GetControler()
 	return Duel.IsExistingMatchingCard(c101002051.lkfilter1,tp,LOCATION_MZONE,0,1,nil,c,tp)
 end
-function c101002051.lkop(e,tp,eg,ep,ev,re,r,rp,c)
-	local g1=Duel.SelectMatchingCard(tp,c101002051.lkfilter1,tp,LOCATION_MZONE,0,1,1,nil,c,tp)
-	local g2=Duel.SelectMatchingCard(tp,c101002051.lkfilter2,tp,LOCATION_MZONE,0,1,1,g1:GetFirst(),c,g1:GetFirst(),tp)
-	g1:Merge(g2)
-	c:SetMaterial(g1)
-	Duel.SendtoGrave(g1,REASON_MATERIAL+REASON_LINK)
+function c101002051.linktg(e,tp,eg,ep,ev,re,r,rp,chk,c)
+	local g=Group.CreateGroup()
+	while g:GetCount()<2 do
+		local tc=nil
+		if g:GetCount()==0 then
+			tc=Group.SelectUnselect(Duel.GetMatchingGroup(c101002051.lkfilter1,tp,LOCATION_MZONE,0,nil,c,tp),g,tp,false,true,2,2)
+		else
+			tc=Group.SelectUnselect(Duel.GetMatchingGroup(c101002051.lkfilter2,tp,LOCATION_MZONE,0,g,c,g:GetFirst(),tp),g,tp,false,false,2,2)
+		end
+		if not tc then return false end
+		if not g:IsContains(tc) then
+			g:AddCard(tc)
+		else
+			g:RemoveCard(tc)
+		end
+	end
+	g:KeepAlive()
+	e:SetLabelObject(g)
+	return true
 end
 function c101002051.thcon(e,tp,eg,ep,ev,re,r,rp)
 	return bit.band(e:GetHandler():GetSummonType(),SUMMON_TYPE_LINK)==SUMMON_TYPE_LINK
@@ -96,9 +110,10 @@ function c101002051.cfilter(c,mc)
 end
 function c101002051.actg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
-		local lg=e:GetHandler():GetLinkedGroup():Filter(c101002051.cfilter,nil,c)
+		local c=e:GetHandler()
+		local lg=c:GetLinkedGroup():Filter(c101002051.cfilter,nil,c)
 		local ct=lg:GetSum(Card.GetLink)
-		if ct<=0 not Duel.IsPlayerCanDiscardDeck(tp,ct) then return false end
+		if ct<=0 or not Duel.IsPlayerCanDiscardDeck(tp,ct) then return false end
 		local g=Duel.GetDecktopGroup(tp,ct)
 		return g:FilterCount(Card.IsAbleToHand,nil)>0
 	end
@@ -111,7 +126,8 @@ function c101002051.thfilter(c,code)
 	return c:IsCode(code) and c:IsAbleToHand()
 end
 function c101002051.acop(e,tp,eg,ep,ev,re,r,rp)
-	local lg=e:GetHandler():GetLinkedGroup():Filter(c101002051.cfilter,nil,c)
+	local c=e:GetHandler()
+	local lg=c:GetLinkedGroup():Filter(c101002051.cfilter,nil,c)
 	local ct=lg:GetSum(Card.GetLink)
 	if ct<=0 or not Duel.IsPlayerCanDiscardDeck(tp,ct) then return end
 	Duel.ConfirmDecktop(tp,ct)
