@@ -11,25 +11,25 @@ function c511002620.initial_effect(c)
 end
 function c511002620.fusfilter(c,e,tp,fe)
 	return c:IsType(TYPE_FUSION) and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,false) 
-		and Duel.IsExistingMatchingCard(c511002620.synfilter,tp,LOCATION_EXTRA,0,1,c,e,tp,c,fe)
+		and Duel.IsExistingMatchingCard(c511002620.synfilter,tp,LOCATION_EXTRA,0,1,c,tp,c,fe)
 end
-function c511002620.synfilter(c,e,tp,fc,fe)
+function c511002620.synfilter(c,tp,fc,fe)
 	local g=Duel.GetMatchingGroup(c511002620.filter,tp,LOCATION_MZONE,0,nil,fe,fc,c)
-	return c:IsType(TYPE_SYNCHRO) and g:IsExists(c511002620.filterchk,1,nil,g,Group.CreateGroup(),e,tp,fc,c)
+	return c:IsType(TYPE_SYNCHRO) and g:IsExists(c511002620.filterchk,1,nil,g,Group.CreateGroup(),tp,fc,c)
 end
 function c511002620.filter(c,e,fc,sc)
 	return c:IsFaceup() and c:IsCanBeSynchroMaterial(sc) and c:IsCanBeFusionMaterial(fc) and (not e or not c:IsImmuneToEffect(e))
 end
-function c511002620.filterchk(c,g,sg,e,tp,fc,sc)
+function c511002620.filterchk(c,g,sg,tp,fc,sc)
 	sg:AddCard(c)
 	local res
 	if sg:GetCount()<fc.min_material_count then
-		res=g:IsExists(c511002620.filterchk,1,sg,g,sg,e,tp,fc,sc)
+		res=g:IsExists(c511002620.filterchk,1,sg,g,sg,tp,fc,sc)
 	elseif sg:GetCount()<fc.max_material_count then
-		res=c511002620.matchk(fc,sc,sg,e,tp)
-			or g:IsExists(c511002620.filterchk,1,sg,g,sg,e,tp,fc,sc)
+		res=c511002620.matchk(fc,sc,sg,tp)
+			or g:IsExists(c511002620.filterchk,1,sg,g,sg,tp,fc,sc)
 	else
-		res=c511002620.matchk(fc,sc,sg,e,tp)
+		res=c511002620.matchk(fc,sc,sg,tp)
 	end
 	sg:RemoveCard(c)
 	return res
@@ -70,12 +70,12 @@ function c511002620.activate(e,tp,eg,ep,ev,re,r,rp)
 	local fc=Duel.SelectMatchingCard(tp,c511002620.fusfilter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp,e):GetFirst()
 	if not fc then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local sc=Duel.SelectMatchingCard(tp,c511002620.synfilter,tp,LOCATION_EXTRA,0,1,1,fc,e,tp,fc,e):GetFirst()
+	local sc=Duel.SelectMatchingCard(tp,c511002620.synfilter,tp,LOCATION_EXTRA,0,1,1,fc,tp,fc,e):GetFirst()
 	local g=Duel.GetMatchingGroup(c511002620.filter,tp,LOCATION_MZONE,0,nil,e,fc,sc)
 	local mat=Group.CreateGroup()
 	while mat:GetCount()<fc.max_material_count do
-		local cancel=mat:GetCount()>0 and c511002620.matchk(fc,sc,mat,e,tp)
-		local sg=g:Filter(c511002620.filterchk,mat,g,mat,e,tp,fc,sc)
+		local cancel=mat:GetCount()>0 and c511002620.matchk(fc,sc,mat,tp)
+		local sg=g:Filter(c511002620.filterchk,mat,g,mat,tp,fc,sc)
 		if sg:GetCount()<=0 then break end
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FMATERIAL)
 		local tc=Group.SelectUnselect(sg,mat,tp,cancel,cancel)
