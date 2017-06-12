@@ -31,7 +31,7 @@ function c511015117.initial_effect(c)
 end
 function c511015117.spcon(e,c)
 	if c==nil then return true end
-	return Duel.GetLocationCount(c:GetControler(),LOCATION_MZONE)>0 
+	return Duel.GetLocationCount(c:GetControler(),LOCATION_MZONE)>2 
 		and Duel.IsExistingMatchingCard(Card.IsFusionSetCard,c:GetControler(),LOCATION_MZONE,0,3,nil,0x16)
 end
 function c511015117.spop(e,tp,eg,ep,ev,re,r,rp,c)
