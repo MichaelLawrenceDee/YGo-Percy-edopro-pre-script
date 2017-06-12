@@ -1,37 +1,41 @@
---Absolute King Back Jack
-function c511000760.initial_effect(c)
-	--disable attack
+--Spell Textbook
+function c511001145.initial_effect(c)
+	--Activate
 	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(511000760,0))
 	e1:SetCategory(CATEGORY_DRAW)
-	e1:SetType(EFFECT_TYPE_QUICK_O)
-	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-	e1:SetRange(LOCATION_GRAVE)
-	e1:SetCondition(c511000760.condition)
-	e1:SetCost(c511000760.cost)
-	e1:SetTarget(c511000760.target)
-	e1:SetOperation(c511000760.operation)
+	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetCost(c511001145.cost)
+	e1:SetTarget(c511001145.target)
+	e1:SetOperation(c511001145.activate)
 	c:RegisterEffect(e1)
 end
-function c511000760.condition(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetTurnPlayer()~=tp
+function c511001145.cost(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then
+		local g=Duel.GetFieldGroup(tp,LOCATION_HAND,0)
+		g:RemoveCard(e:GetHandler())
+		return g:GetCount()==0 or g:FilterCount(Card.IsDiscardable,nil)==g:GetCount()
+	end
+	local g=Duel.GetFieldGroup(tp,LOCATION_HAND,0)
+	Duel.SendtoGrave(g,REASON_COST+REASON_DISCARD)
 end
-function c511000760.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():IsAbleToRemoveAsCost() end
-	Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_COST)
-end
-function c511000760.target(e,tp,eg,ep,ev,re,r,rp,chk)
+function c511001145.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsPlayerCanDraw(tp,1) end
 	Duel.SetTargetPlayer(tp)
 	Duel.SetTargetParam(1)
 	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
 end
-function c511000760.operation(e,tp,eg,ep,ev,re,r,rp)
+function c511001145.activate(e,tp,eg,ep,ev,re,r,rp)
+	local chain=Duel.GetCurrentChain()-1
 	local p,d=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER,CHAININFO_TARGET_PARAM)
-	local h=Duel.GetDecktopGroup(p,1)
-	local tc=h:GetFirst()
+	Duel.ShuffleDeck(p)
+	Duel.BreakEffect()
+	local g=Duel.GetDecktopGroup(p,1)
+	local tc=g:GetFirst()
 	Duel.Draw(p,d,REASON_EFFECT)
+	Duel.ConfirmCards(1-p,tc)
+	Duel.ShuffleHand(p)
 	local te=tc:GetActivateEffect()
 	if not te then return end
 	local pre={Duel.GetPlayerEffect(tp,EFFECT_CANNOT_ACTIVATE)}
@@ -41,9 +45,8 @@ function c511000760.operation(e,tp,eg,ep,ev,re,r,rp)
 			if type(prev)~='function' or prev(eff,te,tp) then return end
 		end
 	end
-	if tc:IsType(TYPE_TRAP) and tc:CheckActivateEffect(false,false,false)~=nil and not tc:IsHasEffect(EFFECT_CANNOT_TRIGGER)
-		and Duel.GetLocationCount(tp,LOCATION_SZONE) and Duel.SelectYesNo(tp,aux.Stringid(511000760,1)) then
-		Duel.ConfirmCards(1-p,tc)
+	if (Duel.GetLocationCount(tp,LOCATION_SZONE)>0 or tc:IsType(TYPE_FIELD)) and tc:IsType(TYPE_SPELL) 
+		and tc:CheckActivateEffect(false,false,false)~=nil and not tc:IsHasEffect(EFFECT_CANNOT_TRIGGER) then
 		local tpe=tc:GetType()
 		local tg=te:GetTarget()
 		local co=te:GetCost()
@@ -63,16 +66,12 @@ function c511000760.operation(e,tp,eg,ep,ev,re,r,rp)
 			end
 		end
 		Duel.MoveToField(tc,tp,tp,LOCATION_SZONE,POS_FACEUP,true)
-		if bit.band(tpe,TYPE_TRAP+TYPE_FIELD)==TYPE_TRAP+TYPE_FIELD then
-			Duel.MoveSequence(tc,5)
-		end
-		Duel.Hint(HINT_CARD,0,tc:GetCode())
+		Duel.Hint(HINT_CARD,0,tc:GetOriginalCode())
 		tc:CreateEffectRelation(te)
-		if bit.band(tpe,TYPE_EQUIP+TYPE_CONTINUOUS+TYPE_FIELD)==0 then
+		if bit.band(tpe,TYPE_EQUIP+TYPE_CONTINUOUS+TYPE_FIELD)==0 and not tc:IsHasEffect(EFFECT_REMAIN_FIELD) then
 			tc:CancelToGrave(false)
 		end
 		if te:GetCode()==EVENT_CHAINING then
-			local chain=Duel.GetCurrentChain()-1
 			local te2=Duel.GetChainInfo(chain,CHAININFO_TRIGGERING_EFFECT)
 			local tc=te2:GetHandler()
 			local g=Group.FromCards(tc)
@@ -99,7 +98,6 @@ function c511000760.operation(e,tp,eg,ep,ev,re,r,rp)
 		tc:SetStatus(STATUS_ACTIVATED,true)
 		if not tc:IsDisabled() then
 			if te:GetCode()==EVENT_CHAINING then
-				local chain=Duel.GetCurrentChain()-1
 				local te2=Duel.GetChainInfo(chain,CHAININFO_TRIGGERING_EFFECT)
 				local tc=te2:GetHandler()
 				local g=Group.FromCards(tc)
@@ -126,6 +124,5 @@ function c511000760.operation(e,tp,eg,ep,ev,re,r,rp)
 				etc=g:GetNext()
 			end
 		end
-		Duel.ShuffleHand(p)
-	end
+	end	
 end

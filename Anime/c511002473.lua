@@ -1,49 +1,47 @@
---Absolute King Back Jack
-function c511000760.initial_effect(c)
-	--disable attack
+--Danger Draw
+function c511002473.initial_effect(c)
+	--Activate
 	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(511000760,0))
 	e1:SetCategory(CATEGORY_DRAW)
-	e1:SetType(EFFECT_TYPE_QUICK_O)
-	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-	e1:SetRange(LOCATION_GRAVE)
-	e1:SetCondition(c511000760.condition)
-	e1:SetCost(c511000760.cost)
-	e1:SetTarget(c511000760.target)
-	e1:SetOperation(c511000760.operation)
+	e1:SetCode(EVENT_ATTACK_ANNOUNCE)
+	e1:SetCondition(c511002473.condition)
+	e1:SetTarget(c511002473.target)
+	e1:SetOperation(c511002473.activate)
 	c:RegisterEffect(e1)
 end
-function c511000760.condition(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetTurnPlayer()~=tp
+function c511002473.condition(e,tp,eg,ep,ev,re,r,rp)
+	local a=Duel.GetAttacker()
+	return a:IsControler(1-tp) and a:GetAttack()>Duel.GetLP(tp) and Duel.GetAttackTarget()==nil
 end
-function c511000760.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():IsAbleToRemoveAsCost() end
-	Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_COST)
-end
-function c511000760.target(e,tp,eg,ep,ev,re,r,rp,chk)
+function c511002473.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then return Duel.IsPlayerCanDraw(tp,1) end
 	Duel.SetTargetPlayer(tp)
 	Duel.SetTargetParam(1)
 	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
 end
-function c511000760.operation(e,tp,eg,ep,ev,re,r,rp)
+function c511002473.activate(e,tp,eg,ep,ev,re,r,rp)
+	local chain=Duel.GetCurrentChain()-1
 	local p,d=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER,CHAININFO_TARGET_PARAM)
-	local h=Duel.GetDecktopGroup(p,1)
-	local tc=h:GetFirst()
+	local g=Duel.GetDecktopGroup(p,1)
+	local tc=g:GetFirst()
 	Duel.Draw(p,d,REASON_EFFECT)
+	Duel.ConfirmCards(1-p,tc)
+	Duel.ShuffleHand(p)
+	if not tc:IsType(TYPE_TRAP) then return end
+	Duel.NegateAttack()
 	local te=tc:GetActivateEffect()
 	if not te then return end
 	local pre={Duel.GetPlayerEffect(tp,EFFECT_CANNOT_ACTIVATE)}
 	if pre[1] then
 		for i,eff in ipairs(pre) do
 			local prev=eff:GetValue()
-			if type(prev)~='function' or prev(eff,te,tp) then return end
+			if type(prev)~='function' or prev(eff,te,tp) then return false end
 		end
 	end
-	if tc:IsType(TYPE_TRAP) and tc:CheckActivateEffect(false,false,false)~=nil and not tc:IsHasEffect(EFFECT_CANNOT_TRIGGER)
-		and Duel.GetLocationCount(tp,LOCATION_SZONE) and Duel.SelectYesNo(tp,aux.Stringid(511000760,1)) then
-		Duel.ConfirmCards(1-p,tc)
+	if Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and tc:CheckActivateEffect(false,false,false)~=nil and not tc:IsHasEffect(EFFECT_CANNOT_TRIGGER) 
+		and Duel.SelectYesNo(tp,aux.Stringid(28265983,0)) then
 		local tpe=tc:GetType()
 		local tg=te:GetTarget()
 		local co=te:GetCost()
@@ -68,11 +66,10 @@ function c511000760.operation(e,tp,eg,ep,ev,re,r,rp)
 		end
 		Duel.Hint(HINT_CARD,0,tc:GetCode())
 		tc:CreateEffectRelation(te)
-		if bit.band(tpe,TYPE_EQUIP+TYPE_CONTINUOUS+TYPE_FIELD)==0 then
+		if bit.band(tpe,TYPE_EQUIP+TYPE_CONTINUOUS+TYPE_FIELD)==0 and not tc:IsHasEffect(EFFECT_REMAIN_FIELD) then
 			tc:CancelToGrave(false)
 		end
 		if te:GetCode()==EVENT_CHAINING then
-			local chain=Duel.GetCurrentChain()-1
 			local te2=Duel.GetChainInfo(chain,CHAININFO_TRIGGERING_EFFECT)
 			local tc=te2:GetHandler()
 			local g=Group.FromCards(tc)
@@ -99,7 +96,6 @@ function c511000760.operation(e,tp,eg,ep,ev,re,r,rp)
 		tc:SetStatus(STATUS_ACTIVATED,true)
 		if not tc:IsDisabled() then
 			if te:GetCode()==EVENT_CHAINING then
-				local chain=Duel.GetCurrentChain()-1
 				local te2=Duel.GetChainInfo(chain,CHAININFO_TRIGGERING_EFFECT)
 				local tc=te2:GetHandler()
 				local g=Group.FromCards(tc)
@@ -126,6 +122,5 @@ function c511000760.operation(e,tp,eg,ep,ev,re,r,rp)
 				etc=g:GetNext()
 			end
 		end
-		Duel.ShuffleHand(p)
-	end
+	end	
 end
