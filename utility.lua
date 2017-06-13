@@ -283,7 +283,7 @@ function Auxiliary.SynCondition(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,
 					local hc=hg:GetFirst()
 					while hc do
 						local effs={hc:GetCardEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)}
-						for _,v in ipairs(effs)
+						for _,v in ipairs(effs) do
 							v:Reset()
 						end
 						hc=hg:GetNext()
@@ -321,7 +321,7 @@ function Auxiliary.SynCondition(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,
 					local hc=hg:GetFirst()
 					while hc do
 						local effs={hc:GetCardEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)}
-						for _,v in ipairs(effs)
+						for _,v in ipairs(effs) do
 							v:Reset()
 						end
 						hc=hg:GetNext()
@@ -843,7 +843,7 @@ function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req
 				local hc=hg:GetFirst()
 				while hc do
 					local effs={hc:GetCardEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)}
-					for _,v in ipairs(effs)
+					for _,v in ipairs(effs) do
 						v:Reset()
 					end
 					hc=hg:GetNext()
