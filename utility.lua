@@ -282,7 +282,10 @@ function Auxiliary.SynCondition(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,
 					local hg=Duel.GetMatchingGroup(Card.IsHasEffect,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)
 					local hc=hg:GetFirst()
 					while hc do
-						hc:ResetEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK,RESET_CODE)
+						local effs={hc:GetCardEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)}
+						for _,v in ipairs(effs)
+							v:Reset()
+						end
 						hc=hg:GetNext()
 					end
 					Duel.AssumeReset()
@@ -317,7 +320,10 @@ function Auxiliary.SynCondition(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,
 					local hg=Duel.GetMatchingGroup(Card.IsHasEffect,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)
 					local hc=hg:GetFirst()
 					while hc do
-						hc:ResetEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK,RESET_CODE)
+						local effs={hc:GetCardEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)}
+						for _,v in ipairs(effs)
+							v:Reset()
+						end
 						hc=hg:GetNext()
 					end
 					return res
@@ -836,7 +842,10 @@ function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req
 				local hg=Duel.GetMatchingGroup(Card.IsHasEffect,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)
 				local hc=hg:GetFirst()
 				while hc do
-					hc:ResetEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK,RESET_CODE)
+					local effs={hc:GetCardEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)}
+					for _,v in ipairs(effs)
+						v:Reset()
+					end
 					hc=hg:GetNext()
 				end
 				if sg then
