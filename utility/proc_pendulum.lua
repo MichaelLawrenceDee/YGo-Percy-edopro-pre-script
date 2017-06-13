@@ -7,7 +7,6 @@ function Auxiliary.EnablePendulumAttribute(c,reg)
 	e1:SetCode(EFFECT_SPSUMMON_PROC_G)
 	e1:SetProperty(EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_CANNOT_DISABLE)
 	e1:SetRange(LOCATION_PZONE)
-	e1:SetCountLimit(1,10000000)
 	e1:SetCondition(Auxiliary.PendCondition())
 	e1:SetOperation(Auxiliary.PendOperation())
 	e1:SetValue(SUMMON_TYPE_PENDULUM)
@@ -38,7 +37,7 @@ function Auxiliary.PendCondition()
 				if c==nil then return true end
 				local tp=c:GetControler()
 				local rpz=Duel.GetFieldCard(tp,LOCATION_PZONE,1)
-				if rpz==nil or c==rpz then return false end
+				if rpz==nil or c==rpz or Duel.GetFlagEffect(tp,10000000)>0 then return false end
 				local lscale=c:GetLeftScale()
 				local rscale=rpz:GetRightScale()
 				if lscale>rscale then lscale,rscale=rscale,lscale end
@@ -88,34 +87,36 @@ function Auxiliary.PendOperation()
 					local ct=ft
 					if ct1>ft1 then ct=math.min(ct,ft1) end
 					if ct2>ft2 then ct=math.min(ct,ft2) end
-					if ct<=0 then break end
-					if sg:GetCount()>0 and not Duel.SelectYesNo(tp,210) then ft=0 break end
+					local loc=0
+					if ft1>0 then loc=loc+LOCATION_HAND end
+					if ft2>0 then loc=loc+LOCATION_EXTRA end
+					local g=tg:Filter(Card.IsLocation,sg,loc)
+					if g:GetCount()==0 or ft==0 then break end
 					Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-					local g=tg:Select(tp,1,ct,nil)
-					tg:Sub(g)
-					sg:Merge(g)
-					if g:GetCount()<ct then ft=0 break end
-					ft=ft-g:GetCount()
-					ft1=ft1-g:FilterCount(Card.IsLocation,nil,LOCATION_HAND)
-					ft2=ft2-g:FilterCount(Card.IsLocation,nil,LOCATION_EXTRA)
-				end
-				if ft>0 then
-					local tg1=tg:Filter(Card.IsLocation,nil,LOCATION_HAND)
-					local tg2=tg:Filter(Card.IsLocation,nil,LOCATION_EXTRA)
-					if ft1>0 and ft2==0 and tg1:GetCount()>0 and (sg:GetCount()==0 or Duel.SelectYesNo(tp,210)) then
-						local ct=math.min(ft1,ft)
-						Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-						local g=tg1:Select(tp,1,ct,nil)
-						sg:Merge(g)
-					end
-					if ft1==0 and ft2>0 and tg2:GetCount()>0 and (sg:GetCount()==0 or Duel.SelectYesNo(tp,210)) then
-						local ct=math.min(ft2,ft)
-						Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-						local g=tg2:Select(tp,1,ct,nil)
-						sg:Merge(g)
+					local tc=Group.SelectUnselect(g,sg,tp,true,true)
+					if not tc then break end
+					if sg:IsContains(tc) then
+						sg:RemoveCard(tc)
+						if tc:IsLocation(LOCATION_HAND) then
+							ft1=ft1+1
+						else
+							ft2=ft2+1
+						end
+						ft=ft+1
+					else
+						sg:AddCard(tc)
+						if tc:IsLocation(LOCATION_HAND) then
+							ft1=ft1-1
+						else
+							ft2=ft2-1
+						end
+						ft=ft-1
 					end
 				end
-				Duel.HintSelection(Group.FromCards(c))
-				Duel.HintSelection(Group.FromCards(rpz))
+				if sg:GetCount()>0 then
+					Duel.RegisterFlagEffect(tp,10000000,RESET_PHASE+PHASE_END+RESET_SELF_TURN,0,1)
+					Duel.HintSelection(Group.FromCards(c))
+					Duel.HintSelection(Group.FromCards(rpz))
+				end
 			end
 end
