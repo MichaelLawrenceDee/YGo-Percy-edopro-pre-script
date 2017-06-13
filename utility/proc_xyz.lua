@@ -458,7 +458,9 @@ function Auxiliary.XyzTarget(f,lv,minc,maxc,mustbemat)
 								local matg=Group.CreateGroup()
 								if Duel.GetLocationCountFromEx(tp)>0 then
 									while matg:GetCount()<maxc do
+										if mg:GetCount()==0 then break end
 										Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
+										cancel=matg:GetCount()>=minc or (not og and Duel.GetCurrentChain()<=0 and matg:GetCount()==0)
 										local tc=Group.SelectUnselect(mg,matg,tp,cancel,cancel)
 										if not tc then
 											if matg:GetCount()<minc then return false end
@@ -466,17 +468,17 @@ function Auxiliary.XyzTarget(f,lv,minc,maxc,mustbemat)
 										else
 											if mg:IsContains(tc) then
 												mg:RemoveCard(tc) matg:AddCard(tc)
-												if matg:GetCount()>=minc then cancel=true end
 											else
 												mg:AddCard(tc) matg:RemoveCard(tc)
-												if matg:GetCount()<minc then cancel=not og and Duel.GetCurrentChain()<=0 end
 											end
 										end
 									end
 								else
 									while matg:GetCount()<maxc do
 										local tc
+										if mg:GetCount()==0 then break end
 										Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
+										cancel=matg:GetCount()>=minc or (not og and Duel.GetCurrentChain()<=0 and matg:GetCount()==0)
 										if matg:IsExists(Auxiliary.FieldChk,1,nil,tp,c) then
 											tc=Group.SelectUnselect(mg,matg,tp,cancel,cancel)
 										else
@@ -488,10 +490,8 @@ function Auxiliary.XyzTarget(f,lv,minc,maxc,mustbemat)
 										else
 											if mg:IsContains(tc) then
 												mg:RemoveCard(tc) matg:AddCard(tc)
-												if matg:GetCount()>=minc then cancel=true end
 											else
 												mg:AddCard(tc) matg:RemoveCard(tc)
-												if matg:GetCount()<minc then cancel=not og and Duel.GetCurrentChain()<=0 end
 											end
 										end
 									end
@@ -505,6 +505,7 @@ function Auxiliary.XyzTarget(f,lv,minc,maxc,mustbemat)
 								local matg=Group.CreateGroup()
 								local ct=0
 								while ct<maxc do
+									if mg:FilterCount(Auxiliary.XyzRecursionChk2,matg,mg,c,tp,minc,maxc,matg,ct,mustbemat)==0 then break end
 									Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
 									local sc=Group.SelectUnselect(mg:Filter(Auxiliary.XyzRecursionChk2,matg,mg,c,tp,minc,maxc,matg,ct,mustbemat),matg,tp,cancel,cancel)
 									if not sc then
@@ -549,7 +550,9 @@ function Auxiliary.XyzTarget(f,lv,minc,maxc,mustbemat)
 									local matg=Group.CreateGroup()
 									if Duel.GetLocationCountFromEx(tp)>0 then
 										while matg:GetCount()<maxc do
+											if mg:GetCount()==0 then break end
 											Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
+											cancel=matg:GetCount()>=minc or (not og and Duel.GetCurrentChain()<=0 and matg:GetCount()==0)
 											local tc=Group.SelectUnselect(mg,matg,tp,cancel,cancel)
 											if not tc then
 												if matg:GetCount()<minc then return false end
@@ -557,17 +560,17 @@ function Auxiliary.XyzTarget(f,lv,minc,maxc,mustbemat)
 											else
 												if mg:IsContains(tc) then
 													mg:RemoveCard(tc) matg:AddCard(tc)
-													if matg:GetCount()>=minc then cancel=true end
 												else
 													mg:AddCard(tc) matg:RemoveCard(tc)
-													if matg:GetCount()<minc then cancel=not og and Duel.GetCurrentChain()<=0 end
 												end
 											end
 										end
 									else
 										while matg:GetCount()<maxc do
 											local tc
+											if mg:GetCount()==0 then break end
 											Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
+											cancel=matg:GetCount()>=minc or (not og and Duel.GetCurrentChain()<=0 and matg:GetCount()==0)
 											if matg:IsExists(Auxiliary.FieldChk,1,nil,tp,c) then
 												tc=Group.SelectUnselect(mg,matg,tp,cancel,cancel)
 											else
@@ -579,10 +582,8 @@ function Auxiliary.XyzTarget(f,lv,minc,maxc,mustbemat)
 											else
 												if mg:IsContains(tc) then
 													mg:RemoveCard(tc) matg:AddCard(tc)
-													if matg:GetCount()>=minc then cancel=true end
 												else
 													mg:AddCard(tc) matg:RemoveCard(tc)
-													if matg:GetCount()<minc then cancel=not og and Duel.GetCurrentChain()<=0 end
 												end
 											end
 										end
@@ -597,6 +598,7 @@ function Auxiliary.XyzTarget(f,lv,minc,maxc,mustbemat)
 									mg:Remove(Card.IsHasEffect,nil,511001175)
 									local matg=Group.CreateGroup()
 									while ct<maxc do
+										if mg:GetCount()==0 then break end
 										Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
 										local tc
 										if matg:IsExists(Auxiliary.FieldChk,1,nil,tp,c) then
@@ -634,6 +636,7 @@ function Auxiliary.XyzTarget(f,lv,minc,maxc,mustbemat)
 								local matg=Group.CreateGroup()
 								local g=Group.CreateGroup()
 								while ct<maxc do
+									if mg:FilterCount(Auxiliary.XyzRecursionChk2,g,mg,c,tp,minc,maxc,matg,ct,mustbemat)==0 then break end
 									Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
 									local sc=Group.SelectUnselect(mg:Filter(Auxiliary.XyzRecursionChk2,g,mg,c,tp,minc,maxc,matg,ct,mustbemat),g,tp,cancel,cancel)
 									if not sc then
