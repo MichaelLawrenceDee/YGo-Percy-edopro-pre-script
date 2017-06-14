@@ -1,5 +1,7 @@
 # Functions
 
+Group.SelectUnselect(Group g1, Group g2, int player[, bool buttonok, bool cancelable, int min, int max]) g1 is the group of not selected, g2 is the group of already selected cards, player is the player who selects the card, buttonok. often used with cancelable, shows the ok button while in the panel selection, cancelable make the selection be canceled with the right click, max and min does nothing to the function, they are only the max and min values shown in the hint. Every card in both the groups can be selectes. The function returns a single card
+
 Duel.RockPaperScissors([repeat = true]) - returns int (winner or PLAYER_NONE)
 
 Duel.GetRandomNumber([int min = 0,]int max)
