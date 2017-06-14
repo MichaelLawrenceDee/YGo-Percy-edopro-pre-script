@@ -39,7 +39,7 @@ These 3 functions works at the same way as the "normal" ones, the only differenc
 EFFECT_CANNOT_SPECIAL_SUMMON now can accept the position as filter by putting it as the value, the inserted position will be the one blocked, example target: 
 ```
 function (e,c,sump,sumtype,sumpos,targetp,se)
-	return bit.band(sumpos,bit.bnot(0xff-POSITION_TO_ALLOW))==0
+	return bit.band(sumpos,POSITION_TO_ALLOW)==0
 end
 ```
 
