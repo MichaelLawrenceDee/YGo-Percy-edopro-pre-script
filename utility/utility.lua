@@ -442,10 +442,11 @@ function Auxiliary.PersistentTarget(tg,p,f)
 					player=PLAYER_ALL
 				end
 				if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsFaceup() and Auxiliary.PersistentFilter(chkc,player,f,e,tp) end
-				if chk==0 then return player~=nil and Duel.IsExistingTarget(Auxiliary.PersistentFilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil,player,f,e,tp) end
+				if chk==0 then return (not tg or tg(e,tp,eg,ep,ev,re,r,rp,g:GetFirst(),0)) and player~=nil 
+					and Duel.IsExistingTarget(Auxiliary.PersistentFilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil,player,f,e,tp) end
 				Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
 				local g=Duel.SelectTarget(tp,Auxiliary.PersistentFilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil,player,f,e,tp)
-				if tg then tg(e,tp,eg,ep,ev,re,r,rp,g:GetFirst()) end
+				if tg then tg(e,tp,eg,ep,ev,re,r,rp,g:GetFirst(),1) end
 			end
 end
 function Auxiliary.PersistentTgCon(e,tp,eg,ep,ev,re,r,rp)
