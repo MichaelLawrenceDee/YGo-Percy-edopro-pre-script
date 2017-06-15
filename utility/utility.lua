@@ -303,8 +303,11 @@ end
 
 --Cost for effect "You can banish this card from your Graveyard"
 function Auxiliary.bfgcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():IsAbleToRemoveAsCost() end
-    Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_COST)
+	local c=e:GetHandler()
+	if chk==0 then return (not Duel.IsPlayerAffectedByEffect(e:GetHandlerPlayer(),69832741) or not c:IsType(TYPE_MONSTER)
+		or not c:IsLocation(LOCATION_GRAVE)) 
+		and c:IsAbleToRemoveAsCost() end
+	Duel.Remove(c,POS_FACEUP,REASON_COST)
 end
 
 --add procedure to equip spells equipping by rule
