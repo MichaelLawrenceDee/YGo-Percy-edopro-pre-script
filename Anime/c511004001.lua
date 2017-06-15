@@ -5,7 +5,7 @@
 getseq=Card.GetSequence
 function Card.GetSequence(c)
 	local seq=getseq(c)
-	if not c:IsLocation(LOCATION_MZONE) then
+	if c:IsLocation(LOCATION_SZONE) then
 		if seq==0 then seq=1 end
 		if seq==4 then seq=3 end
 	end
