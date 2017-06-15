@@ -6,6 +6,13 @@ function c100419006.initial_effect(c)
 	--Fusion procedure
 	aux.AddFusionProcMixN(c,true,true,c100419006.ffilter,3)
 	aux.AddContactFusion(c,c100419006.contactfil,c100419006.contactop)
+	--spsummon condition
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_SINGLE)
+	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e1:SetCode(EFFECT_SPSUMMON_CONDITION)
+	e1:SetValue(c100419006.splimit)
+	c:RegisterEffect(e1)
 	--fusion limit
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_SINGLE)
@@ -46,6 +53,9 @@ function c100419006.contactop(g)
 end
 function c100419006.fusfilter(c,attr)
 	return c:IsFusionAttribute(attr) and not c:IsHasEffect(511002961)
+end
+function c100419006.splimit(e,se,sp,st)
+	return e:GetHandler():GetLocation()~=LOCATION_EXTRA
 end
 function c100419006.costfilter(c)
 	return c:IsSetCard(0x3d) and c:IsAbleToRemoveAsCost() and ((c:IsLocation(LOCATION_ONFIELD) and c:IsFaceup()) or c:IsLocation(LOCATION_GRAVE))
