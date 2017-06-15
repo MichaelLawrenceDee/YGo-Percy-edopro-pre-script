@@ -53,9 +53,10 @@ function Auxiliary.FConditionMix(insf,sub,...)
 				local chkf=bit.band(chkfnf,0xff)
 				local c=e:GetHandler()
 				local tp=c:GetControler()
-				local notfusion=bit.rshift(chkfnf,8)~=0
-				local sub=sub or notfusion
-				local mg=g:Filter(Auxiliary.FConditionFilterMix,c,c,sub,sub,table.unpack(funs))
+				local notfusion=bit.band(bit.rshift(chkfnf,8),0xf)~=0
+				local contact=bit.rshift(chkfnf,12)~=0
+				local sub=(sub or notfusion) and not contact
+				local mg=g:Filter(Auxiliary.FConditionFilterMix,c,c,sub,sub,contact,table.unpack(funs))
 				if gc then
 					local sg=Group.CreateGroup()
 					return Auxiliary.FSelectMix(gc,tp,mg,sg,c,sub,sub,chkf,table.unpack(funs))
@@ -70,9 +71,10 @@ function Auxiliary.FOperationMix(insf,sub,...)
 				local chkf=bit.band(chkfnf,0xff)
 				local c=e:GetHandler()
 				local tp=c:GetControler()
-				local notfusion=bit.rshift(chkfnf,8)~=0
-				local sub=sub or notfusion
-				local mg=eg:Filter(Auxiliary.FConditionFilterMix,c,c,sub,sub,table.unpack(funs))
+				local notfusion=bit.band(bit.rshift(chkfnf,8),0xf)~=0
+				local contact=bit.rshift(chkfnf,12)~=0
+				local sub=(sub or notfusion) and not contact
+				local mg=eg:Filter(Auxiliary.FConditionFilterMix,c,c,sub,sub,contact,table.unpack(funs))
 				local sg=Group.CreateGroup()
 				if gc then
 					sg:AddCard(gc)
@@ -86,13 +88,13 @@ function Auxiliary.FOperationMix(insf,sub,...)
 				end
 				local p=tp
 				local sfhchk=false
-				if Duel.IsPlayerAffectedByEffect(tp,511004008) and Duel.SelectYesNo(1-tp,65) then
+				if not contact and Duel.IsPlayerAffectedByEffect(tp,511004008) and Duel.SelectYesNo(1-tp,65) then
 					p=1-tp Duel.ConfirmCards(1-tp,mg)
 					if mg:IsExists(Card.IsLocation,1,nil,LOCATION_HAND) then sfhchk=true end
 				end
 				while sg:GetCount()<#funs do
 					Duel.Hint(HINT_SELECTMSG,p,HINTMSG_FMATERIAL)
-					local tc=Group.SelectUnselect(mg:Filter(Auxiliary.FSelectMix,sg,tp,mg,sg,c,sub,sub,chkf,table.unpack(funs)),sg,p,false,false,#funs,#funs)
+					local tc=Group.SelectUnselect(mg:Filter(Auxiliary.FSelectMix,sg,tp,mg,sg,c,sub,sub,chkf,table.unpack(funs)),sg,p,false,contact and sg:GetCount()==0,#funs,#funs)
 					if not tc then break end
 					if not gc or (gc and tc~=gc) then
 						if not sg:IsContains(tc) then
@@ -107,8 +109,8 @@ function Auxiliary.FOperationMix(insf,sub,...)
 				Duel.SetFusionMaterial(sg)
 			end
 end
-function Auxiliary.FConditionFilterMix(c,fc,sub,sub,...)
-	if not c:IsCanBeFusionMaterial(fc) then return false end
+function Auxiliary.FConditionFilterMix(c,fc,sub,sub,contact,...)
+	if not c:IsCanBeFusionMaterial(fc) and not contact then return false end
 	for i,f in ipairs({...}) do
 		if f(c,fc,sub,sub2,mg,sg) then return true end
 	end
@@ -222,9 +224,10 @@ function Auxiliary.FConditionMixRep(insf,sub,fun1,minc,maxc,...)
 				local chkf=bit.band(chkfnf,0xff)
 				local c=e:GetHandler()
 				local tp=c:GetControler()
-				local notfusion=bit.rshift(chkfnf,8)~=0
-				local sub=sub or notfusion
-				local mg=g:Filter(Auxiliary.FConditionFilterMix,c,c,sub,sub,fun1,table.unpack(funs))
+				local notfusion=bit.band(bit.rshift(chkfnf,8),0xf)~=0
+				local contact=bit.rshift(chkfnf,12)~=0
+				local sub=(sub or notfusion) and not contact
+				local mg=g:Filter(Auxiliary.FConditionFilterMix,c,c,sub,sub,contact,fun1,table.unpack(funs))
 				if gc then
 					local sg=Group.CreateGroup()
 					return Auxiliary.FSelectMixRep(gc,tp,mg,sg,c,sub,sub,chkf,fun1,minc,maxc,table.unpack(funs))
@@ -239,21 +242,22 @@ function Auxiliary.FOperationMixRep(insf,sub,fun1,minc,maxc,...)
 				local chkf=bit.band(chkfnf,0xff)
 				local c=e:GetHandler()
 				local tp=c:GetControler()
-				local notfusion=bit.rshift(chkfnf,8)~=0
-				local sub=sub or notfusion
-				local mg=eg:Filter(Auxiliary.FConditionFilterMix,c,c,sub,sub,fun1,table.unpack(funs))
+				local notfusion=bit.band(bit.rshift(chkfnf,8),0xf)~=0
+				local contact=bit.rshift(chkfnf,12)~=0
+				local sub=(sub or notfusion) and not contact
+				local mg=eg:Filter(Auxiliary.FConditionFilterMix,c,c,sub,sub,contact,fun1,table.unpack(funs))
 				local sg=Group.CreateGroup()
 				if gc then sg:AddCard(gc) end
 				local p=tp
 				local sfhchk=false
-				if Duel.IsPlayerAffectedByEffect(tp,511004008) and Duel.SelectYesNo(1-tp,65) then
+				if not contact and Duel.IsPlayerAffectedByEffect(tp,511004008) and Duel.SelectYesNo(1-tp,65) then
 					p=1-tp Duel.ConfirmCards(1-tp,mg)
 					if mg:IsExists(Card.IsLocation,1,nil,LOCATION_HAND) then sfhchk=true end
 				end
 				while sg:GetCount()<maxc+#funs do
 					local cg=mg:Filter(Auxiliary.FSelectMixRep,sg,tp,mg,sg,c,sub,sub,chkf,fun1,minc,maxc,table.unpack(funs))
 					if cg:GetCount()==0 then break end
-					local cancel=Auxiliary.FCheckMixRepGoal(tp,sg,c,sub,sub,chkf,fun1,minc,maxc,table.unpack(funs))
+					local cancel=Auxiliary.FCheckMixRepGoal(tp,sg,c,sub,sub,chkf,fun1,minc,maxc,table.unpack(funs)) or (contact and sg:GetCount()==0)
 					Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FMATERIAL)
 					local tc=Group.SelectUnselect(cg,sg,p,cancel,cancel)
 					if not tc then break end
@@ -402,6 +406,54 @@ function Auxiliary.FSelectMixRep(c,tp,mg,sg,fc,sub,sub2,chkf,...)
 	sg:RemoveCard(c)
 	mg:Merge(rg)
 	return res
+end
+function Auxiliary.AddContactFusion(c,op,group)
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_FIELD)
+	e1:SetCode(EFFECT_SPSUMMON_PROC)
+	e1:SetProperty(EFFECT_FLAG_UNCOPYABLE)
+	e1:SetRange(LOCATION_EXTRA)
+	e1:SetCondition(Auxiliary.ContactCon(group))
+	e1:SetTarget(Auxiliary.ContactTg(group))
+	e1:SetOperation(Auxiliary.ContactOp(op))
+	c:RegisterEffect(e1)
+end
+function Auxiliary.ContactCon(f)
+	return function(e,c)
+		if c==nil then return true end
+		local m=Group.CreateGroup()
+		if f then
+			m=f(tp)
+		else
+			m=Duel.GetFieldGroup(tp,LOCATION_ONFIELD,0)
+		end
+		local chkf=c:GetControler()+0x1000
+		return c:CheckFusionMaterial(m,nil,chkf)
+	end
+end
+function Auxiliary.ContactTg(f)
+	return function(e,tp,eg,ep,ev,re,r,rp)
+		local m=Group.CreateGroup()
+		if f then
+			m=f(tp)
+		else
+			m=Duel.GetFieldGroup(tp,LOCATION_ONFIELD,0)
+		end
+		local chkf=tp+0x1000
+		local sg=Duel.SelectFusionMaterial(tp,e:GetHandler(),m,nil,chkf)
+		if sg:GetCount()>0 then
+			sg:KeepAlive()
+			e:SetLabelObject(sg)
+			return true
+		else return false end
+	end
+end
+function Auxiliary.ContactOp(f)
+	return function(e,tp,eg,ep,ev,re,r,rp,c)
+		local g=e:GetLabelObject()
+		f(g)
+		g:DeleteGroup()
+	end
 end
 --Fusion monster, name + name
 function Auxiliary.AddFusionProcCode2(c,code1,code2,sub,insf)
