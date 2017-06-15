@@ -5,6 +5,7 @@ function c43387895.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
 	aux.AddFusionProcMixN(c,true,true,c43387895.ffilter,2)
+	aux.AddContactFusion(c,c43387895.contactfil,c43387895.contactop)
 	--spsummon condition
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
@@ -12,15 +13,6 @@ function c43387895.initial_effect(c)
 	e1:SetCode(EFFECT_SPSUMMON_CONDITION)
 	e1:SetValue(c43387895.splimit)
 	c:RegisterEffect(e1)
-	--special summon rule
-	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_FIELD)
-	e2:SetCode(EFFECT_SPSUMMON_PROC)
-	e2:SetProperty(EFFECT_FLAG_UNCOPYABLE)
-	e2:SetRange(LOCATION_EXTRA)
-	e2:SetCondition(c43387895.spcon)
-	e2:SetOperation(c43387895.spop)
-	c:RegisterEffect(e2)
 	--copy effect
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(43387895,0))
@@ -36,22 +28,14 @@ end
 function c43387895.ffilter(c)
 	return c:IsFusionAttribute(ATTRIBUTE_DARK) and c:IsFusionType(TYPE_PENDULUM)
 end
+function c43387895.contactfil(tp)
+	return Duel.GetReleaseGroup(tp)
+end
+function c43387895.contactop(g)
+	Duel.Release(g,REASON_COST+REASON_MATERIAL)
+end
 function c43387895.splimit(e,se,sp,st)
 	return bit.band(st,SUMMON_TYPE_FUSION)==SUMMON_TYPE_FUSION
-end
-function c43387895.spfilter(c,fc)
-	return c43387895.ffilter(c) and c:IsCanBeFusionMaterial(fc)
-end
-function c43387895.spcon(e,c)
-	if c==nil then return true end
-	local tp=c:GetControler()
-	return Duel.GetLocationCount(tp,LOCATION_MZONE)>-2
-		and Duel.CheckReleaseGroup(tp,c43387895.spfilter,2,nil,c)
-end
-function c43387895.spop(e,tp,eg,ep,ev,re,r,rp,c)
-	local g=Duel.SelectReleaseGroup(tp,c43387895.spfilter,2,2,nil,c)
-	c:SetMaterial(g)
-	Duel.Release(g,REASON_COST+REASON_FUSION+REASON_MATERIAL)
 end
 function c43387895.copycost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():GetFlagEffect(41209827)==0 end

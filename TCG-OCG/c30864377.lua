@@ -4,6 +4,7 @@
 function c30864377.initial_effect(c)
 	c:EnableReviveLimit()
 	aux.AddFusionProcMixN(c,true,true,c30864377.matfilter,2)
+	aux.AddContactFusion(c,c30864377.contactfil,c30864377.contactop)
 	--spsummon condition
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
@@ -11,16 +12,6 @@ function c30864377.initial_effect(c)
 	e1:SetCode(EFFECT_SPSUMMON_CONDITION)
 	e1:SetValue(c30864377.splimit)
 	c:RegisterEffect(e1)
-	--special summon rule
-	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(30864377,1))
-	e2:SetType(EFFECT_TYPE_FIELD)
-	e2:SetCode(EFFECT_SPSUMMON_PROC)
-	e2:SetProperty(EFFECT_FLAG_UNCOPYABLE)
-	e2:SetRange(LOCATION_EXTRA)
-	e2:SetCondition(c30864377.sprcon)
-	e2:SetOperation(c30864377.sprop)
-	c:RegisterEffect(e2)
 	--cannot be fusion material
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_SINGLE)
@@ -54,27 +45,15 @@ end
 function c30864377.matfilter(c)
 	return c:IsLevelAbove(5) and c:IsFusionSetCard(0x19)
 end
+function c30864377.contactfil(tp)
+	return Duel.GetMatchingGroup(Card.IsAbleToDeckOrExtraAsCost,tp,LOCATION_ONFIELD,0,nil)
+end
+function c30864377.contactop(g,tp)
+	Duel.ConfirmCards(1-tp,g)
+	Duel.SendtoDeck(g,nil,2,REASON_COST+REASON_MATERIAL)
+end
 function c30864377.splimit(e,se,sp,st)
 	return e:GetHandler():GetLocation()~=LOCATION_EXTRA
-end
-function c30864377.fspfilter(c)
-	return c30864377.matfilter(c) and c:IsAbleToDeckOrExtraAsCost() and c:IsCanBeFusionMaterial()
-end
-function c30864377.sprcon(e,c)
-	if c==nil then return true end 
-	local tp=c:GetControler()
-	return Duel.GetLocationCount(tp,LOCATION_MZONE)>-2
-		and Duel.IsExistingMatchingCard(c30864377.fspfilter,tp,LOCATION_MZONE,0,2,nil,tp)
-end
-function c30864377.sprop(e,tp,eg,ep,ev,re,r,rp,c)
-	Duel.Hint(HINT_SELECTMSG,tp,aux.Stringid(30864377,2))
-	local g=Duel.SelectMatchingCard(tp,c30864377.fspfilter,tp,LOCATION_MZONE,0,2,2,nil)
-	local tc=g:GetFirst()
-	while tc do
-		if not tc:IsFaceup() then Duel.ConfirmCards(1-tp,tc) end
-		tc=g:GetNext()
-	end
-	Duel.SendtoDeck(g,nil,2,REASON_COST)
 end
 function c30864377.espfilter(c,e,tp)
 	return c:IsSetCard(0x19) and c:IsType(TYPE_FUSION) and not c:IsCode(30864377)
