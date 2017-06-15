@@ -110,7 +110,7 @@ function Auxiliary.FOperationMix(insf,sub,...)
 			end
 end
 function Auxiliary.FConditionFilterMix(c,fc,sub,sub,contact,...)
-	if not c:IsCanBeFusionMaterial(fc) and not contact then return false end
+	if not c:IsCanBeFusionMaterial(fc) then return false end
 	for i,f in ipairs({...}) do
 		if f(c,fc,sub,sub2,mg,sg) then return true end
 	end
@@ -441,7 +441,8 @@ end
 function Auxiliary.ContactOp(f)
 	return function(e,tp,eg,ep,ev,re,r,rp,c)
 		local g=e:GetLabelObject()
-		f(g,tp)
+		c:SetMaterial(g)
+		f(g,tp,c)
 		g:DeleteGroup()
 	end
 end

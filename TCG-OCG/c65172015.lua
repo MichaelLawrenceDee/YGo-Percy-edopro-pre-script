@@ -2,6 +2,7 @@
 function c65172015.initial_effect(c)
 	c:EnableReviveLimit()
 	aux.AddFusionProcMix(c,true,true,1561110,91998119)
+	aux.AddContactFusion(c,c65172015.contactfil,c65172015.contactop)
 	--spsummon condition
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
@@ -9,91 +10,41 @@ function c65172015.initial_effect(c)
 	e1:SetCode(EFFECT_SPSUMMON_CONDITION)
 	e1:SetValue(c65172015.splimit)
 	c:RegisterEffect(e1)
-	--special summon rule
-	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_FIELD)
-	e2:SetCode(EFFECT_SPSUMMON_PROC)
-	e2:SetProperty(EFFECT_FLAG_UNCOPYABLE)
-	e2:SetRange(LOCATION_EXTRA)
-	e2:SetCondition(c65172015.spcon)
-	e2:SetOperation(c65172015.spop)
-	c:RegisterEffect(e2)
 	--negate
-	local e3=Effect.CreateEffect(c)
-	e3:SetDescription(aux.Stringid(65172015,0))
-	e3:SetCategory(CATEGORY_NEGATE+CATEGORY_DESTROY)
-	e3:SetType(EFFECT_TYPE_QUICK_O)
-	e3:SetCode(EVENT_CHAINING)
-	e3:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DAMAGE_CAL)
-	e3:SetRange(LOCATION_MZONE)
-	e3:SetCondition(c65172015.discon)
-	e3:SetCost(c65172015.discost)
-	e3:SetTarget(c65172015.distg)
-	e3:SetOperation(c65172015.disop)
-	c:RegisterEffect(e3)
+	local e2=Effect.CreateEffect(c)
+	e2:SetDescription(aux.Stringid(65172015,0))
+	e2:SetCategory(CATEGORY_NEGATE+CATEGORY_DESTROY)
+	e2:SetType(EFFECT_TYPE_QUICK_O)
+	e2:SetCode(EVENT_CHAINING)
+	e2:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DAMAGE_CAL)
+	e2:SetRange(LOCATION_MZONE)
+	e2:SetCondition(c65172015.discon)
+	e2:SetCost(c65172015.discost)
+	e2:SetTarget(c65172015.distg)
+	e2:SetOperation(c65172015.disop)
+	c:RegisterEffect(e2)
 	--spsummon
-	local e4=Effect.CreateEffect(c)
-	e4:SetDescription(aux.Stringid(65172015,1))
-	e4:SetCategory(CATEGORY_SPECIAL_SUMMON)
-	e4:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e4:SetType(EFFECT_TYPE_QUICK_O)
-	e4:SetCode(EVENT_FREE_CHAIN)
-	e4:SetRange(LOCATION_MZONE)
-	e4:SetHintTiming(0,0x1e0)
-	e4:SetCost(c65172015.spcost)
-	e4:SetTarget(c65172015.sptg)
-	e4:SetOperation(c65172015.spop2)
-	c:RegisterEffect(e4)
+	local e3=Effect.CreateEffect(c)
+	e3:SetDescription(aux.Stringid(65172015,1))
+	e3:SetCategory(CATEGORY_SPECIAL_SUMMON)
+	e3:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e3:SetType(EFFECT_TYPE_QUICK_O)
+	e3:SetCode(EVENT_FREE_CHAIN)
+	e3:SetRange(LOCATION_MZONE)
+	e3:SetHintTiming(0,0x1e0)
+	e3:SetCost(c65172015.spcost)
+	e3:SetTarget(c65172015.sptg)
+	e3:SetOperation(c65172015.spop2)
+	c:RegisterEffect(e3)
 end
 function c65172015.splimit(e,se,sp,st)
 	return not e:GetHandler():IsLocation(LOCATION_EXTRA)
 end
-function c65172015.spfilter(c,code)
-	return c:GetOriginalCode()==code and c:IsAbleToRemoveAsCost()
+function c65172015.contactfil(tp)
+	return Duel.GetMatchingGroup(Card.IsAbleToRemoveAsCost,tp,LOCATION_ONFIELD,0,nil)
 end
-function c65172015.spcon(e,c)
-	if c==nil then return true end
-	local tp=c:GetControler()
-	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
-	if ft<-1 then return false end
-	local g1=Duel.GetMatchingGroup(c65172015.spfilter,tp,LOCATION_ONFIELD,0,nil,1561110)
-	local g2=Duel.GetMatchingGroup(c65172015.spfilter,tp,LOCATION_ONFIELD,0,nil,91998119)
-	if g1:GetCount()==0 or g2:GetCount()==0 then return false end
-	if ft>0 then return true end
-	local f1=g1:FilterCount(Card.IsLocation,nil,LOCATION_MZONE)
-	local f2=g2:FilterCount(Card.IsLocation,nil,LOCATION_MZONE)
-	if ft==-1 then return f1>0 and f2>0
-	else return f1>0 or f2>0 end
-end
-function c65172015.spop(e,tp,eg,ep,ev,re,r,rp,c)
-	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
-	local g1=Duel.GetMatchingGroup(c65172015.spfilter,tp,LOCATION_ONFIELD,0,nil,1561110)
-	local g2=Duel.GetMatchingGroup(c65172015.spfilter,tp,LOCATION_ONFIELD,0,nil,91998119)
-	g1:Merge(g2)
-	local g=Group.CreateGroup()
-	local tc=nil
-	for i=1,2 do
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-		if ft<=0 then
-			tc=g1:FilterSelect(tp,Card.IsLocation,1,1,nil,LOCATION_MZONE):GetFirst()
-			ft=ft+1
-		else
-			tc=g1:Select(tp,1,1,nil):GetFirst()
-		end
-		g:AddCard(tc)
-		if i==1 then
-			g1:Clear()
-			if tc:GetOriginalCode()==1561110 then
-				local sg=Duel.GetMatchingGroup(c65172015.spfilter,tp,LOCATION_ONFIELD,0,tc,91998119)
-				g1:Merge(sg)
-			end
-			if tc:GetOriginalCode()==91998119 then
-				local sg=Duel.GetMatchingGroup(c65172015.spfilter,tp,LOCATION_ONFIELD,0,tc,1561110)
-				g1:Merge(sg)
-			end
-		end
-	end
-	Duel.Remove(g,POS_FACEUP,REASON_COST)
+function c65172015.contactop(g)
+	Duel.Remove(g,POS_FACEUP,REASON_COST+REASON_MATERIAL)
 end
 function c65172015.discon(e,tp,eg,ep,ev,re,r,rp)
 	return re:GetHandler()~=e:GetHandler() and not e:GetHandler():IsStatus(STATUS_BATTLE_DESTROYED)
