@@ -25,10 +25,11 @@ function c511015117.contactfilter(tp)
 	if Duel.GetLocationCount(tp,LOCATION_SZONE)>2 then
 		return Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,0,nil)
 	else
-		return Duel.GetMatchingGroup(aux.FALSE,tp,LOCATION_MZONE,0,nil)
+		return Group.CreateGroup()
 	end
 end
 function c511015117.contactop(g,tp,c)
+	local g=g:Clone()
 	local tc=g:GetFirst()
 	while tc do
 		Duel.MoveToField(tc,tp,tp,LOCATION_SZONE,POS_FACEUP,true)
