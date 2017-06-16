@@ -1,6 +1,7 @@
 --Valkyrion the Magna Warrior (Anime)
 function c511000462.initial_effect(c)
 	aux.AddFusionProcMix(c,true,true,99785935,39256679,11549357)
+	aux.AddContactFusion(c,c511000462.contactfilter,c511000462.contactop)
 	c:EnableReviveLimit()
 	--spsummon condition
 	local e1=Effect.CreateEffect(c)
@@ -8,15 +9,6 @@ function c511000462.initial_effect(c)
 	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e1:SetCode(EFFECT_SPSUMMON_CONDITION)
 	e1:SetValue(c511000462.splimit)
-	c:RegisterEffect(e1)
-	--special summon
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetCode(EFFECT_SPSUMMON_PROC)
-	e1:SetProperty(EFFECT_FLAG_UNCOPYABLE)
-	e1:SetRange(LOCATION_EXTRA)
-	e1:SetCondition(c511000462.spcon)
-	e1:SetOperation(c511000462.spop)
 	c:RegisterEffect(e1)
 	--special summon
 	local e2=Effect.CreateEffect(c)
@@ -33,27 +25,11 @@ end
 function c511000462.splimit(e,se,sp,st)
 	return not e:GetHandler():IsLocation(LOCATION_EXTRA)
 end
-function c511000462.cfilter(c,code)
-	return (c:IsFaceup() or c:IsLocation(LOCATION_HAND)) and c:IsCode(code) and c:IsAbleToGraveAsCost()
+function c511000462.contactfilter(tp)
+	return Duel.GetMatchingGroup(Card.IsAbleToGraveAsCost,tp,LOCATION_HAND+LOCATION_ONFIELD,0,nil)
 end
-function c511000462.spcon(e,c)
-	if c==nil then return true end
-	local tp=c:GetControler()
-	return Duel.GetLocationCount(tp,LOCATION_MZONE)>-3
-		and Duel.IsExistingMatchingCard(c511000462.cfilter,tp,LOCATION_ONFIELD+LOCATION_HAND,0,1,nil,99785935)
-		and Duel.IsExistingMatchingCard(c511000462.cfilter,tp,LOCATION_ONFIELD+LOCATION_HAND,0,1,nil,39256679)
-		and Duel.IsExistingMatchingCard(c511000462.cfilter,tp,LOCATION_ONFIELD+LOCATION_HAND,0,1,nil,11549357)
-end
-function c511000462.spop(e,tp,eg,ep,ev,re,r,rp,c)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g1=Duel.SelectMatchingCard(tp,c511000462.cfilter,tp,LOCATION_ONFIELD+LOCATION_HAND,0,1,1,nil,99785935)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g2=Duel.SelectMatchingCard(tp,c511000462.cfilter,tp,LOCATION_ONFIELD+LOCATION_HAND,0,1,1,nil,39256679)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g3=Duel.SelectMatchingCard(tp,c511000462.cfilter,tp,LOCATION_ONFIELD+LOCATION_HAND,0,1,1,nil,11549357)
-	g1:Merge(g2)
-	g1:Merge(g3)
-	Duel.SendtoGrave(g1,REASON_COST)
+function c511000462.contactop(g,tp,c)
+	Duel.SendtoGrave(g,REASON_COST+REASON_MATERIAL)
 end
 function c511000462.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsReleasable() end

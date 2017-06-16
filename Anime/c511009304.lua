@@ -4,6 +4,7 @@ function c511009304.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
 	aux.AddFusionProcMixN(c,true,true,c511009304.ffilter,2)
+	aux.AddContactFusion(c,c511009304.contactfilter,c511009304.contactop)
 	--spsummon condition
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
@@ -11,15 +12,6 @@ function c511009304.initial_effect(c)
 	e1:SetCode(EFFECT_SPSUMMON_CONDITION)
 	e1:SetValue(c511009304.splimit)
 	c:RegisterEffect(e1)
-	--special summon rule
-	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_FIELD)
-	e2:SetCode(EFFECT_SPSUMMON_PROC)
-	e2:SetProperty(EFFECT_FLAG_UNCOPYABLE)
-	e2:SetRange(LOCATION_EXTRA)
-	e2:SetCondition(c511009304.sprcon)
-	e2:SetOperation(c511009304.sprop)
-	c:RegisterEffect(e2)
 	--Special Summon
 	local e5=Effect.CreateEffect(c)
 	e5:SetDescription(aux.Stringid(35089369,0))
@@ -83,24 +75,15 @@ end
 function c511009304.splimit(e,se,sp,st)
 	return e:GetHandler():GetLocation()~=LOCATION_EXTRA
 end
-function c511009304.spfilter(c)
-	return c511009304.ffilter(c) and c:IsAbleToDeckOrExtraAsCost()
+function c511009304.contactfilter(tp)
+	return Duel.GetMatchingGroup(Card.IsAbleToDeckOrExtraAsCost,tp,LOCATION_ONFIELD,0,nil)
 end
-function c511009304.sprcon(e,c)
-	if c==nil then return true end 
-	local tp=c:GetControler()
-	return Duel.GetLocationCount(tp,LOCATION_MZONE)>-2
-		and Duel.IsExistingMatchingCard(c511009304.spfilter,tp,LOCATION_MZONE,0,2,nil)
-end
-function c511009304.sprop(e,tp,eg,ep,ev,re,r,rp,c)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g=Duel.SelectMatchingCard(tp,c511009304.spfilter,tp,LOCATION_MZONE,0,2,2,nil)
-	local tc=g:GetFirst()
-	while tc do
-		if not tc:IsFaceup() then Duel.ConfirmCards(1-tp,tc) end
-		tc=g:GetNext()
+function c511009304.contactop(g,tp)
+	local cg=g:Filter(Card.IsFacedown,nil)
+	if cg:GetCount()>0 then
+		Duel.ConfirmCards(1-tp,cg)
 	end
-	Duel.SendtoDeck(g,nil,2,REASON_COST)
+	Duel.SendtoDeck(g,nil,2,REASON_COST+REASON_MATERIAL)
 end
 function c511009304.sumfilter(c,e,tp)
 	return c:IsSetCard(0x19) and c:IsType(TYPE_FUSION) and c:IsCanBeSpecialSummoned(e,0,tp,true,false)

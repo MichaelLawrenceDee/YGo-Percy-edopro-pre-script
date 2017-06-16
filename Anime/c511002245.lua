@@ -1,6 +1,7 @@
 --Solidroid beta
 function c511002245.initial_effect(c)
 	aux.AddFusionProcMix(c,true,true,98049038,511002240,511000660)
+	aux.AddContactFusion(c,c511002245.contactfilter,c511002245.contactop)
 	c:EnableReviveLimit()
 	--spsummon condition
 	local e1=Effect.CreateEffect(c)
@@ -9,15 +10,6 @@ function c511002245.initial_effect(c)
 	e1:SetCode(EFFECT_SPSUMMON_CONDITION)
 	e1:SetValue(c511002245.splimit)
 	c:RegisterEffect(e1)
-	--special summon rule
-	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_FIELD)
-	e2:SetCode(EFFECT_SPSUMMON_PROC)
-	e2:SetProperty(EFFECT_FLAG_UNCOPYABLE)
-	e2:SetRange(LOCATION_EXTRA)
-	e2:SetCondition(c511002245.spcon)
-	e2:SetOperation(c511002245.spop)
-	c:RegisterEffect(e2)
 	--destroy
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(16304628,0))
@@ -37,37 +29,19 @@ end
 function c511002245.splimit(e,se,sp,st)
 	return not e:GetHandler():IsLocation(LOCATION_EXTRA)
 end
-function c511002245.spfilter(c,code)
-	if not c:IsCode(code) or not c:IsAbleToRemoveAsCost() then return false end
+function c511002245.contactfilter(tp)
+	return Duel.GetMatchingGroup(c511002245.spfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil)
+end
+function c511002245.contactop(g)
+	Duel.Remove(g,POS_FACEUP,REASON_COST+REASON_MATERIAL)
+end
+function c511002245.spfilter(c)
+	if not c:IsAbleToRemoveAsCost() then return false end
 	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
 		return c:IsFaceup() and c:IsLocation(LOCATION_MZONE)
 	else
 		return c:IsLocation(LOCATION_GRAVE)
 	end
-end
-function c511002245.spcon(e,c)
-	if c==nil then return true end 
-	local tp=c:GetControler()
-	local g1=Duel.GetMatchingGroup(c511002245.spfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil,98049038)
-	local g2=Duel.GetMatchingGroup(c511002245.spfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil,511002240)
-	local g3=Duel.GetMatchingGroup(c511002245.spfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil,511000660)
-	if g1:GetCount()==0 or g2:GetCount()==0 or g3:GetCount()==0 then return false end
-	return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 or Duel.IsPlayerAffectedByEffect(tp,69832741)
-end
-function c511002245.spop(e,tp,eg,ep,ev,re,r,rp,c)
-	local g1=Duel.GetMatchingGroup(c511002245.spfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil,98049038)
-	local g2=Duel.GetMatchingGroup(c511002245.spfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil,511002240)
-	local g3=Duel.GetMatchingGroup(c511002245.spfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil,511000660)
-	g1:Merge(g2)
-	g1:Merge(g3)
-	local g=Group.CreateGroup()
-	for i=1,3 do
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-		local tc=g1:Select(tp,1,1,nil):GetFirst()
-		g:AddCard(tc)
-		g1:Remove(Card.IsCode,nil,tc:GetCode())
-	end
-	Duel.Remove(g,POS_FACEUP,REASON_COST)
 end
 function c511002245.destg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end

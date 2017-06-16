@@ -3,21 +3,13 @@ function c511015117.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
 	aux.AddFusionProcMixN(c,true,true,aux.FilterBoolFunction(Card.IsFusionSetCard,0x16),3)
+	aux.AddContactFusion(c,c511015117.contactfilter,c511015117.contactop)
 	--spsummon condition
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
 	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e1:SetCode(EFFECT_SPSUMMON_CONDITION)
 	c:RegisterEffect(e1)
-	--special summon rule
-	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_FIELD)
-	e2:SetCode(EFFECT_SPSUMMON_PROC)
-	e2:SetProperty(EFFECT_FLAG_UNCOPYABLE)
-	e2:SetRange(LOCATION_EXTRA)
-	e2:SetCondition(c511015117.spcon)
-	e2:SetOperation(c511015117.spop)
-	c:RegisterEffect(e2)
 	--damage
 	local e3=Effect.CreateEffect(c)
 	e3:SetCategory(CATEGORY_DAMAGE)
@@ -29,13 +21,14 @@ function c511015117.initial_effect(c)
 	e3:SetOperation(c511015117.damop)
 	c:RegisterEffect(e3)
 end
-function c511015117.spcon(e,c)
-	if c==nil then return true end
-	return Duel.GetLocationCount(c:GetControler(),LOCATION_SZONE)>2 
-		and Duel.IsExistingMatchingCard(Card.IsFusionSetCard,c:GetControler(),LOCATION_MZONE,0,3,nil,0x16)
+function c511015117.contactfilter(tp)
+	if Duel.GetLocationCount(tp,LOCATION_SZONE)>2 then
+		return Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,0,nil)
+	else
+		return Duel.GetMatchingGroup(aux.FALSE,tp,LOCATION_MZONE,0,nil)
+	end
 end
-function c511015117.spop(e,tp,eg,ep,ev,re,r,rp,c)
-	local g=Duel.SelectMatchingCard(tp,Card.IsFusionSetCard,tp,LOCATION_MZONE,0,3,3,nil,0x16)
+function c511015117.contactop(g,tp,c)
 	local tc=g:GetFirst()
 	while tc do
 		Duel.MoveToField(tc,tp,tp,LOCATION_SZONE,POS_FACEUP,true)
