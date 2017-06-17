@@ -581,12 +581,12 @@ function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req
 					while ntsg:GetCount()<max2 do
 						local cancel=false
 						if tune then
-							if (tsg:GetCount()>=min1 and tsg:IsExists(Auxiliary.TunerFilter,tsg:GetCount(),nil,f1,sub1) and (not req1 or tsg:IsExists(req1,reqct1,nil,tp)) 
-							and ntg:Filter(Auxiliary.SynchroCheckP32,sg,g,tsg,ntsg,sg,f2,sub2,min2,max2,req2,reqct2,reqm,lv,c,tp,smat,pg,mgchk):GetCount()>0)
-							or (not mgchk and Duel.GetCurrentChain()<=0 and tsg:GetCount()==0) then
-									cancel=true
-							end
+							cancel=not mgchk and Duel.GetCurrentChain()<=0 and tsg:GetCount()==0
+							local g3=ntg:Filter(Auxiliary.SynchroCheckP32,sg,g,tsg,ntsg,sg,f2,sub2,min2,max2,req2,reqct2,reqm,lv,c,tp,smat,pg,mgchk)
 							g2=g:Filter(Auxiliary.SynchroCheckP31,sg,g,tsg,ntsg,sg,f1,sub1,f2,sub2,min1,max1,min2,max2,req1,reqct1,req2,reqct2,reqm,lv,c,tp,smat,pg,mgchk)
+							if g3:GetCount()>0 and tsg:GetCount()>=min1 and tsg:IsExists(Auxiliary.TunerFilter,tsg:GetCount(),nil,f1,sub1) and (not req1 or tsg:IsExists(req1,reqct1,nil,tp)) then
+								g2:Merge(g3)
+							end
 							Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SMATERIAL)
 							local tc=Group.SelectUnselect(g2,sg,tp,cancel,cancel)
 							if not tc then
@@ -597,7 +597,12 @@ function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req
 								end
 							end
 							if not sg:IsContains(tc) then
-								tsg:AddCard(tc)
+								if g3:IsContains(tc) then
+									ntsg:AddCard(tc)
+									tune = false
+								else
+									tsg:AddCard(tc)
+								end
 								sg:AddCard(tc)
 							else
 								tsg:RemoveCard(tc)
@@ -615,6 +620,10 @@ function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req
 							end
 							g2=g:Filter(Auxiliary.SynchroCheckP32,sg,g,tsg,ntsg,sg,f2,sub2,min2,max2,req2,reqct2,reqm,lv,c,tp,smat,pg,mgchk)
 							if g2:GetCount()==0 then break end
+							local g3=g:Filter(Auxiliary.SynchroCheckP31,sg,g,tsg,ntsg,sg,f1,sub1,f2,sub2,min1,max1,min2,max2,req1,reqct1,req2,reqct2,reqm,lv,c,tp,smat,pg,mgchk)
+							if g3:GetCount()>0 and ntsg:GetCount()==0 then
+								g2:Merge(g3)
+							end
 							Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SMATERIAL)
 							local tc=Group.SelectUnselect(g2,sg,tp,cancel,cancel)
 							if not tc then
@@ -647,12 +656,12 @@ function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req
 					while ntsg:GetCount()<max2 do
 						cancel=false
 						if tune then
-							if(tsg:GetCount()>=min1 and (not req1 or tsg:IsExists(req1,reqct1,nil,tp)) 
-							and ntg:Filter(Auxiliary.SynchroCheckP42,sg,ntg,tsg,ntsg,sg,min2,max2,req2,reqct2,reqm,lv,c,tp,smat,pg,mgchk):GetCount()>0)
-							or (not mgchk and Duel.GetCurrentChain()<=0 and tsg:GetCount()==0) then
-								cancel=true
-							end
+							cancel=not mgchk and Duel.GetCurrentChain()<=0 and tsg:GetCount()==0
+							local g3=ntg:Filter(Auxiliary.SynchroCheckP42,sg,ntg,tsg,ntsg,sg,min2,max2,req2,reqct2,reqm,lv,c,tp,smat,pg,mgchk)
 							g2=tg:Filter(Auxiliary.SynchroCheckP41,sg,tg,ntg,tsg,ntsg,sg,min1,max1,min2,max2,req1,reqct1,req2,reqct2,reqm,lv,c,tp,smat,pg,mgchk)
+							if g3:GetCount()>0 and tsg:GetCount()>=min1 and (not req1 or tsg:IsExists(req1,reqct1,nil,tp)) then
+								g2:Merge(g3)
+							end
 							Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SMATERIAL)
 							local tc=Group.SelectUnselect(g2,sg,tp,cancel,cancel)
 							if not tc then
@@ -663,7 +672,12 @@ function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req
 								end
 							else
 								if not sg:IsContains(tc) then
-									tsg:AddCard(tc)
+									if g3:IsContains(tc) then
+										ntsg:AddCard(tc)
+										tune = false
+									else
+										tsg:AddCard(tc)
+									end
 									sg:AddCard(tc)
 								else
 									tsg:RemoveCard(tc)
@@ -680,6 +694,10 @@ function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req
 							end
 							g2=ntg:Filter(Auxiliary.SynchroCheckP42,sg,ntg,tsg,ntsg,sg,min2,max2,req2,reqct2,reqm,lv,c,tp,smat,pg,mgchk)
 							if g2:GetCount()==0 then break end
+							local g3=tg:Filter(Auxiliary.SynchroCheckP41,sg,tg,ntg,tsg,ntsg,sg,min1,max1,min2,max2,req1,reqct1,req2,reqct2,reqm,lv,c,tp,smat,pg,mgchk)
+							if g3:GetCount()>0 and ntsg:GetCount()==0 then
+								g2:Merge(g3)
+							end
 							Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SMATERIAL)
 							local tc=Group.SelectUnselect(g2,sg,tp,cancel,cancel)
 							if not tc then
