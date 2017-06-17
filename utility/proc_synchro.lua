@@ -197,22 +197,34 @@ function Auxiliary.SynchroCheckP31(c,g,tsg,ntsg,sg,f1,sub1,f2,sub2,min1,max1,min
 	if not mgchk then
 		if c:IsHasEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK) then
 			local teg={c:GetCardEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)}
+			local hanchk=false
 			for i=1,#teg do
 				local te=teg[i]
 				local tgchk=te:GetTarget()
 				local res,trg,ntrg2=tgchk(te,c,sg,g,g,tsg,ntsg)
-				if not res then return false end
-				rg:Merge(trg)
+				--if not res then return false end
+				if res then
+					rg:Merge(trg)
+					hanchk=true
+					break
+				end
 			end
+			if not hanchk then return false end
 		end
 		g2=sg:Filter(Card.IsHasEffect,nil,EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)
 		if g2:GetCount()>0 then
 			local tc=g2:GetFirst()
 			while tc do
 				local eff={tc:GetCardEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)}
+				local hanchk=false
 				for i,te in ipairs(eff) do
-					if not te:GetTarget()(te,nil,sg,g,g,tsg,ntsg) then return false end
+					--if not te:GetTarget()(te,nil,sg,g,g,tsg,ntsg) then return false end
+					if te:GetTarget()(te,nil,sg,g,g,tsg,ntsg) then
+						hanchk=true
+						break
+					end
 				end
+				if not hanchk then return false end
 				tc=g2:GetNext()
 			end	
 		end
@@ -272,22 +284,34 @@ function Auxiliary.SynchroCheckP32(c,g,tsg,ntsg,sg,f2,sub2,min2,max2,req2,reqct2
 	if not mgchk then
 		if c:IsHasEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK) then
 			local teg={c:GetCardEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)}
+			local hanchk=false
 			for i=1,#teg do
 				local te=teg[i]
 				local tgchk=te:GetTarget()
 				local res,trg2,ntrg2=tgchk(te,c,sg,Group.CreateGroup(),g,tsg,ntsg)
-				if not res then return false end
-				rg:Merge(ntrg2)
+				--if not res then return false end
+				if res then
+					rg:Merge(ntrg2)
+					hanchk=true
+					break
+				end
 			end
+			if not hanchk then return false end
 		end
 		g2=sg:Filter(Card.IsHasEffect,nil,EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)
 		if g2:GetCount()>0 then
 			local tc=g2:GetFirst()
 			while tc do
 				local eff={tc:GetCardEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)}
+				local hanchk=false
 				for i,te in ipairs(eff) do
-					if not te:GetTarget()(te,nil,sg,Group.CreateGroup(),g,tsg,ntsg) then return false end
+					--if not te:GetTarget()(te,nil,sg,Group.CreateGroup(),g,tsg,ntsg) then return false end
+					if te:GetTarget()(te,nil,sg,Group.CreateGroup(),g,tsg,ntsg) then
+						hanchk=true
+						break
+					end
 				end
+				if not hanchk then return false end
 				tc=g2:GetNext()
 			end	
 		end
@@ -344,22 +368,34 @@ function Auxiliary.SynchroCheckP41(c,tg,ntg,tsg,ntsg,sg,min1,max1,min2,max2,req1
 	if not mgchk then
 		if c:IsHasEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK) then
 			local teg={c:GetCardEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)}
+			local hanchk=false
 			for i,te in ipairs(teg) do
 				local tgchk=te:GetTarget()
 				local res,trg2,ntrg2=tgchk(te,c,sg,tg,ntg,tsg,ntsg)
-				if not res then return false end
-				trg:Merge(trg2)
-				ntrg:Merge(ntrg2)
+				--if not res then return false end
+				if res then
+					trg:Merge(trg2)
+					ntrg:Merge(ntrg2)
+					hanchk=true
+					break
+				end
 			end
+			if not hanchk then return false end
 		end
 		g2=sg:Filter(Card.IsHasEffect,nil,EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)
 		if g2:GetCount()>0 then
 			local tc=g2:GetFirst()
 			while tc do
 				local eff={tc:GetCardEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)}
+				local hanchk=false
 				for i,te in ipairs(eff) do
-					if not te:GetTarget()(te,nil,sg,tg,ntg,tsg,ntsg) then return false end
+					--if not te:GetTarget()(te,nil,sg,tg,ntg,tsg,ntsg) then return false end
+					if te:GetTarget()(te,nil,sg,tg,ntg,tsg,ntsg) then
+						hanchk=true
+						break
+					end
 				end
+				if not hanchk then return false end
 				tc=g2:GetNext()
 			end	
 		end
@@ -410,22 +446,34 @@ function Auxiliary.SynchroCheckP42(c,ntg,tsg,ntsg,sg,min2,max2,req2,reqct2,reqm,
 	if not mgchk then
 		if c:IsHasEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK) then
 			local teg={c:GetCardEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)}
+			local hanchk=false
 			for i=1,#teg do
 				local te=teg[i]
 				local tgchk=te:GetTarget()
 				local res,trg2,ntrg2=tgchk(te,c,sg,Group.CreateGroup(),ntg,tsg,ntsg)
-				if not res then return false end
-				ntrg:Merge(ntrg2)
+				--if not res then return false end
+				if res then
+					ntrg:Merge(ntrg2)
+					hanchk=true
+					break
+				end
+				if not hanchk then return false end
 			end
 		end
 		g2=sg:Filter(Card.IsHasEffect,nil,EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)
 		if g2:GetCount()>0 then
 			local tc=g2:GetFirst()
+			local hanchk=false
 			while tc do
 				local eff={tc:GetCardEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)}
 				for i,te in ipairs(eff) do
-					if not te:GetTarget()(te,nil,sg,Group.CreateGroup(),ntg,tsg,ntsg) then return false end
+					--if not te:GetTarget()(te,nil,sg,Group.CreateGroup(),ntg,tsg,ntsg) then return false end
+					if te:GetTarget()(te,nil,sg,Group.CreateGroup(),ntg,tsg,ntsg) then
+						hanchk=true
+						break
+					end
 				end
+				if not hanchk then return false end
 				tc=g2:GetNext()
 			end	
 		end
@@ -516,12 +564,9 @@ function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req
 					local thc=thg:GetFirst()
 					while thc do
 						local te=thc:GetCardEffect(EFFECT_HAND_SYNCHRO)
-						Debug.Message("ciao")
-						Debug.Message(thc:GetCode())
 						local val=te:GetValue()
 						local thag=hg:Filter(function(mc) return Auxiliary.TunerFilter(mc,f1,sub1) and val(te,mc,c) end,nil) --tuner
 						local nthag=hg:Filter(function(mc) return Auxiliary.NonTunerFilter(mc,f2,sub2) and val(te,mc,c) end,nil) --non-tuner
-						if thc:GetCode()==64910482 then Debug.Message(nthag:GetCount()) end
 						tg:Merge(thag)
 						ntg:Merge(nthag)
 						thc=thg:GetNext()
