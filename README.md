@@ -24,12 +24,22 @@ Card.GetFreeLinkedZone() returns the useable linkes zones of a link monster
 
 Duel.AssumeReset() manually resets assume effects
 
+Group.SelectUnselect(Group g1, Group g2, int player[, bool buttonok, bool cancelable, int min, int max]) g1 is the group of not selected cards, g2 is the group of already selected cards, player is the player who selects the card, buttonok. often used with cancelable, shows the ok button while in the panel selection, cancelable make the selection be canceled with the right click, max and min does nothing to the function, they are only the max and min values shown in the hint. Every card in both the groups can be selectes. The function returns a single card
+
+Group.SelectC()
+
+Group.FilterSelectC()
+
+Group.SelectMatchingCardC()
+
+These 3 functions works at the same way as the "normal" ones, the only difference is that the selection is cancelable, if canceled when no card has been selected, it returns nil
+
 # Effects:
 
 EFFECT_CANNOT_SPECIAL_SUMMON now can accept the position as filter by putting it as the value, the inserted position will be the one blocked, example target: 
 ```
 function (e,c,sump,sumtype,sumpos,targetp,se)
-	return bit.band(sumpos,bit.bnot(0xff-POSITION_TO_ALLOW))==0
+	return bit.band(sumpos,POSITION_TO_ALLOW)==0
 end
 ```
 

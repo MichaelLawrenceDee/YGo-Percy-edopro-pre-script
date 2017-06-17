@@ -62,7 +62,14 @@ end
 function c111011904.filter(c,e,tp,eg,ep,ev,re,r,rp,chain)
 	if not c:IsType(TYPE_FIELD) and Duel.GetLocationCount(tp,LOCATION_SZONE)<=0 then return false end
 	local te=c:GetActivateEffect()
-	if not c:IsType(TYPE_SPELL+TYPE_TRAP) or not te then return false end
+	local pre={Duel.GetPlayerEffect(tp,EFFECT_CANNOT_ACTIVATE)}
+	if not c:IsType(TYPE_SPELL+TYPE_TRAP) or not te or c:IsHasEffect(EFFECT_CANNOT_TRIGGER) then return false end
+	if pre[1] then
+		for i,eff in ipairs(pre) do
+			local prev=eff:GetValue()
+			if type(prev)~='function' or prev(eff,te,tp) then return false end
+		end
+	end
 	local condition=te:GetCondition()
 	local cost=te:GetCost()
 	local target=te:GetTarget()

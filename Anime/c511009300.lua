@@ -4,6 +4,7 @@ function c511009300.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
 	aux.AddFusionProcMixN(c,true,true,7573135,1,aux.FilterBoolFunction(Card.IsFusionSetCard,0x19),2)
+	aux.AddContactFusion(c,c511009300.contactfilter,c511009300.contactop)
 	--spsummon condition
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
@@ -11,16 +12,6 @@ function c511009300.initial_effect(c)
 	e1:SetCode(EFFECT_SPSUMMON_CONDITION)
 	e1:SetValue(c511009300.splimit)
 	c:RegisterEffect(e1)
-	--special summon rule
-	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(27346636,1))
-	e2:SetType(EFFECT_TYPE_FIELD)
-	e2:SetCode(EFFECT_SPSUMMON_PROC)
-	e2:SetProperty(EFFECT_FLAG_UNCOPYABLE)
-	e2:SetRange(LOCATION_EXTRA)
-	e2:SetCondition(c511009300.sprcon)
-	e2:SetOperation(c511009300.sprop)
-	c:RegisterEffect(e2)
 	--spsummon when summoned
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(7573135,0))
@@ -58,31 +49,15 @@ end
 function c511009300.splimit(e,se,sp,st)
 	return e:GetHandler():GetLocation()~=LOCATION_EXTRA
 end
-function c511009300.spfilter1(c,tp)
-	return c:IsFusionCode(7573135) and c:IsAbleToDeckOrExtraAsCost() and c:IsCanBeFusionMaterial(nil,true)
-		and Duel.IsExistingMatchingCard(c511009300.spfilter2,tp,LOCATION_MZONE,0,2,c)
+function c511009300.contactfilter(tp)
+	return Duel.GetMatchingGroup(Card.IsAbleToDeckOrExtraAsCost,tp,LOCATION_ONFIELD,0,nil)
 end
-function c511009300.spfilter2(c)
-	return c:IsFusionSetCard(0x19) and c:IsCanBeFusionMaterial() and c:IsAbleToDeckOrExtraAsCost()
-end
-function c511009300.sprcon(e,c)
-	if c==nil then return true end 
-	local tp=c:GetControler()
-	return Duel.GetLocationCount(tp,LOCATION_MZONE)>-3
-		and Duel.IsExistingMatchingCard(c511009300.spfilter1,tp,LOCATION_ONFIELD,0,1,nil,tp)
-end
-function c511009300.sprop(e,tp,eg,ep,ev,re,r,rp,c)
-	Duel.Hint(HINT_SELECTMSG,tp,aux.Stringid(27346636,2))
-	local g1=Duel.SelectMatchingCard(tp,c511009300.spfilter1,tp,LOCATION_ONFIELD,0,1,1,nil,tp)
-	Duel.Hint(HINT_SELECTMSG,tp,aux.Stringid(27346636,3))
-	local g2=Duel.SelectMatchingCard(tp,c511009300.spfilter2,tp,LOCATION_MZONE,0,2,2,g1:GetFirst())
-	g1:Merge(g2)
-	local tc=g1:GetFirst()
-	while tc do
-		if not tc:IsFaceup() then Duel.ConfirmCards(1-tp,tc) end
-		tc=g1:GetNext()
+function c511009300.contactop(g,tp)
+	local cg=g:Filter(Card.IsFacedown,nil)
+	if cg:GetCount()>0 then
+		Duel.ConfirmCards(1-tp,cg)
 	end
-	Duel.SendtoDeck(g1,nil,2,REASON_COST)
+	Duel.SendtoDeck(g,nil,2,REASON_COST+REASON_MATERIAL)
 end
 function c511009300.hspfilter(c,e,tp)
 	return c:IsSetCard(0x19) and not c:IsCode(511009300) and c:IsCanBeSpecialSummoned(e,0,tp,true,false)

@@ -49,7 +49,7 @@ function c511002620.matchk(fc,sc,sg,e,tp)
 		t[tc]=e1
 		tc=sg:GetNext()
 	end
-	local res=fc:CheckFusionMaterial(sg,nil,tp) and sc:IsSynchroSummonable(nil,sg)
+	local res=fc:CheckFusionMaterial(sg,nil,tp) and sc:IsSynchroSummonable(nil,sg) and Duel.GetLocationCountFromEx(tp,tp,sg,fc)>1
 	tc=sg:GetFirst()
 	while tc do
 		t[tc]:Reset()

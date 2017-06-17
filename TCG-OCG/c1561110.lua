@@ -3,6 +3,7 @@ function c1561110.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
 	aux.AddFusionProcMix(c,true,true,30012506,77411244,3405259)
+	aux.AddContactFusion(c,c1561110.contactfil,c1561110.contactop)
 	--spsummon condition
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
@@ -10,15 +11,6 @@ function c1561110.initial_effect(c)
 	e1:SetCode(EFFECT_SPSUMMON_CONDITION)
 	e1:SetValue(c1561110.splimit)
 	c:RegisterEffect(e1)
-	--special summon rule
-	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_FIELD)
-	e2:SetCode(EFFECT_SPSUMMON_PROC)
-	e2:SetProperty(EFFECT_FLAG_UNCOPYABLE)
-	e2:SetRange(LOCATION_EXTRA)
-	e2:SetCondition(c1561110.spcon)
-	e2:SetOperation(c1561110.spop)
-	c:RegisterEffect(e2)
 	--remove
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(1561110,0))
@@ -51,55 +43,11 @@ end
 function c1561110.splimit(e,se,sp,st)
 	return not e:GetHandler():IsLocation(LOCATION_EXTRA)
 end
-function c1561110.rmfilter(c)
-	if not c:IsAbleToRemoveAsCost() or not c:IsCanBeFusionMaterial() then return false end
-	return not c:IsLocation(LOCATION_GRAVE) or not Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741)
+function c1561110.contactfil(tp)
+	return Duel.GetMatchingGroup(Card.IsAbleToRemoveAsCost,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,nil)
 end
-function c1561110.rmfilter1(c,mg,ft)
-	local mg2=mg:Clone()
-	mg2:RemoveCard(c)
-	local ct=ft
-	if c:IsLocation(LOCATION_MZONE) then ct=ct+1 end
-	return c:IsFusionCode(30012506) and mg2:IsExists(c1561110.rmfilter2,1,nil,mg2,ct)
-end
-function c1561110.rmfilter2(c,mg,ft)
-	local mg2=mg:Clone()
-	mg2:RemoveCard(c)
-	local ct=ft
-	if c:IsLocation(LOCATION_MZONE) then ct=ct+1 end
-	return c:IsFusionCode(77411244) and mg2:IsExists(c1561110.rmfilter3,1,nil,ct)
-end
-function c1561110.rmfilter3(c,ft)
-	local ct=ft
-	if c:IsLocation(LOCATION_MZONE) then ct=ct+1 end
-	return c:IsFusionCode(3405259) and ct>0
-end
-function c1561110.spcon(e,c)
-	if c==nil then return true end
-	local tp=c:GetControler()
-	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
-	if ft<-2 then return false end
-	local mg=Duel.GetMatchingGroup(c1561110.rmfilter,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,nil)
-	return mg:IsExists(c1561110.rmfilter1,1,nil,mg,ft)
-end
-function c1561110.spop(e,tp,eg,ep,ev,re,r,rp,c)
-	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
-	local mg=Duel.GetMatchingGroup(c1561110.rmfilter,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,nil)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g1=mg:FilterSelect(tp,c1561110.rmfilter1,1,1,nil,mg,ft)
-	local tc1=g1:GetFirst()
-	mg:RemoveCard(tc1)
-	if tc1:IsLocation(LOCATION_MZONE) then ft=ft+1 end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g2=mg:FilterSelect(tp,c1561110.rmfilter2,1,1,nil,mg,ft)
-	local tc2=g2:GetFirst()
-	if tc2:IsLocation(LOCATION_MZONE) then ft=ft+1 end
-	mg:RemoveCard(tc2)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g3=mg:FilterSelect(tp,c1561110.rmfilter3,1,1,nil,ft)
-	g1:Merge(g2)
-	g1:Merge(g3)
-	Duel.Remove(g1,POS_FACEUP,REASON_COST)
+function c1561110.contactop(g)
+	Duel.Remove(g,POS_FACEUP,REASON_COST+REASON_MATERIAL)
 end
 function c1561110.rmcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsDiscardable,tp,LOCATION_HAND,0,1,e:GetHandler()) end

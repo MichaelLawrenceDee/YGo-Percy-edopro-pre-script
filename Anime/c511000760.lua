@@ -33,11 +33,19 @@ function c511000760.operation(e,tp,eg,ep,ev,re,r,rp)
 	local h=Duel.GetDecktopGroup(p,1)
 	local tc=h:GetFirst()
 	Duel.Draw(p,d,REASON_EFFECT)
-	if tc:IsType(TYPE_TRAP) and tc:CheckActivateEffect(false,false,false)~=nil 
+	local te=tc:GetActivateEffect()
+	if not te then return end
+	local pre={Duel.GetPlayerEffect(tp,EFFECT_CANNOT_ACTIVATE)}
+	if pre[1] then
+		for i,eff in ipairs(pre) do
+			local prev=eff:GetValue()
+			if type(prev)~='function' or prev(eff,te,tp) then return end
+		end
+	end
+	if tc:IsType(TYPE_TRAP) and tc:CheckActivateEffect(false,false,false)~=nil and not tc:IsHasEffect(EFFECT_CANNOT_TRIGGER)
 		and Duel.GetLocationCount(tp,LOCATION_SZONE) and Duel.SelectYesNo(tp,aux.Stringid(511000760,1)) then
 		Duel.ConfirmCards(1-p,tc)
 		local tpe=tc:GetType()
-		local te=tc:GetActivateEffect()
 		local tg=te:GetTarget()
 		local co=te:GetCost()
 		local op=te:GetOperation()

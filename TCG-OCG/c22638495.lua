@@ -3,6 +3,7 @@ function c22638495.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
 	aux.AddFusionProcMix(c,true,true,c22638495.ffilter,aux.FilterBoolFunction(Card.IsFusionType,TYPE_PENDULUM))
+	aux.AddContactFusion(c,c22638495.contactfil,c22638495.contactop)
 	--spsummon condition
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
@@ -10,15 +11,6 @@ function c22638495.initial_effect(c)
 	e1:SetCode(EFFECT_SPSUMMON_CONDITION)
 	e1:SetValue(c22638495.splimit)
 	c:RegisterEffect(e1)
-	--special summon rule
-	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_FIELD)
-	e2:SetCode(EFFECT_SPSUMMON_PROC)
-	e2:SetProperty(EFFECT_FLAG_UNCOPYABLE)
-	e2:SetRange(LOCATION_EXTRA)
-	e2:SetCondition(c22638495.spcon)
-	e2:SetOperation(c22638495.spop)
-	c:RegisterEffect(e2)
 	--spsummon
 	local e3=Effect.CreateEffect(c)
 	e3:SetCategory(CATEGORY_SPECIAL_SUMMON)
@@ -49,28 +41,14 @@ end
 function c22638495.ffilter(c,tp,fc)
 	return c:IsFusionSetCard(0xc7) and c:IsType(TYPE_PENDULUM)
 end
+function c22638495.contactfil(tp)
+	return Duel.GetReleaseGroup(tp)
+end
+function c22638495.contactop(g)
+	Duel.Release(g,REASON_COST+REASON_MATERIAL)
+end
 function c22638495.splimit(e,se,sp,st)
 	return e:GetHandler():GetLocation()~=LOCATION_EXTRA
-end
-function c22638495.spfilter1(c,tp,fc)
-	return c:IsFusionSetCard(0xc7) and c:IsType(TYPE_PENDULUM) and c:IsCanBeFusionMaterial(fc)
-		and Duel.CheckReleaseGroup(tp,c22638495.spfilter2,1,c,fc)
-end
-function c22638495.spfilter2(c,fc)
-	return c:IsType(TYPE_PENDULUM) and c:IsCanBeFusionMaterial(fc)
-end
-function c22638495.spcon(e,c)
-	if c==nil then return true end
-	local tp=c:GetControler()
-	return Duel.GetLocationCount(tp,LOCATION_MZONE)>-2
-		and Duel.CheckReleaseGroup(tp,c22638495.spfilter1,1,nil,tp,c)
-end
-function c22638495.spop(e,tp,eg,ep,ev,re,r,rp,c)
-	local g1=Duel.SelectReleaseGroup(tp,c22638495.spfilter1,1,1,nil,tp,c)
-	local g2=Duel.SelectReleaseGroup(tp,c22638495.spfilter2,1,1,g1:GetFirst(),c)
-	g1:Merge(g2)
-	c:SetMaterial(g1)
-	Duel.Release(g1,REASON_COST+REASON_FUSION+REASON_MATERIAL)
 end
 function c22638495.spfilter(c,e,tp)
 	return c:IsSetCard(0xc7) and c:IsType(TYPE_PENDULUM) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)

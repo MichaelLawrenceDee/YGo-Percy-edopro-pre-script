@@ -3,6 +3,7 @@ function c2129638.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
 	aux.AddFusionProcMixN(c,true,true,89631139,2)
+	aux.AddContactFusion(c,c2129638.contactfil,c2129638.contactop)
 	--spsummon condition
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
@@ -10,15 +11,6 @@ function c2129638.initial_effect(c)
 	e1:SetCode(EFFECT_SPSUMMON_CONDITION)
 	e1:SetValue(c2129638.splimit)
 	c:RegisterEffect(e1)
-	--special summon rule
-	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_FIELD)
-	e2:SetCode(EFFECT_SPSUMMON_PROC)
-	e2:SetProperty(EFFECT_FLAG_UNCOPYABLE)
-	e2:SetRange(LOCATION_EXTRA)
-	e2:SetCondition(c2129638.spcon)
-	e2:SetOperation(c2129638.spop)
-	c:RegisterEffect(e2)
 	--indes
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_SINGLE)
@@ -49,20 +41,11 @@ end
 function c2129638.splimit(e,se,sp,st)
 	return bit.band(st,SUMMON_TYPE_FUSION)==SUMMON_TYPE_FUSION
 end
-function c2129638.spfilter(c,fc)
-	return c:IsFusionCode(89631139) and c:IsCanBeFusionMaterial(fc) and c:IsAbleToGraveAsCost()
+function c2129638.contactfil(tp)
+	return Duel.GetMatchingGroup(Card.IsAbleToGraveAsCost,tp,LOCATION_ONFIELD,0,nil)
 end
-function c2129638.spcon(e,c)
-	if c==nil then return true end
-	local tp=c:GetControler()
-	return Duel.GetLocationCount(tp,LOCATION_MZONE)>-2
-		and Duel.IsExistingMatchingCard(c2129638.spfilter,tp,LOCATION_MZONE,0,2,nil,c)
-end
-function c2129638.spop(e,tp,eg,ep,ev,re,r,rp,c)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g=Duel.SelectMatchingCard(tp,c2129638.spfilter,tp,LOCATION_MZONE,0,2,2,nil,c)
-	c:SetMaterial(g)
-	Duel.SendtoGrave(g,REASON_COST)
+function c2129638.contactop(g)
+	Duel.SendtoGrave(g,REASON_COST+REASON_MATERIAL)
 end
 function c2129638.rmcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
