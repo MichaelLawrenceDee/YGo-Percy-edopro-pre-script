@@ -7,17 +7,6 @@ end
 --Synchro monster, m-n tuners + m-n monsters
 --function Auxiliary.AddSynchroProcedure(c,f1,f2,ct)
 function Auxiliary.AddSynchroProcedure(c,...)
-	--[[local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetCode(EFFECT_SPSUMMON_PROC)
-	e1:SetProperty(EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_IGNORE_IMMUNE)
-	e1:SetRange(LOCATION_EXTRA)
-	e1:SetCondition(Auxiliary.SynCondition(f1,f2,ct,99))
-	e1:SetTarget(Auxiliary.SynTarget(f1,f2,ct,99))
-	e1:SetOperation(Auxiliary.SynOperation(f1,f2,ct,99))
-	e1:SetValue(SUMMON_TYPE_SYNCHRO)
-	c:RegisterEffect(e1)]]
-	
 	if c.synchro_type==nil then
 		local code=c:GetOriginalCode()
 		local mt=_G["c" .. code]
@@ -59,9 +48,6 @@ end
 function Auxiliary.SynCondition(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req2,reqct2,reqm)
 	return	function(e,c,smat,mg)
 				if c==nil then return true end
-				--[[if smat and smat:IsType(TYPE_TUNER) and (not f1 or f1(smat)) then
-					return Duel.CheckTunerMaterial(c,smat,f1,f2,minc,maxc,mg) end
-				return Duel.CheckSynchroMaterial(c,f1,f2,minc,maxc,smat,mg)]]
 				local tp=c:GetControler()
 				local pe={Duel.GetPlayerEffect(tp,EFFECT_MUST_BE_SMATERIAL)}
 				local pg=Group.CreateGroup()
