@@ -25,7 +25,7 @@ function Auxiliary.AddSynchroProcedure(c,...)
 	c:RegisterEffect(e1)
 end
 function Auxiliary.SynchroCheckFilterChk(c,f1,f2,sub1,sub2)
-	local te=c:GetCardEffect(511000189)
+	local te=c:GetCardEffect(EFFECT_SYNCHRO_CHECK)
 	if not te then return false end
 	local f=te:GetValue()
 	local reset=false
@@ -156,7 +156,7 @@ function Auxiliary.SynchroCheckP31(c,g,tsg,ntsg,sg,f1,sub1,f2,sub2,min1,max1,min
 			local te=teg[i]
 			local val=te:GetValue()
 			local tg=g:Filter(function(mc) return val(te,mc) end,nil)
-			rg=tg:Filter(function(mc) return not Auxiliary.TunerFilter(mc,f1,sub1) and not Auxiliary.NonTunerFilter(c,f2,sub2) end,nil)
+			rg=tg:Filter(function(mc) return not Auxiliary.TunerFilter(mc,f1,sub1) and not Auxiliary.NonTunerFilter(mc,f2,sub2) end,nil)
 		end
 	end
 	--c has the synchro limit
@@ -231,7 +231,9 @@ function Auxiliary.SynchroCheckP31(c,g,tsg,ntsg,sg,f1,sub1,f2,sub2,min1,max1,min
 	g:Merge(rg)
 	tsg:RemoveCard(c)
 	sg:RemoveCard(c)
-	Duel.AssumeReset()
+	if not sg:IsExists(Card.IsHasEffect,1,nil,EFFECT_SYNCHRO_CHECK) then
+		Duel.AssumeReset()
+	end
 	return res
 end
 function Auxiliary.SynchroCheckP32(c,g,tsg,ntsg,sg,f2,sub2,min2,max2,req2,reqct2,reqm,lv,sc,tp,smat,pg,mgchk)
@@ -243,7 +245,7 @@ function Auxiliary.SynchroCheckP32(c,g,tsg,ntsg,sg,f2,sub2,min2,max2,req2,reqct2
 			local te=teg[i]
 			local val=te:GetValue()
 			local tg=g:Filter(function(mc) return val(te,mc) end,nil)
-			rg=tg:Filter(function(mc) return not Auxiliary.NonTunerFilter(c,f2,sub2) end,nil)
+			rg=tg:Filter(function(mc) return not Auxiliary.NonTunerFilter(mc,f2,sub2) end,nil)
 		end
 	end
 	--c has the synchro limit
@@ -321,7 +323,9 @@ function Auxiliary.SynchroCheckP32(c,g,tsg,ntsg,sg,f2,sub2,min2,max2,req2,reqct2
 	g:Merge(rg)
 	ntsg:RemoveCard(c)
 	sg:RemoveCard(c)
-	Duel.AssumeReset()
+	if not sg:IsExists(Card.IsHasEffect,1,nil,EFFECT_SYNCHRO_CHECK) then
+		Duel.AssumeReset()
+	end
 	return res
 end
 function Auxiliary.SynchroCheckP41(c,tg,ntg,tsg,ntsg,sg,min1,max1,min2,max2,req1,reqct1,req2,reqct2,reqm,lv,sc,tp,smat,pg,mgchk)
