@@ -594,9 +594,19 @@ function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req
 									tsg:AddCard(tc)
 								end
 								sg:AddCard(tc)
+								if tc:IsHasEffect(EFFECT_SYNCHRO_CHECK) then
+									local teg={tc:GetCardEffect(EFFECT_SYNCHRO_CHECK)}
+									for i=1,#teg do
+										local te=teg[i]
+										local tg=g:Filter(function(mc) return te:GetValue()(te,mc) end,nil)
+									end
+								end
 							else
 								tsg:RemoveCard(tc)
 								sg:RemoveCard(tc)
+								if not sg:IsExists(Card.IsHasEffect,1,nil,EFFECT_SYNCHRO_CHECK) then
+									Duel.AssumeReset()
+								end
 							end
 							if g:FilterCount(Auxiliary.SynchroCheckP31,sg,g,tsg,ntsg,sg,f1,sub1,f2,sub2,min1,max1,min2,max2,req1,reqct1,req2,reqct2,reqm,lv,c,tp,smat,pg,mgchk)==0 or tsg:GetCount()>=max2 then
 								tune=false
@@ -626,9 +636,19 @@ function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req
 								if not sg:IsContains(tc) then
 									ntsg:AddCard(tc)
 									sg:AddCard(tc)
+									if tc:IsHasEffect(EFFECT_SYNCHRO_CHECK) then
+										local teg={tc:GetCardEffect(EFFECT_SYNCHRO_CHECK)}
+										for i=1,#teg do
+											local te=teg[i]
+											local tg=g:Filter(function(mc) return te:GetValue()(te,mc) end,nil)
+										end
+									end
 								else
 									ntsg:RemoveCard(tc)
 									sg:RemoveCard(tc)
+									if not sg:IsExists(Card.IsHasEffect,1,nil,EFFECT_SYNCHRO_CHECK) then
+										Duel.AssumeReset()
+									end
 								end
 							elseif ntsg:GetCount()==0 then
 								tune=true
