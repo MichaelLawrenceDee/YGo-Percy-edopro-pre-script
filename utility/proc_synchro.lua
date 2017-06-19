@@ -5,14 +5,14 @@ function Auxiliary.NonTuner(f,a,b,c)
 			end
 end
 --Synchro monster, m-n tuners + m-n monsters
---function Auxiliary.AddSynchroProcedure(c,f1,f2,ct)
 function Auxiliary.AddSynchroProcedure(c,...)
+	--parameters (f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req2,reqct2,reqm)
 	if c.synchro_type==nil then
 		local code=c:GetOriginalCode()
 		local mt=_G["c" .. code]
 		mt.synchro_type=1
 		mt.synchro_parameters={...}
-	end	
+	end
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetCode(EFFECT_SPSUMMON_PROC)
@@ -44,7 +44,6 @@ end
 function Auxiliary.NonTunerFilter(c,f2,sub2)
 	return not f2 or f2(c) or (sub2 and sub2(c))
 end
---function Auxiliary.SynCondition(f1,f2,minc,maxc)
 function Auxiliary.SynCondition(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req2,reqct2,reqm)
 	return	function(e,c,smat,mg)
 				if c==nil then return true end
@@ -131,18 +130,6 @@ function Auxiliary.SynCondition(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,
 						hc=hg:GetNext()
 					end
 					return res
-					--[[local okg=false
-					if g:IsExists(Card.IsHasEffect,1,nil,511000806) then okg=true end
-					local okh=false
-					if g:IsExists(Card.IsHasEffect,1,nil,EFFECT_HAND_SYNCHRO) then okh=true end
-					if okg then
-						local g2=Duel.GetMatchingGroup(Card.IsCanBeSynchroMaterial,tp,LOCATION_GRAVE,0,c)
-						g:Merge(g2)
-					end
-					if okh then
-						local g2=Duel.GetMatchingGroup(Card.IsCanBeSynchroMaterial,tp,LOCATION_HAND,0,c)
-						g:Merge(g2)
-					end]]
 				end
 				return false
 			end
@@ -318,6 +305,7 @@ function Auxiliary.SynchroCheckP32(c,g,tsg,ntsg,sg,f2,sub2,min2,max2,req2,reqct2
 	else
 		res=(not req2 or ntsg:IsExists(req2,reqct2,nil,tp)) and (not reqm or sg:IsExists(reqm,1,nil,tp)) 
 			and ntsg:IsExists(Auxiliary.NonTunerFilter,ntsg:GetCount(),nil,f2,sub2)
+			and (pg:GetCount()<=0 or pg:IsExists(function(mc) return sg:IsContains(mc) end,pg:GetCount(),nil))
 			and (not smat or sg:IsContains(smat))  and Auxiliary.SynchroCheckP43(tsg,ntsg,sg,lv,sc,tp)
 	end
 	g:Merge(rg)
@@ -480,6 +468,7 @@ function Auxiliary.SynchroCheckP42(c,ntg,tsg,ntsg,sg,min2,max2,req2,reqct2,reqm,
 				and Auxiliary.SynchroCheckP43(tsg,ntsg,sg,lv,sc,tp))
 	else
 		res=(not req2 or ntsg:IsExists(req2,reqct2,nil,tp)) and (not reqm or sg:IsExists(reqm,1,nil,tp)) 
+			and (pg:GetCount()<=0 or pg:IsExists(function(mc) return sg:IsContains(mc) end,pg:GetCount(),nil))
 			and (not smat or sg:IsContains(smat))  and Auxiliary.SynchroCheckP43(tsg,ntsg,sg,lv,sc,tp)
 	end
 	ntg:Merge(ntrg)
@@ -520,7 +509,6 @@ function Auxiliary.SynchroCheckP43(tsg,ntsg,sg,lv,sc,tp)
 		or (not sc:IsLocation(LOCATION_EXTRA) and (Duel.GetLocationCount(tp,LOCATION_MZONE)>0 or sg:IsExists(Auxiliary.FConditionCheckF,nil,tp))))
 end
 function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req2,reqct2,reqm)
---function Auxiliary.SynTarget(f1,f2,minc,maxc)
 	return	function(e,tp,eg,ep,ev,re,r,rp,chk,c,smat,mg)
 				local sg=Group.CreateGroup()
 				local pe={Duel.GetPlayerEffect(tp,EFFECT_MUST_BE_SMATERIAL)}
@@ -768,4 +756,308 @@ function Auxiliary.SynOperation(e,tp,eg,ep,ev,re,r,rp,c,smat,mg)
 		Duel.SendtoGrave(g,REASON_MATERIAL+REASON_SYNCHRO)
 	end
 	g:DeleteGroup()
+end
+
+--Synchro monster, Majestic
+function Auxiliary.AddMajesticSynchroProcedure(c,f1,cbt1,f2,cbt2,f3,cbt3,...)
+	--parameters: function, can be tuner, required materials (by 2s, functions + number)
+	if c.synchro_type==nil then
+		local code=c:GetOriginalCode()
+		local mt=_G["c" .. code]
+		mt.synchro_type=2
+		mt.synchro_parameters={f1,cbt1,f2,cbt2,f3,cbt3,...}
+	end
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_FIELD)
+	e1:SetCode(EFFECT_SPSUMMON_PROC)
+	e1:SetProperty(EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_IGNORE_IMMUNE)
+	e1:SetRange(LOCATION_EXTRA)
+	e1:SetCondition(Auxiliary.MajesticSynCondition(f1,cbt1,f2,cbt2,f3,cbt3,...))
+	e1:SetTarget(Auxiliary.MajesticSynTarget(f1,cbt1,f2,cbt2,f3,cbt3,...))
+	e1:SetOperation(Auxiliary.SynOperation)
+	e1:SetValue(SUMMON_TYPE_SYNCHRO)
+	c:RegisterEffect(e1)
+end
+function Auxiliary.MajesticSynchroCheck1(c,g,sg,card1,card2,card3,lv,sc,tp,smat,pg,mgchk,f1,cbt1,f2,cbt2,f3,cbt3,...)
+	local res
+	local rg=Group.CreateGroup()
+	if c:IsHasEffect(EFFECT_SYNCHRO_CHECK) then
+		local teg={c:GetCardEffect(EFFECT_SYNCHRO_CHECK)}
+		for i=1,#teg do
+			local te=teg[i]
+			local val=te:GetValue()
+			local tg=g:Filter(function(mc) return val(te,mc) end,nil)
+		end
+	end
+	--c has the synchro limit
+	if c:IsHasEffect(73941492+TYPE_SYNCHRO) then
+		local eff={c:GetCardEffect(73941492+TYPE_SYNCHRO)}
+		for i,f in ipairs(eff) do
+			if sg:IsExists(Auxiliary.TuneMagFilter,1,c,f,f:GetValue()) then return false end
+			local sg1=g:Filter(function(c) return not Auxiliary.TuneMagFilterFus(c,f,f:GetValue()) end,nil)
+			rg:Merge(sg1)
+		end
+	end
+	--A card in the selected group has the synchro lmit
+	local g2=sg:Filter(Card.IsHasEffect,nil,73941492+TYPE_SYNCHRO)
+	if g2:GetCount()>0 then
+		local tc=g2:GetFirst()
+		while tc do
+			local eff={tc:GetCardEffect(73941492+TYPE_SYNCHRO)}
+			for i,f in ipairs(eff) do
+				if Auxiliary.TuneMagFilter(c,f,f:GetValue()) then return false end
+			end
+			tc=g2:GetNext()
+		end	
+	end
+	if not mgchk then
+		if c:IsHasEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK) then
+			local teg={c:GetCardEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)}
+			local hanchk=false
+			for i=1,#teg do
+				local te=teg[i]
+				local tgchk=te:GetTarget()
+				local res,trg,ntrg2=tgchk(te,c,sg,g,g,tsg,ntsg)
+				--if not res then return false end
+				if res then
+					rg:Merge(trg)
+					hanchk=true
+					break
+				end
+			end
+			if not hanchk then return false end
+		end
+		g2=sg:Filter(Card.IsHasEffect,nil,EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)
+		if g2:GetCount()>0 then
+			local tc=g2:GetFirst()
+			while tc do
+				local eff={tc:GetCardEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)}
+				local hanchk=false
+				for i,te in ipairs(eff) do
+					--if not te:GetTarget()(te,nil,sg,g,g,tsg,ntsg) then return false end
+					if te:GetTarget()(te,nil,sg,g,g,tsg,ntsg) then
+						hanchk=true
+						break
+					end
+				end
+				if not hanchk then return false end
+				tc=g2:GetNext()
+			end	
+		end
+	end
+	g:Sub(rg)
+	sg:AddCard(c)
+	if not card1 then
+		card1=c
+	elseif not card2 then
+		card2=c
+	else
+		card3=c
+	end
+	if sg:GetCount()<3 then
+		res=g:IsExists(Auxiliary.MajesticSynchroCheck1,1,sg,g,sg,card1,card2,card3,lv,sc,tp,smat,pg,mgchk,f1,cbt1,f2,cbt2,f3,cbt3,...)
+	else
+		res=(pg:GetCount()<=0 or pg:IsExists(function(mc) return sg:IsContains(mc) end,pg:GetCount(),nil))
+			and (not smat or sg:IsContains(smat)) and Auxiliary.MajesticSynchroCheck2(sg,card1,card2,card3,lv,sc,tp,f1,cbt1,f2,cbt2,f3,cbt3,...)
+	end
+	g:Merge(rg)
+	sg:RemoveCard(c)
+	if card3 then
+		card3=nil
+	elseif card2 then
+		card2=nil
+	else
+		card1=nil
+	end
+	if not sg:IsExists(Card.IsHasEffect,1,nil,EFFECT_SYNCHRO_CHECK) then
+		Duel.AssumeReset()
+	end
+	return res
+end
+function Auxiliary.MajesticSynchroCheck2(sg,card1,card2,card3,lv,sc,tp,f1,cbt1,f2,cbt2,f3,cbt3,...)
+	if sg:IsExists(Auxiliary.SynchroCheckHand,1,nil,sg) then return false end
+	local t={...}
+	local funs={}
+	funs[0]={} --number of those
+	funs[1]={} --required functions
+	for i,v in ipairs(t) do
+		table.insert(funs[i%2],v)
+	end
+	local tunechk=false
+	if not f1(card1) or not f2(card2) or not f3(card3) then return false end
+	if cbt1 and card1:IsType(TYPE_TUNER) then tunechk=true end
+	if cbt2 and card2:IsType(TYPE_TUNER) then tunechk=true end
+	if cbt3 and card3:IsType(TYPE_TUNER) then tunechk=true end
+	if not tunechk then return false end
+	local lvchk=false
+	if #funs[0]>0 then
+		for i=1,#funs[0] do
+			if not sg:IsExists(funs[1][i],funs[0][i],nil) then return false end
+		end
+	end
+	if sg:IsExists(Card.IsHasEffect,1,nil,EFFECT_SYNCHRO_MATERIAL_CUSTOM) then
+		local g=sg:Filter(Card.IsHasEffect,nil,EFFECT_SYNCHRO_MATERIAL_CUSTOM)
+		local tc=g:GetFirst()
+		while tc do
+			local teg={tc:GetCardEffect(EFFECT_SYNCHRO_MATERIAL_CUSTOM)}
+			for i,te in ipairs(teg) do
+				local op=te:GetOperation()
+				local ok,tlvchk=op(te,Group.CreateGroup(),Group.CreateGroup(),sg,lv,sc,tp)
+				if not ok then return false end
+				lvchk=lvchk or tlvchk
+			end
+			tc=g:GetNext()
+		end
+	end
+	if not lvchk and not sg:CheckWithSumEqual(Card.GetSynchroLevel,lv,sg:GetCount(),sg:GetCount(),sc) then return false end
+	if sc:IsLocation(LOCATION_EXTRA) then
+		return Duel.GetLocationCountFromEx(tp,tp,sg,sc)>0
+	else
+		return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 or sg:IsExists(Auxiliary.FConditionCheckF,nil,tp)
+	end
+end
+function Auxiliary.MajesticSynCondition(f1,cbt1,f2,cbt2,f3,cbt3,...)
+	local t={...}
+	return	function(e,c,smat,mg)
+				if c==nil then return true end
+				local tp=c:GetControler()
+				local pe={Duel.GetPlayerEffect(tp,EFFECT_MUST_BE_SMATERIAL)}
+				local pg=Group.CreateGroup()
+				local lv=c:GetLevel()
+				if pe[1] then
+					for i,eff in ipairs(pe) do
+						pg:AddCard(eff:GetOwner())
+					end
+				end
+				local g
+				local mgchk
+				if mg then
+					g=mg:Filter(Card.IsCanBeSynchroMaterial,c,c)
+					mgchk=true
+				else
+					g=Duel.GetMatchingGroup(function(mc) return mc:IsFaceup() and mc:IsCanBeSynchroMaterial(c) end,tp,LOCATION_MZONE,LOCATION_MZONE,c)
+					mgchk=false
+				end
+				if not mgchk then
+					local thg=g:Filter(Card.IsHasEffect,nil,EFFECT_HAND_SYNCHRO)
+					local hg=Duel.GetMatchingGroup(Card.IsCanBeSynchroMaterial,tp,LOCATION_HAND+LOCATION_GRAVE,0,c,c)
+					local thc=thg:GetFirst()
+					while thc do
+						local te=thc:GetCardEffect(EFFECT_HAND_SYNCHRO)
+						local val=te:GetValue()
+						local ag=hg:Filter(function(mc) return val(te,mc,c) end,nil) --tuner
+						g:Merge(ag)
+						thc=thg:GetNext()
+					end
+				end
+				local res=(not smat or g:IsContains(smat)) 
+					and g:IsExists(Auxiliary.MajesticSynchroCheck1,1,nil,g,Group.CreateGroup(),card1,card2,card3,lv,c,tp,smat,pg,mgchk,f1,cbt1,f2,cbt2,f3,cbt3,table.unpack(t))
+				local hg=Duel.GetMatchingGroup(Card.IsHasEffect,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)
+				local hc=hg:GetFirst()
+					while hc do
+					local effs={hc:GetCardEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)}
+					for _,v in ipairs(effs) do
+						v:Reset()
+					end
+					hc=hg:GetNext()
+				end
+				Duel.AssumeReset()
+				return res
+			end
+end
+function Auxiliary.MajesticSynTarget(f1,cbt1,f2,cbt2,f3,cbt3,...)
+	local t={...}
+	return	function(e,tp,eg,ep,ev,re,r,rp,chk,c,smat,mg)
+				local sg=Group.CreateGroup()
+				local pe={Duel.GetPlayerEffect(tp,EFFECT_MUST_BE_SMATERIAL)}
+				local pg=Group.CreateGroup()
+				local lv=c:GetLevel()
+				if pe[1] then
+					for i,eff in ipairs(pe) do
+						pg:AddCard(eff:GetOwner())
+					end
+				end
+				local mgchk
+				local g
+				if mg then
+					mgchk=true
+					g=mg:Filter(Card.IsCanBeSynchroMaterial,c,c)
+				else
+					mgchk=false
+					g=Duel.GetMatchingGroup(function(mc) return mc:IsFaceup() and mc:IsCanBeSynchroMaterial(c) end,tp,LOCATION_MZONE,LOCATION_MZONE,c)
+				end
+				if not mgchk then
+					local thg=g:Filter(Card.IsHasEffect,nil,EFFECT_HAND_SYNCHRO)
+					local hg=Duel.GetMatchingGroup(Card.IsCanBeSynchroMaterial,tp,LOCATION_HAND+LOCATION_GRAVE,0,c,c)
+					local thc=thg:GetFirst()
+					while thc do
+						local te=thc:GetCardEffect(EFFECT_HAND_SYNCHRO)
+						local val=te:GetValue()
+						local ag=hg:Filter(function(mc) return val(te,mc,c) end,nil)
+						g:Merge(ag)
+						thc=thg:GetNext()
+					end
+				end
+				local lv=c:GetLevel()
+				local card1=nil
+				local card2=nil
+				local card3=nil
+				local cancel=not mgchk and Duel.GetCurrentChain()<=0
+				while sg:GetCount()<3 do
+					local g2=g:Filter(Auxiliary.MajesticSynchroCheck1,sg,g,sg,card1,card2,card3,lv,c,tp,smat,pg,mgchk,f1,cbt1,f2,cbt2,f3,cbt3,table.unpack(t))
+					Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SMATERIAL)
+					local tc=Group.SelectUnselect(g2,sg,tp,cancel,cancel)
+					if not tc then return false end
+					if not sg:IsContains(tc) then
+						sg:AddCard(tc)
+						if tc:IsHasEffect(EFFECT_SYNCHRO_CHECK) then
+							local teg={tc:GetCardEffect(EFFECT_SYNCHRO_CHECK)}
+							for i=1,#teg do
+								local te=teg[i]
+								local tg=g:Filter(function(mc) return te:GetValue()(te,mc) end,nil)
+							end
+						end
+						if not card1 then
+							card1=tc
+						elseif not card2 then
+							card2=tc
+						else
+							card3=tc
+						end
+					else
+						local rem=false
+						if card3 and tc==card3 then
+							card3=nil
+							rem=true
+						elseif not card3 and card2 and tc==card2 then
+							card2=nil
+							rem=true
+						elseif not card3 and not card2 and card1 and tc==card1 then
+							card1=nil
+							rem=true
+						end
+						if rem then
+							sg:RemoveCard(tc)
+							if not sg:IsExists(Card.IsHasEffect,1,nil,EFFECT_SYNCHRO_CHECK) then
+								Duel.AssumeReset()
+							end
+						end
+					end
+				end
+				Duel.AssumeReset()
+				local hg=Duel.GetMatchingGroup(Card.IsHasEffect,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)
+				local hc=hg:GetFirst()
+				while hc do
+					local effs={hc:GetCardEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)}
+ 					for _,v in ipairs(effs) do
+ 						v:Reset()
+ 					end
+					hc=hg:GetNext()
+				end
+				if sg then
+					sg:KeepAlive()
+					e:SetLabelObject(sg)
+					return true
+				else return false end
+			end
 end
