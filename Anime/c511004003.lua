@@ -85,9 +85,7 @@ function c511004003.activate(e,tp,eg,ep,ev,re,r,rp)
 		while tc do
 			local loc,pos,p,seq=c511004003.GetInfos(tc)
 			if not Duel.GetFieldCard(p,loc,seq) then
-				if Duel.SpecialSummonStep(tc,0,tp,p,true,true,pos)~=0 and tc:GetSequence()~=seq then
-					Duel.MoveSequence(tc,seq)
-				end
+				Duel.SpecialSummonStep(tc,0,tp,p,true,true,pos,bit.lshift(1,seq))~=0
 			end
 			tc=g1:GetNext()
 		end
