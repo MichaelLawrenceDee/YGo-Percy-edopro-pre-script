@@ -467,7 +467,7 @@ function Auxiliary.PersistentTargetFilter(e,c)
 	return e:GetHandler():IsHasCardTarget(c)
 end
 --add a anounce digit by digit
-function Duel.ComposeNumberDigitByDigit(tp,min,max)
+function Auxiliary.ComposeNumberDigitByDigit(tp,min,max)
 	if min>max then min,max=max,min end
 	local mindc=#tostring(min)
 	local maxdc=#tostring(max)
