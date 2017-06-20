@@ -58,7 +58,7 @@ function c511009559.spop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.Overlay(sc,Group.FromCards(tc))
 		if Duel.SpecialSummon(sc,SUMMON_TYPE_XYZ,tp,tp,false,false,POS_FACEUP)>0 then
 			sc:CompleteProcedure()
-			if c:IsRelateToEffect(e) then
+			if c:IsRelateToEffect(e) and e:IsHasType(EFFECT_TYPE_ACTIVATE) then
 				c:CancelToGrave()
 				Duel.Overlay(sc,Group.FromCards(c))
 			end
