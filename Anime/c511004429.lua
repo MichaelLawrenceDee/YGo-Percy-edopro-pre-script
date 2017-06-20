@@ -11,7 +11,7 @@ function c511004429.initial_effect(c)
 	c:RegisterEffect(e1)
 end
 function c511004429.filter(c,g)
-	return c:IsFaceup() and c:IsSetCard(0x10ec) and c:GetLevel()<=4 and 
+	return c:IsFaceup() and c:IsSetCard(0x10ec) and c:GetLevel()<=4
 end
 function c511004429.target(e,tp,eg,ev,ep,re,r,rp,chk,chkc)
 	local a=Duel.GetAttacker()
