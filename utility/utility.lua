@@ -466,6 +466,63 @@ end
 function Auxiliary.PersistentTargetFilter(e,c)
 	return e:GetHandler():IsHasCardTarget(c)
 end
+--add a anounce digit by digit
+function Duel.ComposeNumberDigitByDigit(tp,min,max)
+	if min>max then min,max=max,min end
+	local mindc=#tostring(min)
+	local maxdc=#tostring(max)
+	local dbdmin={}
+	local dbdmax={}
+	local mi=maxdc-1
+	local aux=min
+	for i=1,maxdc do
+		dbdmin[i]=math.floor(aux/(10^mi))
+		aux=aux%(10^mi)
+		mi=mi-1
+	end
+	aux=max
+	mi=maxdc-1
+	for i=1,maxdc do
+		dbdmax[i]=math.floor(aux/(10^mi))
+		aux=aux%(10^mi)
+		mi=mi-1
+	end
+	local chku=true
+	local chkl=true
+	local dbd={}
+	mi=maxdc-1
+	for i=1,maxdc do
+		local maxval=9
+		local minval=0
+		if chku and i>1 and dbd[i-1]<dbdmax[i-1] then
+			chku=false
+		end
+		if chkl and i>1 and dbd[i-1]>dbdmin[i-1] then
+			chkl=false
+		end
+		if chku then
+			maxval=dbdmax[i]
+		end
+		if chkl then
+			minval=dbdmin[i]
+		end
+		local r={}
+		local j=1
+		for k=minval,maxval do
+			r[j]=k
+			j=j+1
+		end
+		dbd[i]=Duel.AnnounceNumber(tp,table.unpack(r))
+		mi=mi-1
+	end
+	local number=0
+	mi=maxdc-1
+	for i=1,maxdc do
+		number=number+dbd[i]*10^mi
+		mi=mi-1
+	end
+	return number
+end
 
 pcall(dofile,"script/proc_fusion.lua")
 pcall(dofile,"script/proc_ritual.lua")
