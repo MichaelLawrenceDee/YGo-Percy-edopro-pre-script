@@ -101,7 +101,7 @@ function c513000012.discon(e,tp,eg,ep,ev,re,r,rp)
 	if not g or g:GetCount()<=0 or not ex or not tg or g==nil or tc+tg:FilterCount(Card.IsControler,nil,tp)-tg:GetCount()<=0 then return false end
 	local c=g:GetFirst()
 	while c do
-		if tg:IsContains(c) and not c==e:GetHandler() and c:IsControler(tp) then return true end
+		if tg:IsContains(c) and c~=e:GetHandler() and c:IsControler(tp) then return true end
 		c=g:GetNext()
 	end
 	return false
