@@ -14,20 +14,17 @@ function c511001019.filter(c,e)
 	local tpe=c.synchro_type
 	if not tpe then return false end
 	local t={c.synchro_parameters()}
-	local e1
-	if tpe==1 or tpe==2 then
-		e1=Effect.CreateEffect(e:GetHandler())
-		e1:SetType(EFFECT_TYPE_FIELD)
-		e1:SetCode(EFFECT_SPSUMMON_PROC)
-		e1:SetProperty(EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_IGNORE_IMMUNE)
-		e1:SetRange(LOCATION_GRAVE)
-		e1:SetCondition(aux.SynCondition(table.unpack(t)))
-		e1:SetTarget(aux.SynTarget(table.unpack(t)))
-		e1:SetOperation(aux.SynOperation)
-		e1:SetValue(SUMMON_TYPE_SYNCHRO)
-		e1:SetReset(RESET_CHAIN)
-		c:RegisterEffect(e1)
-	end
+	local e1=Effect.CreateEffect(e:GetHandler())
+	e1:SetType(EFFECT_TYPE_FIELD)
+	e1:SetCode(EFFECT_SPSUMMON_PROC)
+	e1:SetProperty(EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_IGNORE_IMMUNE)
+	e1:SetRange(LOCATION_GRAVE)
+	e1:SetCondition(aux.SynCondition(table.unpack(t)))
+	e1:SetTarget(aux.SynTarget(table.unpack(t)))
+	e1:SetOperation(aux.SynOperation)
+	e1:SetValue(SUMMON_TYPE_SYNCHRO)
+	e1:SetReset(RESET_CHAIN)
+	c:RegisterEffect(e1)
 	local res=c:IsSynchroSummonable(nil)
 	e1:Reset()
 	return res
