@@ -28,7 +28,7 @@ function c511001744.initial_effect(c)
 	end
 	
 	--synchro summon
-	aux.AddSynchroProcedure(c,nil,aux.NonTuner(Card.IsGoyo),1)
+	aux.AddSynchroProcedure(c,nil,1,1,aux.NonTuner(Card.IsGoyo),1,99)
 	c:EnableReviveLimit()
 	--attack up
 	local e1=Effect.CreateEffect(c)
