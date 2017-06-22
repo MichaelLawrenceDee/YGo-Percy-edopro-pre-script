@@ -523,12 +523,20 @@ function Auxiliary.ComposeNumberDigitByDigit(tp,min,max)
 	end
 	return number
 end
+function Auxiliary.ResetEffects(g,eff)
+	for c in aux.Next(g) do
+		local effs={c:GetCardEffect(eff)}
+		for _,v in ipairs(effs) do
+			v:Reset()
+		end
+	end
+end
 
-pcall(dofile,"script/proc_fusion.lua")
-pcall(dofile,"script/proc_ritual.lua")
-pcall(dofile,"script/proc_synchro.lua")
-pcall(dofile,"script/proc_union.lua")
-pcall(dofile,"script/proc_xyz.lua")
-pcall(dofile,"script/proc_pendulum.lua")
-pcall(dofile,"script/proc_link.lua")
+dofile("script/proc_fusion.lua")
+dofile("script/proc_ritual.lua")
+dofile("script/proc_synchro.lua")
+dofile("script/proc_union.lua")
+dofile("script/proc_xyz.lua")
+dofile("script/proc_pendulum.lua")
+dofile("script/proc_link.lua")
 pcall(dofile,"init.lua")

@@ -211,15 +211,13 @@ function Auxiliary.XyzRecursionChk2(c,mg,xyz,tp,minc,maxc,matg,ct,mustbemat)
 end
 function Auxiliary.MatNumChkF(tg)
 	local chkg=tg:Filter(Card.IsHasEffect,nil,91110378)
-	local chkc=chkg:GetFirst()
-		while chkc do
-			local eff={chkc:GetCardEffect(91110378)}
-			for j=1,#eff do
-				local rct=eff[j]:GetValue()
-				local comp=eff[j]:GetLabel()
-				if not Auxiliary.MatNumChk(tg:FilterCount(Card.IsType,nil,TYPE_MONSTER),rct,comp) then return false end
-			end
-			chkc=chkg:GetNext()
+	for chkc in aux.Next(chkg) do
+		local eff={chkc:GetCardEffect(91110378)}
+		for j=1,#eff do
+			local rct=eff[j]:GetValue()
+			local comp=eff[j]:GetLabel()
+			if not Auxiliary.MatNumChk(tg:FilterCount(Card.IsType,nil,TYPE_MONSTER),rct,comp) then return false end
+		end
 	end
 	return true
 end
@@ -256,11 +254,9 @@ function Auxiliary.XyzCondition(f,lv,minc,maxc,mustbemat)
 					if not mustbemat then
 						local eqg=mg:Filter(Auxiliary.XyzFreeMatFilter,nil)
 						local eqmg=Group.CreateGroup()
-						local tc=eqg:GetFirst()
-						while tc do
+						for tc in aux.Next(eqg) do
 							local eq=tc:GetEquipGroup():Filter(Card.IsHasEffect,nil,511001175)
 							eqmg:Merge(eq)
-							tc=eqg:GetNext()
 						end
 						mg:Merge(eqmg)
 						mg:Merge(Duel.GetMatchingGroup(Auxiliary.XyzSubMatFilter,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,nil,f,lv,xg))
@@ -434,11 +430,9 @@ function Auxiliary.XyzTarget(f,lv,minc,maxc,mustbemat)
 						if not mustbemat then
 							local eqg=mg:Filter(Auxiliary.XyzFreeMatFilter,nil)
 							local eqmg=Group.CreateGroup()
-							local tc=eqg:GetFirst()
-							while tc do
+							for tc in aux.Next(eqg) do
 								local eq=tc:GetEquipGroup():Filter(Card.IsHasEffect,nil,511001175)
 								eqmg:Merge(eq)
-								tc=eqg:GetNext()
 							end
 							mg:Merge(eqmg)
 							mg:Merge(Duel.GetMatchingGroup(Auxiliary.XyzSubMatFilter,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,nil,f,lv,xg))
@@ -712,19 +706,13 @@ function Auxiliary.XyzOperation(f,lv,minc,maxc,mustbemat)
 				local g=e:GetLabelObject()
 				if not g then return end
 				local remg=g:Filter(Card.IsHasEffect,nil,511002116)
-				local tc=remg:GetFirst()
-				while tc do
-					tc:RegisterFlagEffect(511002115,RESET_EVENT+0x1fe0000,0,0)
-					tc=remg:GetNext()
-				end
+				remg:ForEach(function(c) c:RegisterFlagEffect(511002115,RESET_EVENT+0x1fe0000,0,0) end)
 				g:Remove(Card.IsHasEffect,nil,511002116)
 				g:Remove(Card.IsHasEffect,nil,511002115)
 				local sg=Group.CreateGroup()
-				tc=g:GetFirst()
-				while tc do
+				for tc in aux.Next(g) do
 					local sg1=tc:GetOverlayGroup()
 					sg:Merge(sg1)
-					tc=g:GetNext()
 				end
 				Duel.SendtoGrave(sg,REASON_RULE)
 				c:SetMaterial(g)

@@ -156,18 +156,14 @@ function Auxiliary.FSelectMix(c,tp,mg,sg,fc,sub,sub2,chkf,...)
 	end
 	--A card in the selected group has the fusion lmit
 	local g2=sg:Filter(Card.IsHasEffect,nil,73941492+TYPE_FUSION)
-	if g2:GetCount()>0 then
-		local tc=g2:GetFirst()
-		while tc do
-			local eff={tc:GetCardEffect(73941492+TYPE_FUSION)}
-			for i,f in ipairs(eff) do
-				if Auxiliary.TuneMagFilter(c,f,f:GetValue()) then
-					mg:Merge(rg)
-					return false
-				end
+	for tc in aux.Next(g2) do
+		local eff={tc:GetCardEffect(73941492+TYPE_FUSION)}
+		for i,f in ipairs(eff) do
+			if Auxiliary.TuneMagFilter(c,f,f:GetValue()) then
+				mg:Merge(rg)
+				return false
 			end
-			tc=g2:GetNext()
-		end	
+		end
 	end
 	sg:AddCard(c)
 	if sg:GetCount()<#{...} then
@@ -380,18 +376,14 @@ function Auxiliary.FSelectMixRep(c,tp,mg,sg,fc,sub,sub2,chkf,...)
 	end
 	--A card in the selected group has the fusion lmit
 	local g2=sg:Filter(Card.IsHasEffect,nil,73941492+TYPE_FUSION)
-	if g2:GetCount()>0 then
-		local tc=g2:GetFirst()
-		while tc do
-			local eff={tc:GetCardEffect(73941492+TYPE_FUSION)}
-			for i,f in ipairs(eff) do
-				if Auxiliary.TuneMagFilter(c,f,f:GetValue()) then
-					mg:Merge(rg)
-					return false
-				end
+	for tc in aux.Next(g2) do
+		local eff={tc:GetCardEffect(73941492+TYPE_FUSION)}
+		for i,f in ipairs(eff) do
+			if Auxiliary.TuneMagFilter(c,f,f:GetValue()) then
+				mg:Merge(rg)
+				return false
 			end
-			tc=g2:GetNext()
-		end	
+		end
 	end
 	sg:AddCard(c)
 	local res=false
