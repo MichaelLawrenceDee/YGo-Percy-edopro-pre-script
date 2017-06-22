@@ -14,10 +14,10 @@ function c511001947.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 function c511001947.cfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0x214)
+	return c:IsFaceup() and c:IsSetCard(0x50a)
 end
 function c511001947.damcon(e,tp,eg,ep,ev,re,r,rp)
-	if rp~=tp or not re:GetHandler():IsSetCard(0x214) then return end
+	if rp~=tp or not re:GetHandler():IsSetCard(0x50a) then return end
 	local ex,cg,ct,cp,cv=Duel.GetOperationInfo(ev,CATEGORY_DAMAGE)
 	return ex and Duel.IsExistingMatchingCard(c511001947.cfilter,e:GetHandlerPlayer(),LOCATION_MZONE,0,1,e:GetHandler())
 end

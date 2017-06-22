@@ -27,7 +27,7 @@ function c511001948.atkcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetCurrentPhase()~=PHASE_DAMAGE or not Duel.IsDamageCalculated()
 end
 function c511001948.cfilter(c)
-	if not c:IsSetCard(0x214) or not c:IsType(TYPE_MONSTER) then return false end
+	if not c:IsSetCard(0x50a) or not c:IsType(TYPE_MONSTER) then return false end
 	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
 		return c:IsFaceup() and c:IsLocation(LOCATION_MZONE)
 	else

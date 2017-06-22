@@ -1,7 +1,7 @@
 --Bee Force - Hama the Devil Conquering Bow
 function c511001949.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsType,TYPE_SYNCHRO),1,1,aux.NonTuner(Card.IsSetCard,0x214),1,99)
+	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsType,TYPE_SYNCHRO),1,1,aux.NonTuner(Card.IsSetCard,0x50a),1,99)
 	c:EnableReviveLimit()
 	--atk
 	local e1=Effect.CreateEffect(c)
@@ -76,7 +76,7 @@ function c511001949.damcon(e,tp,eg,ep,ev,re,r,rp,chk)
 	return Duel.GetTurnPlayer()==tp and c511001949[0]
 end
 function c511001949.filter(c)
-	return c:IsSetCard(0x214) and c:IsType(TYPE_MONSTER)
+	return c:IsSetCard(0x50a) and c:IsType(TYPE_MONSTER)
 end
 function c511001949.damtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c511001949.filter,tp,LOCATION_GRAVE,0,1,nil) end

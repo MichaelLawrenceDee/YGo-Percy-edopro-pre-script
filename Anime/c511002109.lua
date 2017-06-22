@@ -2,7 +2,7 @@
 function c511002109.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcMixN(c,true,true,c511002109.ffilter,2)
+	aux.AddFusionProcMixN(c,true,true,aux.FilterBoolFunction(Card.IsGoyo,true),2)
 	--
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
@@ -38,9 +38,6 @@ function c511002109.archchk(e,tp,eg,ep,ev,re,r,rp)
 		Duel.CreateToken(1-tp,420)
 		Duel.RegisterFlagEffect(0,420,0,0,0)
 	end
-end
-function c511002109.ffilter(c)
-	return c420.IsGoyo(c,true)
 end
 function c511002109.atkcon(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetAttacker()

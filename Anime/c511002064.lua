@@ -46,7 +46,7 @@ function c511002064.initial_effect(c)
 end
 c511002064.xyz_number=82
 function c511002064.filter(c)
-	return c:IsFaceup() and (c:IsSetCard(0x215) or c:IsCode(31437713))
+	return c:IsFaceup() and (c:IsSetCard(0x528) or c:IsCode(31437713))
 end
 function c511002064.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end

@@ -40,12 +40,29 @@ function c511004439.initial_effect(c)
 	e5:SetTarget(c511004439.target1)
 	e5:SetOperation(c511004439.operation1)
 	c:RegisterEffect(e5)
+	if not c511004439.global_check then
+		c511004439.global_check=true
+		local ge2=Effect.CreateEffect(c)
+		ge2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		ge2:SetCode(EVENT_ADJUST)
+		ge2:SetCountLimit(1)
+		ge2:SetProperty(EFFECT_FLAG_NO_TURN_RESET)
+		ge2:SetOperation(c511004439.archchk)
+		Duel.RegisterEffect(ge2,0)
+	end
+end
+function c511004439.archchk(e,tp,eg,ep,ev,re,r,rp)
+	if Duel.GetFlagEffect(0,420)==0 then 
+		Duel.CreateToken(tp,420)
+		Duel.CreateToken(1-tp,420)
+		Duel.RegisterFlagEffect(0,420,0,0,0)
+	end
 end
 function c511004439.condition(e,tp,eg,ev,ep,re,r,rp)
 	return Duel.GetTurnPlayer()==tp
 end
 function c511004439.filter(c,sc)
-	return c:IsType(TYPE_MONSTER) and (c:IsSetCard(0x10e3) or c:IsCode(15610297)) and c:IsFaceup()
+	return c:IsFaceup() and c:IsCubicSeed()
 end
 function c511004439.target(e,tp,eg,ev,ep,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c511004439.filter,tp,LOCATION_MZONE,0,3,nil,e:GetHandler()) and e:GetHandler():IsCanBeSpecialSummoned(e,SUMMON_TYPE_SPECIAL,tp,true,false) end
@@ -69,7 +86,7 @@ function c511004439.operation(e,tp,eg,ev,ep,re,r,rp)
 	end
 end
 function c511004439.spfilter(c,e,tp)
-	return c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_SPECIAL,tp,true,false) and c:IsType(TYPE_MONSTER) and (c:IsSetCard(0x10e3) or c:IsCode(15610297))
+	return c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_SPECIAL,tp,true,false) and c:IsType(TYPE_MONSTER) and c:IsCubicSeed()
 end
 function c511004439.target0(e,tp,eg,ev,ep,re,r,rp,chk)
 	local c=e:GetHandler()
@@ -96,8 +113,7 @@ function c511004439.filter1(c)
 end
 function c511004439.target1(e,tp,eg,ev,ep,re,r,rp,chk)
 	local c=e:GetHandler()
-	if chk==0 then return not Duel.IsPlayerAffectedByEffect(e:GetHandlerPlayer(),69832741) 
-		and c:IsAbleToRemove() and Duel.IsExistingMatchingCard(c511004439.filter1,tp,LOCATION_GRAVE,0,1,nil) end
+	if chk==0 then return c:IsAbleToRemove() and Duel.IsExistingMatchingCard(c511004439.filter1,tp,LOCATION_GRAVE,0,1,nil) end
 	local tg=Duel.SelectMatchingCard(tp,c511004439.filter1,tp,LOCATION_GRAVE,0,1,1,nil)
 	Duel.SetTargetCard(tg)
 	Duel.SetOperationInfo(0,CATEGORY_REMOVE,c,1,0,0)
