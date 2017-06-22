@@ -39,7 +39,14 @@ function c511009338.acfilter(c,e,tp,eg,ep,ev,re,r,rp,chain)
 	if not te then return false end
 	if not c:IsType(TYPE_SPELL) or not c:IsSSetable(true) then return false end
 	if not c:IsType(TYPE_FIELD) and Duel.GetLocationCount(tp,LOCATION_SZONE)<=0 then return false end
-	if te:IsActivatable(tp) then return true end
+	if c:IsHasEffect(EFFECT_CANNOT_TRIGGER) then return false end
+	local pre={Duel.GetPlayerEffect(tp,EFFECT_CANNOT_ACTIVATE)}
+	if pre[1] then
+		for i,eff in ipairs(pre) do
+			local prev=eff:GetValue()
+			if type(prev)~='function' or prev(eff,te,tp) then return false end
+		end
+	end
 	local condition=te:GetCondition()
 	local cost=te:GetCost()
 	local target=te:GetTarget()
@@ -87,7 +94,14 @@ function c511009338.activate(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SSet(tp,tc)
 		if not tc:IsLocation(LOCATION_SZONE) then return end
 		local te=tc:GetActivateEffect()
-		if not te then return end
+		if not te or tc:IsHasEffect(EFFECT_CANNOT_TRIGGER) then return end
+		local pre={Duel.GetPlayerEffect(tp,EFFECT_CANNOT_ACTIVATE)}
+		if pre[1] then
+			for i,eff in ipairs(pre) do
+				local prev=eff:GetValue()
+				if type(prev)~='function' or prev(eff,te,tp) then return end
+			end
+		end
 		Duel.ChangePosition(tc,POS_FACEUP)
 		local tg=te:GetTarget()
 		local co=te:GetCost()
