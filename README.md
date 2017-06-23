@@ -4,9 +4,9 @@ Duel.RockPaperScissors([repeat = true]) - returns int (winner or PLAYER_NONE)
 
 Duel.GetRandomNumber([int min = 0,]int max)
 
-Card.GetCardEffect(card, int code) returns all the effect with that code applied on a card
+Card.GetCardEffect(card[, int code]) returns all the effect with that code applied on a card. With no code or code=0 it will returna ll the effects applied on a card.
 
-Duel.GetPlayerEffect(int player, int code) returns all the effect with that code applied on the player
+Duel.GetPlayerEffect(int player, int code) returns all the effect with that code applied on the player. With no code or code=0 it will returna ll the effects applied on the player.
 
 Duel.GetLinkedZone(int player) returns all the aviable linked zones a player has
 
@@ -49,6 +49,6 @@ EFFECT_TUNE_MAGICIAN_X this effect is a filter for the xyz materials
 
 EFFECT_BECOME_LINKED: This effect, only useful under mr4, accept as value the zone that will be treated as a linked zone, even if there's no link monster
 
-EFFECT_FUSION_MATERIAnow a monster can have more than 1 of this effect
+EFFECT_FUSION_MATERIAL now a monster can have more than 1 of this effect
 
 ##### Place cards with official card number in TCG-OCG, Beta and Anime Cards in respective folders. Also, all pics (TCG/OCG/Anime/etc) are placed in the pics folder.
