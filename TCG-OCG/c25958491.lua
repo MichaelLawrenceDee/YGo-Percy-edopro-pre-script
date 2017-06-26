@@ -22,6 +22,12 @@ function c25958491.initial_effect(c)
 	e2:SetTarget(c25958491.sumtg)
 	e2:SetOperation(c25958491.sumop)
 	c:RegisterEffect(e2)
+	--
+	local e5=Effect.CreateEffect(c)
+	e5:SetType(EFFECT_TYPE_SINGLE)
+	e5:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
+	e5:SetCode(90162951)
+	c:RegisterEffect(e5)
 end
 function c25958491.atkval(e,c)
 	local cont=c:GetControler()
