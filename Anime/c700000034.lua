@@ -28,7 +28,7 @@ function c700000034.spfilter(c,e,tp,rg)
 	if not c:IsType(TYPE_FUSION) or not c:IsSetCard(0x7) or not c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,false) then return false end
 	local minc=c.min_material_count
 	local maxc=c.max_material_count
-	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
+	local ft=Duel.GetLocationCountFromEx(tp)
 	if not minc then return false end
 	local mg=Duel.GetMatchingGroup(c700000034.matfilter,tp,LOCATION_DECK+LOCATION_EXTRA+LOCATION_GRAVE,0,nil,e,tp,c)
 	return rg:IsExists(c700000034.rmfilterchk,1,nil,mg,rg,c,minc,maxc,Group.CreateGroup(),ft,tp)
@@ -93,7 +93,7 @@ function c700000034.activate(e,tp,eg,ep,ev,re,r,rp)
 	local mg=Duel.GetMatchingGroup(c700000034.matfilter,tp,LOCATION_DECK+LOCATION_EXTRA+LOCATION_GRAVE,0,nil,e,tp,fc)
 	local rsg=Group.CreateGroup()
 	local matg=Group.CreateGroup()
-	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
+	local ft=Duel.GetLocationCountFromEx(tp)
 	while rsg:GetCount()<maxc do
 		local cancel=rsg:GetCount()>0 and mg:IsExists(c700000034.matchk,1,rsg,mg,rsg,rsg:GetCount(),matg,fc,ft,tp)
 		local g=rg:Filter(c700000034.rmfilterchk,rsg,mg,rg,fc,minc,maxc,rsg,ft,tp)

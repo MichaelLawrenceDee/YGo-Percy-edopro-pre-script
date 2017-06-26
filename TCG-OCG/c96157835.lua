@@ -74,12 +74,12 @@ end
 function c96157835.xtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(c96157835.xfil,tp,LOCATION_EXTRA,0,nil,e,tp)
 	if chk==0 then 
-		return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and g:GetCount()>0
+		return Duel.GetLocationCountFromEx(tp)>0 and g:GetCount()>0
 	end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,g,1,tp,LOCATION_EXTRA)
 end
 function c96157835.xop(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)<1 then return end
+	if Duel.GetLocationCountFromEx(tp)<1 then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,c96157835.xfil,tp,LOCATION_EXTRA,0,1,1,nil,e,tp)
 	local c=e:GetHandler()

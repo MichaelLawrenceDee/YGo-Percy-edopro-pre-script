@@ -39,7 +39,7 @@ end
 function c72332074.activate(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,0,LOCATION_ONFIELD,nil)
 	if Duel.SendtoDeck(g,nil,2,REASON_EFFECT)~=0
-		and Duel.GetLocationCount(1-tp,LOCATION_MZONE)>0
+		and Duel.GetLocationCountFromEx(1-tp)>0
 		and Duel.IsExistingMatchingCard(c72332074.spfilter,1-tp,LOCATION_EXTRA,0,1,nil,e,1-tp) then
 		Duel.BreakEffect()
 		Duel.Hint(HINT_SELECTMSG,1-tp,HINTMSG_SPSUMMON)

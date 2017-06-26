@@ -35,24 +35,26 @@ end
 function c23379054.splimit(e,c,sump,sumtype,sumpos,targetp,se)
 	return c:GetRace()~=RACE_DRAGON
 end
-function c23379054.filter1(c,e,tp,lv)
+function c23379054.filter1(c,e,tp,lv,mc)
 	if not c:IsType(TYPE_FUSION) or not c:IsAbleToRemove()
-		or not Duel.IsExistingMatchingCard(c23379054.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,lv+c:GetLevel()) then return false end
+		or not Duel.IsExistingMatchingCard(c23379054.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,lv+c:GetLevel(),mc) then return false end
 	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
 		return c:IsFaceup() and c:IsLocation(LOCATION_MZONE)
 	else
 		return c:IsLocation(LOCATION_GRAVE)
 	end
 end
-function c23379054.filter2(c,e,tp,lv)
-	return c:GetLevel()==lv and c:IsRace(RACE_DRAGON) and c:IsType(TYPE_SYNCHRO) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+function c23379054.filter2(c,e,tp,lv,mc)
+	return c:GetLevel()==lv and c:IsRace(RACE_DRAGON) and c:IsType(TYPE_SYNCHRO) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) 
+		and Duel.GetLocationCountFromEx(tp,tp,mc,c)>0
 end
 function c23379054.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_MZONE+LOCATION_GRAVE) and c23379054.filter1(chkc,e,tp,e:GetHandler():GetLevel()) end
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>-1 and e:GetHandler():IsAbleToRemove()
-		and Duel.IsExistingTarget(c23379054.filter1,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,nil,e,tp,e:GetHandler():GetLevel()) end
+	local c=e:GetHandler()
+	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_MZONE+LOCATION_GRAVE) and c23379054.filter1(chkc,e,tp,c:GetLevel(),c) end
+	if chk==0 then return c:IsAbleToRemove()
+		and Duel.IsExistingTarget(c23379054.filter1,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,nil,e,tp,c:GetLevel(),c) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g=Duel.SelectTarget(tp,c23379054.filter1,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,1,nil,e,tp,e:GetHandler():GetLevel())
+	local g=Duel.SelectTarget(tp,c23379054.filter1,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,1,nil,e,tp,c:GetLevel(),c)
 	g:AddCard(e:GetHandler())
 	Duel.SetOperationInfo(0,CATEGORY_REMOVE,g,2,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
@@ -64,9 +66,8 @@ function c23379054.operation(e,tp,eg,ep,ev,re,r,rp)
 	local lv=c:GetLevel()+tc:GetLevel()
 	local g=Group.FromCards(c,tc)
 	if Duel.Remove(g,POS_FACEUP,REASON_EFFECT)==2 then
-		if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-		local sg=Duel.SelectMatchingCard(tp,c23379054.filter2,tp,LOCATION_EXTRA,0,1,1,nil,e,tp,lv)
+		local sg=Duel.SelectMatchingCard(tp,c23379054.filter2,tp,LOCATION_EXTRA,0,1,1,nil,e,tp,lv,g)
 		if sg:GetCount()>0 then
 			Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)
 		end

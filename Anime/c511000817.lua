@@ -190,7 +190,7 @@ function c511000817.spop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,c511000817.filter,tp,LOCATION_EXTRA,0,ct,ct,nil,e,tp)
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)<ct then
-		local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
+		local ft=Duel.GetLocationCountFromEx(tp)
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 		local sg=g:Select(tp,ft,ft,nil)
 		g:Sub(sg)
