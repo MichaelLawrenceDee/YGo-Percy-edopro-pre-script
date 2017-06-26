@@ -10,6 +10,7 @@ function Auxiliary.AddXyzProcedure(c,f,lv,ct,alterf,desc,maxct,op,mustbemat)
 		local code=c:GetOriginalCode()
 		local mt=_G["c" .. code]
 		mt.xyz_filter=function(mc,ignoretoken) return mc and (not f or f(mc)) and mc:IsXyzLevel(c,lv) and (not mc:IsType(TYPE_TOKEN) or ignoretoken) end
+		mt.xyz_parameters={mt.xyz_filter,lv,ct,alterf,desc,maxct,op,mustbemat}
 		mt.minxyzct=ct
 		mt.maxxyzct=maxct
 	end
