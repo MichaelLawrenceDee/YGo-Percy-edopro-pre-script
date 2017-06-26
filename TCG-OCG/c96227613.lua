@@ -77,9 +77,7 @@ function c96227613.trig(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c96227613.thcon(e,tp,eg,ep,ev,re,r,rp)
-	local seq=e:GetHandler():GetSequence()
-	local pc=Duel.GetFieldCard(tp,LOCATION_SZONE,13-seq)
-	return pc and pc:IsCode(22211622)
+	return Duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_PZONE,0,1,e:GetHandler(),22211622)
 end
 function c96227613.thfilter(c)
 	return c:IsType(TYPE_SPELL) and c:IsSetCard(0x46) and c:IsAbleToHand()
