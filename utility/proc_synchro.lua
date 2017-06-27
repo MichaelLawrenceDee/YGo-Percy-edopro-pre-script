@@ -551,7 +551,7 @@ function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req
 							g2=g:Filter(Auxiliary.SynchroCheckP32,sg,g,tsg,ntsg,sg,f2,sub2,min2,max2,req2,reqct2,reqm,lv,c,tp,smat,pg,mgchk)
 							if g2:GetCount()==0 then break end
 							local g3=g:Filter(Auxiliary.SynchroCheckP31,sg,g,tsg,ntsg,sg,f1,sub1,f2,sub2,min1,max1,min2,max2,req1,reqct1,req2,reqct2,reqm,lv,c,tp,smat,pg,mgchk)
-							if g3:GetCount()>0 and ntsg:GetCount()==0 then
+							if g3:GetCount()>0 and ntsg:GetCount()==0 and tsg:GetCount()<max1 then
 								g2:Merge(g3)
 							end
 							Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SMATERIAL)
@@ -635,7 +635,7 @@ function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req
 							g2=ntg:Filter(Auxiliary.SynchroCheckP42,sg,ntg,tsg,ntsg,sg,min2,max2,req2,reqct2,reqm,lv,c,tp,smat,pg,mgchk)
 							if g2:GetCount()==0 then break end
 							local g3=tg:Filter(Auxiliary.SynchroCheckP41,sg,tg,ntg,tsg,ntsg,sg,min1,max1,min2,max2,req1,reqct1,req2,reqct2,reqm,lv,c,tp,smat,pg,mgchk)
-							if g3:GetCount()>0 and ntsg:GetCount()==0 then
+							if g3:GetCount()>0 and ntsg:GetCount()==0 and tsg:GetCount()<max1 then
 								g2:Merge(g3)
 							end
 							Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SMATERIAL)
