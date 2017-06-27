@@ -37,8 +37,8 @@ end
 function Auxiliary.LinkSpLimit(e,se,sp,st)
 	return bit.band(sp,POS_ATTACK)>0
 end
-function Auxiliary.LConditionFilter(c,f)
-	return c:IsFaceup() and (not f or f(c))
+function Auxiliary.LConditionFilter(c,f,lc)
+	return c:IsFaceup() and c:IsCanBeLinkMaterial(lc) and (not f or f(c))
 end
 function Auxiliary.GetLinkCount(c)
 	if c:IsType(TYPE_LINK) and c:GetLink()>1 then
@@ -62,14 +62,14 @@ function Auxiliary.LinkCondition(f,minc,maxc)
 				if c==nil then return true end
 				if c:IsType(TYPE_PENDULUM) and c:IsFaceup() then return false end
 				local tp=c:GetControler()
-				local mg=Duel.GetMatchingGroup(Auxiliary.LConditionFilter,tp,LOCATION_MZONE,0,nil,f)
+				local mg=Duel.GetMatchingGroup(Auxiliary.LConditionFilter,tp,LOCATION_MZONE,0,nil,f,c)
 				local sg=Group.CreateGroup()
 				return mg:IsExists(Auxiliary.LCheckRecursive,1,nil,tp,sg,mg,c,0,minc,maxc)
 			end
 end
 function Auxiliary.LinkTarget(f,minc,maxc)
 	return	function(e,tp,eg,ep,ev,re,r,rp,chk,c)
-				local mg=Duel.GetMatchingGroup(Auxiliary.LConditionFilter,tp,LOCATION_MZONE,0,nil,f)
+				local mg=Duel.GetMatchingGroup(Auxiliary.LConditionFilter,tp,LOCATION_MZONE,0,nil,f,c)
 				local sg=Group.CreateGroup()
 				local cancel=false
 				while sg:GetCount()<maxc do

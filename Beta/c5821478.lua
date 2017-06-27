@@ -3,7 +3,7 @@
 --Script by nekrozar
 function c5821478.initial_effect(c)
 	--link summon
-	aux.AddLinkProcedure(c,aux.FilterBoolFunction(Card.IsType,TYPE_EFFECT),2)
+	aux.AddLinkProcedure(c,aux.FilterBoolFunction(Card.IsLinkType,TYPE_EFFECT),2)
 	c:EnableReviveLimit()
 	--damage
 	local e1=Effect.CreateEffect(c)
@@ -26,24 +26,6 @@ function c5821478.initial_effect(c)
 	e2:SetTarget(c5821478.damtg)
 	e2:SetOperation(c5821478.damop)
 	c:RegisterEffect(e2)
-	if not Duel.GetLinkedGroup then
-		function Duel.GetLinkedGroup(p,s,o)
-			local g=Group.CreateGroup()
-			local loc1,loc2=0,0
-			if s==1 then loc1=LOCATION_MZONE end
-			if o==1 then loc2=LOCATION_MZONE end
-			local tg=Duel.GetMatchingGroup(c5821478.lgfilter,p,loc1,loc2,nil)
-			local tc=tg:GetFirst()
-			while tc do
-				local lg=tc:GetLinkedGroup()
-				if lg:GetCount()>0 then
-					g:Merge(lg)
-				end
-				tc=tg:GetNext()
-			end
-			return g
-		end
-	end
 end
 function c5821478.lgfilter(c)
 	return c:IsFaceup() and c:IsType(TYPE_LINK)
