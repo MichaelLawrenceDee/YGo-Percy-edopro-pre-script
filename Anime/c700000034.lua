@@ -28,10 +28,12 @@ function c700000034.spfilter(c,e,tp,rg)
 	if not c:IsType(TYPE_FUSION) or not c:IsSetCard(0x7) or not c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,false) then return false end
 	local minc=c.min_material_count
 	local maxc=c.max_material_count
-	local ft=Duel.GetLocationCountFromEx(tp)
+	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
+	local ftex=Duel.GetLocationCountFromEx(tp)
+	local ftt=Duel.GetUsableMZoneCount(tp)
 	if not minc then return false end
 	local mg=Duel.GetMatchingGroup(c700000034.matfilter,tp,LOCATION_DECK+LOCATION_EXTRA+LOCATION_GRAVE,0,nil,e,tp,c)
-	return rg:IsExists(c700000034.rmfilterchk,1,nil,mg,rg,c,minc,maxc,Group.CreateGroup(),ft,tp)
+	return rg:IsExists(c700000034.rmfilterchk,1,nil,mg,rg,c,minc,maxc,Group.CreateGroup(),ft,ftex,ftt,tp)
 end
 function c700000034.rmfilter(c)
 	if c:GetSummonLocation()~=LOCATION_EXTRA or not c:IsPreviousLocation(LOCATION_MZONE) or not c:IsAbleToRemove() then return false end
@@ -41,32 +43,47 @@ function c700000034.rmfilter(c)
 		return c:IsLocation(LOCATION_GRAVE)
 	end
 end
-function c700000034.rmfilterchk(c,mg,rg,fc,minc,maxc,sg,ft,tp)
+function c700000034.rmfilterchk(c,mg,rg,fc,minc,maxc,sg,ft,ftex,ftt,tp)
 	sg:AddCard(c)
 	local res
-	local ftchk
-	if c:IsLocation(LOCATION_MZONE) then ftchk=true ft=ft+1 end
-	if sg:GetCount()<minc then
-		res=rg:IsExists(c700000034.rmfilterchk,1,sg,mg,rg,fc,minc,maxc,sg,ft,tp)
-	elseif sg:GetCount()<maxc then
-		res=rg:IsExists(c700000034.rmfilterchk,1,sg,mg,rg,fc,minc,maxc,sg,ft,tp) 
-			or mg:IsExists(c700000034.matchk,1,sg,mg,sg,sg:GetCount(),Group.CreateGroup(),fc,ft,tp)
-	else
-		res=mg:IsExists(c700000034.matchk,1,sg,mg,sg,sg:GetCount(),Group.CreateGroup(),fc,ft,tp)
+	if c:IsLocation(LOCATION_MZONE) then
+		ftt=ftt+1
+		if c:GetSequence()>4 then
+			ftex=ftex+1
+		else
+			ft=ft+1
+		end
 	end
-	if ftchk then ft=ft-1 end
+	if sg:GetCount()<minc then
+		res=rg:IsExists(c700000034.rmfilterchk,1,sg,mg,rg,fc,minc,maxc,sg,ft,ftex,ftt,tp)
+	elseif sg:GetCount()<maxc then
+		res=rg:IsExists(c700000034.rmfilterchk,1,sg,mg,rg,fc,minc,maxc,sg,ft,ftex,ftt,tp) 
+			or mg:IsExists(c700000034.matchk,1,sg,mg,sg,sg:GetCount(),Group.CreateGroup(),fc,ft,ftex,ftt,tp)
+	else
+		res=mg:IsExists(c700000034.matchk,1,sg,mg,sg,sg:GetCount(),Group.CreateGroup(),fc,ft,ftex,ftt,tp)
+	end
+	if c:IsLocation(LOCATION_MZONE) then
+		ftt=ftt-1
+		if c:GetSequence()>4 then
+			ftex=ftex-1
+		else
+			ft=ft-1
+		end
+	end
 	sg:RemoveCard(c)
 	return res
 end
-function c700000034.matchk(c,mg,sg,ct,matg,fc,ft,tp)
-	if ft<ct or (Duel.IsPlayerAffectedByEffect(tp,59822133) and ct>1) then return false end
+function c700000034.matchk(c,mg,sg,ct,matg,fc,ft,ftex,ftt,tp)
+	if ftt<ct or (Duel.IsPlayerAffectedByEffect(tp,59822133) and ct>1) then return false end
+	if matg:FilterCount(Card.IsLocation,nil,LOCATION_EXTRA)>ftex 
+		or matg:FilterCount(function(c) return not c:IsLocation(LOCATION_EXTRA) end,nil)>ft then return false end
 	local ect=c29724053 and Duel.IsPlayerAffectedByEffect(tp,29724053) and (c29724053[tp]-1)
 	if ect and matg:FilterCount(Card.IsLocation,nil,LOCATION_EXTRA)>ect then return false end
 	sg:AddCard(c)
 	matg:AddCard(c)
 	local res
 	if matg:GetCount()<ct then
-		res=mg:IsExists(c700000034.matchk,1,sg,mg,sg,ct,matg,fc,ft,tp)
+		res=mg:IsExists(c700000034.matchk,1,sg,mg,sg,ct,matg,fc,ft,ftex,ftt,tp)
 	else
 		res=fc:CheckFusionMaterial(matg,nil,tp) and matg:IsExists(function(mc) return fc:CheckFusionMaterial(matg,mc) end,ct,nil)
 	end
@@ -93,10 +110,12 @@ function c700000034.activate(e,tp,eg,ep,ev,re,r,rp)
 	local mg=Duel.GetMatchingGroup(c700000034.matfilter,tp,LOCATION_DECK+LOCATION_EXTRA+LOCATION_GRAVE,0,nil,e,tp,fc)
 	local rsg=Group.CreateGroup()
 	local matg=Group.CreateGroup()
-	local ft=Duel.GetLocationCountFromEx(tp)
+	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
+	local ftex=Duel.GetLocationCountFromEx(tp)
+	local ftt=Duel.GetUsableMZoneCount(tp)
 	while rsg:GetCount()<maxc do
-		local cancel=rsg:GetCount()>0 and mg:IsExists(c700000034.matchk,1,rsg,mg,rsg,rsg:GetCount(),matg,fc,ft,tp)
-		local g=rg:Filter(c700000034.rmfilterchk,rsg,mg,rg,fc,minc,maxc,rsg,ft,tp)
+		local cancel=rsg:GetCount()>0 and mg:IsExists(c700000034.matchk,1,rsg,mg,rsg,rsg:GetCount(),matg,fc,ft,ftex,ftt,tp)
+		local g=rg:Filter(c700000034.rmfilterchk,rsg,mg,rg,fc,minc,maxc,rsg,ft,ftex,ftt,tp)
 		if g:GetCount()<=0 then break end
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 		local tc=Group.SelectUnselect(g,rsg,tp,cancel,cancel)
@@ -104,12 +123,22 @@ function c700000034.activate(e,tp,eg,ep,ev,re,r,rp)
 		if rsg:IsContains(tc) then
 			rsg:RemoveCard(tc)
 			if tc:IsLocation(LOCATION_MZONE) then
-				ft=ft-1
+				ftt=ftt-1
+				if c:GetSequence()>4 then
+					ftex=ftex-1
+				else
+					ft=ft-1
+				end
 			end
 		else
 			rsg:AddCard(tc)
 			if tc:IsLocation(LOCATION_MZONE) then
-				ft=ft+1
+				ftt=ftt+1
+				if c:GetSequence()>4 then
+					ftex=ftex+1
+				else
+					ft=ft+1
+				end
 			end
 		end
 	end
@@ -117,7 +146,7 @@ function c700000034.activate(e,tp,eg,ep,ev,re,r,rp)
 	if ct<rsg:GetCount() then return end
 	mg:Sub(rsg)
 	while matg:GetCount()<ct do
-		local g=mg:Filter(c700000034.matchk,matg,mg,matg,ct,matg,fc,ft,tp)
+		local g=mg:Filter(c700000034.matchk,matg,mg,matg,ct,matg,fc,ft,ftex,ftt,tp)
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 		local tc=Group.SelectUnselect(g,matg,tp)
 		if matg:IsContains(tc) then
