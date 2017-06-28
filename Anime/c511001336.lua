@@ -159,4 +159,3 @@ end
 function c511001336.indes(e,c)
 	return not c:IsSetCard(0x48)
 end
- 
