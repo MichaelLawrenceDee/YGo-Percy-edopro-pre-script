@@ -12,13 +12,12 @@ end
 function c26194151.filter1(c,e,tp)
 	local lv=c:GetLevel()
 	return c:IsSetCard(0xa3) and c:IsType(TYPE_SYNCHRO) and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_SYNCHRO,tp,false,false)
-		and Duel.IsExistingMatchingCard(c26194151.filter2,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,nil,tp,lv)
+		and Duel.IsExistingMatchingCard(c26194151.filter2,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,nil,tp,c)
 end
-function c26194151.filter2(c,tp,lv)
-	local rlv=lv-c:GetLevel()
+function c26194151.filter2(c,tp,sc)
 	local rg=Duel.GetMatchingGroup(c26194151.filter3,tp,LOCATION_MZONE+LOCATION_GRAVE,0,c)
-	if rlv<=0 or not c:IsType(TYPE_TUNER) or not c:IsAbleToRemove()
-		or not rg:CheckWithSumEqual(Card.GetLevel,rlv,1,2) then return false end
+	if not c:IsType(TYPE_TUNER) or not c:IsAbleToRemove()
+		or not rg:IsExists(c26194151.filterchk,1,nil,rg,Group.CreateGroup(),tp,c,sc) then return false end
 	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
 		return c:IsFaceup() and c:IsLocation(LOCATION_MZONE)
 	else
@@ -33,38 +32,63 @@ function c26194151.filter3(c)
 		return c:IsLocation(LOCATION_GRAVE)
 	end
 end
+function c26194151.filterchk(c,g,sg,tp,tuner,sc)
+	sg:AddCard(c)
+	sg:AddCard(tuner)
+	local res=Duel.GetLocationCountFromEx(tp,tp,sg,sc)>0 
+		and sg:CheckWithSumEqual(Card.GetLevel,sc:GetLevel(),sg:GetCount(),sg:GetCount())
+	sg:RemoveCard(tuner)	
+	if sg:GetCount()<2 and not res then
+		res=g:IsExists(c26194151.filterchk,1,sg,g,sg,tp,tuner,sc)
+	end
+	sg:RemoveCard(c)
+	return res
+end
 function c26194151.target(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return (Duel.GetLocationCount(tp,LOCATION_MZONE)>0 or Duel.IsPlayerAffectedByEffect(tp,69832741))
-		and Duel.IsExistingMatchingCard(c26194151.filter1,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
+	if chk==0 then return Duel.IsExistingMatchingCard(c26194151.filter1,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 function c26194151.activate(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g1=Duel.SelectMatchingCard(tp,c26194151.filter1,tp,LOCATION_EXTRA,0,1,1,nil,e,tp)
-	local tc=g1:GetFirst()
-	if tc then
-		local lv=tc:GetLevel()
+	local sc=g1:GetFirst()
+	if sc then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-		local g2=Duel.SelectMatchingCard(tp,c26194151.filter2,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,1,nil,tp,lv)
-		local rlv=lv-g2:GetFirst():GetLevel()
-		local rg=Duel.GetMatchingGroup(c26194151.filter3,tp,LOCATION_MZONE+LOCATION_GRAVE,0,g2:GetFirst())
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-		local g3=rg:SelectWithSumEqual(tp,Card.GetLevel,rlv,1,2)
-		g2:Merge(g3)
-		Duel.Remove(g2,POS_FACEUP,REASON_EFFECT)
-		Duel.SpecialSummonStep(tc,SUMMON_TYPE_SYNCHRO,tp,tp,false,false,POS_FACEUP)
+		local g2=Duel.SelectMatchingCard(tp,c26194151.filter2,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,1,nil,tp,sc)
+		local tuner=g2:GetFirst()
+		local rg=Duel.GetMatchingGroup(c26194151.filter3,tp,LOCATION_MZONE+LOCATION_GRAVE,0,tuner)
+		local sg=Group.CreateGroup()
+		while sg:GetCount()<2 do
+			local tg=rg:Filter(c26194151.filterchk,sg,rg,sg,tp,tuner,sc)
+			if tg:GetCount()<=0 then break end
+			sg:AddCard(tuner)
+			local cancel=Duel.GetLocationCountFromEx(tp,tp,sg,sc)>0 
+				and sg:CheckWithSumEqual(Card.GetLevel,sc:GetLevel(),sg:GetCount(),sg:GetCount())
+			local tc=Group.SelectUnselect(g,sg,tp,cancel,cancel)
+			sg:RemoveCard(tuner)
+			if tc~-tuner then
+				if sg:IsContains(tc) then
+					sg:RemoveCard(tc)
+				else
+					sg:AddCard(tc)
+				end
+			end
+		end
+		sg:AddCard(tuner)
+		Duel.Remove(sg,POS_FACEUP,REASON_EFFECT)
+		Duel.SpecialSummonStep(sc,SUMMON_TYPE_SYNCHRO,tp,tp,false,false,POS_FACEUP)
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_DISABLE)
 		e1:SetReset(RESET_EVENT+0x1fe0000)
-		tc:RegisterEffect(e1,true)
+		sc:RegisterEffect(e1,true)
 		local e2=Effect.CreateEffect(e:GetHandler())
 		e2:SetType(EFFECT_TYPE_SINGLE)
 		e2:SetCode(EFFECT_DISABLE_EFFECT)
 		e2:SetReset(RESET_EVENT+0x1fe0000)
-		tc:RegisterEffect(e2,true)
-		tc:CompleteProcedure()
+		sc:RegisterEffect(e2,true)
+		sc:CompleteProcedure()
 		Duel.SpecialSummonComplete()
 	end
 end
