@@ -531,6 +531,19 @@ function Auxiliary.ResetEffects(g,eff)
 		end
 	end
 end
+--Checks whether 2 cards are on the same column
+function Card.IsOnSameColumn(c1,c2)
+	if not c1 or not c1:IsOnField() or not c2 or not c2:IsOnField() then return false end
+	local s1=c1:GetSequence()
+	local s2=c2:GetSequence()
+	if (c1:IsLocation(LOCATION_SZONE) and s1>=5)
+		or (c2:IsLocation(LOCATION_SZONE) and s2>=5) then return false end
+	if c1:GetControler()==c2:GetControler() then
+		return s2==s1 or (s1==1 and s2==5) or (s1==3 and s2==6)
+	else
+		return s2==4-s1 or (s1==1 and s2==6) or (s1==3 and s2==5)
+	end
+end
 
 dofile("script/proc_fusion.lua")
 dofile("script/proc_ritual.lua")
