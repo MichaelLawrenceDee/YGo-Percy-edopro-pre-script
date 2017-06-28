@@ -156,3 +156,7 @@ function c511001336.sumop(e,tp,eg,ep,ev,re,r,rp)
 	end
 	Duel.SpecialSummonComplete()
 end
+function c511001336.indes(e,c)
+	return not c:IsSetCard(0x48)
+end
+ 
