@@ -68,14 +68,16 @@ end
 function c511001336.spfilter(c,e,tp)
 	return c:IsCode(511001336,511001337) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
-function c511001336.filterchk(c,g,sg,ft,ftex,ct,ect)
+function c511001336.filterchk(c,g,sg,ft,ftex,ct,ect,ftt)
 	local ct=ct-1
+	if ftt<=0 then return false end
+	local ftt=ftt-1
 	if c:IsLocation(LOCATION_EXTRA) then
 		if ftex<=0 or (ect and ect<=0) then return false end
 		ftex=ftex-1
 		if ect then ect=ect-1 end
 		sg:AddCard(c)
-		local res=ct<=0 or g:IsExists(c511001336.filterchk,1,sg,g,sg,ft,ftex,ct,ect)
+		local res=ct<=0 or g:IsExists(c511001336.filterchk,1,sg,g,sg,ft,ftex,ct,ect,ftt)
 		sg:RemoveCard(c)
 		ftex=ftex+1
 		if ect then ect=ect+1 end
@@ -84,7 +86,7 @@ function c511001336.filterchk(c,g,sg,ft,ftex,ct,ect)
 		if ft<=0 then return false end
 		ft=ft-1
 		sg:AddCard(c)
-		local res=ct<=0 or g:IsExists(c511001336.filterchk,1,sg,g,sg,ft,ftex,ct,ect)
+		local res=ct<=0 or g:IsExists(c511001336.filterchk,1,sg,g,sg,ft,ftex,ct,ect,ftt)
 		sg:RemoveCard(c)
 		ft=ft+1
 		return res
@@ -99,9 +101,10 @@ function c511001336.sumtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local sg=Duel.GetMatchingGroup(c511001336.spfilter,tp,LOCATION_EXTRA+LOCATION_GRAVE,0,e:GetHandler(),e,tp)
 	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
 	local ftex=Duel.GetLocationCountFromEx(tp)
+	local ftt=Duel.GetUsableMZoneCount(tp)
 	local ect=c29724053 and Duel.IsPlayerAffectedByEffect(tp,29724053) and c29724053[tp]
 	if chk==0 then return ct>0 and (not Duel.IsPlayerAffectedByEffect(tp,59822133) or ct<=1) 
-		and sg:IsExists(c511001336.filterchk,1,nil,sg,Group.CreateGroup(),ft,ftex,ct,ect) end
+		and sg:IsExists(c511001336.filterchk,1,nil,sg,Group.CreateGroup(),ft,ftex,ct,ect,ftt) end
 	Duel.SetTargetCard(g)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,ct,tp,nil)
 end
@@ -113,15 +116,17 @@ function c511001336.sumop(e,tp,eg,ep,ev,re,r,rp)
 	local sg=Group.CreateGroup()
 	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
 	local ftex=Duel.GetLocationCountFromEx(tp)
+	local ftt=Duel.GetUsableMZoneCount(tp)
 	local ect=c29724053 and Duel.IsPlayerAffectedByEffect(tp,29724053) and c29724053[tp]
 	while ct>0 do
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-		local tempg=g:Filter(c511001336.filterchk,sg,g,sg,ft,ftex,ct,ect)
+		local tempg=g:Filter(c511001336.filterchk,sg,g,sg,ft,ftex,ct,ect,ftt)
 		if tempg:GetCount()<=0 then break end
 		local tc=Group.SelectUnselect(tempg,sg,tp)
 		if sg:IsContains(tc) then
 			sg:RemoveCard(tc)
 			ct=ct+1
+			ftt=ftt+1
 			if tc:IsLocation(LOCATION_EXTRA) then
 				ftex=ftex+1
 				if ect then ect=ect+1 end
@@ -131,6 +136,7 @@ function c511001336.sumop(e,tp,eg,ep,ev,re,r,rp)
 		else
 			sg:AddCard(tc)
 			ct=ct-1
+			ftt=ftt-1
 			if tc:IsLocation(LOCATION_EXTRA) then
 				ftex=ftex-1
 				if ect then ect=ect-1 end
@@ -149,7 +155,4 @@ function c511001336.sumop(e,tp,eg,ep,ev,re,r,rp)
 		tc=sg:GetNext()
 	end
 	Duel.SpecialSummonComplete()
-end
-function c511001336.indes(e,c)
-	return not c:IsSetCard(0x48)
 end
