@@ -49,6 +49,7 @@ function c26194151.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 function c26194151.activate(e,tp,eg,ep,ev,re,r,rp)
+	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g1=Duel.SelectMatchingCard(tp,c26194151.filter1,tp,LOCATION_EXTRA,0,1,1,nil,e,tp)
 	local sc=g1:GetFirst()
@@ -64,7 +65,8 @@ function c26194151.activate(e,tp,eg,ep,ev,re,r,rp)
 			sg:AddCard(tuner)
 			local cancel=Duel.GetLocationCountFromEx(tp,tp,sg,sc)>0 
 				and sg:CheckWithSumEqual(Card.GetLevel,sc:GetLevel(),sg:GetCount(),sg:GetCount())
-			local tc=Group.SelectUnselect(g,sg,tp,cancel,cancel)
+			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
+			local tc=Group.SelectUnselect(tg,sg,tp,cancel,cancel)
 			sg:RemoveCard(tuner)
 			if tc~-tuner then
 				if sg:IsContains(tc) then
