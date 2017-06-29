@@ -545,7 +545,7 @@ function Card.IsOnSameColumn(c1,c2,skip_ex)
 			return s2==s1
 		else
 			return s2==s1 or (s1==1 and s2==5) or (s1==3 and s2==6)
-		else
+		end
 	else
 		if skip_ex then
 			return s2==4-s1
