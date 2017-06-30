@@ -21,7 +21,7 @@ function c511001440.con(e,tp,eg,ep,ev,re,r,rp)
 end
 function c511001440.cfilter(c,e,tp,clv)
 	local lv=c:GetLevel()
-	if not c:IsAbleToRemoveAsCost() or lv<=0 or not c:IsType(TYPE_TUNER) 
+	if not c:IsAbleToRemoveAsCost() or lv<=0 or not c:IsType(TYPE_TUNER) or Duel.GetLocationCountFromEx(tp,tp,c)<=0
 		or not Duel.IsExistingMatchingCard(c511001440.spfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp,lv+clv) then return false end
 	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
 		return c:IsFaceup() and c:IsLocation(LOCATION_MZONE)
@@ -45,18 +45,17 @@ function c511001440.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.Remove(g,POS_FACEUP,REASON_COST)
 end
 function c511001440.tg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return (Duel.GetLocationCount(tp,LOCATION_MZONE)>0 or Duel.IsPlayerAffectedByEffect(tp,69832741))  end
+	if chk==0 then return true end
 	Duel.SetOperationInfo(0,CATEGORY_DISABLE,eg,1,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,0,0)
 end
 function c511001440.op(e,tp,eg,ep,ev,re,r,rp,val,r,rc)
 	Duel.NegateEffect(ev)
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
+	if Duel.GetLocationCountFromEx(tp)<=0 then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,c511001440.spfilter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp,e:GetLabel())
 	local tc=g:GetFirst()
 	if tc then
-		tc:SetMaterial(e:GetLabelObject())
 		Duel.SpecialSummon(tc,SUMMON_TYPE_SYNCHRO,tp,tp,false,false,POS_FACEUP)
 		tc:CompleteProcedure()
 		local e1=Effect.CreateEffect(e:GetHandler())

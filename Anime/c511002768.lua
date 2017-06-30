@@ -39,6 +39,7 @@ end
 function c511002768.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_GRAVE) and c511002768.filter1(chkc,e,tp) end
 	if chk==0 then return Duel.IsPlayerCanSpecialSummonCount(tp,2) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+		and Duel.GetLocationCountFromEx(tp)>0
 		and Duel.IsExistingTarget(c511002768.filter1,tp,LOCATION_GRAVE,0,1,nil,e,tp) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectTarget(tp,c511002768.filter1,tp,LOCATION_GRAVE,0,1,1,nil,e,tp)
@@ -47,7 +48,7 @@ end
 function c511002768.activate(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
 	local tc=Duel.GetFirstTarget()
-	if not tc:IsRelateToEffect(e) or tc:IsImmuneToEffect(e) then return end
+	if not tc or not tc:IsRelateToEffect(e) or tc:IsImmuneToEffect(e) then return end
 	if Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP)==0 then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,c511002768.filter2,tp,LOCATION_EXTRA,0,1,1,nil,e,tp,tc,tc:GetRank()*2)

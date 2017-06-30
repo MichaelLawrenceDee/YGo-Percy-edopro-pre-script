@@ -58,8 +58,6 @@ function c511010507.spop(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetReset(RESET_EVENT+0x1fe0000)
 		c:RegisterEffect(e1)
 		Duel.RaiseSingleEvent(c,EVENT_CUSTOM+511010507,e,r,tp,tp,0)
-	elseif Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false) then
-		Duel.SendtoGrave(c,REASON_RULE)
 	end
 end
 function c511010507.rettg(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -72,10 +70,12 @@ function c511010507.retop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS):Filter(c511010507.spcfilterchk,nil,e,tp)
 	local tc=g:GetFirst()
 	while tc do
-		local seq=tc:GetPreviousSequence()
-		Duel.MoveToField(tc,tp,tp,tc:GetPreviousLocation(),tc:GetPreviousPosition(),true)
-		if tc:GetSequence()~=seq then
-			Duel.MoveSequence(tc,seq)
+		if tc:IsPreviousLocation(LOCATION_PZONE) then
+ -			local seq=0
+ -			if tc:GetPreviousSequence()==7 or tc:GetPreviousSequence()==4 then seq=1 end
+ -			Duel.MoveToField(tc,tp,tp,LOCATION_PZONE,tc:GetPreviousPosition(),true,bit.lshift(1,seq))
+ -		else
+ -			Duel.MoveToField(tc,tp,tp,tc:GetPreviousLocation(),tc:GetPreviousPosition(),true,bit.lshift(1,tc:GetPreviousSequence()))
 		end
 		tc=g:GetNext()
 	end
@@ -87,41 +87,51 @@ end
 function c511010507.zarcspfilter(c,e,tp)
 	return c:IsCode(13331639) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
-function c511010507.zarcremfilter(c,code)
-	if not c:IsCode(code) or not c:IsAbleToRemove() then return false end
+function c511010507.zarcremfilter(c)
+	if not c:IsCode(41209827,82044279,16195942,16178681) or not c:IsAbleToRemove() then return false end
 	return not c:IsLocation(LOCATION_GRAVE) or not Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741)
 end
+function c511010507.fcheck(c,sg,g,code,...)
+	if not c:IsCode(code) then return false end
+	if ... then
+		g:AddCard(c)
+		local res=sg:IsExists(c511010507.fcheck,1,g,sg,g,...)
+		g:RemoveCard(c)
+		return res
+	else return true end
+end
+function c511010507.fselect(c,tp,mg,sg,...)
+	sg:AddCard(c)
+	local res=false
+	if sg:GetCount()<4 then
+		res=mg:IsExists(c511010507.fselect,1,sg,tp,mg,sg,...)
+	elseif Duel.GetLocationCountFromEx(tp,tp,sg)>0 then
+		local g=Group.CreateGroup()
+		res=sg:IsExists(c511010507.fcheck,1,g,sg,g,...)
+	end
+	sg:RemoveCard(c)
+	return res
+end
 function c511010507.zarctg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c511010507.zarcremfilter,tp,0x5d,0,1,nil,41209827) 
-		and Duel.IsExistingMatchingCard(c511010507.zarcremfilter,tp,0x5d,0,1,nil,82044279) 
-		and Duel.IsExistingMatchingCard(c511010507.zarcremfilter,tp,0x5d,0,1,nil,16195942) 
-		and Duel.IsExistingMatchingCard(c511010507.zarcremfilter,tp,0x5d,0,1,nil,16178681) 
-		and Duel.GetLocationCount(tp,LOCATION_MZONE)>-1 and Duel.IsExistingMatchingCard(c511010507.zarcspfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
+	local g=Duel.GetMatchingGroup(c511010507.zarcremfilter,tp,0x5d,0,nil)
+	if chk==0 then return g:IsExists(c511010507.fselect,1,nil,tp,g,Group.CreateGroup(),41209827,82044279,16195942,16178681) 
+		and Duel.IsExistingMatchingCard(c511010507.zarcspfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 function c511010507.zarcop(e,tp,eg,ep,ev,re,r,rp)
-	local g1=Duel.GetMatchingGroup(c511010507.zarcremfilter,tp,0x5d,0,nil,41209827)
-	local g2=Duel.GetMatchingGroup(c511010507.zarcremfilter,tp,0x5d,0,nil,82044279)
-	local g3=Duel.GetMatchingGroup(c511010507.zarcremfilter,tp,0x5d,0,nil,16195942)
-	local g4=Duel.GetMatchingGroup(c511010507.zarcremfilter,tp,0x5d,0,nil,16178681)
-	if g1:GetCount()>0 and g2:GetCount()>0 and g3:GetCount()>0 and g4:GetCount()>0 then
+	local mg=Duel.GetMatchingGroup(aux.NecroValleyFilter(c511010507.zarcremfilter),tp,0x5d,0,nil)
+	local sg=Group.CreateGroup()
+	while sg:GetCount()<4 do
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-		local sg1=g1:Select(tp,1,1,nil)
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-		local sg2=g2:Select(tp,1,1,nil)
-		sg1:Merge(sg2)
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-		local sg3=g3:Select(tp,1,1,nil)
-		sg1:Merge(sg3)
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-		local sg4=g4:Select(tp,1,1,nil)
-		sg1:Merge(sg4)
-		if Duel.Remove(sg1,POS_FACEUP,REASON_EFFECT)>3 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
-			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-			local tc=Duel.SelectMatchingCard(tp,c511010507.zarcspfilter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp):GetFirst()
-			if tc and Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP)>0 then
-				tc:CompleteProcedure()
-			end
+		local g=mg:FilterSelect(tp,c511010507.fselect,1,1,sg,tp,mg,sg,41209827,82044279,16195942,16178681)
+		if not g or g:GetCount()<=0 then return false end
+		sg:Merge(g)
+	end
+	if Duel.Remove(sg1,POS_FACEUP,REASON_EFFECT)>3 and Duel.GetLocationCountFromEx(tp)>0 then
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+		local tc=Duel.SelectMatchingCard(tp,c511010507.zarcspfilter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp):GetFirst()
+		if tc and Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP)>0 then
+			tc:CompleteProcedure()
 		end
 	end
 end

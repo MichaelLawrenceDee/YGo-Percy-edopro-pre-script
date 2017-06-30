@@ -89,12 +89,12 @@ function c511009304.sumfilter(c,e,tp)
 	return c:IsSetCard(0x19) and c:IsType(TYPE_FUSION) and c:IsCanBeSpecialSummoned(e,0,tp,true,false)
 end
 function c511009304.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+	if chk==0 then return Duel.GetLocationCountFromEx(tp)>0
 		and Duel.IsExistingMatchingCard(c511009304.sumfilter,tp,LOCATION_EXTRA,LOCATION_EXTRA,1,nil,e,tp) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 function c511009304.spop(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)<1 then return end
+	if Duel.GetLocationCountFromEx(tp)<1 then return end
 	local rg=Duel.GetMatchingGroup(c511009304.sumfilter,tp,0,LOCATION_EXTRA,nil,e,tp)
 	Duel.ConfirmCards(tp,rg)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)

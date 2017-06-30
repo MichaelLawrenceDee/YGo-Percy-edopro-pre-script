@@ -25,11 +25,12 @@ function c511001611.filterchk(c,g,sg,e,tp)
 end
 function c511001611.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	local mg=Duel.GetMatchingGroup(c511001611.filter,tp,LOCATION_EXTRA,0,nil)
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+	if chk==0 then return Duel.GetLocationCountFromEx(tp)>0
 		and	mg:IsExists(c511001611.filterchk,1,nil,mg,Group.CreateGroup(),e,tp) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,0,LOCATION_EXTRA)
 end
 function c511001611.activate(e,tp,eg,ep,ev,re,r,rp)
+	if Duel.GetLocationCountFromEx(tp)<=0 then return end
 	local mg=Duel.GetMatchingGroup(c511001611.filter,tp,LOCATION_EXTRA,0,nil)
 	local xg=Group.CreateGroup()
 	::start::

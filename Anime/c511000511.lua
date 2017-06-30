@@ -18,8 +18,8 @@ function c511000511.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function c511000511.filter(c,e,tp,tid)
 	local rk=c:GetRank()
-	return not Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) and c:IsType(TYPE_XYZ) and c:IsReason(REASON_DESTROY) and c:GetTurnID()==tid and c:IsAbleToRemove() 
-		and Duel.IsExistingTarget(c511000511.spfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp,rk)
+	return c:IsType(TYPE_XYZ) and c:IsReason(REASON_DESTROY) and c:GetTurnID()==tid and c:IsAbleToRemove() 
+		and Duel.IsExistingMatchingCard(c511000511.spfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp,rk)
 end
 function c511000511.spfilter(c,e,tp,rk)
 	return c:IsType(TYPE_XYZ) and c:GetRank()==rk+2 and c:IsCanBeSpecialSummoned(e,0,tp,true,false)
@@ -30,7 +30,7 @@ function c511000511.target(e,tp,eg,ep,ev,re,r,rp,chk)
 		if e:GetLabel()~=1 then return false end
 		e:SetLabel(0)
 		return Duel.IsExistingMatchingCard(c511000511.filter,tp,LOCATION_GRAVE,0,1,nil,e,tp,tid) 
-			and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 end
+			and Duel.GetLocationCountFromEx(tp)>0 end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 	local rg=Duel.SelectMatchingCard(tp,c511000511.filter,tp,LOCATION_GRAVE,0,1,1,nil,e,tp,tid)
 	Duel.Remove(rg,POS_FACEUP,REASON_COST)
@@ -38,8 +38,10 @@ function c511000511.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,0,0)
 end
 function c511000511.activate(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
+	if Duel.GetLocationCountFromEx(tp)<=0 then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,c511000511.spfilter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp,Duel.GetChainInfo(0,CHAININFO_TARGET_PARAM))
-	Duel.SpecialSummon(g,0,tp,tp,true,false,POS_FACEUP)
+	if g:GetCount()>0 then
+		Duel.SpecialSummon(g,0,tp,tp,true,false,POS_FACEUP)
+	end
 end

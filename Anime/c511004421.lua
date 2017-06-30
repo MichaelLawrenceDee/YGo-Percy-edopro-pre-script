@@ -44,9 +44,9 @@ end
 function c511004421.operation(e,tp,eg,ev,ep,re,r,rp)
 	local c=e:GetHandler()
 	local fid=Duel.GetChainInfo(0,CHAININFO_TARGET_PARAM)
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)<0 then return end
 	local tc=Duel.GetFirstTarget()
 	if not tc or tc:IsFacedown() or not tc:IsRelateToEffect(e) or tc:IsControler(1-tp) or tc:IsImmuneToEffect(e) then return end
+	if Duel.GetLocationCountFromEx(tp,tp,tc)<=0 then return end
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
 	e1:SetCode(EFFECT_INDESTRUCTABLE_BATTLE)

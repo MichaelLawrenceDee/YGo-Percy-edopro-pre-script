@@ -130,7 +130,7 @@ end
 function c511001531.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	local tc=e:GetLabelObject()
 	if chk==0 then return tc and tc:IsAbleToRemove() and tc:GetOverlayGroup():IsExists(Card.IsAbleToRemove,tc:GetOverlayCount(),nil) 
-		and (Duel.GetLocationCount(tp,LOCATION_MZONE)>0 or tc:IsControler(tp))
+		and Duel.GetLocationCountFromEx(tp,tp,tc)>0
 		and Duel.IsExistingMatchingCard(c511001531.filter,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
 	local g=tc:GetOverlayGroup()
 	g:AddCard(tc)
@@ -175,7 +175,7 @@ function c511001531.banop(e,tp,eg,ep,ev,re,r,rp)
 		tcg:RegisterFlagEffect(511001531,RESET_EVENT+0x1fe0000,0,1)
 		tcg=g:GetNext()
 	end
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
+	if Duel.GetLocationCountFromEx(tp)<=0 then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,c511001531.filter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp)
 	if g:GetCount()>0 then

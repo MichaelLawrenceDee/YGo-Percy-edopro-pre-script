@@ -9,59 +9,56 @@ function c100000365.initial_effect(c)
 	e1:SetOperation(c100000365.activate)
 	c:RegisterEffect(e1)
 end
-function c100000365.tfilter(c,e,tp)
+function c100000365.spfilter(c,e,tp)
 	return c:IsCode(43378048) and c:IsCanBeSpecialSummoned(e,0,tp,true,false)
 end
-function c100000365.filter(c,code)
-	if not c:IsCode(code) or not c:IsAbleToRemove() then return false end
+function c100000365.filter(c)
+	if not c:IsCode(6007213,32491822,69890967) or not c:IsAbleToRemove() then return false end
 	return not c:IsLocation(LOCATION_GRAVE) or not Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741)
 end
-function c100000365.target(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then
-		if not Duel.IsExistingMatchingCard(c100000365.tfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp) then return false end
-		local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
-		if ft<-2 then return false end
-		local g1=Duel.GetMatchingGroup(c100000365.filter,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,nil,6007213)
-		local g2=Duel.GetMatchingGroup(c100000365.filter,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,nil,32491822)
-		local g3=Duel.GetMatchingGroup(c100000365.filter,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,nil,69890967)
-		if g1:GetCount()==0 or g2:GetCount()==0 or g3:GetCount()==0 then return false end
-		if ft>0 then return true end
-		local f1=g1:FilterCount(Card.IsLocation,nil,LOCATION_MZONE)>0 and 1 or 0
-		local f2=g2:FilterCount(Card.IsLocation,nil,LOCATION_MZONE)>0 and 1 or 0
-		local f3=g3:FilterCount(Card.IsLocation,nil,LOCATION_MZONE)>0 and 1 or 0
-		if ft==-2 then return f1+f2+f3==3
-		elseif ft==-1 then return f1+f2+f3>=2
-		else return f1+f2+f3>=1 end
+function c100000365.fcheck(c,sg,g,code,...)
+	if not c:IsCode(code) then return false end
+	if ... then
+		g:AddCard(c)
+		local res=sg:IsExists(c100000365.fcheck,1,g,sg,g,...)
+		g:RemoveCard(c)
+		return res
+	else return true end
+end
+function c100000365.fselect(c,tp,mg,sg,...)
+	sg:AddCard(c)
+	local res=false
+	if sg:GetCount()<3 then
+		res=mg:IsExists(c100000365.fselect,1,sg,tp,mg,sg,...)
+	elseif Duel.GetLocationCountFromEx(tp,tp,sg)>0 then
+		local g=Group.CreateGroup()
+		res=sg:IsExists(c100000365.fcheck,1,g,sg,g,...)
 	end
+	sg:RemoveCard(c)
+	return res
+end
+function c100000365.target(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=Duel.GetMatchingGroup(c100000365.filter,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,nil)
+	if chk==0 then return g:IsExists(c100000365.fselect,1,nil,tp,g,Group.CreateGroup(),6007213,32491822,69890967) 
+		and Duel.IsExistingMatchingCard(c100000365.spfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
 	Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,3,0,LOCATION_ONFIELD+LOCATION_GRAVE)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 function c100000365.activate(e,tp,eg,ep,ev,re,r,rp)
-	if not Duel.IsExistingMatchingCard(c100000365.tfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp) then return end
-	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
-	local g1=Duel.GetMatchingGroup(c100000365.filter,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,nil,6007213)
-	local g2=Duel.GetMatchingGroup(c100000365.filter,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,nil,32491822)
-	local g3=Duel.GetMatchingGroup(c100000365.filter,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,nil,69890967)
-	g1:Merge(g2)
-	g1:Merge(g3)
-	local g=Group.CreateGroup()
-	local tc=nil
-	for i=1,3 do
+	if not Duel.IsExistingMatchingCard(c100000365.spfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp) then return end
+	local mg=Duel.GetMatchingGroup(aux.NecroValleyFilter(c100000365.filter),tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,nil)
+	local sg=Group.CreateGroup()
+	while sg:GetCount()<3 do
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-		if ft<=0 then
-			tc=g1:FilterSelect(tp,Card.IsLocation,1,1,nil,LOCATION_MZONE):GetFirst()
-		else
-			tc=g1:Select(tp,1,1,nil):GetFirst()
-		end
-		g:AddCard(tc)
-		g1:Remove(Card.IsCode,nil,tc:GetCode())
-		ft=ft+1
+		local g=mg:FilterSelect(tp,c100000365.fselect,1,1,sg,tp,mg,sg,6007213,32491822,69890967)
+		if not g or g:GetCount()<=0 then return false end
+		sg:Merge(g)
 	end
-	Duel.Remove(g,POS_FACEUP,REASON_EFFECT)
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
-	local sg=Duel.SelectMatchingCard(tp,c100000365.tfilter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp)
-	if sg:GetCount()>0 then
-		Duel.BreakEffect()
-		Duel.SpecialSummon(sg,0,tp,tp,true,false,POS_FACEUP)
+	if Duel.Remove(sg,POS_FACEUP,REASON_EFFECT)>2 and Duel.GetLocationCountFromEx(tp)>0 then
+		local sg=Duel.SelectMatchingCard(tp,c100000365.tfilter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp)
+		if sg:GetCount()>0 then
+			Duel.BreakEffect()
+			Duel.SpecialSummon(sg,0,tp,tp,true,false,POS_FACEUP)
+		end
 	end
 end

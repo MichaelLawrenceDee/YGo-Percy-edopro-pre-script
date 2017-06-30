@@ -12,8 +12,8 @@ function c511000685.initial_effect(c)
 end
 function c511000685.filter1(c,e,tp)
 	local rk=c:GetRank()
-	return rk>0 and c:IsFaceup() and Duel.IsExistingMatchingCard(c511000685.filter2,tp,LOCATION_EXTRA,0,2,nil,rk,e,tp,c)
-		and c:IsCode(84013237) and c:GetOverlayGroup():GetCount()>=2
+	return rk>0 and c:IsFaceup() and c:IsCode(84013237) and c:GetOverlayGroup():GetCount()>=2 and Duel.GetLocationCountFromEx(tp,tp,c)>1
+		and Duel.IsExistingMatchingCard(c511000685.filter2,tp,LOCATION_EXTRA,0,2,nil,rk,e,tp,c)
 end
 function c511000685.filter2(c,rk,e,tp,mc)
 	if c.rum_limit and not c.rum_limit(mc,e) then return false end
@@ -22,18 +22,19 @@ end
 function c511000685.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_MZONE) and c511000685.filter1(chkc,e,tp) end
 	local ect=c29724053 and Duel.IsPlayerAffectedByEffect(tp,29724053) and c29724053[tp]
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>1 and not Duel.IsPlayerAffectedByEffect(tp,59822133) 
-		and Duel.IsExistingTarget(c511000685.filter1,tp,LOCATION_MZONE,0,1,nil,e,tp) and (not ect or math.min(ect,2)>=2) end
+	if chk==0 then return not Duel.IsPlayerAffectedByEffect(tp,59822133) and (not ect or ect>=2)
+		and Duel.IsExistingTarget(c511000685.filter1,tp,LOCATION_MZONE,0,1,nil,e,tp) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
 	local g=Duel.SelectTarget(tp,c511000685.filter1,tp,LOCATION_MZONE,0,1,1,nil,e,tp)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,2,tp,LOCATION_EXTRA)
 end
 function c511000685.activate(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)<1 or Duel.IsPlayerAffectedByEffect(tp,59822133) then return end
+	if Duel.IsPlayerAffectedByEffect(tp,59822133) then return end
 	local ect=c29724053 and Duel.IsPlayerAffectedByEffect(tp,29724053) and c29724053[tp]
 	if ect~=nil and ect<2 then return end
 	local tc=Duel.GetFirstTarget()
-	if not tc or tc:IsFacedown() or not tc:IsRelateToEffect(e) or tc:IsControler(1-tp) or tc:IsImmuneToEffect(e) then return end
+	if not tc or tc:IsFacedown() or not tc:IsRelateToEffect(e) or tc:IsControler(1-tp) or tc:IsImmuneToEffect(e) 
+		or Duel.GetLocationCountFromEx(tp,tp,tc)<=1 then return end
 	local ov=tc:GetOverlayGroup()
 	if ov:GetCount()<2 then return end
 	local g=Duel.GetMatchingGroup(c511000685.filter2,tp,LOCATION_EXTRA,0,nil,tc:GetRank(),e,tp,tc)

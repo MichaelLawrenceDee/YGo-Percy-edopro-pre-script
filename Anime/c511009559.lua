@@ -27,14 +27,14 @@ function c511009559.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local tid=Duel.GetTurnCount()
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and c511009559.filter(chkc,e,tp,tid) end
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.IsPlayerCanSpecialSummonCount(tp,2) 
-		and Duel.IsExistingTarget(c511009559.filter,tp,LOCATION_GRAVE,0,1,nil,e,tp,tid) end
+		and Duel.GetLocationCountFromEx(tp)>0 and Duel.IsExistingTarget(c511009559.filter,tp,LOCATION_GRAVE,0,1,nil,e,tp,tid) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectTarget(tp,c511009559.filter,tp,LOCATION_GRAVE,0,1,1,nil,e,tp,tid)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,g,2,tp,LOCATION_EXTRA)
 end
 function c511009559.spop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
+	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 or Duel.GetLocationCountFromEx(tp)<=0 then return end
 	local tc=Duel.GetFirstTarget()
 	if not tc or not tc:IsRelateToEffect(e) or tc:IsImmuneToEffect(e) 
 		or not Duel.SpecialSummonStep(tc,0,tp,tp,false,false,POS_FACEUP) then return end

@@ -27,13 +27,12 @@ function c511018510.filter1(c,e,tp)
 end
 function c511018510.filter2(c,e,tp,mc,rk)
 	if c.rum_limit and not c.rum_limit(mc,e) then return false end
-	return c:GetRank()==rk and c:IsSetCard(0xe5) and mc:IsCanBeXyzMaterial(c)
+	return c:GetRank()==rk and c:IsSetCard(0xe5) and mc:IsCanBeXyzMaterial(c) and Duel.GetLocationCountFromEx(tp,tp,mc,c)>0 
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
 end
 function c511018510.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_MZONE) and c511018510.filter1(chkc,e,tp) end
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>-1
-		and Duel.IsExistingTarget(c511018510.filter1,tp,LOCATION_MZONE,0,1,nil,e,tp) end
+	if chk==0 then return Duel.IsExistingTarget(c511018510.filter1,tp,LOCATION_MZONE,0,1,nil,e,tp) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
 	Duel.SelectTarget(tp,c511018510.filter1,tp,LOCATION_MZONE,0,1,1,nil,e,tp)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
