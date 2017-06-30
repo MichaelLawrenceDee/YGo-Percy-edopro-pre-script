@@ -9,18 +9,33 @@ function c511001708.initial_effect(c)
 	e1:SetTarget(c511001708.target)
 	e1:SetOperation(c511001708.activate)
 	c:RegisterEffect(e1)
+	if not c511001708.global_check then
+		c511001708.global_check=true
+		local ge4=Effect.CreateEffect(c)
+		ge4:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		ge4:SetCode(EVENT_ADJUST)
+		ge4:SetCountLimit(1)
+		ge4:SetProperty(EFFECT_FLAG_NO_TURN_RESET)
+		ge4:SetOperation(c511001708.archchk)
+		Duel.RegisterEffect(ge4,0)
+	end
+end
+function c511001708.archchk(e,tp,eg,ep,ev,re,r,rp)
+	if Duel.GetFlagEffect(0,420)==0 then 
+		Duel.CreateToken(tp,420)
+		Duel.CreateToken(1-tp,420)
+		Duel.RegisterFlagEffect(0,420,0,0,0)
+	end
 end
 function c511001708.filter1(c,e,tp)
 	local rk=c:GetRank()
 	return (c:IsFaceup() or c:IsLocation(LOCATION_GRAVE)) and c:IsType(TYPE_XYZ) 
-		and (c:IsCode(56832966) or c:IsCode(86532744) or c:IsCode(52653092))
-		and Duel.IsExistingMatchingCard(c511001708.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,c,rk+1)
-		and (Duel.GetLocationCount(tp,LOCATION_MZONE)>0 or c:IsLocation(LOCATION_MZONE))
+		and c:IsNumberS() and Duel.IsExistingMatchingCard(c511001708.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,c,rk+1)
 end
 function c511001708.filter2(c,e,tp,mc,rk)
 	if c.rum_limit and not c.rum_limit(mc,e) then return false end
-	return c:GetRank()==rk and (c:IsCode(56832966) or c:IsCode(86532744) or c:IsCode(52653092)) and mc:IsCanBeXyzMaterial(c)
-		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
+	return c:GetRank()==rk and c:IsNumberS() and mc:IsCanBeXyzMaterial(c) and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false) 
+		and Duel.GetLocationCountFromEx(tp,tp,mc,c)>0
 end
 function c511001708.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_MZONE+LOCATION_GRAVE) and c511001708.filter1(chkc,e,tp) end
@@ -30,9 +45,8 @@ function c511001708.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 function c511001708.activate(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)<0 then return end
 	local tc=Duel.GetFirstTarget()
-	if tc:IsFacedown() or not tc:IsRelateToEffect(e) or tc:IsControler(1-tp) or tc:IsImmuneToEffect(e) then return end
+	if not tc or tc:IsFacedown() or not tc:IsRelateToEffect(e) or tc:IsControler(1-tp) or tc:IsImmuneToEffect(e) then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,c511001708.filter2,tp,LOCATION_EXTRA,0,1,1,nil,e,tp,tc,tc:GetRank()+1)
 	local sc=g:GetFirst()

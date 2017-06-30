@@ -18,7 +18,7 @@ function c100000025.filter1(c,e)
 	end
 end
 function c100000025.filter2(c,e,tp,m)
-	return c:IsType(TYPE_FUSION) and c:IsSetCard(0x304) and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,false)
+	return c:IsType(TYPE_FUSION) and c:IsSetCard(0x512) and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,false)
 		and c:CheckFusionMaterial(m,nil,tp)
 end
 function c100000025.target(e,tp,eg,ep,ev,re,r,rp,chk)

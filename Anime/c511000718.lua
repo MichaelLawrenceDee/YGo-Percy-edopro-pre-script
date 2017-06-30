@@ -34,22 +34,6 @@ function c511000718.initial_effect(c)
 	e5:SetCode(EVENT_ATTACK_ANNOUNCE)
 	e5:SetOperation(c511000718.atkop)
 	c:RegisterEffect(e5)
-	if not c511000718.global_check then
-		c511000718.global_check=true
-		--check obsolete ruling
-		local ge1=Effect.CreateEffect(c)
-		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-		ge1:SetCode(EVENT_DRAW)
-		ge1:SetOperation(c511000718.checkop)
-		Duel.RegisterEffect(ge1,0)
-	end
-end
-function c511000718.checkop(e,tp,eg,ep,ev,re,r,rp)
-	if bit.band(r,REASON_RULE)~=0 and Duel.GetTurnCount()==1 then
-		--obsolete
-		Duel.RegisterFlagEffect(tp,62765383,0,0,1)
-		Duel.RegisterFlagEffect(1-tp,62765383,0,0,1)
-	end
 end
 function c511000718.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return eg:IsExists(Card.IsPosition,1,nil,POS_FACEUP_DEFENSE) end
@@ -84,9 +68,9 @@ function c511000718.acop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ClearTargetCard()
 		if bit.band(tpe,TYPE_FIELD)~=0 then
 			local fc=Duel.GetFieldCard(1-tp,LOCATION_SZONE,5)
-			if Duel.GetFlagEffect(tp,62765383)>0 then
+			if Duel.IsDuelType(DUEL_OBSOLETE_RULING) then
 				if fc then Duel.Destroy(fc,REASON_RULE) end
-				of=Duel.GetFieldCard(tp,LOCATION_SZONE,5)
+				fc=Duel.GetFieldCard(tp,LOCATION_SZONE,5)
 				if fc and Duel.Destroy(fc,REASON_RULE)==0 then Duel.SendtoGrave(tc,REASON_RULE) end
 			else
 				Duel.GetFieldCard(tp,LOCATION_SZONE,5)

@@ -453,9 +453,9 @@ c420.OCGFossil={
 }
 function Card.IsFossil(c,fbool)
 	if fbool then
-		return c:IsFusionSetCard(0x1521) or c:IsFusionCode(table.unpack(c420.OCGFossil))
+		return c:IsFusionSetCard(0x512) or c:IsFusionCode(table.unpack(c420.OCGFossil))
 	else
-		return c:IsSetCard(0x1521) or c:IsCode(table.unpack(c420.OCGFossil))
+		return c:IsSetCard(0x512) or c:IsCode(table.unpack(c420.OCGFossil))
 	end
 end
 
