@@ -57,11 +57,12 @@ c6165656.rum_xyzsummon=function(c)
 	e1:SetDescription(1073)
 	e1:SetCode(EFFECT_SPSUMMON_PROC)
 	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
-	e1:SetRange(LOCATION_EXTRA)
+	e1:SetRange(c:GetLocation())
 	e1:SetCondition(aux.XyzCondition(nil,9,4,4,false))
 	e1:SetTarget(aux.XyzTarget(nil,9,4,4,false))
 	e1:SetOperation(aux.XyzOperation(nil,9,4,4,false))
 	e1:SetValue(SUMMON_TYPE_XYZ)
+	e1:SetReset(RESET_CHAIN)
 	c:RegisterEffect(e1)
 	return e1
 end
