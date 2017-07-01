@@ -51,6 +51,20 @@ c6165656.xyz_number=88
 c6165656.rum_limit=function(c,e)
 	return c:IsCode(48995978)
 end
+c6165656.rum_xyzsummon=function(c)
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_FIELD)
+	e1:SetDescription(1073)
+	e1:SetCode(EFFECT_SPSUMMON_PROC)
+	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e1:SetRange(LOCATION_EXTRA)
+	e1:SetCondition(aux.XyzCondition(nil,9,4,4,false))
+	e1:SetTarget(aux.XyzTarget(nil,9,4,4,false))
+	e1:SetOperation(aux.XyzOperation(nil,9,4,4,false))
+	e1:SetValue(SUMMON_TYPE_XYZ)
+	c:RegisterEffect(e1)
+	return e1
+end
 --target check is in RUM magic cards
 function c6165656.splimit(e,se,sp,st)
 	return se:GetHandler():IsSetCard(0x95) and se:GetHandler():IsType(TYPE_SPELL)
