@@ -1,4 +1,5 @@
 --Commander Covington (Manga)
+--fixed by MLD
 function c511015115.initial_effect(c)
 	--special summon
 	local e1=Effect.CreateEffect(c)
@@ -99,6 +100,7 @@ function c511015115.operation(e,tp,eg,ep,ev,re,r,rp)
 	if tc then
 		Duel.Overlay(tc,og)
 		Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP)
+		tc:CompleteProcedure()
 		c:SetCardTarget(tc)
 		c:RegisterFlagEffect(511015115,RESET_EVENT+0x1fe0000,0,0)
 	else
