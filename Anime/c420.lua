@@ -927,9 +927,9 @@ c420.OCGNumeron={
 }
 function Card.IsNumeron(c,fbool)
 	if fbool then
-		return c:IsFusionSetCard(0x539) or c:IsFusionCode(table.unpack(c420.OCGNumeron))
+		return c:IsFusionSetCard(0x53a) or c:IsFusionCode(table.unpack(c420.OCGNumeron))
 	else
-		return c:IsSetCard(0x539) or c:IsCode(table.unpack(c420.OCGNumeron))
+		return c:IsSetCard(0x53a) or c:IsCode(table.unpack(c420.OCGNumeron))
 	end
 end
 
