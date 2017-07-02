@@ -17,7 +17,7 @@ function c511000558.initial_effect(c)
 	e2:SetCode(EFFECT_CHANGE_DAMAGE)
 	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
 	e2:SetRange(LOCATION_MZONE)
-	e2:SetTargetRange(1,0)
+	e2:SetTargetRange(1,1)
 	e2:SetValue(c511000558.damval)
 	c:RegisterEffect(e2)
 	--lvchange
