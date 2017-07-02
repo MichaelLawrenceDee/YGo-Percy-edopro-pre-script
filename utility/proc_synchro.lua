@@ -435,6 +435,25 @@ function Auxiliary.SynchroCheckHand(c,sg)
 end
 function Auxiliary.SynchroCheckP43(tsg,ntsg,sg,lv,sc,tp)
 	if sg:IsExists(Auxiliary.SynchroCheckHand,1,nil,sg) then return false end
+	local c=sg:GetFirst()
+	while c do
+		if c:IsHasEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK) then
+			local teg={c:GetCardEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)}
+			local hanchk=false
+			for i=1,#teg do
+				local te=teg[i]
+				local tgchk=te:GetTarget()
+				local res=tgchk(te,c,sg,Group.CreateGroup(),Group.CreateGroup(),tsg,ntsg)
+				--if not res then return false end
+				if res then
+					hanchk=true
+					break
+				end
+			end
+			if not hanchk then return false end
+		end
+		c=sg:GetNext()
+	end
 	local lvchk=false
 	if sg:IsExists(Card.IsHasEffect,1,nil,EFFECT_SYNCHRO_MATERIAL_CUSTOM) then
 		local g=sg:Filter(Card.IsHasEffect,nil,EFFECT_SYNCHRO_MATERIAL_CUSTOM)
@@ -800,6 +819,25 @@ function Auxiliary.MajesticSynchroCheck1(c,g,sg,card1,card2,card3,lv,sc,tp,smat,
 end
 function Auxiliary.MajesticSynchroCheck2(sg,card1,card2,card3,lv,sc,tp,f1,cbt1,f2,cbt2,f3,cbt3,...)
 	if sg:IsExists(Auxiliary.SynchroCheckHand,1,nil,sg) then return false end
+	local c=sg:GetFirst()
+	while c do
+		if c:IsHasEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK) then
+			local teg={c:GetCardEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)}
+			local hanchk=false
+			for i=1,#teg do
+				local te=teg[i]
+				local tgchk=te:GetTarget()
+				local res=tgchk(te,c,sg,Group.CreateGroup(),Group.CreateGroup(),Group.CreateGroup(),Group.CreateGroup())
+				--if not res then return false end
+				if res then
+					hanchk=true
+					break
+				end
+			end
+			if not hanchk then return false end
+		end
+		c=sg:GetNext()
+	end
 	local t={...}
 	local funs={}
 	funs[0]={} --number of those
@@ -1069,6 +1107,25 @@ function Auxiliary.DarkSynchroCheck1(c,g,sg,card1,card2,plv,nlv,sc,tp,smat,pg,f1
 end
 function Auxiliary.DarkSynchroCheck2(sg,card1,card2,plv,nlv,sc,tp,f1,f2,...)
 	if sg:IsExists(Auxiliary.SynchroCheckHand,1,nil,sg) then return false end
+	local c=sg:GetFirst()
+	while c do
+		if c:IsHasEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK) then
+			local teg={c:GetCardEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)}
+			local hanchk=false
+			for i=1,#teg do
+				local te=teg[i]
+				local tgchk=te:GetTarget()
+				local res=tgchk(te,c,sg,Group.CreateGroup(),Group.CreateGroup(),Group.CreateGroup(),Group.CreateGroup())
+				--if not res then return false end
+				if res then
+					hanchk=true
+					break
+				end
+			end
+			if not hanchk then return false end
+		end
+		c=sg:GetNext()
+	end
 	local reqm={...}
 	if (f1 and not f1(card1)) or (f2 and not f2(card2)) or not card2:IsType(TYPE_TUNER) or not card2:IsSetCard(0x301) then return false end
 	local lvchk=false
