@@ -50,7 +50,7 @@ function c511015101.filter2(c,e,tp,m,f)
 		or not c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,false) then return false end
 	if c:CheckFusionMaterial(m,nil,tp) then return true end
 	local mc=e:GetHandler()
-	if mc:IsCanBeFusionMaterial(c) and m:IsExists(Card.IsCode,1,nil,47198668) and c511015101[1]:IsExists(c511015101.cfilter,1,nil,c,tp) then
+	if e:IsHasType(EFFECT_TYPE_ACTIVATE) and mc:IsCanBeFusionMaterial(c) and m:IsExists(Card.IsCode,1,nil,47198668) and c511015101[1]:IsExists(c511015101.cfilter,1,nil,c,tp) then
 		m:AddCard(mc)
 		local e1=Effect.CreateEffect(mc)
 		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_IGNORE_IMMUNE)
@@ -113,8 +113,8 @@ function c511015101.activate(e,tp,eg,ep,ev,re,r,rp)
 		local tc=tg:GetFirst()
 		if sg1:IsContains(tc) and (sg2==nil or not sg2:IsContains(tc) or not Duel.SelectYesNo(tp,ce:GetDescription())) then
 			local mat1
-			if not tc:CheckFusionMaterial(mg1,nil,tp) or (c:IsCanBeFusionMaterial(tc) and mg1:IsExists(Card.IsCode,1,nil,47198668) 
-				and c511015101[1]:IsExists(c511015101.cfilter,1,nil,tc,tp) and Duel.SelectYesNo(tp,65)) then
+			if not tc:CheckFusionMaterial(mg1,nil,tp) or (e:IsHasType(EFFECT_TYPE_ACTIVATE) and c:IsCanBeFusionMaterial(tc) 
+				and mg1:IsExists(Card.IsCode,1,nil,47198668) and c511015101[1]:IsExists(c511015101.cfilter,1,nil,tc,tp) and Duel.SelectYesNo(tp,65)) then
 				mg1:AddCard(c)
 				local e1=Effect.CreateEffect(c)
 				e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_IGNORE_IMMUNE)
@@ -134,7 +134,7 @@ function c511015101.activate(e,tp,eg,ep,ev,re,r,rp)
 			Duel.SpecialSummon(tc,SUMMON_TYPE_FUSION,tp,tp,false,false,POS_FACEUP)
 		else
 			local mat2
-			if not tc:CheckFusionMaterial(mg2,nil,tp) or (c:IsCanBeFusionMaterial(tc) and mg2:IsExists(Card.IsCode,1,nil,47198668) 
+			if not tc:CheckFusionMaterial(mg2,nil,tp) or (e:IsHasType(EFFECT_TYPE_ACTIVATE) and c:IsCanBeFusionMaterial(tc) and mg2:IsExists(Card.IsCode,1,nil,47198668) 
 				and c511015101[1]:IsExists(c511015101.cfilter,1,nil,tc,tp) and Duel.SelectYesNo(tp,65)) then
 				mg2:AddCard(c)
 				local e1=Effect.CreateEffect(c)

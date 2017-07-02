@@ -15,6 +15,7 @@ function c511015107.filter(c,e,tp)
 	else
 		local mg=Duel.GetMatchingGroup(Card.IsCanBeSynchroMaterial,tp,LOCATION_MZONE+LOCATION_HAND,LOCATION_MZONE,nil,c)
 		if c:IsSynchroSummonable(nil,mg) then return true end
+		if not e:IsHasType(EFFECT_TYPE_ACTIVATE) then return false end
 		local mc=e:GetHandler()
 		local e1=Effect.CreateEffect(mc)
 		e1:SetType(EFFECT_TYPE_SINGLE)
@@ -53,7 +54,7 @@ function c511015107.activate(e,tp,eg,ep,ev,re,r,rp)
 		else
 			local mg=Duel.GetMatchingGroup(Card.IsCanBeSynchroMaterial,tp,LOCATION_MZONE+LOCATION_HAND,LOCATION_MZONE,nil,tc)
 			local c=e:GetHandler()
-			if c:IsRelateToEffect(e) and (not tc:IsSynchroSummonable(nil,mg) or Duel.SelectYesNo(tp,93)) then
+			if e:IsHasType(EFFECT_TYPE_ACTIVATE) and c:IsRelateToEffect(e) and (not tc:IsSynchroSummonable(nil,mg) or Duel.SelectYesNo(tp,93)) then
 				mg:AddCard(c)
 				local e1=Effect.CreateEffect(c)
 				e1:SetType(EFFECT_TYPE_SINGLE)
