@@ -186,6 +186,13 @@ end
 -- Ｃ 
 -- カオス 
 -- is "C" or Cxyz or Cnumber
+function Card.IsC(c,fbool)
+	if fbool then
+		return c:IsFusionSetCard(0x1048) or c:IsFusionSetCard(0x1073) or c:IsFusionSetCard(0x568)
+	else
+		return c:IsSetCard(0x1048) or c:IsSetCard(0x1073) or c:IsSetCard(0x568)
+	end
+end
 
 -- Cat キャット (list to update)
 -- Cat Shark/Nekogal #2/Mimicat
