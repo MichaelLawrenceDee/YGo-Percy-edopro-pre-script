@@ -9,14 +9,14 @@ function c511000294.initial_effect(c)
 	e1:SetCode(EFFECT_DISABLE)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetTargetRange(0,LOCATION_MZONE)
-	e1:SetTarget(c511000294.negfilter)
+	e1:SetTarget(aux.TargetBoolFunction(Card.IsC))
 	c:RegisterEffect(e1)
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_FIELD)
 	e3:SetCode(EFFECT_CANNOT_ATTACK)
 	e3:SetRange(LOCATION_MZONE)
 	e3:SetTargetRange(0,LOCATION_MZONE)
-	e3:SetTarget(c511000294.negfilter)
+	e3:SetTarget(aux.TargetBoolFunction(Card.IsC))
 	c:RegisterEffect(e3)
 	--Destroy replace
 	local e4=Effect.CreateEffect(c)
@@ -63,10 +63,24 @@ function c511000294.initial_effect(c)
 	e8:SetLabel(c:GetOriginalCode())
 	e8:SetLabelObject(e5)
 	c:RegisterEffect(e8)
+	if not c511000294.global_check then
+		c511000294.global_check=true
+		local ge2=Effect.CreateEffect(c)
+		ge2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		ge2:SetCode(EVENT_ADJUST)
+		ge2:SetCountLimit(1)
+		ge2:SetProperty(EFFECT_FLAG_NO_TURN_RESET)
+		ge2:SetOperation(c511000294.archchk)
+		Duel.RegisterEffect(ge2,0)
+	end
 end
 c511000294.xyz_number=1000
-function c511000294.negfilter(e,c)
-	return c:IsSetCard(0x1048) or c:IsSetCard(0x1073) or c:IsCode(511000296)
+function c511000294.archchk(e,tp,eg,ep,ev,re,r,rp)
+	if Duel.GetFlagEffect(0,420)==0 then 
+		Duel.CreateToken(tp,420)
+		Duel.CreateToken(1-tp,420)
+		Duel.RegisterFlagEffect(0,420,0,0,0)
+	end
 end
 function c511000294.repfilter(c)
 	return not c:IsStatus(STATUS_DESTROY_CONFIRMED+STATUS_BATTLE_DESTROYED)
@@ -94,10 +108,11 @@ function c511000294.descost(e,tp,eg,ep,ev,re,r,rp,chk)
 	e:GetHandler():RemoveOverlayCard(tp,1,1,REASON_COST)
 end
 function c511000294.desfilter(c,e,tp)
-	return Duel.IsExistingMatchingCard(c511000294.xyzfilter,c:GetControler(),LOCATION_EXTRA,0,1,nil,e,tp)
+	return Duel.IsExistingMatchingCard(c511000294.xyzfilter,c:GetControler(),LOCATION_EXTRA,0,1,nil,e,tp,c)
 end
-function c511000294.xyzfilter(c,e,tp)
-	return (c:IsSetCard(0x1048) or c:IsSetCard(0x1073) or c:IsCode(511000296)) and c:IsCanBeSpecialSummoned(e,0,tp,true,false)
+function c511000294.xyzfilter(c,e,tp,dc)
+	return c:IsC() and c:IsCanBeSpecialSummoned(e,0,tp,true,false) 
+		and Duel.GetLocationCountFromEx(tp,tp,dc,c)>0
 end
 function c511000294.destg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and c511000294.desfilter(chkc,e,tp) end
@@ -117,7 +132,7 @@ function c511000294.desop(e,tp,eg,ep,ev,re,r,rp)
 				local g2=Duel.GetFieldGroup(tp,0,LOCATION_EXTRA)
 				Duel.ConfirmCards(tp,g2)
 			end
-			local g=Duel.SelectMatchingCard(tp,c511000294.xyzfilter,p,LOCATION_EXTRA,0,1,1,nil,e,tp)
+			local g=Duel.SelectMatchingCard(tp,c511000294.xyzfilter,p,LOCATION_EXTRA,0,1,1,nil,e,tp,tc)
 			if g:GetCount()>0 then
 				Duel.SpecialSummon(g,0,tp,p,true,false,POS_FACEUP)
 			end
