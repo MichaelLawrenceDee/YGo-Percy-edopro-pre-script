@@ -9,12 +9,7 @@ function c511015105.initial_effect(c)
 	e1:SetCost(c511015105.cost)
 	e1:SetTarget(c511015105.target)
 	e1:SetOperation(c511015105.activate)
-	c:RegisterEffect(e1)	
-	--remain field
-	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_SINGLE)
-	e2:SetCode(EFFECT_REMAIN_FIELD)
-	c:RegisterEffect(e2)
+	c:RegisterEffect(e1)
 	Duel.AddCustomActivityCounter(511015105,ACTIVITY_SPSUMMON,c511015105.counterfilter)
 end
 function c511015105.counterfilter(c)
@@ -34,29 +29,29 @@ function c511015105.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	e1:SetTarget(c511015105.splimit)
 	Duel.RegisterEffect(e1,tp)
 end
-
 function c511015105.filter1(c,e,tp)
 	return c:IsCode(16178681) and c:IsFaceup() and c:IsCanBeSpecialSummoned(e,0,tp,false,false) 
 		and Duel.IsExistingTarget(c511015105.filter2,tp,LOCATION_GRAVE,0,1,nil,e,tp,c)
 end
 function c511015105.filter2(c,e,tp,odd)
-	return c:IsType(TYPE_SYNCHRO) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and not c:IsType(TYPE_TUNER)
+	return c:IsType(TYPE_SYNCHRO) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 		and Duel.IsExistingMatchingCard(c511015105.filter3,tp,LOCATION_EXTRA,0,1,odd,e,tp,c,odd)
 end
 function c511015105.filter3(c,e,tp,syn,odd)
+	if not c:IsType(TYPE_PENDULUM) then return false end
 	local e1=Effect.CreateEffect(e:GetHandler())
 	e1:SetType(EFFECT_TYPE_SINGLE)
 	e1:SetCode(EFFECT_CHANGE_LEVEL)
 	e1:SetValue(1)
-	e1:SetReset(RESET_CHAIN)
+	e1:SetReset(RESET_EVENT+0x1fe0000)
 	odd:RegisterEffect(e1)
 	local e2=Effect.CreateEffect(e:GetHandler())
 	e2:SetType(EFFECT_TYPE_SINGLE)
 	e2:SetCode(EFFECT_ADD_TYPE)
-	e2:SetReset(RESET_CHAIN)
+	e2:SetReset(RESET_EVENT+0x1fe0000)
 	e2:SetValue(TYPE_TUNER)
 	odd:RegisterEffect(e2)
-	local result = c:IsSynchroSummonable(nil,Group.FromCards(syn,odd))
+	local result=c:IsSynchroSummonable(nil,Group.FromCards(syn,odd))
 	e1:Reset()
 	e2:Reset()
 	return result
@@ -65,7 +60,8 @@ function c511015105.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local ect=c29724053 and Duel.IsPlayerAffectedByEffect(tp,29724053) and c29724053[tp]
 	if chkc then return false end
 	if chk==0 then return not Duel.IsPlayerAffectedByEffect(tp,59822133) and Duel.IsPlayerCanSpecialSummonCount(tp,2) 
-		and (not ect or ect>=2) and Duel.GetLocationCount(tp,LOCATION_MZONE)>1 
+		and (not ect or ect>=2) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 
+		and Duel.GetLocationCountFromEx(tp)>0 and Duel.GetUsableMZoneCount(tp)>1 
 		and Duel.IsExistingTarget(c511015105.filter1,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local c1=Duel.SelectTarget(tp,c511015105.filter1,tp,LOCATION_EXTRA,0,1,1,nil,e,tp):GetFirst()
@@ -75,7 +71,8 @@ function c511015105.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 function c511015105.activate(e,tp,eg,ep,ev,re,r,rp)
 	local ect=c29724053 and Duel.IsPlayerAffectedByEffect(tp,29724053) and c29724053[tp]
-	if Duel.IsPlayerAffectedByEffect(tp,59822133) or Duel.GetLocationCount(tp,LOCATION_MZONE)<=1 then return false end
+	if Duel.IsPlayerAffectedByEffect(tp,59822133) or Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 
+		or Duel.GetLocationCountFromEx(tp)<=0 or Duel.GetUsableMZoneCount(tp)<=1 then return false end
 	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS)
 	local sg=g:Filter(Card.IsRelateToEffect,nil,e)
 	local tc=sg:GetFirst()
@@ -94,12 +91,12 @@ function c511015105.activate(e,tp,eg,ep,ev,re,r,rp)
 			e1:SetType(EFFECT_TYPE_SINGLE)
 			e1:SetCode(EFFECT_CHANGE_LEVEL)
 			e1:SetValue(1)
-			e1:SetReset(RESET_CHAIN)
+			e1:SetReset(RESET_EVENT+0x1fe0000)
 			tc:RegisterEffect(e1)
 			local e2=Effect.CreateEffect(e:GetHandler())
 			e2:SetType(EFFECT_TYPE_SINGLE)
 			e2:SetCode(EFFECT_ADD_TYPE)
-			e2:SetReset(RESET_CHAIN)
+			e2:SetReset(RESET_EVENT+0x1fe0000)
 			e2:SetValue(TYPE_TUNER)
 			tc:RegisterEffect(e2)
 		end
@@ -107,50 +104,49 @@ function c511015105.activate(e,tp,eg,ep,ev,re,r,rp)
 	end
 	Duel.SpecialSummonComplete()
 	Duel.BreakEffect()
-	local g=Duel.GetMatchingGroup(Card.IsSynchroSummonable,tp,LOCATION_EXTRA,0,nil,nil,sg)
+	local g=Duel.GetMatchingGroup(function(sc) return sc:IsType(TYPE_PENDULUM) and sc:IsSynchroSummonable(nil,sg) end,tp,LOCATION_EXTRA,0,nil)
 	if g:GetCount()>0 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-		local sg=g:Select(tp,1,1,nil)
-		Duel.SynchroSummon(tp,sg:GetFirst(),nil,sg)
+		local sc=g:Select(tp,1,1,nil):GetFirst()
+		Duel.SynchroSummon(tp,sc,nil,sg)
 		local c=e:GetHandler()
-		if not c:IsRelateToEffect(e) then return end
+		if not c:IsRelateToEffect(e) or not e:IsHasType(EFFECT_TYPE_ACTIVATE) then return end
+		c:CancelToGrave()
 		local e1=Effect.CreateEffect(c)
-		e1:SetType(EFFECT_TYPE_TRIGGER_F+EFFECT_TYPE_FIELD)
-		e1:SetProperty(EFFECT_FLAG_DELAY)
+		e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
+		e1:SetType(EFFECT_TYPE_TRIGGER_O+EFFECT_TYPE_FIELD)
+		e1:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
 		e1:SetRange(LOCATION_SZONE)
 		e1:SetCode(EVENT_LEAVE_FIELD)
 		e1:SetCondition(c511015105.descon)
-		e1:SetCost(c511015105.descost)
+		e1:SetTarget(c511015105.destg)
 		e1:SetOperation(c511015105.desop)
 		e1:SetReset(RESET_EVENT+0x1fe0000)
-		e1:SetLabelObject(sg:GetFirst())
+		e1:SetLabelObject(sc)
 		c:RegisterEffect(e1)
 	end
 end
 function c511015105.descon(e,tp,eg,ep,ev,re,r,rp)
 	local tc=e:GetLabelObject()
-	return tc and eg:IsContains(tc) 
+	return tc and eg:IsContains(tc) and tc:IsReason(REASON_DESTROY)
 end
 function c511015105.thfilter(c)
 	return c:IsAbleToHand() and c:IsCode(511015106)
 end
-function c511015105.descost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return true end
-	if e:GetLabelObject():IsReason(REASON_DESTROY) and Duel.IsExistingMatchingCard(c511015105.thfilter,tp,LOCATION_DECK,0,1,nil)
-		and e:GetHandler():IsAbleToGrave() and Duel.SelectYesNo(tp,aux.Stringid(511015105,0)) then
-		Duel.SendtoGrave(e:GetHandler(),REASON_COST)
-		e:GetHandler():RegisterFlagEffect(511015105,RESET_EVENT+EVENT_CHAIN_END+RESET_PHASE+PHASE_END,0,1)
-	end
+function c511015105.destg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return e:GetHandler():IsAbleToGrave() 
+		and Duel.IsExistingMatchingCard(c511015105.thfilter,tp,LOCATION_DECK,0,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,e:GetHandler(),1,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 function c511015105.desop(e,tp,eg,ep,ev,re,r,rp)
-	if e:GetHandler():GetFlagEffect(511015105)~=0 then
+	local c=e:GetHandler()
+	if c:IsRelateToEffect(e) and Duel.SendtoGrave(c,REASON_EFFECT)~=0 and c:IsLocation(LOCATION_GRAVE) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 		local g=Duel.SelectMatchingCard(tp,c511015105.thfilter,tp,LOCATION_DECK,0,1,1,nil)
 		if g:GetCount()>0 then
 			Duel.SendtoHand(g,nil,REASON_EFFECT)
 			Duel.ConfirmCards(1-tp,g)
 		end
-	else
-		Duel.SendtoGrave(e:GetHandler(),REASON_EFFECT)
 	end
 end

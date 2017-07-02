@@ -59,16 +59,33 @@ end
 function c511009528.cfilter(c)
 	return c:IsFaceup() and c:IsCode(13331639)
 end
+function c511009528.costfilter(c,tp,sg,tc)
+	if not c:IsSetCard(0x20f8) then return false end
+	sg:AddCard(c)
+	local res
+	if sg:GetCount()<2 then
+		res=Duel.CheckReleaseGroup(tp,c511009528.costfilter,1,sg,tp,sg,tc)
+	else
+		res=Duel.GetLocationCountFromEx(tp,tp,sg,tc)>0
+	end
+	sg:RemoveCard(c)
+	return res
+end
 function c511009528.spcon(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
 	return eg:IsExists(c511009528.spfilter,1,nil,tp) and Duel.IsExistingMatchingCard(c511009528.cfilter,tp,LOCATION_MZONE,0,1,nil)
-		and Duel.CheckReleaseGroup(tp,Card.IsSetCard,2,nil,0x20f8) and e:GetHandler():IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,true)
+		and Duel.CheckReleaseGroup(tp,c511009528.costfilter,1,nil,tp,Group.CreateGroup(),c) and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,true)
 end
 function c511009528.spop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if Duel.CheckReleaseGroup(tp,Card.IsSetCard,2,nil,0x20f8) and e:GetHandler():IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,true) 
+	local sg=Group.CreateGroup()
+	if Duel.CheckReleaseGroup(tp,c511009528.costfilter,1,nil,tp,sg,c) and e:GetHandler():IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,true) 
 		and Duel.SelectYesNo(tp,aux.Stringid(4003,6)) then
-		local g=Duel.SelectReleaseGroup(tp,Card.IsSetCard,2,2,nil,0x20f8)
-		Duel.Release(g,REASON_COST)
+		while sg:GetCount()<2 do
+			local g=Duel.SelectReleaseGroup(tp,c511009528.costfilter,1,1,sg,tp,sg,c)
+			sg:Merge(g)
+		end
+		Duel.Release(sg,REASON_COST)
 		Duel.SpecialSummon(c,SUMMON_TYPE_FUSION,tp,tp,false,true,POS_FACEUP)
 		c:CompleteProcedure()
 	end
@@ -118,8 +135,9 @@ function c511009528.spfilter2(c,e,tp)
 	return c:IsFaceup() and c:IsSetCard(0x20f8) and c:IsType(TYPE_PENDULUM) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function c511009528.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return not Duel.IsPlayerAffectedByEffect(tp,59822133)
-		and Duel.GetLocationCount(tp,LOCATION_MZONE)>1 and e:GetHandler():GetFlagEffect(511009528)==0
+	local ect=c29724053 and Duel.IsPlayerAffectedByEffect(tp,29724053) and c29724053[tp]
+	if chk==0 then return not Duel.IsPlayerAffectedByEffect(tp,59822133) and (not ect or ect>=2)
+		and Duel.GetLocationCountFromEx(tp,tp,e:GetHandler())>1 and e:GetHandler():GetFlagEffect(511009528)==0
 		and Duel.IsExistingMatchingCard(c511009528.spfilter2,tp,LOCATION_EXTRA,0,2,nil,e,tp) end
 	e:GetHandler():RegisterFlagEffect(511009528,RESET_CHAIN,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,2,tp,LOCATION_EXTRA)
@@ -128,7 +146,7 @@ function c511009528.filter(c)
 	return c:IsFaceup() and c:IsType(TYPE_FUSION)
 end
 function c511009528.spop2(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.IsPlayerAffectedByEffect(tp,59822133) or Duel.GetLocationCount(tp,LOCATION_MZONE)<2 then return end
+	if Duel.IsPlayerAffectedByEffect(tp,59822133) or (ect and ect<2) or Duel.GetLocationCountFromEx(tp)<2 then return end
 	local g=Duel.GetMatchingGroup(c511009528.spfilter2,tp,LOCATION_EXTRA,0,nil,e,tp)
 	if g:GetCount()>=2 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)

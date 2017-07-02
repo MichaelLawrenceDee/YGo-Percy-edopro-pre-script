@@ -96,19 +96,19 @@ function c511015112.pfusop(e,tp,eg,ep,ev,re,r,rp)
 end
 function c511015112.mfusfilter1(c,e)
 	local seq=c:GetSequence()
-	return (seq==6 or seq==7) and c:IsCanBeFusionMaterial() and (not e or not c:IsImmuneToEffect(e))
+	return c:IsCanBeFusionMaterial() and (not e or not c:IsImmuneToEffect(e))
 end
 function c511015112.mfusfilter2(c,e,tp,m,f,gc)
 	return c:IsType(TYPE_FUSION) and (not f or f(c)) and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,false) 
 		and m:IsExists(c511015112.mfusfilter3,1,nil,gc,c,tp)
 end
 function c511015112.mfusfilter3(c,gc,fusc)
-	return fusc:CheckFusionMaterial(Group.FromCards(c),gc,tp)
+	return fusc:CheckFusionMaterial(Group.FromCards(c,gc),gc,tp)
 end
 function c511015112.mfustg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then
-		local mg1=Duel.GetMatchingGroup(c511015112.mfusfilter1,tp,LOCATION_SZONE,0,nil)
+		local mg1=Duel.GetMatchingGroup(c511015112.mfusfilter1,tp,LOCATION_PZONE,0,nil)
 		local res=Duel.IsExistingMatchingCard(c511015112.mfusfilter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,mg1,nil,c)
 		if not res then
 			local ce=Duel.GetChainMaterial(tp)
@@ -126,7 +126,7 @@ end
 function c511015112.mfusop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if c:IsControler(1-tp) or not c:IsRelateToEffect(e) or c:IsImmuneToEffect(e) then return end
-	local mg1=Duel.GetMatchingGroup(c511015112.mfusfilter1,tp,LOCATION_SZONE,0,nil,e)
+	local mg1=Duel.GetMatchingGroup(c511015112.mfusfilter1,tp,LOCATION_PZONE,0,nil,e)
 	local sg1=Duel.GetMatchingGroup(c511015112.mfusfilter2,tp,LOCATION_EXTRA,0,nil,e,tp,mg1,nil,c)
 	local mg2=nil
 	local sg2=nil
