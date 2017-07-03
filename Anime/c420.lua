@@ -1235,7 +1235,7 @@ end
 
 -- Statue (not finished) スタチュー
 c420.OCGStatue={
-	
+	75209824,3129635,49514333,9197735
 }
 function Card.IsStatue(c,fbool)
 	if fbool then
