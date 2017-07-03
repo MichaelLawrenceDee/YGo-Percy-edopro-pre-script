@@ -238,9 +238,9 @@ end
 -- Clear Vice Dragon/Clear World
 function Card.IsClear(c,fbool)
 	if fbool then
-		return c:IsFusionSetCard(0x510) or c:IsFusionCode(97811903,82044279)
+		return c:IsFusionSetCard(0x510) or c:IsFusionCode(97811903,82044279,33900648)
 	else
-		return c:IsSetCard(0x510) or c:IsCode(97811903,82044279)
+		return c:IsSetCard(0x510) or c:IsCode(97811903,82044279,33900648)
 	end
 end
 
