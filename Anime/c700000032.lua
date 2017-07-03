@@ -2,7 +2,7 @@
 --Thorn Observer - Zuma
 function c700000032.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,nil,1,1,aux.NonTuner(Card.IsSetCard,0x513),1,1)
+	aux.AddSynchroProcedure(c,nil,1,1,aux.NonTuner(Card.IsSetCard,0x556),1,1)
 	c:EnableReviveLimit()
 	--Place Counter
 	local e1=Effect.CreateEffect(c)

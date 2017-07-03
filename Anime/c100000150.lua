@@ -31,7 +31,7 @@ function c100000150.initial_effect(c)
 	e5:SetType(EFFECT_TYPE_SINGLE)
 	e5:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e5:SetCode(EFFECT_ADD_SETCODE)
-	e5:SetValue(0x301)
+	e5:SetValue(0x601)
 	c:RegisterEffect(e5)
 	--Randomizer
 	local e6=Effect.CreateEffect(c)

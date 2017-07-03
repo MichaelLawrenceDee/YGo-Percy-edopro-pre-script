@@ -165,7 +165,7 @@ function c511000817.initial_effect(c)
 	e26:SetType(EFFECT_TYPE_SINGLE)
 	e26:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e26:SetCode(EFFECT_ADD_SETCODE)
-	e26:SetValue(0x301)
+	e26:SetValue(0x601)
 	c:RegisterEffect(e26)
 end
 function c511000817.sumlimit(e,c,sump,sumtype,sumpos,targetp)

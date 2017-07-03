@@ -14,11 +14,10 @@ end
 function c511000593.con(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetAttacker()
 	local at=Duel.GetAttackTarget()
-	return Duel.GetBattleDamage(tp)>0 and (tc:IsSetCard(0x1202) or (at and at:IsSetCard(0x1202)))
+	return Duel.GetBattleDamage(tp)>0 and (tc:IsSetCard(0x155d) or (at and at:IsSetCard(0x155d)))
 end
 function c511000593.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return not Duel.IsPlayerAffectedByEffect(e:GetHandlerPlayer(),69832741) 
-		and e:GetHandler():IsAbleToRemoveAsCost() end
+	if chk==0 then return e:GetHandler():IsAbleToRemoveAsCost() end
 	Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_COST)
 end
 function c511000593.op(e,tp,eg,ep,ev,re,r,rp)

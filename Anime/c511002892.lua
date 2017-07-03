@@ -12,8 +12,7 @@ function c511002892.initial_effect(c)
 	c:RegisterEffect(e1)
 end
 function c511002892.rmfilter(c)
-	if (not c:IsCode(33695750,50074522,17285476) and not c:IsSetCard(0x21d)) 
-		or not c:IsType(TYPE_MONSTER) or not c:IsAbleToRemove() then return false end
+	if not c:IsSetCard(0x536) or not c:IsType(TYPE_MONSTER) or not c:IsAbleToRemove() then return false end
 	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
 		return c:IsFaceup() and c:IsLocation(LOCATION_MZONE)
 	else

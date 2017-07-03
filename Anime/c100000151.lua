@@ -19,7 +19,7 @@ function c100000151.initial_effect(c)
 	e3:SetType(EFFECT_TYPE_SINGLE)
 	e3:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e3:SetCode(EFFECT_ADD_SETCODE)
-	e3:SetValue(0x301)
+	e3:SetValue(0x601)
 	c:RegisterEffect(e3)
 end
 function c100000151.filter(c,e,tp)

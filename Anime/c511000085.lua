@@ -8,6 +8,23 @@ function c511000085.initial_effect(c)
 	e1:SetTarget(c511000085.target)
 	e1:SetOperation(c511000085.operation)
 	c:RegisterEffect(e1)
+	if not c511000085.global_check then
+		c511000085.global_check=true
+		local ge2=Effect.CreateEffect(c)
+		ge2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		ge2:SetCode(EVENT_ADJUST)
+		ge2:SetCountLimit(1)
+		ge2:SetProperty(EFFECT_FLAG_NO_TURN_RESET)
+		ge2:SetOperation(c511000085.archchk)
+		Duel.RegisterEffect(ge2,0)
+	end
+end
+function c511000085.archchk(e,tp,eg,ep,ev,re,r,rp)
+	if Duel.GetFlagEffect(0,420)==0 then 
+		Duel.CreateToken(tp,420)
+		Duel.CreateToken(1-tp,420)
+		Duel.RegisterFlagEffect(0,420,0,0,0)
+	end
 end
 function c511000085.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	e:SetLabel(1)
@@ -15,16 +32,11 @@ function c511000085.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function c511000085.filter(c,tp)
 	local mi,ma=c:GetTributeRequirement()
-	return c:GetLevel()>4 and (c:IsCode(97811903,82044279) or c:IsSetCard(0x306))
-		and Duel.IsExistingMatchingCard(c511000085.rfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,mi,nil) and not c:IsPublic()
+	return c:GetLevel()>4 and c:IsClear()
+		and Duel.IsExistingMatchingCard(c511000085.rfilter,tp,LOCATION_GRAVE,0,mi,nil) and not c:IsPublic()
 end
 function c511000085.rfilter(c)
-	if not c:IsType(TYPE_MONSTER) or (not c:IsCode(97811903,82044279) and not c:IsSetCard(0x306)) or not c:IsAbleToRemoveAsCost() then return false end
-	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
-		return c:IsFaceup() and c:IsLocation(LOCATION_MZONE)
-	else
-		return c:IsLocation(LOCATION_GRAVE)
-	end
+	return c:IsType(TYPE_MONSTER) and c:IsClear() and c:IsAbleToRemoveAsCost()
 end
 function c511000085.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
@@ -37,7 +49,7 @@ function c511000085.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.ShuffleHand(tp)
 	local mi,ma=tc:GetTributeRequirement()
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local rg=Duel.SelectMatchingCard(tp,c511000085.rfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,mi,ma,nil)
+	local rg=Duel.SelectMatchingCard(tp,c511000085.rfilter,tp,LOCATION_GRAVE,0,mi,ma,nil)
 	Duel.Remove(rg,POS_FACEUP,REASON_COST)
 	Duel.SetTargetCard(tc)
 end

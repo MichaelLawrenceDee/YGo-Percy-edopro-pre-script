@@ -43,7 +43,7 @@ function c100000155.initial_effect(c)
 	e6:SetType(EFFECT_TYPE_SINGLE)
 	e6:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e6:SetCode(EFFECT_ADD_SETCODE)
-	e6:SetValue(0x301)
+	e6:SetValue(0x601)
 	c:RegisterEffect(e6)
 end
 function c100000155.aclimit(e,re,tp)
