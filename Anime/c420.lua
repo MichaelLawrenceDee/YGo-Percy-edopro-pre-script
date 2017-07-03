@@ -749,19 +749,30 @@ end
 -- Paladin of the Cursed Dragon/Dark Magician Knight/Blade Knight
 -- Penguin Knight/Nightmare Penguin/Seiyaryu/Avenging Knight Parshath
 -- Dragon Master Knight/Mermaid Knight/Midnight Fiend
--- Super Roboyarou
+-- Super Roboyarou,Red-Eyes Metal Knight Gearfried
 
 -- TellarKnight/Igknight/Gem-Knight
 c420.OCGKnight={
-	
+	24435369,83678433,1412158,85651167,89494469,39303359,36151751,14553285,95291684,35052053,
+	71341529,66516792,18036057,652362,72837335,19353570,24291651,64788463,92821268,55204071,
+	35950025,11287364,49217579,30936186,33413638,49217579,21843307,10375182,85827713,58383100,
+	55291359,32696942,86952477,9603356,78700060,51126152,44364207,90876561,60410769,15653824,
+	97896503,57902462,80538728,86039057,18444902,78422252,5998840,48210156,1826676,38109772,
+	16226786,36107810,85346853,71408082,73398797,89882100,15767889,88724332,88643173,51838385,
+	42956963,59290628,78402798,6150044,31924889,359563,72926163,40391316,12744567,97204936,
+	21249921,34116027,900787,80159717,25682811,2191144,85684223,48739166,2986553,31320433,
+	99348756,66661678,52575195,35429292,89731911,68670547,50725996,39507162,36039163,81306586,
+	6740720,69514125,62873545
 }
 function Card.IsKnight(c,fbool)
 	if fbool then
-		return c:IsFusionSetCard(0x530) or c:IsFusionCode(table.unpack(c420.OCGKnight))
+		return c:IsFusionSetCard(0x530) or c:IsFusionSetCard(0x1047) or c:IsFusionSetCard(0x9c) or c:IsFusionSetCard(0xc8) 
+			or c:IsFusionCode(table.unpack(c420.OCGKnight))
 	else
-		return c:IsSetCard(0x530) or c:IsCode(table.unpack(c420.OCGKnight))
+		return c:IsSetCard(0x530) or c:IsSetCard(0x1047) or c:IsSetCard(0x9c) or c:IsSetCard(0xc8) or c:IsCode(table.unpack(c420.OCGKnight))
 	end
 end
+
 -- Koala コアラ 
 c420.OCGKoala={
 	-- Big Koala, Des Koala, Vampire Koala, Sea Koala, Koalo-Koala, Tree Otter
