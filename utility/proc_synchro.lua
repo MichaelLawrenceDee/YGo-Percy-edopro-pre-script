@@ -1127,7 +1127,7 @@ function Auxiliary.DarkSynchroCheck2(sg,card1,card2,plv,nlv,sc,tp,f1,f2,...)
 		c=sg:GetNext()
 	end
 	local reqm={...}
-	if (f1 and not f1(card1)) or (f2 and not f2(card2)) or not card2:IsType(TYPE_TUNER) or not card2:IsSetCard(0x301) then return false end
+	if (f1 and not f1(card1)) or (f2 and not f2(card2)) or not card2:IsType(TYPE_TUNER) or not card2:IsSetCard(0x600) then return false end
 	local lvchk=false
 	if #reqm>0 then
 		for i=1,#reqm do
