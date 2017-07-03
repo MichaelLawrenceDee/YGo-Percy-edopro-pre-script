@@ -33,10 +33,15 @@ end
 function c511000085.filter(c,tp)
 	local mi,ma=c:GetTributeRequirement()
 	return c:GetLevel()>4 and c:IsClear()
-		and Duel.IsExistingMatchingCard(c511000085.rfilter,tp,LOCATION_GRAVE,0,mi,nil) and not c:IsPublic()
+		and Duel.IsExistingMatchingCard(c511000085.rfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,mi,nil) and not c:IsPublic()
 end
 function c511000085.rfilter(c)
-	return c:IsType(TYPE_MONSTER) and c:IsClear() and c:IsAbleToRemoveAsCost()
+	if not c:IsType(TYPE_MONSTER) or not c:IsClear() or not c:IsAbleToRemoveAsCost() then return false end
+	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
+		return c:IsFaceup() and c:IsLocation(LOCATION_MZONE)
+	else
+		return c:IsLocation(LOCATION_GRAVE)
+	end
 end
 function c511000085.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
@@ -49,7 +54,7 @@ function c511000085.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.ShuffleHand(tp)
 	local mi,ma=tc:GetTributeRequirement()
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local rg=Duel.SelectMatchingCard(tp,c511000085.rfilter,tp,LOCATION_GRAVE,0,mi,ma,nil)
+	local rg=Duel.SelectMatchingCard(tp,c511000085.rfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,mi,ma,nil)
 	Duel.Remove(rg,POS_FACEUP,REASON_COST)
 	Duel.SetTargetCard(tc)
 end
