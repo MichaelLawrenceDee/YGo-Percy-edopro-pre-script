@@ -1018,7 +1018,7 @@ end
 -- Baby Raccoon Tantan/Baby Raccoon Ponpoko/Turtle Raccoon
 -- Number 64: Ronin Raccoon Sandayu
 c420.OCGRacoon={
-	
+	92729410,28118128,39972130,39972129,17441953
 }
 function Card.IsRaccoon(c,fbool)
 	if fbool then
