@@ -1101,7 +1101,7 @@ end
 -- The Legendary Fisherman III/The Legendary Fisherman II/Lumina, Twilightsworn Shaman
 -- Neo Flamvell Shaman
 c420.OCGShaman={
-	
+	81003500,10530913,3643300,44968687,19801646,56166150,39761138
 }
 function Card.IsShaman(c,fbool)
 	if fbool then
