@@ -1005,7 +1005,7 @@ end
 -- Puppet Master/Junk Puppet/Puppet Ritual
 -- Puppet King/Puppet Plant
 c420.OCGPuppet={
-	
+	67968069,3167573,41442341,51119924,1969506
 }
 function Card.IsPuppet(c,fbool)
 	if fbool then
@@ -1282,7 +1282,7 @@ c420.OCGTachyon={
 	8038143,59650656
 }
 function Card.IsTachyon(c,fbool)
-	if Card.IsTachyonDragon(c,fbool) then return true end
+	if c:IsTachyonDragon(fbool) then return true end
 	if fbool then
 		return c:IsFusionSetCard(0x555) or c:IsFusionCode(table.unpack(c420.OCGTachyon))
 	else
