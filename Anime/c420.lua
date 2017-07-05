@@ -1127,10 +1127,10 @@ end
 -- Leeching the Light/SZW - Fenrir Sword/Shining Hope Road
 -- Radiant Mirror Force/Number 104: Masquerade/Blue-Eyes Shining Dragon
 c420.OCGShining={
-	22061412,88820235,25366484,62829077,53347303,90263923,12927849,21481146,56832966,86532744,52653092,2061963
+	22061412,88820235,25366484,62829077,53347303,90263923,12927849,21481146,2061963
 }
 function Card.IsShining(c,fbool)
-	if Card.IsNumberS(c,fbool) then return true end
+	if c:IsNumberS(fbool) then return true end
 	if fbool then
 		return c:IsFusionSetCard(0x548) or c:IsFusionCode(table.unpack(c420.OCGShining))
 	else
