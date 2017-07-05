@@ -1009,9 +1009,9 @@ c420.OCGPuppet={
 }
 function Card.IsPuppet(c,fbool)
 	if fbool then
-		return c:IsFusionSetCard(0x540) or c:IsFusionSetCard(0x83) or c:IsFusionCode(table.unpack(c420.OCGPuppet))
+		return c:IsFusionSetCard(0x540) or c:IsFusionSetCard(0x83) or c:IsFusionSetCard(0x152c) or c:IsFusionCode(table.unpack(c420.OCGPuppet))
 	else
-		return c:IsSetCard(0x540) or c:IsSetCard(0x83) or c:IsCode(table.unpack(c420.OCGPuppet))
+		return c:IsSetCard(0x540) or c:IsSetCard(0x83) or c:IsSetCard(0x152c) or c:IsCode(table.unpack(c420.OCGPuppet))
 	end
 end
 
