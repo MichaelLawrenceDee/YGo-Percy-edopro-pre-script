@@ -1,13 +1,12 @@
 --真紅眼の黒刃竜
---Red-Eyes Slash Dragon
---Scripted by Sahim
 function c21140872.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
 	aux.AddFusionProcMix(c,true,true,74677422,aux.FilterBoolFunction(Card.IsRace,RACE_WARRIOR))
-	--Equip
+	--equip
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(21140872,0))
+	e1:SetCategory(CATEGORY_EQUIP)
 	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetCode(EVENT_ATTACK_ANNOUNCE)
@@ -16,7 +15,7 @@ function c21140872.initial_effect(c)
 	e1:SetTarget(c21140872.eqtg)
 	e1:SetOperation(c21140872.eqop)
 	c:RegisterEffect(e1)
-	--Negate
+	--negate
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(21140872,1))
 	e2:SetCategory(CATEGORY_NEGATE+CATEGORY_DESTROY)
@@ -61,6 +60,7 @@ function c21140872.eqtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 		and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_EQUIP)
 	local g=Duel.SelectTarget(tp,c21140872.eqfilter,tp,LOCATION_GRAVE,0,1,1,nil,tp)
+	Duel.SetOperationInfo(0,CATEGORY_EQUIP,g,1,0,0)
 end
 function c21140872.eqop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
@@ -95,7 +95,7 @@ function c21140872.ngcon(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetChainInfo(ev,CHAININFO_TARGET_CARDS)
 	return g and g:IsExists(c21140872.ngcfilter,1,nil,tp) and Duel.IsChainNegatable(ev)
 end
-function c21140872.ngfilter(c,e,tp)
+function c21140872.ngfilter(c)
 	return c:IsType(TYPE_EQUIP) and c:IsAbleToGraveAsCost()
 end
 function c21140872.ngcost(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -107,9 +107,12 @@ end
 function c21140872.ngtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
 	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
+	if re:GetHandler():IsDestructable() and re:GetHandler():IsRelateToEffect(re) then
+		Duel.SetOperationInfo(0,CATEGORY_DESTROY,eg,1,0,0)
+	end
 end
 function c21140872.ngop(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.NegateActivation(ev) then
+	if Duel.NegateActivation(ev) and re:GetHandler():IsRelateToEffect(re) then
 		Duel.Destroy(eg,REASON_EFFECT)
 	end
 end

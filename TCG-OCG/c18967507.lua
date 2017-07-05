@@ -1,6 +1,4 @@
 --鎧獄竜－サイバー・ダークネス・ドラゴン
---Cyberdarkness Dragon
---Scripted by Eerie Code
 function c18967507.initial_effect(c)
 	c:EnableReviveLimit()
 	aux.AddFusionProcMixN(c,true,true,c18967507.matfilter,5)
@@ -36,8 +34,7 @@ function c18967507.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 function c18967507.matfilter(c)
-	return c:IsType(TYPE_EFFECT) and (c:IsFusionSetCard(0x4093)
-		or c:IsFusionCode(40418351,77625948,41230939,3019642))
+	return c:IsType(TYPE_EFFECT) and c:IsFusionSetCard(0x4093)
 end
 function c18967507.splimit(e,se,sp,st)
 	return not e:GetHandler():IsLocation(LOCATION_EXTRA) or aux.fuslimit(e,se,sp,st)

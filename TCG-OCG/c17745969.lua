@@ -1,6 +1,4 @@
 --スーパービークロイド－モビルベース
---Super Vehicroid Mobile Base
---Scripted by Eerie Code
 function c17745969.initial_effect(c)
 	c:EnableReviveLimit()
 	aux.AddFusionProcMix(c,true,true,c17745969.matfilter,aux.FilterBoolFunction(Card.IsFusionSetCard,0x16))
@@ -40,7 +38,7 @@ end
 function c17745969.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local loc=0
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then loc=loc+LOCATION_DECK end
-	if not Duel.GetLocationCountFromEx or Duel.GetLocationCountFromEx(tp)>0 then loc=loc+LOCATION_EXTRA end
+	if Duel.GetLocationCountFromEx(tp)>0 then loc=loc+LOCATION_EXTRA end
 	if chkc then return chkc:IsControler(1-tp) and chkc:IsLocation(LOCATION_MZONE) and c17745969.spfilter1(chkc,e,tp,loc) end
 	if chk==0 then return loc~=0 and Duel.IsExistingTarget(c17745969.spfilter1,tp,0,LOCATION_MZONE,1,nil,e,tp,loc) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
@@ -50,7 +48,7 @@ end
 function c17745969.spop(e,tp,eg,ep,ev,re,r,rp)
 	local loc=0
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then loc=loc+LOCATION_DECK end
-	if not Duel.GetLocationCountFromEx or Duel.GetLocationCountFromEx(tp)>0 then loc=loc+LOCATION_EXTRA end
+	if Duel.GetLocationCountFromEx(tp)>0 then loc=loc+LOCATION_EXTRA end
 	local tc=Duel.GetFirstTarget()
 	if loc~=0 and tc:IsRelateToEffect(e) and tc:IsFaceup() then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
@@ -61,7 +59,7 @@ function c17745969.spop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c17745969.mvfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0x16) and c:IsAbleToHand() and c:GetSequence()<4
+	return c:IsFaceup() and c:IsSetCard(0x16) and c:IsAbleToHand() and c:GetSequence()<5
 end
 function c17745969.mvtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_MZONE) and c17745969.mvfilter(chkc) end
