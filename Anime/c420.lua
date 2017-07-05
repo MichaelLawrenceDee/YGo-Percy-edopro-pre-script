@@ -991,7 +991,7 @@ end
 -- Priestess with Eyes of Blue/Maiden of the Aqua/Winda, Priestess of Gusto
 -- Star Grail-Bearing Priestess/Ariel, Priestess of the Nekroz/Gravekeeper's Priestess
 c420.OCGPriestess={
-	
+	95511642,56827051,3381441,36734924,54455435,17214465,27107590
 }
 function Card.IsPriestess(c,fbool)
 	if fbool then
