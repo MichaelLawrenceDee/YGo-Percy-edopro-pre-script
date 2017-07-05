@@ -435,24 +435,18 @@ function Auxiliary.SynchroCheckHand(c,sg)
 end
 function Auxiliary.SynchroCheckP43(tsg,ntsg,sg,lv,sc,tp)
 	if sg:IsExists(Auxiliary.SynchroCheckHand,1,nil,sg) then return false end
-	local c=sg:GetFirst()
-	while c do
+	for c in aux.Next(sg) do
 		if c:IsHasEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK) then
 			local teg={c:GetCardEffect(EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)}
 			local hanchk=false
-			for i=1,#teg do
-				local te=teg[i]
-				local tgchk=te:GetTarget()
-				local res=tgchk(te,c,sg,Group.CreateGroup(),Group.CreateGroup(),tsg,ntsg)
-				--if not res then return false end
-				if res then
+			for _,te in ipairs(teg) do
+				if te:GetTarget()(te,c,sg,Group.CreateGroup(),Group.CreateGroup(),tsg,ntsg) then
 					hanchk=true
 					break
 				end
 			end
 			if not hanchk then return false end
 		end
-		c=sg:GetNext()
 	end
 	local lvchk=false
 	if sg:IsExists(Card.IsHasEffect,1,nil,EFFECT_SYNCHRO_MATERIAL_CUSTOM) then
