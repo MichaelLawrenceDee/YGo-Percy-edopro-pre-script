@@ -974,7 +974,8 @@ end
 -- Fairy King Truesdale/Fairy Knight Ingunar/Fairy's Gift/
 -- Fairy Wind/Ancient Pixie Dragon
 c420.OCGPixie={
-	
+	44663232,81563416,91559748,8687195,85239662,21893603,90925163,58753372,44125452,42921475,52022648,
+	55623480,86937530,45425051,28290705,19684740,68401546,73507661,4179255
 }
 function Card.IsPixie(c,fbool)
 	if fbool then
