@@ -109,8 +109,9 @@ function c700000034.activate(e,tp,eg,ep,ev,re,r,rp)
 	local matg=Group.CreateGroup()
 	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
 	local ftt=Duel.GetUsableMZoneCount(tp)
+	local ftex
 	while rsg:GetCount()<maxc do
-		local ftex=Duel.GetLocationCountFromEx(tp,tp,rsg)
+		ftex=Duel.GetLocationCountFromEx(tp,tp,rsg)
 		local cancel=rsg:GetCount()>0 and mg:IsExists(c700000034.matchk,1,rsg,mg,rsg,rsg:GetCount(),matg,fc,ft,ftex,ftt,tp)
 		local g=rg:Filter(c700000034.rmfilterchk,rsg,mg,rg,fc,minc,maxc,rsg,ft,ftt,tp)
 		if g:GetCount()<=0 then break end
@@ -121,7 +122,7 @@ function c700000034.activate(e,tp,eg,ep,ev,re,r,rp)
 			rsg:RemoveCard(tc)
 			if tc:IsLocation(LOCATION_MZONE) then
 				ftt=ftt-1
-				if c:GetSequence()<5 then
+				if tc:GetSequence()<5 then
 					ft=ft-1
 				end
 			end
@@ -129,12 +130,13 @@ function c700000034.activate(e,tp,eg,ep,ev,re,r,rp)
 			rsg:AddCard(tc)
 			if tc:IsLocation(LOCATION_MZONE) then
 				ftt=ftt+1
-				if c:GetSequence()<5 then
+				if tc:GetSequence()<5 then
 					ft=ft+1
 				end
 			end
 		end
 	end
+	ftex=Duel.GetLocationCountFromEx(tp,tp,rsg)
 	local ct=Duel.Remove(rsg,POS_FACEUP,REASON_EFFECT)
 	if ct<rsg:GetCount() then return end
 	mg:Sub(rsg)
