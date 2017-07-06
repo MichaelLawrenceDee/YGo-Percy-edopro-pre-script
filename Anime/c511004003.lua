@@ -48,49 +48,48 @@ end
 function c511004003.activate(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(c511004003.fil2,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
 	local g1=Duel.GetMatchingGroup(c511004003.fil,tp,0xff,0xff,g)
-	if g:GetCount()>0 then
-		local tc=g:GetFirst()
-		while tc do
-			loc,pos,p,seq,pzone=c511004003.GetInfos(tc)
-			if bit.band(loc,LOCATION_DECK)~=0 or (bit.band(loc,LOCATION_EXTRA)~=0 and bit.band(pos,POS_FACEDOWN)~=0) then
-				Duel.SendtoDeck(tc,p,2,REASON_EFFECT)
-			elseif bit.band(loc,LOCATION_HAND)~=0 then
-				Duel.SendtoHand(tc,p,REASON_EFFECT)
-			elseif bit.band(loc,LOCATION_MZONE+LOCATION_SZONE)~=0 then
-				local seq2=0
-				if pzone then
-					loc=LOCATION_PZONE
-					if seq==4 or seq==7 then
-						seq2=1
-					end
-				else
-					seq2=seq
+	local e1=Effect.CreateEffect(e:GetHandler())
+	e1:SetType(EFFECT_TYPE_FIELD)
+	e1:SetCode(EFFECT_BECOME_LINKED_ZONE)
+	e1:SetValue(0xffffff)
+	Duel.RegisterEffect(e1,tp)
+	for tc in aux.Next(g) do
+		loc,pos,p,seq,pzone=c511004003.GetInfos(tc)
+		if bit.band(loc,LOCATION_DECK)~=0 or (bit.band(loc,LOCATION_EXTRA)~=0 and bit.band(pos,POS_FACEDOWN)~=0) then
+			Duel.SendtoDeck(tc,p,2,REASON_EFFECT)
+		elseif bit.band(loc,LOCATION_HAND)~=0 then
+			Duel.SendtoHand(tc,p,REASON_EFFECT)
+		elseif bit.band(loc,LOCATION_MZONE+LOCATION_SZONE)~=0 then
+			local seq2=0
+			if pzone then
+				loc=LOCATION_PZONE
+				if seq==4 or seq==7 then
+					seq2=1
 				end
-				if Duel.MoveToField(tc,tp,p,loc,pos,true,bit.lshift(1,seq2))==0 then
-					Duel.ChangePosition(tc,pos)
-					Duel.MoveSequence(tc,seq2)
-				end
-			elseif bit.band(loc,LOCATION_GRAVE)~=0 then
-				Duel.SendtoGrave(tc,REASON_EFFECT)
-			elseif bit.band(loc,LOCATION_REMOVED)~=0 then
-				Duel.Remove(tc,p,REASON_EFFECT)
-			elseif bit.band(loc,LOCATION_EXTRA)~=0 then
-				Duel.SendtoExtraP(tc,p,REASON_EFFECT)
+			else
+				seq2=seq
 			end
-			tc=g:GetNext()
+			if Duel.MoveToField(tc,tp,p,loc,pos,true,bit.lshift(1,seq2))==0 then
+				Duel.ChangePosition(tc,pos)
+				Duel.MoveSequence(tc,seq2)
+			end
+		elseif bit.band(loc,LOCATION_GRAVE)~=0 then
+			Duel.SendtoGrave(tc,REASON_EFFECT)
+		elseif bit.band(loc,LOCATION_REMOVED)~=0 then
+			Duel.Remove(tc,p,REASON_EFFECT)
+		elseif bit.band(loc,LOCATION_EXTRA)~=0 then
+			Duel.SendtoExtraP(tc,p,REASON_EFFECT)
 		end
 	end
-	if g1:GetCount()>0 then
-		local tc=g1:GetFirst()
-		while tc do
-			local loc,pos,p,seq=c511004003.GetInfos(tc)
-			if not Duel.GetFieldCard(p,loc,seq) then
-				Duel.SpecialSummonStep(tc,0,tp,p,true,true,pos,bit.lshift(1,seq))~=0
-			end
-			tc=g1:GetNext()
+	for tc in aux.Next(g1) do
+		local loc,pos,p,seq=c511004003.GetInfos(tc)
+		if not Duel.GetFieldCard(p,loc,seq) then
+			Duel.SpecialSummonStep(tc,0,tp,p,true,true,pos,bit.lshift(1,seq))
 		end
-		Duel.SpecialSummonComplete()
+		tc=g1:GetNext()
 	end
+	Duel.SpecialSummonComplete()
+	e1:Reset()
 end
 function c511004003.fil(c)
 	loc,pos,p,seq=c511004003.GetInfos(c)
