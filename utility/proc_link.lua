@@ -75,7 +75,7 @@ function Auxiliary.LinkTarget(f,minc,maxc)
 				while sg:GetCount()<maxc do
 					local cg=mg:Filter(Auxiliary.LCheckRecursive,sg,tp,sg,mg,c,sg:GetCount(),minc,maxc)
 					if cg:GetCount()==0 then break end
-					if sg:GetCount()>minc and sg:GetCount()<=maxc and Auxiliary.LCheckGoal(tp,sg,c,minc,sg:GetCount()) then
+					if sg:GetCount()>=minc and sg:GetCount()<=maxc and Auxiliary.LCheckGoal(tp,sg,c,minc,sg:GetCount()) then
 						cancel=true 
 					else 
 						cancel=false
