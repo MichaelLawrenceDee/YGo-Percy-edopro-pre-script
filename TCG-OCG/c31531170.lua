@@ -50,7 +50,6 @@ function c31531170.pendcon(e,c,og)
 	end
 end
 function c31531170.pendop(e,tp,eg,ep,ev,re,r,rp,c,sg,og)
-	Duel.Hint(HINT_CARD,0,31531170)
 	local tp=e:GetOwnerPlayer()
 	local rpz=Duel.GetFieldCard(1-tp,LOCATION_PZONE,1)
 	local lscale=c:GetLeftScale()
