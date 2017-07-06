@@ -29,11 +29,10 @@ function c700000034.spfilter(c,e,tp,rg)
 	local minc=c.min_material_count
 	local maxc=c.max_material_count
 	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
-	local ftex=Duel.GetLocationCountFromEx(tp)
 	local ftt=Duel.GetUsableMZoneCount(tp)
 	if not minc then return false end
 	local mg=Duel.GetMatchingGroup(c700000034.matfilter,tp,LOCATION_DECK+LOCATION_EXTRA+LOCATION_GRAVE,0,nil,e,tp,c)
-	return rg:IsExists(c700000034.rmfilterchk,1,nil,mg,rg,c,minc,maxc,Group.CreateGroup(),ft,ftex,ftt,tp)
+	return rg:IsExists(c700000034.rmfilterchk,1,nil,mg,rg,c,minc,maxc,Group.CreateGroup(),ft,ftt,tp)
 end
 function c700000034.rmfilter(c)
 	if c:GetSummonLocation()~=LOCATION_EXTRA or not c:IsPreviousLocation(LOCATION_MZONE) or not c:IsAbleToRemove() then return false end
@@ -43,30 +42,28 @@ function c700000034.rmfilter(c)
 		return c:IsLocation(LOCATION_GRAVE)
 	end
 end
-function c700000034.rmfilterchk(c,mg,rg,fc,minc,maxc,sg,ft,ftex,ftt,tp)
+function c700000034.rmfilterchk(c,mg,rg,fc,minc,maxc,sg,ft,ftt,tp)
 	sg:AddCard(c)
 	local res
 	if c:IsLocation(LOCATION_MZONE) then
 		ftt=ftt+1
-		if c:GetSequence()>4 then
-			ftex=ftex+1
-		else
+		if c:GetSequence()<5 then
 			ft=ft+1
 		end
 	end
 	if sg:GetCount()<minc then
-		res=rg:IsExists(c700000034.rmfilterchk,1,sg,mg,rg,fc,minc,maxc,sg,ft,ftex,ftt,tp)
+		res=rg:IsExists(c700000034.rmfilterchk,1,sg,mg,rg,fc,minc,maxc,sg,ft,ftt,tp)
 	elseif sg:GetCount()<maxc then
-		res=rg:IsExists(c700000034.rmfilterchk,1,sg,mg,rg,fc,minc,maxc,sg,ft,ftex,ftt,tp) 
+		local ftex=Duel.GetLocationCountFromEx(tp,tp,sg)
+		res=rg:IsExists(c700000034.rmfilterchk,1,sg,mg,rg,fc,minc,maxc,sg,ft,ftt,tp) 
 			or mg:IsExists(c700000034.matchk,1,sg,mg,sg,sg:GetCount(),Group.CreateGroup(),fc,ft,ftex,ftt,tp)
 	else
+		local ftex=Duel.GetLocationCountFromEx(tp,tp,sg)
 		res=mg:IsExists(c700000034.matchk,1,sg,mg,sg,sg:GetCount(),Group.CreateGroup(),fc,ft,ftex,ftt,tp)
 	end
 	if c:IsLocation(LOCATION_MZONE) then
 		ftt=ftt-1
-		if c:GetSequence()>4 then
-			ftex=ftex-1
-		else
+		if c:GetSequence()<5 then
 			ft=ft-1
 		end
 	end
@@ -111,11 +108,11 @@ function c700000034.activate(e,tp,eg,ep,ev,re,r,rp)
 	local rsg=Group.CreateGroup()
 	local matg=Group.CreateGroup()
 	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
-	local ftex=Duel.GetLocationCountFromEx(tp)
 	local ftt=Duel.GetUsableMZoneCount(tp)
 	while rsg:GetCount()<maxc do
+		local ftex=Duel.GetLocationCountFromEx(tp,tp,rsg)
 		local cancel=rsg:GetCount()>0 and mg:IsExists(c700000034.matchk,1,rsg,mg,rsg,rsg:GetCount(),matg,fc,ft,ftex,ftt,tp)
-		local g=rg:Filter(c700000034.rmfilterchk,rsg,mg,rg,fc,minc,maxc,rsg,ft,ftex,ftt,tp)
+		local g=rg:Filter(c700000034.rmfilterchk,rsg,mg,rg,fc,minc,maxc,rsg,ft,ftt,tp)
 		if g:GetCount()<=0 then break end
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 		local tc=Group.SelectUnselect(g,rsg,tp,cancel,cancel)
@@ -124,9 +121,7 @@ function c700000034.activate(e,tp,eg,ep,ev,re,r,rp)
 			rsg:RemoveCard(tc)
 			if tc:IsLocation(LOCATION_MZONE) then
 				ftt=ftt-1
-				if c:GetSequence()>4 then
-					ftex=ftex-1
-				else
+				if c:GetSequence()<5 then
 					ft=ft-1
 				end
 			end
@@ -134,9 +129,7 @@ function c700000034.activate(e,tp,eg,ep,ev,re,r,rp)
 			rsg:AddCard(tc)
 			if tc:IsLocation(LOCATION_MZONE) then
 				ftt=ftt+1
-				if c:GetSequence()>4 then
-					ftex=ftex+1
-				else
+				if c:GetSequence()<5 then
 					ft=ft+1
 				end
 			end
