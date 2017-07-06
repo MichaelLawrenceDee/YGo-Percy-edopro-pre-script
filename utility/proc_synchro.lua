@@ -213,7 +213,7 @@ function Auxiliary.SynchroCheckP32(c,g,tsg,ntsg,sg,f2,sub2,min2,max2,req2,reqct2
 		local eff={c:GetCardEffect(73941492+TYPE_SYNCHRO)}
 		for _,f in ipairs(eff) do
 			if sg:IsExists(Auxiliary.TuneMagFilter,1,c,f,f:GetValue()) then return false end
-			local sg2=ntg:Filter(function(c) return not Auxiliary.TuneMagFilterFus(c,f,f:GetValue()) end,nil)
+			local sg2=g:Filter(function(c) return not Auxiliary.TuneMagFilterFus(c,f,f:GetValue()) end,nil)
 			rg:Merge(sg2)
 		end
 	end
