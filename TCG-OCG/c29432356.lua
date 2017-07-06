@@ -243,13 +243,13 @@ function c29432356.penop2(e,tp,eg,ep,ev,re,r,rp,c,sg,og)
 	if ect~=nil then ft=math.min(ft,ect) end
 	if og then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-		local g=og:FilterSelectC(tp,c29432356.penfilter,1,ft,nil,e,tp,lscale,rscale)
+		local g=og:FilterSelect(tp,c29432356.penfilter,0,ft,nil,e,tp,lscale,rscale)
 		if g then
 			sg:Merge(g)
 		end
 	else
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-		local g=Duel.SelectMatchingCardC(tp,c29432356.penfilter,tp,LOCATION_EXTRA,0,1,ft,nil,e,tp,lscale,rscale)
+		local g=Duel.SelectMatchingCard(tp,c29432356.penfilter,tp,LOCATION_EXTRA,0,0,ft,nil,e,tp,lscale,rscale)
 		if g then
 			sg:Merge(g)
 		end
