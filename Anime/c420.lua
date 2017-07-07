@@ -135,50 +135,35 @@ function Card.IsBlackwingTamer(c,fbool)
 	end
 end
 
--- Butterfly (list to do)
+-- Butterfly
 -- 蝶
 -- ちょう
 -- Blazewing Butterfly/Flower Cardian Boardefly/Flower Cardian Peony with Butterfly
 -- Butterfly Dagger - Elma
 c420.OCGButterfly={
-	
+	16984449,69243953,57261568,3966653
 }
 function Card.IsButterfly(c,fbool)
-	if c:IsPhantomButterfly(fbool) or c:IsButterspy(fbool) then return true end
+	if c:IsPhantomButterfly(fbool) then return true end
 	if fbool then
-		return c:IsFusionSetCard(0x50c) or c:IsFusionCode(table.unpack(c420.OCGButterfly))
+		return c:IsFusionSetCard(0x50c) or c:IsFusionSetCard(0x6a) or c:IsFusionCode(table.unpack(c420.OCGButterfly))
 	else
-		return c:IsSetCard(0x50c) or c:IsCode(table.unpack(c420.OCGButterfly))
+		return c:IsSetCard(0x50c) or c:IsSetCard(0x6a) or c:IsCode(table.unpack(c420.OCGButterfly))
 	end
 end
 
--- Phantom Butterfly (list to do)
+-- Phantom Butterfly
 -- 幻蝶
 -- げんちょう
 -- Butterspy Protection
 c420.OCGPhantomButterfly={
-	
+	63630268
 }
 function Card.IsPhantomButterfly(c,fbool)
-	if c:IsButterspy(fbool) then return true end
 	if fbool then
-		return c:IsFusionSetCard(0x150c) or c:IsFusionCode(table.unpack(c420.OCGPhantomButterfly))
+		return c:IsFusionSetCard(0x150c) or c:IsFusionSetCard(0x6a) or c:IsFusionCode(table.unpack(c420.OCGPhantomButterfly))
 	else
-		return c:IsSetCard(0x150c) or c:IsCode(table.unpack(c420.OCGPhantomButterfly))
-	end
-end
--- Butterspy (list to do)
--- 幻蝶の刺客
--- げんちょうのしきゃく
--- Swallowtail Butterspy/Blue Mountain Butterspy/Morpho Butterspy
-c420.OCGButterspy={
-	
-}
-function Card.IsButterspy(c,fbool)
-	if fbool then
-		return c:IsFusionSetCard(0x350c) or c:IsFusionCode(table.unpack(c420.OCGButterspy))
-	else
-		return c:IsSetCard(0x350c) or c:IsCode(table.unpack(c420.OCGButterspy))
+		return c:IsSetCard(0x150c) or c:IsSetCard(0x6a) or c:IsCode(table.unpack(c420.OCGPhantomButterfly))
 	end
 end
 
@@ -1113,7 +1098,7 @@ function Card.IsShaman(c,fbool)
 	end
 end
 
--- Shark (archetype)(not finished) シャーク 
+-- Shark (archetype)シャーク 
 c420.OCGShark={
 	44223284,34290067,32393580,37798171,64319467,17643265,7500772,23536866,17201174,10532969,87047161,
 	37792478,70101178,63193879,69155991,20838380,71923655,70655556,25484449,440556,84224627,37279508,
@@ -1349,7 +1334,7 @@ c420.OCGWhite={
 	13429800,9433350,32269855,22804410,73398797,24644634,
 	79473793,38517737,89631139,71039903,79814787,15150365,
 	3557275,92409659,20193924,1571945,43487744,73891874,
-	98024118,84812868
+	98024118,84812868,32825095,78229193,5614808
 }
 function Card.IsWhite(c,fbool)
 	if fbool then
