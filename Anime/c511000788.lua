@@ -6,7 +6,7 @@ function c511000788.initial_effect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetRange(LOCATION_GRAVE)
-	e1:SetCost(c511000788.cost)
+	e1:SetCost(aux.bfgcost)
 	e1:SetTarget(c511000788.target)
 	e1:SetOperation(c511000788.operation)
 	c:RegisterEffect(e1)
@@ -27,10 +27,6 @@ function c511000788.archchk(e,tp,eg,ep,ev,re,r,rp)
 		Duel.CreateToken(1-tp,420)
 		Duel.RegisterFlagEffect(0,420,0,0,0)
 	end
-end
-function c511000788.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():IsAbleToRemoveAsCost() end
-	Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_COST)
 end
 function c511000788.filter(c,e,tp)
 	return c:IsRose() and c:IsCanBeSpecialSummoned(e,0,tp,false,false)

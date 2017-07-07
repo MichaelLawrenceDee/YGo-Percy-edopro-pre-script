@@ -33,13 +33,19 @@ end
 function c511002557.condition(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetCurrentPhase()~=PHASE_DAMAGE or not Duel.IsDamageCalculated()
 end
-function c511002557.cfilter(c)
-	return c:IsHand() and c:IsType(TYPE_MONSTER) and c:IsAbleToRemoveAsCost()
+function c511002557.cfilter(c,tp)
+	if not c:IsHand() or not c:IsAbleToRemoveAsCost() 
+		or not Duel.IsExistingTarget(Card.IsFaceup,tp,LOCATION_MZONE,0,1,c) then return false end
+	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
+		return c:IsFaceup() and c:IsLocation(LOCATION_MZONE)
+	else
+		return c:IsLocation(LOCATION_GRAVE)
+	end
 end
 function c511002557.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c511002557.cfilter,tp,LOCATION_GRAVE,0,1,nil) end
+	if chk==0 then return Duel.IsExistingMatchingCard(c511002557.cfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,nil,tp) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g=Duel.SelectMatchingCard(tp,c511002557.cfilter,tp,LOCATION_GRAVE,0,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,c511002557.cfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,1,nil,tp)
 	Duel.Remove(g,POS_FACEUP,REASON_COST)
 end
 function c511002557.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
