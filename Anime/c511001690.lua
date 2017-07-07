@@ -20,9 +20,26 @@ function c511001690.initial_effect(c)
 	e2:SetTarget(c511001690.destg)
 	e2:SetOperation(c511001690.desop)
 	c:RegisterEffect(e2)
+	if not c511001690.global_check then
+		c511001690.global_check=true
+		local ge2=Effect.CreateEffect(c)
+		ge2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		ge2:SetCode(EVENT_ADJUST)
+		ge2:SetCountLimit(1)
+		ge2:SetProperty(EFFECT_FLAG_NO_TURN_RESET)
+		ge2:SetOperation(c511001690.archchk)
+		Duel.RegisterEffect(ge2,0)
+	end
+end
+function c511001690.archchk(e,tp,eg,ep,ev,re,r,rp)
+	if Duel.GetFlagEffect(0,420)==0 then 
+		Duel.CreateToken(tp,420)
+		Duel.CreateToken(1-tp,420)
+		Duel.RegisterFlagEffect(0,420,0,0,0)
+	end
 end
 function c511001690.spfilter(c)
-	if (not c:IsSetCard(0x437) and not c:IsCode(12538374,51534754)) or not c:IsAbleToRemoveAsCost() then return false end
+	if not c:IsYomi() or not c:IsType(TYPE_MONSTER) or not c:IsAbleToRemoveAsCost() then return false end
 	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
 		return c:IsFaceup() and c:IsLocation(LOCATION_MZONE)
 	else

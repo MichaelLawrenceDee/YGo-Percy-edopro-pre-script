@@ -8,13 +8,29 @@ function c511002411.initial_effect(c)
 	e1:SetTarget(c511002411.target)
 	e1:SetOperation(c511002411.activate)
 	c:RegisterEffect(e1)
+	if not c511002411.global_check then
+		c511002411.global_check=true
+		local ge2=Effect.CreateEffect(c)
+		ge2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		ge2:SetCode(EVENT_ADJUST)
+		ge2:SetCountLimit(1)
+		ge2:SetProperty(EFFECT_FLAG_NO_TURN_RESET)
+		ge2:SetOperation(c511002411.archchk)
+		Duel.RegisterEffect(ge2,0)
+	end
+end
+function c511002411.archchk(e,tp,eg,ep,ev,re,r,rp)
+	if Duel.GetFlagEffect(0,420)==0 then 
+		Duel.CreateToken(tp,420)
+		Duel.CreateToken(1-tp,420)
+		Duel.RegisterFlagEffect(0,420,0,0,0)
+	end
 end
 function c511002411.filter(c,e,tp)
-	return (c:IsSetCard(0x219) or c:IsCode(82556058)) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) 
-		and not c:IsHasEffect(EFFECT_NECRO_VALLEY)
+	return c:IsMotor() and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function c511002411.rfilter(c)
-	if (not c:IsSetCard(0x219) and not c:IsCode(82556058)) or not c:IsType(TYPE_MONSTER) or not c:IsAbleToRemove() then return false end
+	if not c:IsMotor() or not c:IsType(TYPE_MONSTER) or not c:IsAbleToRemove() then return false end
 	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
 		return c:IsFaceup() and c:IsLocation(LOCATION_MZONE)
 	else

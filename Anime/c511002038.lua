@@ -23,14 +23,12 @@ function c511002038.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 function c511002038.cfilter(c)
-	local code=c:GetCode()
-	return c:IsFaceup() and (code==511000853 or code==511000826)
+	return c:IsFaceup() and c:IsSetCard(0x151b)
 end
 function c511002038.condition(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsExistingMatchingCard(c511002038.cfilter,tp,LOCATION_MZONE,0,1,nil)
 end
-function c511002038.target(e,tp,eg,ep,ev,re,r,rp,tc,chk)
-	if chk==0 then return true end
+function c511002038.target(e,tp,eg,ep,ev,re,r,rp,tc)
 	Duel.SetOperationInfo(0,CATEGORY_DISABLE,tc,1,0,0)
 end
 function c511002038.descon(e,tp,eg,ep,ev,re,r,rp)

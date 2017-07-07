@@ -32,7 +32,7 @@ function c511002550.condition(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetCurrentPhase()==PHASE_END
 end
 function c511002550.filter(c,tid,e,tp)
-	return c:IsReason(REASON_DESTROY) and c:IsKnight() and c:GetTurnID()==tid
+	return c:IsReason(REASON_DESTROY) and c:IsRace(RACE_FIEND) and c:IsKnight() and c:GetTurnID()==tid
 		and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and c:GetPreviousControler()==tp
 end
 function c511002550.target(e,tp,eg,ep,ev,re,r,rp,chk)

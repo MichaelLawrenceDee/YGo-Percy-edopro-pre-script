@@ -75,19 +75,8 @@ end
 function c511010132.ovfilter(c)
 	return c:IsFaceup() and c:IsCode(65676461)
 end
-c511010132.collection={
-	[13429800]=true;[34290067]=true;[10532969]=true;[71923655]=true;[32393580]=true;
-	[810000016]=true;[20358953]=true;[37798171]=true;[70101178]=true;[23536866]=true;
-	[7500772]=true;[511001410]=true;[69155991]=true;[37792478]=true;[17201174]=true;
-	[44223284]=true;[70655556]=true;[63193879]=true;[25484449]=true;[810000026]=true;
-	[17643265]=true;[64319467]=true;[810000030]=true;[810000008]=true;[20838380]=true;
-	[87047161]=true;[80727036]=true;[28593363]=true;[50449881]=true;[49221191]=true;
-	[65676461]=true;[440556]=true;[511001273]=true;[31320433]=true;[5014629]=true;
-	[14306092]=true;[84224627]=true;[511001163]=true;[511001169]=true;[511001858]=true;
-}
 function c511010132.rfilter(c)
-	if not c:IsType(TYPE_MONSTER) or (not c:IsSetCard(0x321) and not c511010132.collection[c:GetCode()]) 
-		or not c:IsAbleToRemoveAsCost() then return false end
+	if not c:IsType(TYPE_MONSTER) or not c:IsShark() or not c:IsAbleToRemoveAsCost() then return false end
 	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
 		return c:IsFaceup() and c:IsLocation(LOCATION_MZONE)
 	else
@@ -129,6 +118,11 @@ end
 function c511010132.numchk(e,tp,eg,ep,ev,re,r,rp)
 	Duel.CreateToken(tp,49221191)
 	Duel.CreateToken(1-tp,49221191)
+	if Duel.GetFlagEffect(0,420)==0 then 
+		Duel.CreateToken(tp,420)
+		Duel.CreateToken(1-tp,420)
+		Duel.RegisterFlagEffect(0,420,0,0,0)
+	end
 end
 function c511010132.indes(e,c)
 	return not c:IsSetCard(0x48)

@@ -40,37 +40,41 @@ function c511009514.condition(e,tp,eg,ep,ev,re,r,rp)
 		tc=Duel.GetAttackTarget()
 		bc=Duel.GetAttacker()
 	end
-	if not tc or not bc or tc:IsControler(1-tp) or not c420.IsRed(tc) then return false end
-	if tc:IsHasEffect(EFFECT_INDESTRUCTABLE_BATTLE) then
-		local tcind={tc:GetCardEffect(EFFECT_INDESTRUCTABLE_BATTLE)}
-		for i=1,#tcind do
-			local te=tcind[i]
-			local f=te:GetValue()
-			if type(f)=='function' then
-				if f(te,bc) then return false end
-			else return false end
-		end
-	end
+	if not tc or not bc or tc:IsHasEffect(EFFECT_INDESTRUCTABLE_BATTLE) or not tc:IsRed() then return false end
 	e:SetLabelObject(tc)
 	if bc==Duel.GetAttackTarget() and bc:IsDefensePos() then return false end
 	if bc:IsPosition(POS_FACEUP_DEFENSE) and bc==Duel.GetAttacker() then
 		if not bc:IsHasEffect(EFFECT_DEFENSE_ATTACK) then return false end
-		if bc:IsHasEffect(75372290) then
-			if tc:IsAttackPos() then
-				return bc:GetAttack()>0 and bc:GetAttack()>=tc:GetAttack()
-			else
-				return bc:GetAttack()>tc:GetDefense()
-			end
-		else
-			if tc:IsAttackPos() then
-				return bc:GetDefense()>0 and bc:GetDefense()>=tc:GetAttack()
-			else
-				return bc:GetDefense()>tc:GetDefense()
+		if bc:IsHasEffect(EFFECT_DEFENSE_ATTACK) then
+			if bc:GetEffectCount(EFFECT_DEFENSE_ATTACK)==1 then
+				if tc:IsAttackPos() then
+					if bc:GetDefense()==tc:GetAttack() and not bc:IsHasEffect(EFFECT_INDESTRUCTABLE_BATTLE) then
+						return bc:GetDefense()~=0
+					else
+						return bc:GetDefense()>=tc:GetAttack()
+					end
+				else
+					return bc:GetDefense()>tc:GetDefense()
+				end
+			elseif bc:IsHasEffect(EFFECT_DEFENSE_ATTACK) then
+				if tc:IsAttackPos() then
+					if bc:GetAttack()==tc:GetAttack() and not bc:IsHasEffect(EFFECT_INDESTRUCTABLE_BATTLE) then
+						return bc:GetAttack()~=0
+					else
+						return bc:GetAttack()>=tc:GetAttack()
+					end
+				else
+					return bc:GetAttack()>tc:GetDefense()
+				end
 			end
 		end
 	else
 		if tc:IsAttackPos() then
-			return bc:GetAttack()>0 and bc:GetAttack()>=tc:GetAttack()
+			if bc:GetAttack()==tc:GetAttack() and not bc:IsHasEffect(EFFECT_INDESTRUCTABLE_BATTLE) then
+				return bc:GetAttack()~=0
+			else
+				return bc:GetAttack()>=tc:GetAttack()
+			end
 		else
 			return bc:GetAttack()>tc:GetDefense()
 		end
@@ -82,7 +86,7 @@ function c511009514.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function c511009514.cfilter(c,e,tp)
 	return c:IsOnField() and c:IsType(TYPE_MONSTER) and c:IsControler(tp) and (not e or c:IsRelateToEffect(e)) 
-		and c420.IsRed(c)
+		and c:IsRed()
 end
 function c511009514.condition2(e,tp,eg,ep,ev,re,r,rp)
 	local ex,tg,tc=Duel.GetOperationInfo(ev,CATEGORY_DESTROY)

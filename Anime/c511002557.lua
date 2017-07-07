@@ -12,27 +12,34 @@ function c511002557.initial_effect(c)
 	e1:SetTarget(c511002557.target)
 	e1:SetOperation(c511002557.activate)
 	c:RegisterEffect(e1)
+	if not c511002557.global_check then
+		c511002557.global_check=true
+		local ge2=Effect.CreateEffect(c)
+		ge2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		ge2:SetCode(EVENT_ADJUST)
+		ge2:SetCountLimit(1)
+		ge2:SetProperty(EFFECT_FLAG_NO_TURN_RESET)
+		ge2:SetOperation(c511002557.archchk)
+		Duel.RegisterEffect(ge2,0)
+	end
+end
+function c511002557.archchk(e,tp,eg,ep,ev,re,r,rp)
+	if Duel.GetFlagEffect(0,420)==0 then 
+		Duel.CreateToken(tp,420)
+		Duel.CreateToken(1-tp,420)
+		Duel.RegisterFlagEffect(0,420,0,0,0)
+	end
 end
 function c511002557.condition(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetCurrentPhase()~=PHASE_DAMAGE or not Duel.IsDamageCalculated()
 end
-c511002557.collection={
-	[28003512]=true;[52800428]=true;[62793020]=true;[68535320]=true;[95929069]=true;
-	[22530212]=true;[21414674]=true;[63746411]=true;[55888045]=true;
-}
-function c511002557.cfilter(c,tp)
-	if not c511002557.collection[c:GetCode()] or not c:IsAbleToRemoveAsCost() 
-		or not Duel.IsExistingTarget(Card.IsFaceup,tp,LOCATION_MZONE,0,1,c) then return false end
-	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
-		return c:IsFaceup() and c:IsLocation(LOCATION_MZONE)
-	else
-		return c:IsLocation(LOCATION_GRAVE)
-	end
+function c511002557.cfilter(c)
+	return c:IsHand() and c:IsType(TYPE_MONSTER) and c:IsAbleToRemoveAsCost()
 end
 function c511002557.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c511002557.cfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,nil,tp) end
+	if chk==0 then return Duel.IsExistingMatchingCard(c511002557.cfilter,tp,LOCATION_GRAVE,0,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g=Duel.SelectMatchingCard(tp,c511002557.cfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,1,nil,tp)
+	local g=Duel.SelectMatchingCard(tp,c511002557.cfilter,tp,LOCATION_GRAVE,0,1,1,nil)
 	Duel.Remove(g,POS_FACEUP,REASON_COST)
 end
 function c511002557.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

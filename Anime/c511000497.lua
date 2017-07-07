@@ -2,7 +2,7 @@
 function c511000497.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcMix(c,true,true,89943723,c511000497.fusfilter)
+	aux.AddFusionProcMix(c,true,true,89943723,aux.FilterBoolFunction(Card.IsYubel,true))
 	--spsummon condition
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
@@ -58,9 +58,6 @@ function c511000497.archchk(e,tp,eg,ep,ev,re,r,rp)
 end
 function c511000497.splimit(e,se,sp,st)
 	return bit.band(st,SUMMON_TYPE_FUSION)==SUMMON_TYPE_FUSION
-end
-function c511000497.fusfilter(c)
-	return c420.IsYubel(c,true)
 end
 function c511000497.damtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local bc=e:GetHandler():GetBattleTarget()

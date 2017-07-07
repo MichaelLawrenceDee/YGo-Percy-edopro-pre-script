@@ -38,10 +38,10 @@ end
 function c511009024.cfilter(c,e)
 	local val=0
 	if c:GetFlagEffect(284)>0 then val=c:GetFlagEffectLabel(284) end
-	return c420.IsRed(c) and c:IsFaceup() and c:IsType(TYPE_SYNCHRO) and c:GetAttack()~=val and (not e or c:IsCanBeEffectTarget(e))
+	return c:IsRed() and c:IsFaceup() and c:IsType(TYPE_SYNCHRO) and c:GetAttack()~=val and (not e or c:IsCanBeEffectTarget(e))
 end
 function c511009024.rmfilter(c)
-	if not c420.IsRed(c) or not c:IsType(TYPE_SYNCHRO) or not c:IsAbleToRemove() then return false end
+	if not c:IsRed() or not c:IsType(TYPE_SYNCHRO) or not c:IsAbleToRemove() then return false end
 	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
 		return c:IsFaceup() and c:IsLocation(LOCATION_MZONE)
 	else

@@ -33,7 +33,7 @@ function c511002571.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.PayLPCost(tp,500)
 end
 function c511002571.filter(c,e,tp)
-	if c:IsFacedown() or not c420.IsTachyon(c) or not c:IsHasEffect(511002571) then return false end
+	if c:IsFacedown() or not c:IsTachyon() or not c:IsHasEffect(511002571) then return false end
 	local eff={c:GetCardEffect(511002571)}
 	for i=1,#eff do
 		local te=eff[i]:GetLabelObject()

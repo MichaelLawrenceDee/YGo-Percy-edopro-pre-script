@@ -64,7 +64,7 @@ function c511009126.condition(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsReason(REASON_DESTROY)
 end
 function c511009126.cfilter(c)
-	if not c420.IsWhite(c) or not c:IsType(TYPE_MONSTER) or not c:IsAbleToRemoveAsCost() then return false end
+	if not c:IsWhite() or not c:IsType(TYPE_MONSTER) or not c:IsAbleToRemoveAsCost() then return false end
 	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
 		return c:IsFaceup() and c:IsLocation(LOCATION_MZONE)
 	else
