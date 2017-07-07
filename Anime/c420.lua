@@ -442,7 +442,7 @@ end
 -- Valerifawn, Mystical Beast of the Forest/Kalantosa, Mystical Beast of the Forest/Uniflora, Mystical Beast of the Forest
 -- Eco, Mystical Spirit of the Forest/Green Baboon, Defender of the Forest
 c420.OCGForest={
-	
+	77797992,87624166,14015067,4192696,87430998,46668237,60398723,37322745,36318200,24096499,78010363,42883273,65303664,17733394
 }
 function Card.IsForest(c,fbool)
 	if fbool then
