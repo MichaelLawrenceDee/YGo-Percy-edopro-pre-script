@@ -1,7 +1,6 @@
 --DDD神託王ダルク
 function c82956492.initial_effect(c)
-	--fustion material
-	aux.AddFusionProcFunRep(c,,2,true)
+	--fusion material
 	aux.AddFusionProcMixN(c,true,true,aux.FilterBoolFunction(Card.IsFusionSetCard,0xaf),2)
 	c:EnableReviveLimit()
 	--damage conversion
