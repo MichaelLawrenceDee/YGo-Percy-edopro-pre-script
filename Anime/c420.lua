@@ -89,13 +89,13 @@ function Card.IsAtlandis(c,fbool)
 end
 
 -- Barian (archetype) バリアン
--- CXyz Barian Hope
+-- CXyz Barian Hope/ Number 71: Rebarian Shark
 function Card.IsBarian(c,fbool)
 	if c:IsBarians(fbool) or c:IsBattleguard(fbool) then return true end
 	if fbool then
-		return c:IsFusionSetCard(0x509) or c:IsFusionCode(67926903)
+		return c:IsFusionSetCard(0x509) or c:IsFusionCode(67926903,59479050)
 	else
-		return c:IsSetCard(0x509) or c:IsCode(67926903)
+		return c:IsSetCard(0x509) or c:IsCode(67926903,59479050)
 	end
 end
 
@@ -146,9 +146,9 @@ c420.OCGButterfly={
 function Card.IsButterfly(c,fbool)
 	if c:IsPhantomButterfly(fbool) then return true end
 	if fbool then
-		return c:IsFusionSetCard(0x50c) or c:IsFusionSetCard(0x6a) or c:IsFusionCode(table.unpack(c420.OCGButterfly))
+		return c:IsFusionSetCard(0x50c) or c:IsFusionCode(table.unpack(c420.OCGButterfly))
 	else
-		return c:IsSetCard(0x50c) or c:IsSetCard(0x6a) or c:IsCode(table.unpack(c420.OCGButterfly))
+		return c:IsSetCard(0x50c) or c:IsCode(table.unpack(c420.OCGButterfly))
 	end
 end
 
@@ -692,16 +692,25 @@ end
 -- King of the Swamp/Beastking of the Swamps/Imperial Tombs of Necrovalley
 -- Coach King Giantrainer/Coach Captain Bearman
 
--- archtype:Fire King/Supreme King/Monarch (spell/trap)
+-- archtype:Fire King/Supreme King/Monarch (spell/trap)/Dracoverlord
 c420.OCGKing={
-	
+	60990740,13662809,44223284,17573739,89832901,41925941,78651105,19028307,99426834,16768387,6214884,67136033,
+	2926176,21686473,47198668,56619314,74069667,92536468,73360025,53375573,53982768,72426662,29424328,11250655,
+	68400115,40732515,57274196,45425051,10833828,18710707,30646525,19012345,5818798,22910685,47879985,19748583,
+	64514622,14462257,30459350,61740673,90434657,3056267,20438745,83986578,79109599,24590232,55818463,46700124,
+	70406920,89222931,96938777,21223277,54702678,34408491,96381979,32995007,30741334,44852429,8463720,15939229,
+	74583607,987311,71612253,82956492,51497409,3758046,75326861,70583986,29515122,28290705,27337596,62242678,
+	35058857,47355498,47387961,6901008,18891691,63571750,89959682,43791861,51371017,82213171,10071456,29155212,
+	4179849,71411377,5901497,58477767,19254117,33950246,51452091,16509093,93016201,26586849,56058888,72405967,
+	86742443,86327225,61370518,88307361,29762407,80955168,72709014,24857466,52589809,5309481,10613952,84025439,
+	38180759,22858242
 }
 function Card.IsKing(c,fbool)
-	if Card.IsChampion(c,fbool) then return true end
+	if c:IsChampion(fbool) then return true end
 	if fbool then
-		return c:IsFusionSetCard(0x52f) or c:IsFusionCode(table.unpack(c420.OCGKing))
+		return c:IsFusionSetCard(0x52f) or c:IsFusionSetCard(0xf8) or c:IsFusionSetCard(0x81) or c:IsFusionSetCard(0xda) or c:IsFusionCode(table.unpack(c420.OCGKing))
 	else
-		return c:IsSetCard(0x52f) or c:IsCode(table.unpack(c420.OCGKing))
+		return c:IsSetCard(0x52f) or c:IsSetCard(0xf8) or c:IsSetCard(0x81) or c:IsSetCard(0xda) or c:IsCode(table.unpack(c420.OCGKing))
 	end
 end
 
