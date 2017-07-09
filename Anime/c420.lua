@@ -31,13 +31,13 @@ c420.OCGAngel={
 	79575620,39996157,15914410,53334641,16972957,42216237,
 	42418084,18378582,59509952,81146288,85399281,47852924,
 	74137509,17653779,9032529,79571449,2130625,49674183,
-	69992868,96470883
+	69992868,96470883,11398951
 }
 function Card.IsAngel(c,fbool)
 	if fbool then
-		return c:IsFusionSetCard(0x154a) or c:IsFusionCode(table.unpack(c420.OCGAngel)) or c:IsFusionSetCard(0xef)
+		return c:IsFusionSetCard(0x154a) or c:IsFusionSetCard(0xef) or c:IsFusionCode(table.unpack(c420.OCGAngel))
 	else
-		return c:IsSetCard(0x154a) or c:IsCode(table.unpack(c420.OCGAngel)) or c:IsSetCard(0xef)
+		return c:IsSetCard(0x154a) or c:IsSetCard(0xef) or c:IsCode(table.unpack(c420.OCGAngel))
 	end
 end
 
@@ -1171,14 +1171,17 @@ end
 
 -- Nordic Ascendant/Skyscraper
 c420.OCGSky={
-	
+	49771608,42431843,67443336,32360466,50323155,3072808,87390067,22346472,42664989,54977057,62966332,77998771,
+	77235086,3629090,49010598,54407825,95457011,96570609,92223641,4149689,1637760,39238953,38411870,7452945,
+	97795930,10028593,86327225,27813661,11458071,48453776,74841885,10000020,41589166,90122655,95352218,23587624,
+	29146185,37910722,32995007,75326861,58601383,1992816,80764541,23085002,32559361,2519690,12171659
 }
 function Card.IsSky(c,fbool)
-	if Card.IsAngel(c,fbool) or Card.IsCelestial(c,fbool) then return true end
+	if c:IsCelestial(fbool) or c:IsAngel(fbool) then return true end
 	if fbool then
-		return c:IsFusionSetCard(0x54a) or c:IsFusionCode(table.unpack(c420.OCGSky)) or c:IsFusionSetCard(0xf6) or c:IsFusionSetCard(0x3042)
+		return c:IsFusionSetCard(0x54a) or c:IsFusionSetCard(0xf6) or c:IsFusionSetCard(0x3042) or c:IsFusionCode(table.unpack(c420.OCGSky))
 	else
-		return c:IsSetCard(0x54a) or c:IsCode(table.unpack(c420.OCGSky)) or c:IsSetCard(0xf6) or c:IsSetCard(0x3042)
+		return c:IsSetCard(0x54a) or c:IsSetCard(0xf6) or c:IsSetCard(0x3042) or c:IsCode(table.unpack(c420.OCGSky))
 	end
 end
 
