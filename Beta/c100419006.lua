@@ -43,7 +43,7 @@ function c100419006.initial_effect(c)
 	c:RegisterEffect(e5)
 end
 function c100419006.ffilter(c,fc,sub,mg,sg)
-	return c:IsFusionSetCard(0x3d) and (not sg or not sg:IsExists(c100419006.fusfilter,1,c,c:GetFusionAttribute()))
+	return c:IsFusionSetCard(0x3d) and c:GetFusionAttribute()~=0 and (not sg or not sg:IsExists(c100419006.fusfilter,1,c,c:GetFusionAttribute()))
 end
 function c100419006.contactfil(tp)
 	return Duel.GetMatchingGroup(Card.IsAbleToGraveAsCost,tp,LOCATION_ONFIELD,0,nil)
