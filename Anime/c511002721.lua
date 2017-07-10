@@ -14,10 +14,10 @@ function c511002721.initial_effect(c)
 end
 c511002721.miracle_synchro_fusion=true
 function c511002721.fusfilter1(c)
-	return c:IsSetCard(0x321f) and c:IsType(TYPE_FUSION)
+	return c:IsSetCard(0x351a) and c:IsType(TYPE_FUSION)
 end
 function c511002721.fusfilter2(c)
-	return c:IsSetCard(0x321f) and c:IsType(TYPE_SYNCHRO)
+	return c:IsSetCard(0x351a) and c:IsType(TYPE_SYNCHRO)
 end
 function c511002721.cfilter(tc)
 	return tc and tc:IsFaceup()

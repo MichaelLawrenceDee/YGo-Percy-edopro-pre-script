@@ -2,7 +2,7 @@
 function c511002712.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcMixN(c,true,true,c511002712.fusfilter,2)
+	aux.AddFusionProcMixN(c,true,true,aux.FilterBoolFunction(Card.IsEarthbound,true),2)
 	--destroy
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(48009503,0))
@@ -33,9 +33,6 @@ function c511002712.archchk(e,tp,eg,ep,ev,re,r,rp)
 		Duel.CreateToken(1-tp,420)
 		Duel.RegisterFlagEffect(0,420,0,0,0)
 	end
-end
-function c511002712.fusfilter(c)
-	return c420.IsEarthbound(c,true)
 end
 function c511002712.descon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()==tp and eg:IsExists(Card.IsControler,1,nil,1-tp)

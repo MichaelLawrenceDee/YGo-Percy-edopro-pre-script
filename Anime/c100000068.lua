@@ -19,9 +19,25 @@ function c100000068.initial_effect(c)
 	e2:SetRange(LOCATION_SZONE)
 	e2:SetCondition(c100000068.decon)
 	e2:SetTarget(c100000068.destg)
-	e2:SetValue(c100000068.value)
-	e2:SetOperation(c100000068.desop)
+	e2:SetValue(c100000068.desval)
 	c:RegisterEffect(e2)
+	if not c100000068.global_check then
+		c100000068.global_check=true
+		local ge2=Effect.CreateEffect(c)
+		ge2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		ge2:SetCode(EVENT_ADJUST)
+		ge2:SetCountLimit(1)
+		ge2:SetProperty(EFFECT_FLAG_NO_TURN_RESET)
+		ge2:SetOperation(c100000068.archchk)
+		Duel.RegisterEffect(ge2,0)
+	end
+end
+function c100000068.archchk(e,tp,eg,ep,ev,re,r,rp)
+	if Duel.GetFlagEffect(0,420)==0 then 
+		Duel.CreateToken(tp,420)
+		Duel.CreateToken(1-tp,420)
+		Duel.RegisterFlagEffect(0,420,0,0,0)
+	end
 end
 function c100000068.filter(c,e,tp)
 	return c:IsCanBeSpecialSummoned(e,0,tp,true,false) and c:IsCode(63468625)
@@ -52,8 +68,7 @@ function c100000068.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.Remove(g1,POS_FACEUP,REASON_COST)
 end
 function c100000068.target(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:IsHasType(EFFECT_TYPE_ACTIVATE) 
-		and (Duel.GetLocationCount(tp,LOCATION_MZONE)>0 or Duel.IsPlayerAffectedByEffect(tp,69832741)) 
+	if chk==0 then return e:IsHasType(EFFECT_TYPE_ACTIVATE) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 		and Duel.IsExistingMatchingCard(c100000068.filter,tp,0x13,0,1,nil,e,tp) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,0x13)
 end
@@ -77,34 +92,26 @@ function c100000068.operation(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c100000068.eqlimit(e,c)
-	return c:GetCode()==63468625
+	return c:IsCode(63468625)
 end
-c100000068.collection={
-	[39648965]=true;[68140974]=true; --Wisel
-	[75733063]=true;[31930787]=true; --Skiel
-	[2137678]=true;[4545683]=true; --Granel
-}
-function c100000068.cosqli(c)
-	return c:IsAbleToRemove() and (c:IsSetCard(0x300) or c100000068.collection[c:GetCode()])
-end
-function c100000068.cosqli2(c,e)
-	return c==e:GetHandler():GetEquipTarget()
-end
-function c100000068.decon(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	return Duel.IsExistingMatchingCard(c100000068.cosqli,c:GetControler(),LOCATION_GRAVE,0,1,nil)
+function c100000068.cfilter(c)
+	if (not c:IsWisel() and not c:IsGranel() and not c:IsSkiel()) or not c:IsAbleToRemove() then return false end
+	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
+		return c:IsFaceup() and c:IsLocation(LOCATION_MZONE)
+	else
+		return c:IsLocation(LOCATION_GRAVE)
+	end
 end
 function c100000068.destg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then
-		return eg:IsExists(c100000068.cosqli2,1,nil,e)
-	end
-	return Duel.SelectYesNo(tp,aux.Stringid(100000068,0))
+	if chk==0 then return eg:IsContains(e:GetHandler():GetEquipTarget())
+		and Duel.IsExistingMatchingCard(c100000068.cfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,nil) end
+	if Duel.SelectYesNo(tp,aux.Stringid(100000068,0)) then
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
+		local g=Duel.SelectMatchingCard(tp,c100000068.cfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,1,nil)
+		Duel.Remove(g,POS_FACEUP,REASON_EFFECT+REASON_REPLACE)
+		return true
+	else return false end
 end
-function c100000068.value(e,c)
+function c100000068.desval(e,c)
 	return c==e:GetHandler():GetEquipTarget()
-end
-function c100000068.desop(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	local g=Duel.SelectMatchingCard(c:GetControler(),c100000068.cosqli,c:GetControler(),LOCATION_GRAVE,0,1,1,nil)
-	Duel.Remove(g,POS_FACEUP,REASON_EFFECT)
 end

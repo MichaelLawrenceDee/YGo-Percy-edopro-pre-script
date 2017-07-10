@@ -22,14 +22,32 @@ function c100000287.initial_effect(c)
 	e3:SetCode(EVENT_FREE_CHAIN)
 	e3:SetHintTiming(0,TIMING_BATTLE_END+TIMING_BATTLE_PHASE)
 	e3:SetRange(LOCATION_SZONE)
+	e3:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e3:SetCondition(c100000287.dcon)
 	e3:SetCost(c100000287.dcost)
 	e3:SetTarget(c100000287.dtg)
-	e3:SetOperation(c100000287.activate)
+	e3:SetOperation(c100000287.dop)
 	c:RegisterEffect(e3)
+	if not c100000287.global_check then
+		c100000287.global_check=true
+		local ge2=Effect.CreateEffect(c)
+		ge2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		ge2:SetCode(EVENT_ADJUST)
+		ge2:SetCountLimit(1)
+		ge2:SetProperty(EFFECT_FLAG_NO_TURN_RESET)
+		ge2:SetOperation(c100000287.archchk)
+		Duel.RegisterEffect(ge2,0)
+	end
+end
+function c100000287.archchk(e,tp,eg,ep,ev,re,r,rp)
+	if Duel.GetFlagEffect(0,420)==0 then 
+		Duel.CreateToken(tp,420)
+		Duel.CreateToken(1-tp,420)
+		Duel.RegisterFlagEffect(0,420,0,0,0)
+	end
 end
 function c100000287.costfilter(c)
-	if not c:IsCode(47660516,92365601,100000286) or not c:IsAbleToRemoveAsCost() then return false end
+	if not c:IsBarians() or not c:IsAbleToRemoveAsCost() then return false end
 	if c:IsLocation(LOCATION_GRAVE) then
 		return (not Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) or not c:IsType(TYPE_MONSTER))
 	else
@@ -63,6 +81,7 @@ function c100000287.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	Duel.SetTargetCard(tg)
 end
 function c100000287.operation(e,tp,eg,ep,ev,re,r,rp)
+	if not e:GetHandler():IsRelateToEffect(e) then return end
 	Duel.NegateAttack()
 	if e:GetHandler():GetFlagEffect(100000287)>0 then
 		Duel.RegisterFlagEffect(tp,100000287,RESET_PHASE+PHASE_END,0,1)
@@ -75,16 +94,19 @@ function c100000287.dcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsAbleToGraveAsCost() end
 	Duel.SendtoGrave(e:GetHandler(),REASON_COST)
 end
-function c100000287.dtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsPosition,tp,LOCATION_MZONE,0,1,nil,POS_FACEUP_ATTACK)
-		and Duel.IsExistingMatchingCard(Card.IsPosition,tp,0,LOCATION_MZONE,1,nil,POS_FACEUP_ATTACK) end
+function c100000287.dtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return false end
+	if chk==0 then return Duel.IsExistingTarget(Card.IsPosition,tp,LOCATION_MZONE,0,1,nil,POS_FACEUP_ATTACK)
+		and Duel.IsExistingTarget(Card.IsPosition,tp,0,LOCATION_MZONE,1,nil,POS_FACEUP_ATTACK) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SELF)
+	Duel.SelectTarget(tp,Card.IsPosition,tp,LOCATION_MZONE,0,1,1,nil,POS_FACEUP_ATTACK)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_OPPO)
+	Duel.SelectTarget(tp,Card.IsPosition,tp,0,LOCATION_MZONE,1,1,nil,POS_FACEUP_ATTACK)
 end
-function c100000287.activate(e,tp,eg,ep,ev,re,r,rp)
-	local g1=Duel.GetMatchingGroup(Card.IsPosition,tp,0,LOCATION_MZONE,nil,POS_FACEUP_ATTACK)
-	local g2=Duel.GetMatchingGroup(Card.IsPosition,tp,LOCATION_MZONE,0,nil,POS_FACEUP_ATTACK)
-	if g1:GetCount()==0 or g2:GetCount()==0 then return end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATTACK)
-	ga=g1:Select(tp,1,1,nil)
-	gd=g2:Select(tp,1,1,nil)
-	Duel.CalculateDamage(ga:GetFirst(),gd:GetFirst())
+function c100000287.dop(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS):Filter(Card.IsRelateToEffect,nil,e)
+	if g:GetCount()<=1 then return end
+	local a=g:GetFirst()
+	local d=g:GetNext()
+	Duel.CalculateDamage(a,d)
 end

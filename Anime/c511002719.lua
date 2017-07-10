@@ -1,6 +1,6 @@
 --Earthbound Servant Geo Gremlin
 function c511002719.initial_effect(c)
-	aux.AddSynchroProcedure(c,c511002719.sfilter,1,1,aux.NonTuner(c511002719.sfilter),1,99)
+	aux.AddSynchroProcedure(c,Card.IsEarthbound,1,1,aux.NonTuner(Card.IsEarthbound),1,99)
 	c:EnableReviveLimit()
 	--destroy
 	local e1=Effect.CreateEffect(c)
@@ -23,10 +23,21 @@ function c511002719.initial_effect(c)
 		ge1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 		ge1:SetOperation(aux.sumreg)
 		Duel.RegisterEffect(ge1,0)
+		local ge2=Effect.CreateEffect(c)
+		ge2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		ge2:SetCode(EVENT_ADJUST)
+		ge2:SetCountLimit(1)
+		ge2:SetProperty(EFFECT_FLAG_NO_TURN_RESET)
+		ge2:SetOperation(c511002719.archchk)
+		Duel.RegisterEffect(ge2,0)
 	end
 end
-function c511002719.sfilter(c)
-	return c:IsSetCard(0x121f) or c:IsSetCard(0x21) or c:IsCode(67105242) or c:IsCode(67987302)
+function c511002719.archchk(e,tp,eg,ep,ev,re,r,rp)
+	if Duel.GetFlagEffect(0,420)==0 then 
+		Duel.CreateToken(tp,420)
+		Duel.CreateToken(1-tp,420)
+		Duel.RegisterFlagEffect(0,420,0,0,0)
+	end
 end
 function c511002719.cfilter(tc)
 	return tc and tc:IsFaceup()

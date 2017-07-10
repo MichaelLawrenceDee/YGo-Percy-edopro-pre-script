@@ -2,7 +2,7 @@
 function c511002014.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcMix(c,true,true,c511002014.ffilter1,c511002014.ffilter2)
+	aux.AddFusionProcMix(c,true,true,aux.FilterBoolFunction(Card.IsSky,true),aux.FilterBoolFunction(Card.IsEarth,true))
 	--pierce
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
@@ -25,10 +25,4 @@ function c511002014.archchk(e,tp,eg,ep,ev,re,r,rp)
 		Duel.CreateToken(1-tp,420)
 		Duel.RegisterFlagEffect(0,420,0,0,0)
 	end
-end
-function c511002014.ffilter1(c)
-	return c420.IsEarth(c,true)
-end
-function c511002014.ffilter2(c)
-	return c420.IsSky(c,true)
 end
