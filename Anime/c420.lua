@@ -1333,9 +1333,31 @@ function Card.IsToyArcV(c,fbool)
 	end
 end
 
+--V (GX Archetype)
+c420.OCGV={
+	97574404,62017867,96746083,51638941,21208154,62180201,57793869,88581108,58859575,84243274
+	--LV, Vision HERO
+}
+function Card.IsV(c,fbool)
+	if c:Is_V_(fbool) then return true end
+	if fbool then
+		return c:IsFusionSetCard(0x55a) or c:IsFusionSetCard(0x41) or c:IsFusionSetCard(0x5008) or c:IsFusionCode(table.unpack(c420.OCGV))
+	else
+		return c:IsSetCard(0x55a) or c:IsSetCard(0x41) or c:IsSetCard(0x5008) or c:IsCode(table.unpack(c420.OCGV))
+	end
+end
+
 -- V (Zexal archetype)
 -- V
 -- ブイ
+
+function Card.Is_V_(c,fbool)
+	if fbool then
+		return c:IsFusionSetCard(0x155a) or c:IsFusionCode(33725002,66970002,13536606,13536607)
+	else
+		return c:IsSetCard(0x155a) or c:IsCode(33725002,66970002,13536606,13536607)
+	end
+end
 
 -- White ホワイト
 -- Great White/Malefic Blue-Eyes White Dragon/The All-Seeing White Tiger
