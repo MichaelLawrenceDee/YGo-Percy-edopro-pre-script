@@ -1359,6 +1359,20 @@ function Card.Is_V_(c,fbool)
 	end
 end
 
+--W
+c420.OCGW={
+	23846921,41181774,27564031,90075978,96300057,58859575,84243274
+	--Windwitch/ ZW
+}
+
+function Card.IsW(c,fbool)
+	if fbool then
+		return c:IsFusionSetCard(0x56b) or c:IsFusionSetCard(0xf0) or c:IsFusionSetCard(0x7e) or c:IsFusionCode(table.unpack(c420.OCGW))
+	else
+		return c:IsSetCard(0x56b) or c:IsSetCard(0xf0) or c:IsSetCard(0x7e) or c:IsCode(table.unpack(c420.OCGW))
+	end
+end
+
 -- White ホワイト
 -- Great White/Malefic Blue-Eyes White Dragon/The All-Seeing White Tiger
 -- Deep-Eyes White Dragon/ Paladin of White Dragon/ Naturia White Oak
@@ -1393,6 +1407,37 @@ function Card.IsWisel(c,fbool)
 	end
 end
 
+--X
+c420.OCGX={
+	18000338,69831560,5861892,61156777,55410871,87526784,98535702,21598948,71525232,5257687,37745919,81823360,81913510,
+	46008667,40253382,11264180,3868277,58258899,48605591,12181376,93130021,62651957,86559484,30562585,28912357,19891310,
+	84243274,2111707,91998119,99724761
+	--CXyz, X-Saber
+}
+
+function Card.IsX(c,fbool)
+	if fbool then
+		return c:IsFusionSetCard(0x56c) or c:IsFusionSetCard(0x1073) or c:IsFusionSetCard(0x100d) or c:IsFusionCode(table.unpack(c420.OCGX))
+	else
+		return c:IsSetCard(0x56c) or c:IsSetCard(0x1073) or c:IsSetCard(0x100d) or c:IsCode(table.unpack(c420.OCGX))
+	end
+end
+
+--Y
+c420.OCGY={
+	23915499,76895648,56111151,3912064,911883,14731897,65622692,81332143,84243274,2111707,91998119,25119460
+	--PSYFrame
+}
+
+function Card.IsY(c,fbool)
+	if fbool then
+		return c:IsFusionSetCard(0x56d) or c:IsFusionSetCard(0xc1) or c:IsFusionCode(table.unpack(c420.OCGY))
+	else
+		return c:IsSetCard(0x56d) or c:IsSetCard(0xc1) or c:IsCode(table.unpack(c420.OCGY))
+	end
+end
+
+
 -- Yomi 黄泉
 -- Treeborn Frog
 -- Yomi Ship
@@ -1417,6 +1462,20 @@ function Card.IsYubel(c,fbool)
 		return c:IsFusionSetCard(0x561)  or c:IsFusionCode(table.unpack(c420.OCGYubel))
 	else
 		return c:IsSetCard(0x561) or c:IsCode(table.unpack(c420.OCGYubel))
+	end
+end
+
+--Z
+c420.OCGZ={
+	50319138,95027497,29389368,64500000,62499965,30562585,51865604,65172015,40854197,27134689,84243274,91998119,99724761,25119460
+	--ZW -
+}
+
+function Card.IsZ(c,fbool)
+	if fbool then
+		return c:IsFusionSetCard(0x56e) or c:IsFusionSetCard(0x7e) or c:IsFusionCode(table.unpack(c420.OCGZ))
+	else
+		return c:IsSetCard(0x56e) or c:IsSetCard(0x7e) or c:IsCode(table.unpack(c420.OCGZ))
 	end
 end
 
