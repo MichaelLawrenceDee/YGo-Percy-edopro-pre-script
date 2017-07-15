@@ -399,24 +399,36 @@ function Auxiliary.FSelectMixRep(c,tp,mg,sg,fc,sub,sub2,chkf,...)
 	mg:Merge(rg)
 	return res
 end
-function Auxiliary.AddContactFusion(c,group,op)
+function Auxiliary.AddContactFusion(c,group,op,condition,sumtype)
+	local code=c:GetOriginalCode()
+	local mt=_G["c" .. code]
+	local t={}
+	if mt.contactfus then
+		t=mt.contactfus
+	end
+	t[c]=true
+	mt.contactfus=t
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetCode(EFFECT_SPSUMMON_PROC)
 	e1:SetProperty(EFFECT_FLAG_UNCOPYABLE)
 	e1:SetRange(LOCATION_EXTRA)
-	e1:SetValue(1)
-	e1:SetCondition(Auxiliary.ContactCon(group))
+	if sumtype then
+		e1:SetValue(sumtype)
+	else
+		e1:SetValue(1)
+	end
+	e1:SetCondition(Auxiliary.ContactCon(group,condition))
 	e1:SetTarget(Auxiliary.ContactTg(group))
 	e1:SetOperation(Auxiliary.ContactOp(op))
 	c:RegisterEffect(e1)
 end
-function Auxiliary.ContactCon(f)
+function Auxiliary.ContactCon(f,fcon)
 	return function(e,c)
 		if c==nil then return true end
-		local m=f(tp)
+		local m=f(e:GetHandlerPlayer())
 		local chkf=c:GetControler()+0x1000
-		return c:CheckFusionMaterial(m,nil,chkf)
+		return c:CheckFusionMaterial(m,nil,chkf) and (not fcon or fcon(e:GetHandlerPlayer()))
 	end
 end
 function Auxiliary.ContactTg(f)
