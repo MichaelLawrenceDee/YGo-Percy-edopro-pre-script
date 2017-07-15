@@ -15,8 +15,8 @@ end
 function c511000635.filter1(c,e)
 	return c:IsOnField() and not c:IsImmuneToEffect(e) and c:IsAbleToRemove()
 end
-function c511000635.filter2(c,e,tp,m)
-	return c:IsType(TYPE_FUSION) and c:IsRace(RACE_MACHINE)
+function c511000635.filter2(c,e,tp,m,f)
+	return c:IsType(TYPE_FUSION) and c:IsRace(RACE_MACHINE) and (not f or f(c))
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,false) and c:CheckFusionMaterial(m,nil,tp)
 end
 function c511000635.filter3(c)
@@ -29,13 +29,14 @@ function c511000635.target(e,tp,eg,ep,ev,re,r,rp,chk)
 			local mg2=Duel.GetMatchingGroup(c511000635.filter3,tp,LOCATION_GRAVE,0,nil)
 			mg1:Merge(mg2)
 		end
-		local res=Duel.IsExistingMatchingCard(c511000635.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,mg1)
+		local res=Duel.IsExistingMatchingCard(c511000635.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,mg1,nil)
 		if not res then
 			local ce=Duel.GetChainMaterial(tp)
 			if ce~=nil then
 				local fgroup=ce:GetTarget()
 				local mg2=fgroup(ce,e,tp)
-				res=Duel.IsExistingMatchingCard(c511000635.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,mg2)
+				local mf=ce:GetValue()
+				res=Duel.IsExistingMatchingCard(c511000635.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,mg2,mf)
 			end
 		end
 		return res
