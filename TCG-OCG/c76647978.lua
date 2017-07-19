@@ -10,18 +10,25 @@ function c76647978.initial_effect(c)
 	e1:SetTarget(c76647978.target)
 	e1:SetOperation(c76647978.activate)
 	c:RegisterEffect(e1)
-	--Summon Materials
-	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(76647978,1))
-	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
-	e2:SetType(EFFECT_TYPE_IGNITION)
-	e2:SetRange(LOCATION_GRAVE)
-	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e2:SetCost(c76647978.spcost)
-	e2:SetTarget(c76647978.sptg)
-	e2:SetOperation(c76647978.spop)
-	c:RegisterEffect(e2)
-	e1:SetLabelObject(e2)
+	if not UltraPolyTable then UltraPolyTable={} end
+	if not c76647978.global_check then
+		c76647978.global_check=true
+		local ge2=Effect.CreateEffect(c)
+		ge2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		ge2:SetCode(EVENT_ADJUST)
+		ge2:SetOperation(c76647978.clear)
+		Duel.RegisterEffect(ge2,0)
+	end
+end
+function c76647978.clear(e,tp,eg,ep,ev,re,r,rp)
+	for c,e2 in ipairs(UltraPolyTable) do
+		local g=e2:GetLabelObject()
+		g:Remove(aux.FilterEqualFunction(Card.GetFlagEffect,0,76647978),nil)
+		if g:GetCount()<=0 then
+			g:DeleteGroup()
+			UltraPolyTable[c]=nil
+		end
+	end
 end
 function c76647978.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.CheckLPCost(tp,2000) end
@@ -101,9 +108,30 @@ function c76647978.activate(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SpecialSummon(tc,SUMMON_TYPE_FUSION,tp,tp,false,false,POS_FACEUP)
 	end
 	if tc then
+		local c=e:GetHandler()
 		tc:RegisterFlagEffect(76647978,RESET_EVENT+0x1fe0000,0,1)
 		tc:CompleteProcedure()
-		e:GetLabelObject():SetLabelObject(tc)
+		local g
+		if UltraPolyTable[c]==nil then
+			g=Group.CreateGroup()
+			g:KeepAlive()
+			local e2=Effect.CreateEffect(c)
+			e2:SetDescription(aux.Stringid(76647978,1))
+			e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
+			e2:SetType(EFFECT_TYPE_IGNITION)
+			e2:SetRange(LOCATION_GRAVE)
+			e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
+			e2:SetCost(c76647978.spcost)
+			e2:SetTarget(c76647978.sptg)
+			e2:SetOperation(c76647978.spop)
+			e2:SetLabelObject(g)
+			e2:SetReset(RESET_EVENT+RESET_TODECK)
+			c:RegisterEffect(e2)
+			UltraPolyTable[c]=e2
+		else
+			g=UltraPolyTable[c]:GetLabelObject()
+		end
+		g:AddCard(tc)
 	end
 end
 function c76647978.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -117,12 +145,13 @@ function c76647978.mgfilter(c,e,tp,fusc,mg)
 		and fusc:CheckFusionMaterial(mg,c)
 end
 function c76647978.spfilter(c,e,tp)
-	if c:IsFaceup() and c:GetFlagEffect(76647978)~=0 and c==e:GetLabelObject() then
+	local g=UltraPolyTable[e:GetHandler()]:GetLabelObject()
+	if c:IsFaceup() and c:GetFlagEffect(76647978)~=0 and g and g:IsContains(c) then
 		local mg=c:GetMaterial()
 		local ct=mg:GetCount()
 		return ct>0 and ct<=Duel.GetLocationCount(tp,LOCATION_MZONE)
 			and mg:FilterCount(c76647978.mgfilter,nil,e,tp,c,mg)==ct
-			and not Duel.IsPlayerAffectedByEffect(tp,59822133)
+			and (not Duel.IsPlayerAffectedByEffect(tp,59822133) or ct<=1)
 	else return false end
 end
 function c76647978.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
