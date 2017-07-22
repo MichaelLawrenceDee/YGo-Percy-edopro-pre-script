@@ -1,4 +1,5 @@
 --Elemental HERO Terra Firma
+--fixed by MLD
 function c511023013.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
