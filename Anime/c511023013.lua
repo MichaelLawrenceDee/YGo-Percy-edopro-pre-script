@@ -21,7 +21,7 @@ function c511023013.initial_effect(c)
 end
 c511023013.material_setcode=0x8
 function c511023013.cfilter(c,tp)
-	return c:IsSetCard(0x3008) and Duel.IsExistingMatchingCard(c511023013.filter,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil)
+	return c:IsSetCard(0x3008) and Duel.IsExistingMatchingCard(c511023013.filter,tp,LOCATION_MZONE,LOCATION_MZONE,1,c)
 end
 function c511023013.filter(c)
 	return c:IsFaceup() and c:IsCode(74711057)
