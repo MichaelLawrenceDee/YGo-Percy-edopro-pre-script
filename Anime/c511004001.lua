@@ -30,7 +30,7 @@ function c511004001.op(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if Duel.GetFlagEffect(tp,511004001)==0 then
 		Duel.RegisterFlagEffect(tp,511004001,0,0,0)
-		Duel.Remove(c,POS_FACEUP,REASON_RULE)
+		Duel.ConfirmCards(1-tp,c)
 		Duel.Hint(HINT_CARD,0,511004001)
 		--todeck
 		local g=Duel.GetFieldGroup(tp,LOCATION_HAND,0)
