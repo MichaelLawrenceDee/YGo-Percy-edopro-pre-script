@@ -28,7 +28,9 @@ function c511004001.con(e,tp,eg,ep,ev,re,r,rp)
 end
 function c511004001.op(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if not Duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_REMOVED,0,1,nil,511004001) then
+	if Duel.GetFlagEffect(tp,511004001)==0 then
+		Duel.RegisterFlagEffect(tp,511004001,0,0,0)
+		Duel.Remove(c,POS_FACEUP,REASON_RULE)
 		Duel.Hint(HINT_CARD,0,511004001)
 		--todeck
 		local g=Duel.GetFieldGroup(tp,LOCATION_HAND,0)
