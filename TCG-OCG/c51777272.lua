@@ -1,7 +1,6 @@
 --月光舞猫姫
 function c51777272.initial_effect(c)
 	--fusion material
-	aux.AddFusionProcFunRep(c,,2,true)
 	aux.AddFusionProcMixN(c,true,true,aux.FilterBoolFunction(Card.IsFusionSetCard,0xdf),2)
 	c:EnableReviveLimit()
 	--battle indestructable
