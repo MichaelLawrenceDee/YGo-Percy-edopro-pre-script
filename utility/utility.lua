@@ -235,13 +235,11 @@ function Auxiliary.nzdef(c)
 end
 --flag effect for summon/sp_summon turn
 function Auxiliary.sumreg(e,tp,eg,ep,ev,re,r,rp)
-	local tc=eg:GetFirst()
 	local code=e:GetLabel()
-	while tc do
+	for tc in aux.Next(eg) do
 		if tc:GetOriginalCode()==code then 
 			tc:RegisterFlagEffect(code,RESET_EVENT+0x1ec0000+RESET_PHASE+PHASE_END,0,1) 
 		end
-		tc=eg:GetNext()
 	end
 end
 --sp_summon condition for fusion monster
@@ -533,28 +531,34 @@ function Auxiliary.ResetEffects(g,eff)
 		end
 	end
 end
---Checks whether 2 cards are on the same column
---skip_ex is optional, indicates whether the Extra Monster Zone should be ignored (used in Blasting Fuse)
-function Card.IsOnSameColumn(c1,c2,skip_ex)
-	if not c1 or not c1:IsOnField() or not c2 or not c2:IsOnField() then return false end
-	if c1==c2 then return false end
-	local s1=c1:GetSequence()
-	local s2=c2:GetSequence()
-	if (c1:IsLocation(LOCATION_SZONE) and s1>=5)
-		or (c2:IsLocation(LOCATION_SZONE) and s2>=5) then return false end
-	if c1:GetControler()==c2:GetControler() then
-		if skip_ex then
-			return s2==s1
-		else
-			return s2==s1 or (s1==1 and s2==5) or (s1==3 and s2==6)
+function Card.GetColumnGroup(c,left,right,excheck)
+	local seq=c:GetSequence()
+	if excheck==nil then excheck=Duel.GetMasterRule()>3 end
+	if Duel.GetMasterRule()<=3 then excheck=false end
+	if not left then left=0 end
+	if not right then right=0 end
+	local min=seq-left
+	if min<0 then min=0 end
+	local max=seq+right
+	if max>4 then max=4 end
+	return Duel.GetMatchingGroup(function(c,min,max,excheck,p)
+		local seq=c:GetSequence()
+		if excheck and seq>4 then
+			if seq==5 then seq=1 end
+			if seq==6 then seq=3 end
 		end
-	else
-		if skip_ex then
-			return s2==4-s1
-		else
-			return s2==4-s1 or (s1==1 and s2==6) or (s1==3 and s2==5)
-		end
-	end
+		return(c:GetControler()==p and seq>=min and seq<=max) or
+				(c:GetControler()==1-p and seq<=min+4 and seq>=max-4)
+	end,0,LOCATION_ONFIELD,LOCATION_ONFIELD,c,min,max,excheck,c:GetControler())
+end
+function Card.GetColumnGroupCount(c,left,right,excheck)
+	return c:GetColumnGroup(left,right,excheck):GetCount()
+end
+function Card.IsAllColumn(c)
+	local ex=0
+	local seq=c:GetSequence()
+	if (seq==1 or seq==3) and Duel.GetMasterRule()>3 then ex=1 end
+	return c:GetColumnGroupCount(0,0,Duel.GetMasterRule()>3)==3+ex
 end
 
 dofile("script/proc_fusion.lua")
