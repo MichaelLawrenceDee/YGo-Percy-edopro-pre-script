@@ -65,6 +65,9 @@ function Auxiliary.SynCondition(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,
 					g=Duel.GetMatchingGroup(function(mc) return mc:IsFaceup() and mc:IsCanBeSynchroMaterial(c) end,tp,LOCATION_MZONE,LOCATION_MZONE,c)
 					mgchk=false
 				end
+				if smat and smat:IsCanBeSynchroMaterial(c) then
+					g:AddCard(smat)
+				end
 				if g:IsExists(Auxiliary.SynchroCheckFilterChk,1,nil,f1,f2,sub1,sub2) then
 					--if there is a monster with EFFECT_SYNCHRO_CHECK (Genomix Fighter/Mono Synchron)
 					local g2=g:Clone()
@@ -485,6 +488,9 @@ function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req
 					mgchk=false
 					g=Duel.GetMatchingGroup(function(mc) return mc:IsFaceup() and mc:IsCanBeSynchroMaterial(c) end,tp,LOCATION_MZONE,LOCATION_MZONE,c)
 				end
+				if smat and smat:IsCanBeSynchroMaterial(c) then
+					g:AddCard(smat)
+				end
 				local tg
 				local ntg
 				if mgchk then
@@ -892,6 +898,9 @@ function Auxiliary.MajesticSynCondition(f1,cbt1,f2,cbt2,f3,cbt3,...)
 					g=Duel.GetMatchingGroup(function(mc) return mc:IsFaceup() and mc:IsCanBeSynchroMaterial(c) end,tp,LOCATION_MZONE,LOCATION_MZONE,c)
 					mgchk=false
 				end
+				if smat and smat:IsCanBeSynchroMaterial(c) then
+					g:AddCard(smat)
+				end
 				if not mgchk then
 					local thg=g:Filter(Card.IsHasEffect,nil,EFFECT_HAND_SYNCHRO)
 					local hg=Duel.GetMatchingGroup(Card.IsCanBeSynchroMaterial,tp,LOCATION_HAND+LOCATION_GRAVE,0,c,c)
@@ -930,6 +939,9 @@ function Auxiliary.MajesticSynTarget(f1,cbt1,f2,cbt2,f3,cbt3,...)
 				else
 					mgchk=false
 					g=Duel.GetMatchingGroup(function(mc) return mc:IsFaceup() and mc:IsCanBeSynchroMaterial(c) end,tp,LOCATION_MZONE,LOCATION_MZONE,c)
+				end
+				if smat and smat:IsCanBeSynchroMaterial(c) then
+					g:AddCard(smat)
 				end
 				if not mgchk then
 					local thg=g:Filter(Card.IsHasEffect,nil,EFFECT_HAND_SYNCHRO)
@@ -1187,6 +1199,9 @@ function Auxiliary.DarkSynCondition(f1,f2,plv,nlv,...)
 					g=Duel.GetMatchingGroup(function(mc) return mc:IsFaceup() and mc:IsCanBeSynchroMaterial(c) end,tp,LOCATION_MZONE,LOCATION_MZONE,c)
 					mgchk=false
 				end
+				if smat and smat:IsCanBeSynchroMaterial(c) then
+					g:AddCard(smat)
+				end
 				if not mgchk then
 					local thg=g:Filter(Card.IsHasEffect,nil,EFFECT_HAND_SYNCHRO)
 					local hg=Duel.GetMatchingGroup(Card.IsCanBeSynchroMaterial,tp,LOCATION_HAND+LOCATION_GRAVE,0,c,c)
@@ -1232,6 +1247,9 @@ function Auxiliary.DarkSynTarget(f1,f2,plv,nlv,...)
 				else
 					mgchk=false
 					g=Duel.GetMatchingGroup(function(mc) return mc:IsFaceup() and mc:IsCanBeSynchroMaterial(c) end,tp,LOCATION_MZONE,LOCATION_MZONE,c)
+				end
+				if smat and smat:IsCanBeSynchroMaterial(c) then
+					g:AddCard(smat)
 				end
 				if not mgchk then
 					local thg=g:Filter(Card.IsHasEffect,nil,EFFECT_HAND_SYNCHRO)
