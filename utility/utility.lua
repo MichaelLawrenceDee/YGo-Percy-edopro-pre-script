@@ -432,8 +432,8 @@ function Auxiliary.AddPersistentProcedure(c,p,f,category,property,hint1,hint2,co
 	e2:SetOperation(Auxiliary.PersistentTgOp(anypos))
 	c:RegisterEffect(e2)
 end
-function Auxiliary.PersistentFilter(c,p,f,e,tp)
-	return (p==PLAYER_ALL or c:IsControler(p)) and (not f or f(c,e,tp))
+function Auxiliary.PersistentFilter(c,p,f,e,tp,tg,eg,ep,ev,re,r,rp)
+	return (p==PLAYER_ALL or c:IsControler(p)) and (not f or f(c,e,tp)) and (not tg or tg(e,tp,eg,ep,ev,re,r,rp,c,0))
 end
 function Auxiliary.PersistentTarget(tg,p,f)
 	return	function(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
@@ -446,8 +446,8 @@ function Auxiliary.PersistentTarget(tg,p,f)
 					player=PLAYER_ALL
 				end
 				if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsFaceup() and Auxiliary.PersistentFilter(chkc,player,f,e,tp) end
-				if chk==0 then return (not tg or tg(e,tp,eg,ep,ev,re,r,rp,g:GetFirst(),0)) and player~=nil 
-					and Duel.IsExistingTarget(Auxiliary.PersistentFilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil,player,f,e,tp) end
+				if chk==0 then return Duel.IsExistingTarget(Auxiliary.PersistentFilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil,player,f,e,tp,tg,eg,ep,ev,re,r,rp)
+					and player~=nil end
 				Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
 				local g=Duel.SelectTarget(tp,Auxiliary.PersistentFilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil,player,f,e,tp)
 				if tg then tg(e,tp,eg,ep,ev,re,r,rp,g:GetFirst(),1) end
