@@ -547,8 +547,12 @@ function Card.GetColumnGroup(c,left,right,excheck)
 			if seq==5 then seq=1 end
 			if seq==6 then seq=3 end
 		end
+		local omin=min+4
+		if omin>4 then omin=4 end
+		local omax=max-4
+		if omax<0 then omax=0 end
 		return(c:GetControler()==p and seq>=min and seq<=max) or
-				(c:GetControler()==1-p and seq<=min+4 and seq>=max-4)
+				(c:GetControler()==1-p and seq<=omin and seq>=omax)
 	end,0,LOCATION_ONFIELD,LOCATION_ONFIELD,c,min,max,excheck,c:GetControler())
 end
 function Card.GetColumnGroupCount(c,left,right,excheck)
