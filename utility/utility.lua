@@ -533,6 +533,10 @@ function Auxiliary.ResetEffects(g,eff)
 end
 function Card.GetColumnGroup(c,left,right,excheck)
 	local seq=c:GetSequence()
+	if c:IsLocation(LOCATION_MZONE) then
+		if seq==5 then seq=1 end
+		if seq==6 then seq=3 end
+	end
 	if excheck==nil then excheck=Duel.GetMasterRule()>3 end
 	if Duel.GetMasterRule()<=3 then excheck=false end
 	if not left then left=0 end
@@ -561,6 +565,10 @@ end
 function Card.IsAllColumn(c)
 	local ex=0
 	local seq=c:GetSequence()
+	if c:IsLocation(LOCATION_MZONE) then
+		if seq==5 then seq=1 end
+		if seq==6 then seq=3 end
+	end
 	if (seq==1 or seq==3) and Duel.GetMasterRule()>3 then ex=1 end
 	return c:GetColumnGroupCount(0,0,Duel.GetMasterRule()>3)==3+ex
 end
