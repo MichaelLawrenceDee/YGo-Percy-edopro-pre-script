@@ -40,7 +40,7 @@ function c79016563.initial_effect(c)
 			if not lg then return nil end
 			return lg:Filter(aux.mutuallinkfilter,nil,c)
 		end
-		function Card.GetMutualLinkedCount(c)
+		function Card.GetMutualLinkedGroupCount(c)
 			local lg=c:GetLinkedGroup()
 			if not lg then return 0 end
 			return lg:FilterCount(aux.mutuallinkfilter,nil,c)
@@ -64,7 +64,7 @@ function c79016563.recop(e,tp,eg,ep,ev,re,r,rp)
 end
 function c79016563.atkcon(e,tp,eg,ep,ev,re,r,rp)
 	return (Duel.GetCurrentPhase()~=PHASE_DAMAGE or not Duel.IsDamageCalculated())
-		and e:GetHandler():GetMutualLinkedCount()>=2
+		and e:GetHandler():GetMutualLinkedGroupCount()>=2
 end
 function c79016563.atktg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return false end
