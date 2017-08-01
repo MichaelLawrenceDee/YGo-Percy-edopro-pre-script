@@ -82,7 +82,7 @@ function c32617464.rmop(e,tp,eg,ep,ev,re,r,rp)
 end
 function c32617464.negcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return not c:IsStatus(STATUS_BATTLE_DESTROYED) and c:GetMutualLinkedCount()>=3 and Duel.IsChainNegatable(ev)
+	return not c:IsStatus(STATUS_BATTLE_DESTROYED) and c:GetMutualLinkedGroupCount()>=3 and Duel.IsChainNegatable(ev)
 end
 function c32617464.negtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return re:GetHandler():IsAbleToRemove() end
