@@ -22,8 +22,19 @@ function c511001821.scop(e,tp,eg,ep,ev,re,r,rp)
 	if g:GetCount()>0 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 		local sg=g:Select(tp,1,1,nil)
+		local sc=sg:GetFirst()
 		Auxiliary.SynchroSend=2
-		Duel.SynchroSummon(tp,sg:GetFirst(),nil,mg)
+		Duel.SynchroSummon(tp,sc,nil,mg)
 		Auxiliary.SynchroSend=0
+		local e1=Effect.CreateEffect(e:GetHandler())
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetCode(EFFECT_DISABLE)
+		e1:SetReset(RESET_EVENT+0x1fe0000)
+		sc:RegisterEffect(e1,true)
+		local e2=Effect.CreateEffect(e:GetHandler())
+		e2:SetType(EFFECT_TYPE_SINGLE)
+		e2:SetCode(EFFECT_DISABLE_EFFECT)
+		e2:SetReset(RESET_EVENT+0x1fe0000)
+		sc:RegisterEffect(e2,true)
 	end
 end
