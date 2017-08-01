@@ -1,6 +1,6 @@
 --Tachyon Cannon
 function c511001485.initial_effect(c)
-	aux.AddEquipProcedure(c,nil,aux.FilterBoolFunction(Card.IsTachyon))
+	aux.AddEquipProcedure(c,nil,aux.FilterBoolFunction(function(c) return c:IsTachyon() end))
 	--Atk up
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_EQUIP)

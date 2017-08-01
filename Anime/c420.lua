@@ -1119,7 +1119,7 @@ c420.OCGShark={
 }
 function Card.IsShark(c,fbool)
 	if fbool then
-		return c:IsFusionSetCard(0x547) or or c:IsFusionCode(table.unpack(c420.OCGShark))
+		return c:IsFusionSetCard(0x547) or c:IsFusionCode(table.unpack(c420.OCGShark))
 	else
 		return c:IsSetCard(0x547) or c:IsCode(table.unpack(c420.OCGShark))
 	end

@@ -1,6 +1,6 @@
 --Goyo Arrow
 function c511002224.initial_effect(c)
-	aux.AddEquipProcedure(c,nil,aux.FilterBoolFunction(Card.IsGoyo))
+	aux.AddEquipProcedure(c,nil,aux.FilterBoolFunction(function(c) return c:IsGoyo() end))
 	--damage
 	local e4=Effect.CreateEffect(c)
 	e4:SetCategory(CATEGORY_DAMAGE)

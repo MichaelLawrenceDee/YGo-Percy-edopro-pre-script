@@ -1,6 +1,6 @@
 --破滅の紋章
 function c100000219.initial_effect(c)
-	aux.AddEquipProcedure(c,nil,aux.FilterBoolFunction(Card.IsHeraldic))
+	aux.AddEquipProcedure(c,nil,aux.FilterBoolFunction(function(c) return c:IsHeraldic() end))
 	--
 	local e4=Effect.CreateEffect(c)
 	e4:SetCategory(CATEGORY_DAMAGE)

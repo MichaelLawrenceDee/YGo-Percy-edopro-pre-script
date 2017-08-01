@@ -2,7 +2,7 @@
 function c511002109.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcMixN(c,true,true,aux.FilterBoolFunction(Card.IsGoyo,true),2)
+	aux.AddFusionProcMixN(c,true,true,aux.FilterBoolFunction(function(c) return c:IsGoyo(true) end),2)
 	--
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
