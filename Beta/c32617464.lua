@@ -49,7 +49,7 @@ function c32617464.initial_effect(c)
 			if not lg then return nil end
 			return lg:Filter(aux.mutuallinkfilter,nil,c)
 		end
-		function Card.GetMutualLinkedCount(c)
+		function Card.GetMutualLinkedGroupCount(c)
 			local lg=c:GetLinkedGroup()
 			if not lg then return 0 end
 			return lg:FilterCount(aux.mutuallinkfilter,nil,c)
@@ -65,7 +65,7 @@ function c32617464.damop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.ChangeBattleDamage(ep,ev*2)
 end
 function c32617464.rmcon(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():GetMutualLinkedCount()>=2
+	return e:GetHandler():GetMutualLinkedGroupCount()>=2
 end
 function c32617464.rmtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsAbleToRemove() end
