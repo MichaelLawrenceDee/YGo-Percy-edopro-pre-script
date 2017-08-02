@@ -1,17 +1,6 @@
 --星杯神楽イヴ
 function c77610772.initial_effect(c)
-	--link summon
-	local e0=Effect.CreateEffect(c)
-	e0:SetType(EFFECT_TYPE_FIELD)
-	e0:SetCode(EFFECT_SPSUMMON_PROC)
-	e0:SetProperty(EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_IGNORE_IMMUNE)
-	e0:SetRange(LOCATION_EXTRA)
-	e0:SetCondition(c77610772.linkcon)
-	e0:SetTarget(c77610772.linktg)
-	e0:SetOperation(aux.LinkOperation())
-	e0:SetValue(SUMMON_TYPE_LINK)
-	c:RegisterEffect(e0)
-	c:EnableReviveLimit()
+	aux.AddLinkProcedure(c,c77610772.filter,2)
 	--indes
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
@@ -49,38 +38,12 @@ function c77610772.initial_effect(c)
 	e5:SetOperation(c77610772.spop2)
 	c:RegisterEffect(e5)
 end
-function c77610772.linkfilter1(c,lc,tp)
-	return c:IsFaceup() and c:IsCanBeLinkMaterial(lc) and Duel.IsExistingMatchingCard(c77610772.linkfilter2,tp,LOCATION_MZONE,0,1,c,lc,c,tp)
-end
-function c77610772.linkfilter2(c,lc,mc,tp)
-	local mg=Group.FromCards(c,mc)
-	return c:IsFaceup() and c:IsCanBeLinkMaterial(lc) and not c:IsRace(mc:GetRace()) and not c:IsAttribute(mc:GetAttribute()) and Duel.GetLocationCountFromEx(tp,tp,mg,lc)>0
-end
-function c77610772.linkcon(e,c)
-	if c==nil then return true end
-	if c:IsType(TYPE_PENDULUM) and c:IsFaceup() then return false end
-	local tp=c:GetControler()
-	return Duel.IsExistingMatchingCard(c77610772.linkfilter1,tp,LOCATION_MZONE,0,1,nil,c,tp)
-end
-function c77610772.linktg(e,tp,eg,ep,ev,re,r,rp,chk,c)
-	local g=Group.CreateGroup()
-	while g:GetCount()<2 do
-		local tc=nil
-		if g:GetCount()==0 then
-			tc=Group.SelectUnselect(Duel.GetMatchingGroup(c77610772.linkfilter1,tp,LOCATION_MZONE,0,nil,c,tp),g,tp,false,true,2,2)
-		else
-			tc=Group.SelectUnselect(Duel.GetMatchingGroup(c77610772.linkfilter2,tp,LOCATION_MZONE,0,g,c,g:GetFirst(),tp),g,tp,false,false,2,2)
-		end
-		if not tc then return false end
-		if not g:IsContains(tc) then
-			g:AddCard(tc)
-		else
-			g:RemoveCard(tc)
-		end
-	end
-	g:KeepAlive()
-	e:SetLabelObject(g)
+function c77610772.filter(c,chk,tp,sg)
+	if chk then return not sg:IsExists(c77610772.filter2,1,c,c:GetRace(),c:GetAttribute()) end
 	return true
+end
+function c77610772.filter2(c,rc,att)
+	return c:IsRace(rc) or c:IsAttribute(att)
 end
 function c77610772.incon(e)
 	local c=e:GetHandler()
