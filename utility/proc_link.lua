@@ -21,17 +21,18 @@ function Auxiliary.GetLinkCount(c)
 		return 1+0x10000*c:GetLink()
 	else return 1 end
 end
-function Auxiliary.LCheckRecursive(c,tp,sg,mg,lc,ct,minc,maxc)
+function Auxiliary.LCheckRecursive(c,tp,sg,mg,lc,ct,minc,maxc,f)
 	sg:AddCard(c)
 	ct=ct+1
-	local res=Auxiliary.LCheckGoal(tp,sg,lc,minc,ct)
-		or (ct<maxc and mg:IsExists(Auxiliary.LCheckRecursive,1,sg,tp,sg,mg,lc,ct,minc,maxc))
+	local res=Auxiliary.LCheckGoal(tp,sg,lc,minc,ct,f)
+		or (ct<maxc and mg:IsExists(Auxiliary.LCheckRecursive,1,sg,tp,sg,mg,lc,ct,minc,maxc,f))
 	sg:RemoveCard(c)
 	ct=ct-1
 	return res
 end
-function Auxiliary.LCheckGoal(tp,sg,lc,minc,ct)
-	return ct>=minc and sg:CheckWithSumEqual(Auxiliary.GetLinkCount,lc:GetLink(),ct,ct) and Duel.GetLocationCountFromEx(tp,tp,sg,lc)>0
+function Auxiliary.LCheckGoal(tp,sg,lc,minc,ct,f)
+	return ct>=minc and sg:CheckWithSumEqual(Auxiliary.GetLinkCount,lc:GetLink(),ct,ct) and sg:IsExists(f,sg:GetCount(),nil,true,tp,sg) 
+		and Duel.GetLocationCountFromEx(tp,tp,sg,lc)>0
 end
 function Auxiliary.LinkCondition(f,minc,maxc)
 	return	function(e,c)
@@ -40,7 +41,7 @@ function Auxiliary.LinkCondition(f,minc,maxc)
 				local tp=c:GetControler()
 				local mg=Duel.GetMatchingGroup(Auxiliary.LConditionFilter,tp,LOCATION_MZONE,0,nil,f,c)
 				local sg=Group.CreateGroup()
-				return mg:IsExists(Auxiliary.LCheckRecursive,1,nil,tp,sg,mg,c,0,minc,maxc)
+				return mg:IsExists(Auxiliary.LCheckRecursive,1,nil,tp,sg,mg,c,0,minc,maxc,f)
 			end
 end
 function Auxiliary.LinkTarget(f,minc,maxc)
@@ -49,9 +50,9 @@ function Auxiliary.LinkTarget(f,minc,maxc)
 				local sg=Group.CreateGroup()
 				local cancel=false
 				while sg:GetCount()<maxc do
-					local cg=mg:Filter(Auxiliary.LCheckRecursive,sg,tp,sg,mg,c,sg:GetCount(),minc,maxc)
+					local cg=mg:Filter(Auxiliary.LCheckRecursive,sg,tp,sg,mg,c,sg:GetCount(),minc,maxc,f)
 					if cg:GetCount()==0 then break end
-					if sg:GetCount()>=minc and sg:GetCount()<=maxc and Auxiliary.LCheckGoal(tp,sg,c,minc,sg:GetCount()) then
+					if sg:GetCount()>=minc and sg:GetCount()<=maxc and Auxiliary.LCheckGoal(tp,sg,c,minc,sg:GetCount(),f) then
 						cancel=true 
 					else 
 						cancel=false
