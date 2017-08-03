@@ -1,7 +1,7 @@
 --電子光虫－コアベージ
 function c58600555.initial_effect(c)
 	c:EnableReviveLimit()
-	aux.AddXyzProcedure(c,c85004150.matfilter,5,2,nil,nil,99)
+	aux.AddXyzProcedure(c,c58600555.mfilter,5,2,nil,nil,99)
 	--xyz summon
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(58600555,2))
