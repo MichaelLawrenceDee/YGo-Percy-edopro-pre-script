@@ -2,7 +2,7 @@
 --Akashic Magician
 function c28776350.initial_effect(c)
 	c:EnableReviveLimit()
-	aux.AddLinkProcedure(c,c28776350.filter,2)
+	aux.AddLinkProcedure(c,c28776350.filter,2,nil,true)
 	--splimit
 	local e1=Effect.CreateEffect(c)
 	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
