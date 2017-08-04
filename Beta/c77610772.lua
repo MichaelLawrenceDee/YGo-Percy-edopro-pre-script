@@ -1,6 +1,6 @@
 --星杯神楽イヴ
 function c77610772.initial_effect(c)
-	aux.AddLinkProcedure(c,c77610772.filter,2)
+	aux.AddLinkProcedure(c,c77610772.filter,2,nil,true)
 	--indes
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
