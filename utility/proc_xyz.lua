@@ -762,7 +762,11 @@ function Auxiliary.XyzTarget2(alterf,op)
 				if cancel then
 					Auxiliary.ProcCancellable=true
 				end
-				if op then if not op(e,tp,1) then return false end cancel=false end
+				if op then
+					local ok,apply=op(e,tp,1)
+					if not ok then return false end
+					if apply then cancel=false end
+				end
 				if og and not min then
 					og:KeepAlive()
 					e:SetLabelObject(og)
