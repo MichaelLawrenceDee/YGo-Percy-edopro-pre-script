@@ -1,6 +1,12 @@
 
-function Auxiliary.XyzAlterFilter(c,alterf,xyzc,tp)
-	return alterf(c) and c:IsCanBeXyzMaterial(xyzc) and (c:IsControler(tp) or c:IsHasEffect(EFFECT_XYZ_MATERIAL))
+function Auxiliary.XyzAlterFilter(c,alterf,xyzc,e,tp,op)
+	if not alterf(c) or not c:IsCanBeXyzMaterial(xyzc) or (c:IsControler(1-tp) and not c:IsHasEffect(EFFECT_XYZ_MATERIAL)) 
+		or (op and op(e,tp,0,c)) then return false end
+	if xyzc:IsLocation(LOCATION_EXTRA) then
+		return Duel.GetLocationCountFromEx(tp,tp,c,xyzc)>0
+	else
+		return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 or c:GetSequence()<5
+	end
 end
 --Xyz monster, lv k*n
 function Auxiliary.AddXyzProcedure(c,f,lv,ct,alterf,desc,maxct,op,mustbemat)
@@ -15,6 +21,14 @@ function Auxiliary.AddXyzProcedure(c,f,lv,ct,alterf,desc,maxct,op,mustbemat)
 		mt.maxxyzct=maxct
 	end
 	
+	local chk1=Effect.CreateEffect(c)
+	chk1:SetType(EFFECT_TYPE_SINGLE)
+	chk1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_SET_AVAILABLE)
+	chk1:SetCode(946)
+	chk1:SetCondition(Auxiliary.XyzCondition(f,lv,ct,maxct,mustbemat))
+	chk1:SetTarget(Auxiliary.XyzTarget(f,lv,ct,maxct,mustbemat))
+	chk1:SetOperation(Auxiliary.XyzOperation(f,lv,ct,maxct,mustbemat))
+	c:RegisterEffect(chk1)
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetDescription(1073)
@@ -25,8 +39,15 @@ function Auxiliary.AddXyzProcedure(c,f,lv,ct,alterf,desc,maxct,op,mustbemat)
 	e1:SetTarget(Auxiliary.XyzTarget(f,lv,ct,maxct,mustbemat))
 	e1:SetOperation(Auxiliary.XyzOperation(f,lv,ct,maxct,mustbemat))
 	e1:SetValue(SUMMON_TYPE_XYZ)
+	e1:SetLabelObject(e0)
 	c:RegisterEffect(e1)
 	if alterf then
+		local chk2=chk1:Clone()
+		chk2:SetDescription(desc)
+		chk2:SetCondition(Auxiliary.XyzCondition2(alterf,op))
+		chk2:SetTarget(Auxiliary.XyzTarget2(alterf,op))
+		chk2:SetOperation(Auxiliary.XyzOperation2(alterf,op))
+		c:RegisterEffect(chk2)
 		local e2=e1:Clone()
 		e2:SetDescription(desc)
 		e2:SetCondition(Auxiliary.XyzCondition2(alterf,op))
@@ -727,22 +748,22 @@ function Auxiliary.XyzCondition2(alterf,op)
 	return	function(e,c,og,min,max)
 				if c==nil then return true end
 				local tp=c:GetControler()
-				local ft=Duel.GetLocationCountFromEx(tp)
-				local ct=-ft
 				local mg=nil
 				if og then
 					mg=og
 				else
 					mg=Duel.GetFieldGroup(tp,LOCATION_MZONE,LOCATION_MZONE)
 				end
-				return ct<1 and (not min or min<=1) and mg:IsExists(Auxiliary.XyzAlterFilter,1,nil,alterf,c,tp)
-					and (not op or op(e,tp,0))
+				return (not min or min<=1) and mg:IsExists(Auxiliary.XyzAlterFilter,1,nil,alterf,c,e,tp,op)
 			end
 end
 function Auxiliary.XyzTarget2(alterf,op)
 	return	function(e,tp,eg,ep,ev,re,r,rp,chk,c,og,min,max)
-				local cancel=true
-				if op then op(e,tp,1) cancel=false end
+				local cancel=not og and Duel.GetCurrentChain()<=0
+				if cancel then
+					Auxiliary.ProcCancellable=true
+				end
+				if op then if not op(e,tp,1) then return false end cancel=false end
 				if og and not min then
 					og:KeepAlive()
 					e:SetLabelObject(og)
@@ -751,17 +772,14 @@ function Auxiliary.XyzTarget2(alterf,op)
 					local mg=nil
 					if og then
 						mg=og
-						cancel=false
 					else
 						mg=Duel.GetFieldGroup(tp,LOCATION_MZONE,LOCATION_MZONE)
-						if Duel.GetCurrentChain()>0 then cancel=false end
 					end
-					cancel=cancel or Auxiliary.ProcCancellable
-					local g=Group.CreateGroup()
+					local minct=cancel and 0 or 1
 					Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
-					local tc=Group.SelectUnselect(mg:Filter(Auxiliary.XyzAlterFilter,nil,alterf,c,tp),g,tp,cancel,cancel)
-					if tc then
-						g:AddCard(tc)
+					local g=mg:FilterSelect(tp,Auxiliary.XyzAlterFilter,minct,1,nil,alterf,c,e,tp,op)
+					if g:GetCount()>0 then
+						if op then op(e,tp,2,g:GetFirst()) end
 						g:KeepAlive()
 						e:SetLabelObject(g)
 						return true
