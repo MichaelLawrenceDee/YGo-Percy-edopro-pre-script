@@ -1,19 +1,7 @@
 --電子光虫－ライノセバス
 function c85004150.initial_effect(c)
 	c:EnableReviveLimit()
-	aux.AddXyzProcedure(c,c85004150.matfilter,7,2,nil,nil,99)
-	--xyz summon
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetDescription(aux.Stringid(85004150,0))
-	e1:SetCode(EFFECT_SPSUMMON_PROC)
-	e1:SetProperty(EFFECT_FLAG_UNCOPYABLE)
-	e1:SetRange(LOCATION_EXTRA)
-	e1:SetCondition(c85004150.xyzcon)
-	e1:SetTarget(c85004150.xyztg)
-	e1:SetOperation(c85004150.xyzop)
-	e1:SetValue(SUMMON_TYPE_XYZ)
-	c:RegisterEffect(e1)
+	aux.AddXyzProcedure(c,c85004150.mfilter,7,2,c85004150.ovfilter,aux.Stringid(85004150,0),99,c85004150.xyzop)
 	--destroy
 	local e2=Effect.CreateEffect(c)
 	e2:SetCategory(CATEGORY_DESTROY)
@@ -39,64 +27,20 @@ function c85004150.initial_effect(c)
 	e4:SetLabelObject(e2)
 	c:RegisterEffect(e4)
 end
-function c85004150.matfilter(c)
-	return c:IsRace(RACE_INSECT) and c:IsAttribute(ATTRIBUTE_LIGHT)
-end
 function c85004150.ovfilter(c,tp,xyzc)
-	return c:IsFaceup() and c:IsType(TYPE_XYZ) and (c:GetRank()==5 or c:GetRank()==6) and c:IsRace(RACE_INSECT) and c:IsCanBeXyzMaterial(xyzc)
-		and c:CheckRemoveOverlayCard(tp,2,REASON_COST) and (c:IsControler(tp) or c:IsHasEffect(EFFECT_XYZ_MATERIAL))
+	return c:IsFaceup() and c:IsXyzType(TYPE_XYZ) and (c:GetRank()==5 or c:GetRank()==6) and c:IsRace(RACE_INSECT)
+end
+function c85004150.xyzop(e,tp,chk,mc)
+ 	if chk==0 then return mc:CheckRemoveOverlayCard(tp,2,REASON_COST) end
+	if chk==1 then
+		return true
+	end
+	if chk==2 then
+		mc:RemoveOverlayCard(tp,2,2,REASON_COST)
+	end
 end
 function c85004150.mfilter(c)
 	return c:IsRace(RACE_INSECT) and c:IsAttribute(ATTRIBUTE_LIGHT)
-end
-function c85004150.xyzcon(e,c,og,min,max)
-	if c==nil then return true end
-	local tp=c:GetControler()
-	local ft=Duel.GetLocationCountFromEx(tp)
-	local ct=-ft
-	local mg=nil
-	if og then
-		mg=og
-	else
-		mg=Duel.GetFieldGroup(tp,LOCATION_MZONE,0)
-	end
-	return ct<1 and (not min or min<=1) and mg:IsExists(c85004150.ovfilter,1,nil,tp,c)
-end
-function c85004150.xyztg(e,tp,eg,ep,ev,re,r,rp,chk,c,og,min,max)
-	if og and not min then
-		return true
-	end
-	local ft=Duel.GetLocationCountFromEx(tp)
-	local ct=-ft
-	local mg=nil
-	if og then
-		mg=og
-	else
-		mg=Duel.GetFieldGroup(tp,LOCATION_MZONE,0)
-	end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
-	local g=mg:FilterSelect(tp,c85004150.ovfilter,1,1,nil,tp,c)
-	g:GetFirst():RemoveOverlayCard(tp,2,2,REASON_COST)
-	if g then
-		g:KeepAlive()
-		e:SetLabelObject(g)
-		return true
-	else return false end
-end
-function c85004150.xyzop(e,tp,eg,ep,ev,re,r,rp,c,og,min,max)
-	if og and not min then
-		c:SetMaterial(og)
-		Duel.Overlay(c,og)
-	else
-		local mg=e:GetLabelObject()
-		local mg2=mg:GetFirst():GetOverlayGroup()
-		if mg2:GetCount()~=0 then
-			Duel.Overlay(c,mg2)
-		end
-		c:SetMaterial(mg)
-		Duel.Overlay(c,mg)
-		mg:DeleteGroup()
-	end
 end
 function c85004150.desfilter(c)
 	return c:IsFaceup() and c:IsDefenseAbove(0)

@@ -2,7 +2,7 @@
 --Zoodiac Lyca
 --Scripted by Eerie Code
 function c41375811.initial_effect(c)
-  --xyz summon
+	--xyz summon
 	aux.AddXyzProcedure(c,nil,4,2,c41375811.ovfilter,aux.Stringid(41375811,0),99,c41375811.xyzop)
 	c:EnableReviveLimit()
 	--atk
@@ -42,7 +42,12 @@ function c41375811.ovfilter(c)
 end
 function c41375811.xyzop(e,tp,chk)
 	if chk==0 then return Duel.GetFlagEffect(tp,41375811)==0 end
-	Duel.RegisterFlagEffect(tp,41375811,RESET_PHASE+PHASE_END,0,1)
+	if chk==1 then
+		return true,false
+	end
+	if chk==2 then
+		Duel.RegisterFlagEffect(tp,41375811,RESET_PHASE+PHASE_END,0,1)
+	end
 end
 function c41375811.atkfilter(c)
 	return c:IsSetCard(0xf1) and c:GetAttack()>=0

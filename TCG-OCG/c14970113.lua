@@ -1,9 +1,7 @@
 --十二獣ハマーコング
---Zoodiac Hammerkong
---Scripted by Eerie Code
 function c14970113.initial_effect(c)
 	--xyz summon
-	aux.AddXyzProcedure(c,nil,4,3,c14970113.ovfilter,aux.Stringid(14970113,0),99,c14970113.xyzop)
+	aux.AddXyzProcedure(c,nil,4,3,c14970113.ovfilter,aux.Stringid(14970113,0),5,c14970113.xyzop)
 	c:EnableReviveLimit()
 	--atk
 	local e1=Effect.CreateEffect(c)
@@ -44,7 +42,12 @@ function c14970113.ovfilter(c)
 end
 function c14970113.xyzop(e,tp,chk)
 	if chk==0 then return Duel.GetFlagEffect(tp,14970113)==0 end
-	Duel.RegisterFlagEffect(tp,14970113,RESET_PHASE+PHASE_END,0,1)
+	if chk==1 then
+		return true,false
+	end
+	if chk==2 then
+		Duel.RegisterFlagEffect(tp,14970113,RESET_PHASE+PHASE_END,0,1)
+	end
 end
 function c14970113.atkfilter(c)
 	return c:IsSetCard(0xf1) and c:GetAttack()>=0
@@ -72,7 +75,5 @@ function c14970113.rmtg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function c14970113.rmop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if c:GetOverlayCount()>0 then
-		c:RemoveOverlayCard(tp,1,1,REASON_EFFECT)
-	end
+	c:RemoveOverlayCard(tp,1,1,REASON_EFFECT)
 end

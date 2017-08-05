@@ -1,7 +1,7 @@
 --Number C1: Gate of Chaos Numeron - Shunya
 function c511000277.initial_effect(c)
 	--xyz summon
-	aux.AddXyzProcedure(c,nil,2,4,c511000277.ovfilter,aux.Stringid(511000277,0),3,c511000277.xyzop)
+	aux.AddXyzProcedure(c,nil,2,4,c511000277.ovfilter,aux.Stringid(511000277,0),3)
 	c:EnableReviveLimit()
 	--selfdes
 	local e1=Effect.CreateEffect(c)
@@ -33,11 +33,8 @@ function c511000277.cfilter(c)
 	return c:IsFaceup() and c:IsCode(511000275)
 end
 function c511000277.ovfilter(c)
-	return c:IsFaceup() and c:IsCode(511000230)
-end
-function c511000277.xyzop(e,tp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c511000277.cfilter,0,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil)
-		or Duel.IsEnvironment(511000275) end
+	return c:IsFaceup() and c:IsCode(511000230) 
+		and (Duel.IsExistingMatchingCard(c511000277.cfilter,0,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil) or Duel.IsEnvironment(511000275))
 end
 function c511000277.descon(e)
 	return not Duel.IsEnvironment(511000275)
@@ -90,7 +87,7 @@ function c511000277.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function c511000277.spop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if c:IsRelateToEffect(e) and Duel.SpecialSummon(c,1,tp,tp,false,false,POS_FACEUP)>0 then
+	if c:IsRelateToEffect(e) then
 		local e4=Effect.CreateEffect(c)
 		e4:SetDescription(aux.Stringid(511000277,3))
 		e4:SetCategory(CATEGORY_DAMAGE)
@@ -102,7 +99,7 @@ function c511000277.spop(e,tp,eg,ep,ev,re,r,rp)
 		e4:SetTarget(c511000277.damtg)
 		e4:SetOperation(c511000277.damop)
 		e4:SetLabel(e:GetLabel())
-		e4:SetReset(RESET_EVENT+0x1fe0000)
+		e4:SetReset(RESET_EVENT+0xfe0000)
 		c:RegisterEffect(e4)
 		local e2=Effect.CreateEffect(c)
 		e2:SetType(EFFECT_TYPE_SINGLE)
@@ -110,8 +107,9 @@ function c511000277.spop(e,tp,eg,ep,ev,re,r,rp)
 		e2:SetCode(511002571)
 		e2:SetLabelObject(e4)
 		e2:SetLabel(c:GetOriginalCode())
-		e2:SetReset(RESET_EVENT+0x1fe0000)
+		e2:SetReset(RESET_EVENT+0xfe0000)
 		c:RegisterEffect(e2)
+		Duel.SpecialSummon(c,1,tp,tp,false,false,POS_FACEUP)
 	end
 end
 function c511000277.damcost(e,tp,eg,ep,ev,re,r,rp,chk)

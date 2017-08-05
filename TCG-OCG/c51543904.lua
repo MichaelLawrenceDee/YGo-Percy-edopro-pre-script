@@ -44,7 +44,15 @@ function c51543904.ovfilter(c)
 end
 function c51543904.xyzop(e,tp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c51543904.cfilter,tp,LOCATION_HAND,0,1,nil) end
-	Duel.DiscardHand(tp,c51543904.cfilter,1,1,REASON_COST+REASON_DISCARD)
+	if chk==1 then
+		local min=Auxiliary.ProcCancellable and 0 or 1
+		local ct=Duel.DiscardHand(tp,c51543904.cfilter,min,1,REASON_COST+REASON_DISCARD)
+		if ct>0 then
+			return true,true
+		else
+			return false
+		end
+	end
 end
 function c51543904.filter(c,e,tp)
 	return c:IsSetCard(0x48) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)

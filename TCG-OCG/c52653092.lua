@@ -80,7 +80,15 @@ function c52653092.ovfilter(c)
 end
 function c52653092.xyzop2(e,tp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c52653092.cfilter,tp,LOCATION_HAND,0,1,nil) end
-	Duel.DiscardHand(tp,c52653092.cfilter,1,1,REASON_COST+REASON_DISCARD,nil)
+	if chk==1 then
+		local min=Auxiliary.ProcCancellable and 0 or 1
+		local ct=Duel.DiscardHand(tp,c52653092.cfilter,min,1,REASON_COST+REASON_DISCARD,nil)
+		if ct>0 then
+			return true,true
+		else
+			return false
+		end
+	end
 end
 function c52653092.xyzfilter1(c,mg,xyz,tp,min,max,matg,ct,matct)
 	local g=mg:Clone()

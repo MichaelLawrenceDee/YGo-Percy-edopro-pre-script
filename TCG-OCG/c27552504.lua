@@ -41,8 +41,16 @@ function c27552504.ovfilter(c)
 end
 function c27552504.xyzop(e,tp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c27552504.cfilter,tp,LOCATION_HAND,0,1,nil) end
-	Duel.DiscardHand(tp,c27552504.cfilter,1,1,REASON_COST,nil)
-	e:GetHandler():RegisterFlagEffect(27552504,RESET_EVENT+0xfe0000+RESET_PHASE+PHASE_END,0,1)
+	if chk==1 then
+		local min=Auxiliary.ProcCancellable and 0 or 1
+		local ct=Duel.DiscardHand(tp,c27552504.cfilter,min,1,REASON_COST,nil)
+		if ct>0 then
+			e:GetHandler():RegisterFlagEffect(27552504,RESET_EVENT+0xfe0000+RESET_PHASE+PHASE_END,0,1)
+			return true,true
+		else
+			return false
+		end
+	end
 end
 function c27552504.tgcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end
