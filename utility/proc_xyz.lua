@@ -39,7 +39,6 @@ function Auxiliary.AddXyzProcedure(c,f,lv,ct,alterf,desc,maxct,op,mustbemat)
 	e1:SetTarget(Auxiliary.XyzTarget(f,lv,ct,maxct,mustbemat))
 	e1:SetOperation(Auxiliary.XyzOperation(f,lv,ct,maxct,mustbemat))
 	e1:SetValue(SUMMON_TYPE_XYZ)
-	e1:SetLabelObject(e0)
 	c:RegisterEffect(e1)
 	if alterf then
 		local chk2=chk1:Clone()
