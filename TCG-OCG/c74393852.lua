@@ -1,7 +1,7 @@
 --十二獣ワイルドボウ
 function c74393852.initial_effect(c)
 	--xyz summon
-	aux.AddXyzProcedure(c,nil,4,5,c74393852.ovfilter,aux.Stringid(74393852,0),5,c74393852.xyzop)
+	aux.AddXyzProcedure(c,nil,4,5,c74393852.ovfilter,aux.Stringid(74393852,0),99,c74393852.xyzop)
 	c:EnableReviveLimit()
 	--atk
 	local e1=Effect.CreateEffect(c)
