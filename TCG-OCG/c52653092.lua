@@ -60,8 +60,8 @@ end
 function c52653092.ovfilter(c)
 	return c:IsFaceup() and c:IsSetCard(0x107f)
 end
-function c52653092.xyzop(e,tp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c52653092.cfilter,tp,LOCATION_HAND,0,1,nil) end
+function c52653092.xyzop(e,tp,chk,mc)
+	if chk==0 then return mc or Duel.IsExistingMatchingCard(c52653092.cfilter,tp,LOCATION_HAND,0,1,nil) end
 	if chk==1 then
 		local min=Auxiliary.ProcCancellable and 0 or 1
 		local ct=Duel.DiscardHand(tp,c52653092.cfilter,min,1,REASON_COST+REASON_DISCARD,nil)
