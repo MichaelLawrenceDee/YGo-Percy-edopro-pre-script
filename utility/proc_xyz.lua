@@ -150,6 +150,7 @@ function Auxiliary.XyzRecursionChk1(c,mg,xyz,tp,min,max,minc,maxc,sg,matg,ct,mat
 		matg:AddCard(c)
 	end
 	sg:AddCard(c)
+	local res=nil
 	if xct>=min and xmatct>=minc then
 		local ok=true
 		if matg:IsExists(Card.IsHasEffect,1,nil,91110378) then
@@ -160,15 +161,15 @@ function Auxiliary.XyzRecursionChk1(c,mg,xyz,tp,min,max,minc,maxc,sg,matg,ct,mat
 		end
 		if ok then
 			if xyz:IsLocation(LOCATION_EXTRA) then
-				if Duel.GetLocationCountFromEx(tp,tp,matg,xyz)>0 then return true end
+				if Duel.GetLocationCountFromEx(tp,tp,matg,xyz)>0 then res=true end
 			else
-				if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 or matg:IsExists(Auxiliary.FieldChk,1,nil,tp) then return true end
+				if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 or matg:IsExists(Auxiliary.FieldChk,1,nil,tp) then res=true end
 			end
 		end
 	end
 	local retchknum={0}
 	local retchk={mg:IsExists(Auxiliary.XyzRecursionChk1,1,sg,mg,xyz,tp,min,max,minc,maxc,sg,matg,xct,xmatct,mustbemat,exchk,f)}
-	if c:IsHasEffect(511001225) and not mustbemat then
+	if not res and c:IsHasEffect(511001225) and not mustbemat then
 		local eff={c:GetCardEffect(511001225)}
 		for i,te in ipairs(eff) do
 			local tgf=te:GetOperation()
@@ -188,9 +189,9 @@ function Auxiliary.XyzRecursionChk1(c,mg,xyz,tp,min,max,minc,maxc,sg,matg,ct,mat
 					end
 					if ok then
 						if xyz:IsLocation(LOCATION_EXTRA) then
-							if Duel.GetLocationCountFromEx(tp,tp,matg,xyz)>0 then return true end
+							if Duel.GetLocationCountFromEx(tp,tp,matg,xyz)>0 then res=true end
 						else
-							if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 or matg:IsExists(Auxiliary.FieldChk,1,nil,tp) then return true end
+							if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 or matg:IsExists(Auxiliary.FieldChk,1,nil,tp) then res=true end
 						end
 					end
 				end
@@ -202,7 +203,7 @@ function Auxiliary.XyzRecursionChk1(c,mg,xyz,tp,min,max,minc,maxc,sg,matg,ct,mat
 		end
 	end
 	for i=1,#retchk do
-		if retchk[i] then return true end
+		if retchk[i] then res=true break end
 	end
 	matg:RemoveCard(c)
 	sg:RemoveCard(c)
