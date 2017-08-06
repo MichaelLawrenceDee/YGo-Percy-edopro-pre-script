@@ -158,7 +158,9 @@ function c48424886.fusop(e,tp,eg,ep,ev,re,r,rp,gc,chkf)
 		end
 		Duel.Hint(HINT_SELECTMSG,p,HINTMSG_FMATERIAL)
 		local tc=Group.SelectUnselect(tg,sg,p)
-		tg:RemoveCard(fc)
+		if fc then
+			tg:RemoveCard(fc)
+		end
 		if not tc then break end
 		if tc==fc then
 			fc:RemoveCounter(tp,0x16,3,REASON_EFFECT)
