@@ -41,7 +41,7 @@ function c58600555.mfilter(c)
 	return c:IsRace(RACE_INSECT) and c:IsAttribute(ATTRIBUTE_LIGHT)
 end
 function c58600555.xyzop(e,tp,chk,mc)
-	if chk==0 then return mc:CheckRemoveOverlayCard(tp,2,REASON_COST) end
+	if chk==0 then return not mc or mc:CheckRemoveOverlayCard(tp,2,REASON_COST) end
 	if chk==1 then
 		return true,false
 	end

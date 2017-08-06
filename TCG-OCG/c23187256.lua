@@ -30,7 +30,7 @@ c23187256.xyz_number=93
 function c23187256.xyzfilter(c,chk,tp,sg)
 	if chk then return c:IsHasEffect(511001175) or sg:FilterCount(Card.IsType,c,TYPE_XYZ)==0 
 		or not sg:IsExists(c23187256.check,1,c,c:GetRank()) end
-	return c:IsType(TYPE_XYZ) and c:IsSetCard(0x48)
+	return c:IsType(TYPE_XYZ) and c:IsSetCard(0x48) and c:GetOverlayCount()>0
 end
 function c23187256.check(c,rk)
 	return c:GetRank()~=rk and not c:IsHasEffect(511001175)

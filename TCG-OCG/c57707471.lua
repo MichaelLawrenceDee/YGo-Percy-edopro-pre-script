@@ -33,7 +33,7 @@ function c57707471.ovfilter(c,tp,xyzc)
 	return c:IsFaceup() and c:IsXyzType(TYPE_XYZ) and c:GetRank()==5
 end
 function c57707471.xyzop(e,tp,chk,mc)
-	if chk==0 then return mc:CheckRemoveOverlayCard(tp,1,REASON_COST) end
+	if chk==0 then return not mc or mc:CheckRemoveOverlayCard(tp,1,REASON_COST) end
 	if chk==1 then
 		return true,false
 	end
