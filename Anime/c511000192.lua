@@ -2,7 +2,7 @@
 function c511000192.initial_effect(c)
 	--xyz summon
 	c:EnableReviveLimit()
-	aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsType,TYPE_XYZ),nil,2,nil,nil,nil,nil,false,true)
+	aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsType,TYPE_XYZ),nil,2)
 	--rank
 	c:SetStatus(STATUS_NO_LEVEL,true)
 	--indes
