@@ -24,7 +24,7 @@ function Auxiliary.LCheckRecursive(c,tp,sg,mg,lc,ct,minc,maxc,f,special)
 	sg:AddCard(c)
 	ct=ct+1
 	local res=Auxiliary.LCheckGoal(tp,sg,lc,minc,ct,f,special)
-		or (ct<maxc and mg:IsExists(Auxiliary.LCheckRecursive,1,sg,tp,sg,mg,lc,ct,minc,maxc,f))
+		or (ct<maxc and mg:IsExists(Auxiliary.LCheckRecursive,1,sg,tp,sg,mg,lc,ct,minc,maxc,f,special))
 	sg:RemoveCard(c)
 	ct=ct-1
 	return res
