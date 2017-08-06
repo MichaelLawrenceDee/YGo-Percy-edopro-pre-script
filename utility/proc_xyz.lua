@@ -602,7 +602,7 @@ function Auxiliary.XyzCondition2(alterf,op)
 				else
 					mg=Duel.GetFieldGroup(tp,LOCATION_MZONE,LOCATION_MZONE)
 				end
-				return (not min or min<=1) and mg:IsExists(Auxiliary.XyzAlterFilter,1,nil,alterf,c,e,tp,op)
+				return (not min or min<=1) and (not op or op(e,tp,0)) and mg:IsExists(Auxiliary.XyzAlterFilter,1,nil,alterf,c,e,tp,op)
 			end
 end
 function Auxiliary.XyzTarget2(alterf,op)
