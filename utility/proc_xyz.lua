@@ -1,7 +1,7 @@
 
 function Auxiliary.XyzAlterFilter(c,alterf,xyzc,e,tp,op)
 	if not alterf(c) or not c:IsCanBeXyzMaterial(xyzc) or (c:IsControler(1-tp) and not c:IsHasEffect(EFFECT_XYZ_MATERIAL)) 
-		or (op and op(e,tp,0,c)) then return false end
+		or (op and not op(e,tp,0,c)) then return false end
 	if xyzc:IsLocation(LOCATION_EXTRA) then
 		return Duel.GetLocationCountFromEx(tp,tp,c,xyzc)>0
 	else
