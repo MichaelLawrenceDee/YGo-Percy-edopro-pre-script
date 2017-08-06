@@ -209,7 +209,7 @@ function Auxiliary.XyzRecursionChk1(c,mg,xyz,tp,min,max,minc,maxc,sg,matg,ct,mat
 	sg:RemoveCard(c)
 	mg:Sub(eqg)
 	mg:Merge(rg)
-	return false
+	return res
 end
 function Auxiliary.XyzRecursionChk2(c,mg,xyz,tp,minc,maxc,sg,matg,ct,mustbemat,exchk,f)
 	local rg=Group.CreateGroup()
@@ -308,7 +308,6 @@ function Auxiliary.XyzRecursionChk2(c,mg,xyz,tp,minc,maxc,sg,matg,ct,mustbemat,e
 	sg:RemoveCard(c)
 	mg:Sub(eqg)
 	mg:Merge(rg)
-	if not res then res=false end
 	return res
 end
 function Auxiliary.MatNumChkF(tg)
