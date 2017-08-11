@@ -53,14 +53,6 @@ function c511009372.initial_effect(c)
 	e2:SetTarget(c511009372.tetg)
 	e2:SetOperation(c511009372.teop)
 	c:RegisterEffect(e2)
-	if not c511009372.global_check then
-		c511009372.global_check=true
-		local ge=Effect.CreateEffect(c)
-		ge:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-		ge:SetCode(EVENT_CHAINING)
-		ge:SetOperation(c511009372.checkop)
-		Duel.RegisterEffect(ge,0)
-	end
 end
 --spirit OCG collection
 c511009372.collection={
@@ -80,14 +72,11 @@ c511009372.collection={
 function c511009372.fusfilter(c)
 	return c:IsSetCard(0x414) or c511009372.collection[c:GetCode()]
 end
-
 function c511009372.atlimit2(e,c)
-	local lv=c:GetLevel()
-	return lv<e:GetHandler():GetLevel() and not c:IsImmuneToEffect(e)
+    return (not c:IsType(TYPE_PENDULUM) or c:IsLevelBelow(e:GetHandler():GetLevel())) and not c:IsImmuneToEffect(e)
 end
 function c511009372.distg(e,c)
-	local lv=c:GetLevel()
-	return lv<e:GetHandler():GetLevel() and c:IsType(TYPE_EFFECT)
+    return (not c:IsType(TYPE_PENDULUM) or c:IsLevelBelow(e:GetHandler():GetLevel())) and c:IsType(TYPE_EFFECT)
 end
 function c511009372.effilter(c)
 	return c:IsFaceup() and c:IsSummonType(SUMMON_TYPE_PENDULUM) and c:IsPreviousLocation(LOCATION_HAND) and c:IsSetCard(0x1414) and	c:GetFlagEffect(511009366)==0	and c:IsReleasableByEffect()
@@ -123,11 +112,6 @@ function c511009372.efop(e,tp,eg,ep,ev,re,r,rp)
 		end
 	end
 end
-function c511009372.lol(e,tp,eg,ep,ev,re,r,rp)
-	local p,d=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER,CHAININFO_TARGET_PARAM)
-	Duel.Damage(p,d,REASON_EFFECT)
-end
-
 function c511009372.damval(e,re,val,r,rp,rc)
 	local c=e:GetHandler()
 	if bit.band(r,REASON_EFFECT)>0 and re:GetHandler()==c then return val*2 else return val end
@@ -144,15 +128,12 @@ function c511009372.pzop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.MoveToField(c,tp,tp,LOCATION_SZONE,POS_FACEUP,true)
 	end
 end
-
-
 function c511009372.tetg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chk==0 then return not e:GetHandler():IsForbidden() end
+    if chk==0 then return not e:GetHandler():IsForbidden() end
 end
 function c511009372.teop(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	if c:IsRelateToEffect(e) then
-		-- Duel.SendtoHand(c,nil,REASON_EFFECT)
-		Duel.SendtoExtraP(c,tp,REASON_EFFECT)
-	end
+    local c=e:GetHandler()
+    if c:IsRelateToEffect(e) then
+        Duel.SendtoDeck(tc,nil,2,REASON_EFFECT)
+    end
 end
