@@ -1,4 +1,4 @@
---Iron Knight of Revolution
+--Sanctity of Dragon
 function c501000085.initial_effect(c)
 	--link summon
 	c:EnableReviveLimit()
