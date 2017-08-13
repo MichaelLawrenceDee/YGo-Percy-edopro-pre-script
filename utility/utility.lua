@@ -3,6 +3,18 @@ aux=Auxiliary
 POS_FACEUP_DEFENCE=POS_FACEUP_DEFENSE
 POS_FACEDOWN_DEFENCE=POS_FACEDOWN_DEFENSE
 
+--to be removed
+local rmf=Card.IsAbleToRemove
+Card.IsAbleToRemove=function(c,player,pos)
+	if not rmf(c,player) then return false end
+	return not pos or not c:IsType(TYPE_TOKEN) or bit.band(pos,POS_FACEDOWN)<=0
+end
+local rmfc=Card.IsAbleToRemoveAsCost
+Card.IsAbleToRemoveAsCost=function(c,pos)
+	if not rmfc(c) then return false end
+	return not pos or not c:IsType(TYPE_TOKEN) or bit.band(pos,POS_FACEDOWN)<=0
+end
+
 function Auxiliary.Stringid(code,id)
 	return code*16+id
 end
