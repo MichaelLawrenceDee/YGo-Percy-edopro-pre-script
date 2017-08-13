@@ -1,7 +1,5 @@
 --変則ギア
 --Trasmission Gear
---Scripted by Eerie Code
---Might require a core update for better functionality
 function c58297729.initial_effect(c)
 	--activate
 	local e1=Effect.CreateEffect(c)
@@ -15,7 +13,7 @@ function c58297729.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	local a=Duel.GetAttacker()
 	local d=Duel.GetAttackTarget()
 	if chk==0 then return d and a:GetControler()~=d:GetControler()
-		and a:IsAbleToRemove() and d:IsAbleToRemove() end
+		and a:IsAbleToRemove(a:GetControler(),POS_FACEDOWN) and d:IsAbleToRemove(d:GetControler(),POS_FACEDOWN) end
 end
 function c58297729.activate(e,tp,eg,ep,ev,re,r,rp)
 	local a=Duel.GetAttacker()
