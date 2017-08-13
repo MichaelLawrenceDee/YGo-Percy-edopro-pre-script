@@ -1,8 +1,7 @@
 --Junk Warrior (Anime)
---cleaned up by MLD
 function c511009416.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,c511009416.tfilter,aux.NonTuner(nil),1)
+	aux.AddSynchroProcedure(c,c511009416.tfilter,1,1,aux.NonTuner(nil),1,99)
 	c:EnableReviveLimit()
 	--atkup
 	local e1=Effect.CreateEffect(c)
