@@ -3,7 +3,7 @@ aux=Auxiliary
 POS_FACEUP_DEFENCE=POS_FACEUP_DEFENSE
 POS_FACEDOWN_DEFENCE=POS_FACEDOWN_DEFENSE
 
---to be removed
+--to be removed once updated in core
 local rmf=Card.IsAbleToRemove
 Card.IsAbleToRemove=function(c,player,pos)
 	if not rmf(c,player) then return false end
