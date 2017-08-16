@@ -273,10 +273,10 @@ function c300.op(e,tp,eg,ep,ev,re,r,rp)
 			end
 			dm[i]:RegisterFlagEffect(300,0,EFFECT_FLAG_CLIENT_HINT,1,0,63)
 			if dm[i]:GetPreviousLocation()==LOCATION_HAND then
-				Duel.Draw(i,1,REASON_RULE)
+					Duel.Draw(i,1,REASON_RULE)
+			end
 		end
-	end
-		c300.VictoryEffects(dm[0])
+		c300.VictoryEffects(dm[1])
 	else
 		local g=getmatchg(function(c) return c.dm end,0,0xff,0xff,nil)
 		c300.RemoveDeckMasters(g)
