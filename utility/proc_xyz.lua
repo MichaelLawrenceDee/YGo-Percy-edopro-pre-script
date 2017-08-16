@@ -207,7 +207,6 @@ function Auxiliary.XyzRecursionChk1(c,mg,xyz,tp,min,max,minc,maxc,sg,matg,ct,mat
 	end
 	matg:RemoveCard(c)
 	sg:RemoveCard(c)
-	mg:Sub(eqg)
 	mg:Merge(rg)
 	return res
 end
