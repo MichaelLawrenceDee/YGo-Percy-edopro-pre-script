@@ -276,7 +276,7 @@ function c300.op(e,tp,eg,ep,ev,re,r,rp)
 					Duel.Draw(i,1,REASON_RULE)
 			end
 		end
-		c300.VictoryEffects(dm[1])
+		c300.VictoryEffects(dm[i])
 	else
 		local g=getmatchg(function(c) return c.dm end,0,0xff,0xff,nil)
 		c300.RemoveDeckMasters(g)
