@@ -339,6 +339,18 @@ function Auxiliary.bfgcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.Remove(c,POS_FACEUP,REASON_COST)
 end
 
+--sp_summon condition for gladiator beast monsters
+function Auxiliary.gbspcon(e,tp,eg,ep,ev,re,r,rp)
+	local st=e:GetHandler():GetSummonType()
+	return st>=(SUMMON_TYPE_SPECIAL+100) and st<(SUMMON_TYPE_SPECIAL+150)
+end
+
+--sp_summon condition for evolsaur monsters
+function Auxiliary.evospcon(e,tp,eg,ep,ev,re,r,rp)
+	local st=e:GetHandler():GetSummonType()
+	return st>=(SUMMON_TYPE_SPECIAL+150) and st<(SUMMON_TYPE_SPECIAL+180)
+end
+
 --add procedure to equip spells equipping by rule
 function Auxiliary.AddEquipProcedure(c,p,f,eqlimit,cost,tg,op,con)
 	--Note: p==0 is check equip spell controler, p==1 for opponent's, PLAYER_ALL for both player's monsters
