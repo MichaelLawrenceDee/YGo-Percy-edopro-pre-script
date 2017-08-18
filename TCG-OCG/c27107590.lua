@@ -1,6 +1,4 @@
 --時械巫女
---Time Maiden
---Scripted by Eerie Code
 function c27107590.initial_effect(c)
 	--special summon rule
 	local e1=Effect.CreateEffect(c)
@@ -44,14 +42,14 @@ function c27107590.sprcon(e,c)
 		and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 end
 function c27107590.dtcon(e,c)
-	return (c:IsSetCard(0x4a) or c:IsCode(74530899,8967776))
+	return c:IsSetCard(0x4a)
 end
 function c27107590.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsReleasable() end
 	Duel.Release(e:GetHandler(),REASON_COST)
 end
 function c27107590.thfilter(c)
-	return (c:IsSetCard(0x4a) or c:IsCode(74530899,8967776)) and c:IsType(TYPE_MONSTER) and c:GetAttack()==0 and c:IsAbleToHand()
+	return c:IsSetCard(0x4a) and c:IsType(TYPE_MONSTER) and c:GetAttack()==0 and c:IsAbleToHand()
 end
 function c27107590.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c27107590.thfilter,tp,LOCATION_DECK,0,1,nil) end
@@ -84,7 +82,7 @@ function c27107590.splimit(e,c,sump,sumtype,sumpos,targetp,se)
 	return se~=e:GetLabelObject()
 end
 function c27107590.spfilter(c,e,tp)
-	return (c:IsSetCard(0x4a) or c:IsCode(74530899,8967776)) and c:IsType(TYPE_MONSTER) and c:GetAttack()==0 and c:IsCanBeSpecialSummoned(e,0,tp,true,false)
+	return c:IsSetCard(0x4a) and c:IsType(TYPE_MONSTER) and c:GetAttack()==0 and c:IsCanBeSpecialSummoned(e,0,tp,true,false)
 end
 function c27107590.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0

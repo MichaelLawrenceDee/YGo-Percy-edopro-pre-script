@@ -66,6 +66,7 @@ function c23379054.operation(e,tp,eg,ep,ev,re,r,rp)
 	local lv=c:GetLevel()+tc:GetLevel()
 	local g=Group.FromCards(c,tc)
 	if Duel.Remove(g,POS_FACEUP,REASON_EFFECT)==2 then
+		if Duel.GetLocationCountFromEx(tp)<=0 then return end
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 		local sg=Duel.SelectMatchingCard(tp,c23379054.filter2,tp,LOCATION_EXTRA,0,1,1,nil,e,tp,lv,g)
 		if sg:GetCount()>0 then

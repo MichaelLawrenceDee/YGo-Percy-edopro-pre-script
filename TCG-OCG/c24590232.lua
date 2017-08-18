@@ -47,7 +47,8 @@ function c24590232.filterchk(c,g,sg,tp,tuner,sc)
 	return res
 end
 function c24590232.activate(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.NegateAttack() and Duel.IsExistingMatchingCard(c24590232.filter1,tp,LOCATION_EXTRA,0,1,nil,e,tp)
+	if Duel.NegateAttack() and Duel.GetLocationCountFromEx(tp)>0
+		and Duel.IsExistingMatchingCard(c24590232.filter1,tp,LOCATION_EXTRA,0,1,nil,e,tp)
 		and Duel.SelectYesNo(tp,aux.Stringid(24590232,0)) then
 		Duel.BreakEffect()
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
