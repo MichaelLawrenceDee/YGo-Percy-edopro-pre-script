@@ -23,7 +23,7 @@ Card.EnableCounterPermit=function(c,countertype,location)
 		local self=e:GetHandler()
 		if self:IsOnField() then
 			if not location or tempchk then return true end
-			local fz=bit.band(self:GetLocation(),LOCATION_FZONE)
+			local fz=bit.band(location,LOCATION_FZONE)
 			local loc=bit.band(location,LOCATION_ONFIELD+LOCATION_PZONE)
 			return self:IsLocation(loc) or (fz>0 and self:IsLocation(LOCATION_SZONE) and self:GetSequence()==5)
 		end
