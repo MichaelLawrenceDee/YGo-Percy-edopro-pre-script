@@ -23,7 +23,15 @@ function c67196946.filter(c,lv)
 	return c:GetLevel()>lv
 end
 function c67196946.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.CheckLPCost(tp,500) end
+	e:SetLabel(1)
+	if chk==0 then return true end
+end
+function c67196946.tg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then
+		if e:GetLabel()~=1 then return false end
+		e:SetLabel(0)
+		return Duel.CheckLPCost(tp,500) and Duel.IsExistingMatchingCard(c67196946.filter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,nil,1)
+	end
 	local lp=Duel.GetLP(tp)
 	local g=Duel.GetMatchingGroup(c67196946.filter,tp,LOCATION_HAND+LOCATION_MZONE,0,nil,1)
 	local tg=g:GetMaxGroup(Card.GetLevel)
@@ -37,13 +45,10 @@ function c67196946.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.Hint(HINT_SELECTMSG,tp,aux.Stringid(67196946,0))
 	local announce=Duel.AnnounceNumber(tp,table.unpack(t))
 	Duel.PayLPCost(tp,announce)
-	e:SetLabel(announce/500)
-end
-function c67196946.tg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c67196946.filter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,nil,1) end
+	Duel.SetTargetParam(announce/500)
 end
 function c67196946.op(e,tp,eg,ep,ev,re,r,rp)
-	local ct=e:GetLabel()
+	local ct=Duel.GetChainInfo(0,CHAININFO_TARGET_PARAM)
 	local g=Duel.GetMatchingGroup(c67196946.filter,tp,LOCATION_HAND+LOCATION_MZONE,0,nil,ct)
 	if g:GetCount()>0 then
 		Duel.Hint(HINT_SELECTMSG,tp,aux.Stringid(67196946,1))
