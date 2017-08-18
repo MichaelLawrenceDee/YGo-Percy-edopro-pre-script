@@ -43,8 +43,11 @@ end
 function c1561110.splimit(e,se,sp,st)
 	return not e:GetHandler():IsLocation(LOCATION_EXTRA)
 end
+function c1561110.matfil(c,tp)
+	return c:IsAbleToRemoveAsCost() and (not c:IsLocation(LOCATION_GRAVE) or not Duel.IsPlayerAffectedByEffect(tp,69832741))
+end
 function c1561110.contactfil(tp)
-	return Duel.GetMatchingGroup(Card.IsAbleToRemoveAsCost,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,nil)
+	return Duel.GetMatchingGroup(c1561110.matfil,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,nil,tp)
 end
 function c1561110.contactop(g)
 	Duel.Remove(g,POS_FACEUP,REASON_COST+REASON_MATERIAL)
