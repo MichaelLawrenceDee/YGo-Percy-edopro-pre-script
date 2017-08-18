@@ -12,6 +12,7 @@ function c37192109.initial_effect(c)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetCountLimit(1)
+	e1:SetHintTiming(0,0x1e0+TIMING_END_PHASE)
 	e1:SetHintTiming(TIMING_SPSUMMON)
 	e1:SetTarget(c37192109.rmtg)
 	e1:SetOperation(c37192109.rmop)
@@ -29,7 +30,7 @@ function c37192109.initial_effect(c)
 end
 function c37192109.rmfilter(c)
 	return c:IsPosition(POS_FACEUP_ATTACK) and c:IsAbleToRemove()
-		and bit.band(c:GetSummonType(),SUMMON_TYPE_SPECIAL)==SUMMON_TYPE_SPECIAL
+		and c:IsSummonType(SUMMON_TYPE_SPECIAL)
 end
 function c37192109.rmtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) and c37192109.rmfilter(chkc) end
@@ -55,7 +56,7 @@ function c37192109.rmop(e,tp,eg,ep,ev,re,r,rp)
 			if oc:IsControler(tp) then
 				oc:RegisterFlagEffect(37192109,RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_STANDBY+RESET_SELF_TURN,0,rct,fid)
 			else
-				oc:RegisterFlagEffect(37192109,RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_STANDBY+RESET_OPPO_TURN,0,1,fid)
+				oc:RegisterFlagEffect(37192109,RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_STANDBY+RESET_OPPO_TURN,0,rct,fid)
 			end
 			oc=og:GetNext()
 		end

@@ -6,7 +6,7 @@ function c30086349.initial_effect(c)
 	--damage
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(30086349,0))
-	e1:SetCategory(CATEGORY_DAMAGE+CATEGORY_TOGRAVE)
+	e1:SetCategory(CATEGORY_DAMAGE+CATEGORY_DECKDES)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e1:SetProperty(EFFECT_FLAG_DELAY)
 	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
@@ -34,7 +34,7 @@ function c30086349.mfilter2(c)
 	return c:IsRace(RACE_DRAGON) and c:GetLevel()==6
 end
 function c30086349.damcon(e,tp,eg,ep,ev,re,r,rp)
-	return bit.band(e:GetHandler():GetSummonType(),SUMMON_TYPE_FUSION)==SUMMON_TYPE_FUSION
+	return e:GetHandler():IsSummonType(SUMMON_TYPE_FUSION)
 end
 function c30086349.damfilter(c)
 	return c:IsFusionSetCard(0x3b) and c:GetBaseAttack()>0 and c:IsAbleToGrave()

@@ -1,8 +1,7 @@
 --SPYRAL Sleeper
---Scripted by Eerie Code
 function c35699.initial_effect(c)
 	c:EnableReviveLimit()
-	--cannot special summon
+	--splimit
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_SINGLE)
 	e0:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
@@ -26,6 +25,7 @@ function c35699.initial_effect(c)
 	e2:SetCountLimit(1)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e2:SetHintTiming(0,0x1e0)
 	e2:SetTarget(c35699.destg)
 	e2:SetOperation(c35699.desop)
 	c:RegisterEffect(e2)

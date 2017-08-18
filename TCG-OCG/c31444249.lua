@@ -24,15 +24,13 @@ function c31444249.initial_effect(c)
 	c:RegisterEffect(e3)
 	--spsummon
 	local e4=Effect.CreateEffect(c)
-	e4:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_FUSION_SUMMON)
+	e4:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_FUSION_SUMMON+CATEGORY_DECKDES)
 	e4:SetType(EFFECT_TYPE_IGNITION)
 	e4:SetRange(LOCATION_SZONE)
 	e4:SetCost(c31444249.spcost)
 	e4:SetTarget(c31444249.sptg)
 	e4:SetOperation(c31444249.spop)
 	c:RegisterEffect(e4)
-	if not AshBlossomTable then AshBlossomTable={} end
-	table.insert(AshBlossomTable,e4)
 end
 function c31444249.lvtg(e,c)
 	return c:IsSetCard(0xbb) and c:GetOriginalLevel()>=2

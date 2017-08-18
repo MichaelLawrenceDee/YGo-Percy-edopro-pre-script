@@ -1,7 +1,7 @@
 --シューティング・クェーサー・ドラゴン
 function c35952884.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsType,TYPE_SYNCHRO),1,1,aux.NonTuner(Card.IsType,TYPE_SYNCHRO),2,99)
+	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsSynchroType,TYPE_SYNCHRO),1,1,aux.NonTuner(Card.IsSynchroType,TYPE_SYNCHRO),2,99)
 	c:EnableReviveLimit()
 	--cannot special summon
 	local e1=Effect.CreateEffect(c)
@@ -63,7 +63,7 @@ function c35952884.valcheck(e,c)
 	e:GetLabelObject():SetLabel(ct)
 end
 function c35952884.mtcon(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():GetSummonType()==SUMMON_TYPE_SYNCHRO and e:GetLabel()>0
+	return e:GetHandler():IsSummonType(SUMMON_TYPE_SYNCHRO) and e:GetLabel()>0
 end
 function c35952884.mtop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
@@ -102,10 +102,8 @@ function c35952884.sumtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 function c35952884.sumop(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetLocationCountFromEx(tp)<=0 then return end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local g=Duel.SelectMatchingCard(tp,c35952884.filter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp)
-	if g:GetCount()>0 then
-		Duel.SpecialSummon(g,0,tp,tp,false,true,POS_FACEUP)
+	local tg=Duel.GetFirstMatchingCard(c35952884.filter,tp,LOCATION_EXTRA,0,nil,e,tp)
+	if tg then
+		Duel.SpecialSummon(tg,0,tp,tp,false,true,POS_FACEUP)
 	end
 end

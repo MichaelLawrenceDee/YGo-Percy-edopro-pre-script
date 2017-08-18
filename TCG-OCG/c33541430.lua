@@ -1,6 +1,4 @@
 --花札衛-月花見-
---Flower Cardian Tsukihanami
---Scripted by Eerie Code
 function c33541430.initial_effect(c)
 	c:EnableReviveLimit()
 	aux.AddSynchroProcedure(c,nil,1,1,aux.NonTuner(nil),2,2)
@@ -16,7 +14,7 @@ function c33541430.initial_effect(c)
 	e2:SetTarget(c33541430.drtg)
 	e2:SetOperation(c33541430.drop)
 	c:RegisterEffect(e2)
-	--synchro
+	--synchro level
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_SINGLE)
 	e3:SetCode(EFFECT_SYNCHRO_MATERIAL_CUSTOM)
@@ -46,8 +44,7 @@ function c33541430.drop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ConfirmCards(1-tp,tc)
 		Duel.BreakEffect()
 		if tc:IsType(TYPE_MONSTER) and tc:IsSetCard(0xe6) then
-			if tc:IsCanBeSpecialSummoned(e,0,tp,true,false)
-				and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+			if Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 				and Duel.SelectYesNo(tp,aux.Stringid(33541430,1))
 				and Duel.SpecialSummonStep(tc,0,tp,tp,true,false,POS_FACEUP) then
 				local e1=Effect.CreateEffect(e:GetHandler())

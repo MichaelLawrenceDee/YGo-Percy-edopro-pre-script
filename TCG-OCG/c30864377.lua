@@ -1,6 +1,4 @@
 --剣闘獣総監エーディトル
---Gladiator Beast Tamer Editor
---Scripted by Eerie Code
 function c30864377.initial_effect(c)
 	c:EnableReviveLimit()
 	aux.AddFusionProcMixN(c,true,true,c30864377.matfilter,2)
@@ -57,7 +55,7 @@ function c30864377.splimit(e,se,sp,st)
 end
 function c30864377.espfilter(c,e,tp)
 	return c:IsSetCard(0x19) and c:IsType(TYPE_FUSION) and not c:IsCode(30864377)
-		and c:IsCanBeSpecialSummoned(e,122,tp,true,false)
+		and c:IsCanBeSpecialSummoned(e,124,tp,true,false)
 end
 function c30864377.esptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCountFromEx(tp)>0
@@ -69,34 +67,35 @@ function c30864377.espop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,c30864377.espfilter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp)
 	if g:GetCount()>0 then
-		Duel.SpecialSummon(g,122,tp,tp,true,false,POS_FACEUP)
+		Duel.SpecialSummon(g,124,tp,tp,true,false,POS_FACEUP)
 	end
 end
-function c30864377.spcfilter(c)
+function c30864377.spcfilter(c,ft)
 	return c:IsFaceup() and c:IsSetCard(0x19) and c:GetBattledGroupCount()>0
-		and c:IsAbleToDeckOrExtraAsCost()
+		and c:IsAbleToDeckOrExtraAsCost() and (ft>0 or c:GetSequence()<5)
 end
 function c30864377.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c30864377.spcfilter,tp,LOCATION_MZONE,0,1,nil) end
+	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
+	if chk==0 then return ft>-1 and Duel.IsExistingMatchingCard(c30864377.spcfilter,tp,LOCATION_MZONE,0,1,nil,ft) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g=Duel.SelectMatchingCard(tp,c30864377.spcfilter,tp,LOCATION_MZONE,0,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,c30864377.spcfilter,tp,LOCATION_MZONE,0,1,1,nil,ft)
 	Duel.ConfirmCards(1-tp,g)
 	Duel.SendtoDeck(g,nil,2,REASON_COST)
 end
 function c30864377.spfilter(c,e,tp)
-	return c:IsSetCard(0x19) and c:IsCanBeSpecialSummoned(e,122,tp,false,false)
+	return c:IsSetCard(0x19) and c:IsCanBeSpecialSummoned(e,124,tp,false,false)
 end
 function c30864377.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>-1
-		and Duel.IsExistingMatchingCard(c30864377.spfilter,tp,LOCATION_DECK,0,1,nil,e,tp) end
+	if chk==0 then return Duel.IsExistingMatchingCard(c30864377.spfilter,tp,LOCATION_DECK,0,1,nil,e,tp) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_DECK)
 end
 function c30864377.spop(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)<1 then return end
+	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,c30864377.spfilter,tp,LOCATION_DECK,0,1,1,nil,e,tp)
 	local tc=g:GetFirst()
 	if tc then
-		Duel.SpecialSummonStep(tc,122,tp,tp,false,false,POS_FACEUP)
+		Duel.SpecialSummonStep(tc,124,tp,tp,false,false,POS_FACEUP)
 		tc:RegisterFlagEffect(tc:GetOriginalCode(),RESET_EVENT+0x1ff0000,0,0)
 		Duel.SpecialSummonComplete()
 	end
