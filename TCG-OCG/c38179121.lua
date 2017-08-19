@@ -1,6 +1,4 @@
 --究極進化薬
---Ultra Evolution
---Scripted by dest
 function c38179121.initial_effect(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)

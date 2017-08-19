@@ -9,7 +9,7 @@ function c39964797.initial_effect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetHintTiming(0,TIMING_BATTLE_START+TIMING_BATTLE_END+TIMING_MAIN_END)
+	e1:SetHintTiming(0,TIMING_BATTLE_START+TIMING_BATTLE_END)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCondition(c39964797.sccon)
 	e1:SetTarget(c39964797.sctg)
@@ -48,7 +48,7 @@ function c39964797.scop(e,tp,eg,ep,ev,re,r,rp)
 end
 function c39964797.spcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return c:IsPreviousLocation(LOCATION_MZONE) and c:GetSummonType()==SUMMON_TYPE_SYNCHRO and bit.band(r,REASON_EFFECT+REASON_BATTLE)~=0
+	rreturn c:IsPreviousLocation(LOCATION_MZONE) and c:IsSummonType(SUMMON_TYPE_SYNCHRO) and bit.band(r,REASON_EFFECT+REASON_BATTLE)~=0
 end
 function c39964797.spfilter(c,e,tp)
 	return c:IsSetCard(0xea) and not c:IsType(TYPE_SYNCHRO) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)

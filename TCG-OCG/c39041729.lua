@@ -1,6 +1,4 @@
 --時空超越
---Spacetime Transcendence
---Scripted by dest
 function c39041729.initial_effect(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)
