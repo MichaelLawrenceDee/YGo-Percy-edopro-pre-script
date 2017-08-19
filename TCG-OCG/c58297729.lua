@@ -1,5 +1,4 @@
 --変則ギア
---Trasmission Gear
 function c58297729.initial_effect(c)
 	--activate
 	local e1=Effect.CreateEffect(c)
@@ -25,5 +24,5 @@ function c58297729.activate(e,tp,eg,ep,ev,re,r,rp)
 		Duel.Remove(d,POS_FACEDOWN,REASON_RULE)
 	else
 		Duel.Remove(a,POS_FACEDOWN,REASON_RULE)
-        end
+	end
 end

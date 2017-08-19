@@ -1,6 +1,4 @@
 --覇王白竜オッドアイズ・ウィング・ドラゴン
---Odd-Eyes Wing Dragon
---Scripted by Eerie Code
 function c58074177.initial_effect(c)
 	c:EnableReviveLimit()
 	aux.EnablePendulumAttribute(c,false)
@@ -35,7 +33,6 @@ function c58074177.initial_effect(c)
 	e3:SetCode(EVENT_FREE_CHAIN)
 	e3:SetRange(LOCATION_MZONE)
 	e3:SetCountLimit(1,58074177)
-	e3:SetHintTiming(TIMING_BATTLE_START)
 	e3:SetCondition(c58074177.descon)
 	e3:SetTarget(c58074177.destg)
 	e3:SetOperation(c58074177.desop)
@@ -54,25 +51,24 @@ end
 function c58074177.atkcon(e,tp,eg,ep,ev,re,r,rp)
 	local a=Duel.GetAttacker()
 	local d=a:GetBattleTarget()
-	return a:IsFaceup() and a:IsRelateToBattle()
+	if a:IsControler(1-tp) then a,d=d,a end
+	return a and a:IsFaceup() and a:IsRelateToBattle()
 		and d and d:IsFaceup() and d:IsRelateToBattle()
-		and (d:GetAttack()>0 or a:GetAttack()>0) and a:GetControler()~=d:GetControler()
+		and d:GetAttack()>0 and a:GetControler()~=d:GetControler()
 end
 function c58074177.atkop(e,tp,ep,ev,re,r,rp)
 	local a=Duel.GetAttacker()
 	local d=a:GetBattleTarget()
-	local b,atk=nil,0
-	if a:IsControler(tp) then b,atk=a,d:GetAttack()
-	else b,atk=d,a:GetAttack() end
-	if e:GetHandler():IsRelateToEffect(e) and b
+	if a:IsControler(1-tp) then a,d=d,a end
+	if e:GetHandler():IsRelateToEffect(e)
 		and a:IsFaceup() and a:IsRelateToBattle()
 		and d:IsFaceup() and d:IsRelateToBattle() then
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_UPDATE_ATTACK)
-		e1:SetValue(atk)
+		e1:SetValue(d:GetAttack())
 		e1:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_DAMAGE_CAL)
-		b:RegisterEffect(e1)
+		a:RegisterEffect(e1)
 	end
 end
 function c58074177.disfilter(c)
@@ -110,8 +106,8 @@ function c58074177.disop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c58074177.descon(e,tp,eg,ep,ev,re,r,rp)
-	return (Duel.GetCurrentPhase()>=PHASE_BATTLE_START and Duel.GetCurrentPhase()<=PHASE_BATTLE)
-		and bit.band(e:GetHandler():GetSummonType(),SUMMON_TYPE_SYNCHRO)==SUMMON_TYPE_SYNCHRO
+	return e:GetHandler():IsSummonType(SUMMON_TYPE_SYNCHRO)
+		and (Duel.GetCurrentPhase()>=PHASE_BATTLE_START and Duel.GetCurrentPhase()<=PHASE_BATTLE)
 end
 function c58074177.desfilter(c)
 	return c:IsFaceup() and c:IsLevelAbove(5)
@@ -132,12 +128,12 @@ function c58074177.pencon(e,tp,eg,ep,ev,re,r,rp)
 	return c:IsPreviousLocation(LOCATION_MZONE) and c:IsFaceup()
 end
 function c58074177.pentg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.CheckLocation(tp,LOCATION_SZONE,6) or Duel.CheckLocation(tp,LOCATION_SZONE,7) end
+	if chk==0 then return Duel.CheckLocation(tp,LOCATION_PZONE,0) or Duel.CheckLocation(tp,LOCATION_PZONE,1) end
 end
 function c58074177.penop(e,tp,eg,ep,ev,re,r,rp)
-	if not Duel.CheckLocation(tp,LOCATION_SZONE,6) and not Duel.CheckLocation(tp,LOCATION_SZONE,7) then return end
+	if not Duel.CheckLocation(tp,LOCATION_PZONE,0) and not Duel.CheckLocation(tp,LOCATION_PZONE,1) then return end
 	local c=e:GetHandler()
 	if c:IsRelateToEffect(e) then
-		Duel.MoveToField(c,tp,tp,LOCATION_SZONE,POS_FACEUP,true)
+		Duel.MoveToField(c,tp,tp,LOCATION_PZONE,POS_FACEUP,true)
 	end
 end

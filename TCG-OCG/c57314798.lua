@@ -47,7 +47,7 @@ c57314798.xyz_number=100
 function c57314798.xyzfilter(c,chk,tp,sg)
 	if chk then return c:IsHasEffect(511001175) or sg:FilterCount(Card.IsType,c,TYPE_XYZ)==0 
 		or sg:IsExists(c57314798.check,1,c,c:GetRank(),c:GetCode()) end
-	return c:IsType(TYPE_XYZ) and c:IsSetCard(0x48)
+	return c:IsXyzType(TYPE_XYZ) and c:IsSetCard(0x48)
 end
 function c57314798.check(c,rk,code)
 	return c:GetRank()==rk and c:IsCode(code)

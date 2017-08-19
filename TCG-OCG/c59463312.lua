@@ -18,7 +18,7 @@ function c59463312.initial_effect(c)
 	e3:SetType(EFFECT_TYPE_IGNITION)
 	e3:SetRange(LOCATION_GRAVE)
 	e3:SetCountLimit(1,59463312)
-	e3:SetCost(c59463312.cost)
+	e3:SetCost(aux.bfgcost)
 	e3:SetTarget(c59463312.target)
 	e3:SetOperation(c59463312.operation)
 	c:RegisterEffect(e3)
@@ -37,13 +37,8 @@ function c59463312.sumop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.RegisterEffect(e2,tp)
 	Duel.RegisterFlagEffect(tp,59463312,RESET_PHASE+PHASE_END,0,1)
 end
-function c59463312.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return not Duel.IsPlayerAffectedByEffect(e:GetHandlerPlayer(),69832741) 
-		and e:GetHandler():IsAbleToRemoveAsCost() end
-	Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_COST)
-end
 function c59463312.filter(c,e,tp)
-	return c:GetAttack()==800 and c:GetDefense()==1000 and not c:IsCode(59463312) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:GetAttack()==800 and c:GetDefense()==1000 and not c:IsCode(59463312) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP_DEFENSE)
 end
 function c59463312.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_GRAVE) and c59463312.filter(chkc,e,tp) end

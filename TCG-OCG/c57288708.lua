@@ -1,6 +1,4 @@
 --星遺物－『星杯』
---Star Relic - Star Grail
---Scripted by Eerie Code
 function c57288708.initial_effect(c)
 	--send to grave
 	local e1=Effect.CreateEffect(c)
@@ -30,12 +28,12 @@ function c57288708.initial_effect(c)
 	--tohand
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(57288708,2))
-	e3:SetCategory(CATEGORY_TOHAND)
+	e3:SetCategory(CATEGORY_SEARCH)
 	e3:SetType(EFFECT_TYPE_IGNITION)
 	e3:SetRange(LOCATION_GRAVE)
 	e3:SetCountLimit(1,57288709)
 	e3:SetCondition(aux.exccon)
-	e3:SetCost(c57288708.thcost)
+	e3:SetCost(aux.bfgcost)
 	e3:SetTarget(c57288708.thtg)
 	e3:SetOperation(c57288708.thop)
 	c:RegisterEffect(e3)
@@ -63,7 +61,7 @@ function c57288708.tgop(e,tp,eg,ep,ev,re,r,rp)
 end
 function c57288708.spcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return c:IsPreviousPosition(POS_FACEUP) and bit.band(c:GetSummonType(),SUMMON_TYPE_SPECIAL)==0
+	return c:IsPreviousPosition(POS_FACEUP) and not c:IsSummonType(SUMMON_TYPE_SPECIAL)
 end
 function c57288708.spfilter(c,e,tp)
 	return c:IsSetCard(0xfd) and not c:IsCode(57288708) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
@@ -81,11 +79,6 @@ function c57288708.spop(e,tp,eg,ep,ev,re,r,rp)
 	if g:GetCount()==2 then
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 	end
-end
-function c57288708.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return not Duel.IsPlayerAffectedByEffect(e:GetHandlerPlayer(),69832741) 
-		and e:GetHandler():IsAbleToRemoveAsCost() end
-	Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_COST)
 end
 function c57288708.thfilter(c)
 	return c:IsSetCard(0xfe) and c:IsAbleToHand()

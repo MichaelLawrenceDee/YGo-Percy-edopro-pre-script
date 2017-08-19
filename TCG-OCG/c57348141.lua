@@ -1,6 +1,4 @@
 --トワイライト・イレイザー
---Twilight Eraser
---Scripted by Eerie Code
 function c57348141.initial_effect(c)
 	--activate
 	local e1=Effect.CreateEffect(c)
@@ -26,7 +24,7 @@ function c57348141.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 function c57348141.filter1(c,tp)
-	return c:IsFaceup() and c:IsSetCard(0x38) 
+	return c:IsFaceup() and c:IsSetCard(0x38)
 		and Duel.IsExistingMatchingCard(c57348141.filter2,tp,LOCATION_MZONE,0,1,c,c:GetRace(),c:GetCode())
 end
 function c57348141.filter2(c,race,code)
@@ -83,7 +81,7 @@ function c57348141.activate(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c57348141.spcon(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():IsPreviousLocation(LOCATION_DECK) and re:IsActiveType(TYPE_MONSTER) and re:GetHandler():IsSetCard(0x38) 
+	return e:GetHandler():IsPreviousLocation(LOCATION_DECK) and re:IsActiveType(TYPE_MONSTER) and re:GetHandler():IsSetCard(0x38)
 		and bit.band(r,REASON_EFFECT)~=0
 end
 function c57348141.spfilter(c,e,tp)
