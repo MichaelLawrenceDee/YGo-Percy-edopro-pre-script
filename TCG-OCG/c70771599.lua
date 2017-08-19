@@ -1,6 +1,4 @@
 --覇王眷竜 クリアウィング
---Supreme King Servant Dragon Clear Wing
---Scripted by Eerie Code
 function c70771599.initial_effect(c)
 	c:EnableReviveLimit()
 	aux.AddSynchroProcedure(c,nil,1,1,aux.NonTuner(c70771599.matfilter),1,99)
@@ -39,10 +37,10 @@ function c70771599.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 function c70771599.matfilter(c)
-	return c:IsAttribute(ATTRIBUTE_DARK) and c:IsType(TYPE_PENDULUM)
+	return c:IsAttribute(ATTRIBUTE_DARK) and c:IsSynchroType(TYPE_PENDULUM)
 end
 function c70771599.descon(e,tp,eg,ep,ev,re,r,rp)
-	return bit.band(e:GetHandler():GetSummonType(),SUMMON_TYPE_SYNCHRO)==SUMMON_TYPE_SYNCHRO
+	return e:GetHandler():IsSummonType(SUMMON_TYPE_SYNCHRO)
 end
 function c70771599.destg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(Card.IsFaceup,tp,0,LOCATION_MZONE,nil)

@@ -1,5 +1,4 @@
 --アストログラフ・マジシャン
---fixed by MLD
 function c76794549.initial_effect(c)
 	aux.EnablePendulumAttribute(c)
 	--pendulum set/spsummon

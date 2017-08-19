@@ -10,7 +10,7 @@ function c74586817.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetHintTiming(TIMING_SPSUMMON+TIMING_SUMMON+0x1c0+TIMING_MAIN_END)
+	e1:SetHintTiming(0,0x1c0+TIMING_MAIN_END)
 	e1:SetCountLimit(1)
 	e1:SetCondition(c74586817.rmcon)
 	e1:SetTarget(c74586817.rmtg)
@@ -134,8 +134,9 @@ function c74586817.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,2,0,0)
 end
 function c74586817.tdop(e,tp,eg,ep,ev,re,r,rp)
-	local tc=Duel.GetFirstTarget()
 	local c=e:GetHandler()
-	local g=Group.FromCards(c,tc):Filter(Card.IsRelateToEffect,nil,e)
-	Duel.SendtoDeck(g,nil,2,REASON_EFFECT)
-end
+	local tc=Duel.GetFirstTarget()
+	if c:IsRelateToEffect(e) and tc:IsRelateToEffect(e) then
+		local g=Group.FromCards(c,tc)
+		Duel.SendtoDeck(g,nil,2,REASON_EFFECT)
+	end

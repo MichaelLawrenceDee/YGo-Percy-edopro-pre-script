@@ -17,7 +17,7 @@ function c74506079.matcheck(e,c)
 	local ct=c:GetMaterial():GetClassCount(Card.GetCode)
 	if ct>0 then
 		local ae=Effect.CreateEffect(c)
-		ae:SetType(EFFECT_TYPE_SINGLE)	
+		ae:SetType(EFFECT_TYPE_SINGLE)
 		ae:SetCode(EFFECT_SET_ATTACK)
 		ae:SetValue(ct*500)
 		ae:SetReset(RESET_EVENT+0xff0000)

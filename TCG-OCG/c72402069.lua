@@ -1,6 +1,4 @@
 --DDD超死偉王ホワイテスト・ヘル・アーマゲドン
---D/D/D Superdoom King Whitest Armageddon
---Scripted by Eerie Code
 function c72402069.initial_effect(c)
 	c:EnableReviveLimit()
 	aux.EnablePendulumAttribute(c,false)
@@ -53,11 +51,10 @@ function c72402069.initial_effect(c)
 	c:RegisterEffect(e6)
 end
 function c72402069.descon(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetTurnPlayer()~=tp
+	return Duel.GetAttacker():GetControler()~=tp
 end
 function c72402069.desfilter1(c,tp)
-	return c:IsFaceup() and c:IsType(TYPE_SYNCHRO)
-		and c:IsSetCard(0x10af) and c:GetAttack()>0
+	return c:IsFaceup() and c:IsType(TYPE_SYNCHRO) and c:IsSetCard(0x10af) and c:GetAttack()>0
 		and Duel.IsExistingMatchingCard(c72402069.desfilter2,tp,0,LOCATION_MZONE,1,nil,c:GetAttack())
 end
 function c72402069.desfilter2(c,atk)
@@ -67,7 +64,7 @@ function c72402069.destg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and c72402069.desfilter1(chkc,tp) end
 	if chk==0 then return Duel.IsExistingTarget(c72402069.desfilter1,tp,LOCATION_MZONE,0,1,nil,tp) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
-	local tc=Duel.SelectTarget(tp,c72402069.desfilter1,tp,LOCATION_MZONE,0,1,1,nil,tp)
+	local tc=Duel.SelectTarget(tp,c72402069.desfilter1,tp,LOCATION_MZONE,0,1,1,nil,tp):GetFirst()
 	local g=Duel.GetMatchingGroup(c72402069.desfilter2,tp,0,LOCATION_MZONE,nil,tc:GetAttack())
 	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,g:GetCount(),0,0)
 	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,g:GetCount()*1000)
@@ -87,7 +84,8 @@ function c72402069.disfilter(c,tp)
 		and Duel.IsExistingMatchingCard(aux.disfilter1,tp,0,LOCATION_MZONE,1,c)
 end
 function c72402069.distg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c72402069.disfilter,tp,0,LOCATION_MZONE,1,nil,tp) end
+	if chk==0 then return not eg:IsContains(e:GetHandler())
+		and Duel.IsExistingMatchingCard(c72402069.disfilter,tp,0,LOCATION_MZONE,1,nil,tp) end
 end
 function c72402069.disop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,1-tp,aux.Stringid(72402069,2))
@@ -121,12 +119,12 @@ function c72402069.pencon(e,tp,eg,ep,ev,re,r,rp)
 	return c:IsPreviousLocation(LOCATION_MZONE) and c:IsFaceup()
 end
 function c72402069.pentg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.CheckLocation(tp,LOCATION_SZONE,6) or Duel.CheckLocation(tp,LOCATION_SZONE,7) end
+	if chk==0 then return Duel.CheckLocation(tp,LOCATION_PZONE,0) or Duel.CheckLocation(tp,LOCATION_PZONE,1) end
 end
 function c72402069.penop(e,tp,eg,ep,ev,re,r,rp)
-	if not Duel.CheckLocation(tp,LOCATION_SZONE,6) and not Duel.CheckLocation(tp,LOCATION_SZONE,7) then return false end
+	if not Duel.CheckLocation(tp,LOCATION_PZONE,0) and not Duel.CheckLocation(tp,LOCATION_PZONE,1) then return end
 	local c=e:GetHandler()
 	if c:IsRelateToEffect(e) then
-		Duel.MoveToField(c,tp,tp,LOCATION_SZONE,POS_FACEUP,true)
+		Duel.MoveToField(c,tp,tp,LOCATION_PZONE,POS_FACEUP,true)
 	end
 end

@@ -1,5 +1,4 @@
 --調弦の魔術師
---Tune Magician
 function c73941492.initial_effect(c)
 	--pendulum summon
 	aux.EnablePendulumAttribute(c)
@@ -22,7 +21,7 @@ function c73941492.initial_effect(c)
 	e3:SetCode(EFFECT_SPSUMMON_CONDITION)
 	e3:SetValue(aux.FALSE)
 	c:RegisterEffect(e3)
-	--fusion and xyz custom not implemented, or is it?
+	--fusion, synchro and xyz material limitations
 	local e4=Effect.CreateEffect(c)
 	e4:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e4:SetType(EFFECT_TYPE_SINGLE)
@@ -30,12 +29,11 @@ function c73941492.initial_effect(c)
 	e4:SetValue(c73941492.filter)
 	c:RegisterEffect(e4)
 	local e5=e4:Clone()
-	e5:SetCode(73941492+TYPE_XYZ)
+	e5:SetCode(73941492+TYPE_SYNCHRO)
 	c:RegisterEffect(e5)
 	local e6=e4:Clone()
-	e6:SetCode(73941492+TYPE_SYNCHRO)
+	e6:SetCode(73941492+TYPE_XYZ)
 	c:RegisterEffect(e6)
-	--local e6=Effect.CreateEffect(c)
 	--spsummon success
 	local e7=Effect.CreateEffect(c)
 	e7:SetDescription(aux.Stringid(73941492,0))
@@ -51,43 +49,12 @@ end
 function c73941492.filter(e,c)
 	return c:IsSetCard(0x98) and c:IsType(TYPE_PENDULUM)
 end
-function c73941492.xyzfil(c,xyzc,lv)
-	return c:IsSetCard(0x98) and c:IsXyzLevel(xyzc,lv) and c:IsType(TYPE_PENDULUM)
-end
-function c73941492.xyzfil2(c,tp)
-	return c:IsFaceup() and not c:IsType(TYPE_TOKEN) and c:GetControler()==tp or (c:IsHasEffect(EFFECT_XYZ_MATERIAL) and c:GetControler()~=tp)
-end
-function c73941492.xyzfil3(c)
-	return not c:IsCode(73941492)
-end
-function c73941492.tuner_filter(c)
-	return c:IsSetCard(0x98) and c:IsType(TYPE_PENDULUM)
-end
 function c73941492.atkfilter(c)
 	return c:IsFaceup() and c:IsSetCard(0x98) and c:IsType(TYPE_PENDULUM)
 end
 function c73941492.atkval(e,c)
 	local g=Duel.GetMatchingGroup(c73941492.atkfilter,c:GetControler(),LOCATION_EXTRA,0,nil)
 	return g:GetClassCount(Card.GetCode)*100
-end
-function c73941492.synfilter(c,syncard,tuner,f)
-	return c:IsFaceup() and c:IsNotTuner() and c:IsCanBeSynchroMaterial(syncard,tuner) and c:IsSetCard(0x98) and c:IsType(TYPE_PENDULUM) and (f==nil or f(c))
-end
-function c73941492.syntg(e,syncard,f,minc,maxc)
-	local c=e:GetHandler()
-	local lv=syncard:GetLevel()-c:GetLevel()
-	if lv<=0 then return false end
-	local g=Duel.GetMatchingGroup(c73941492.synfilter,syncard:GetControler(),LOCATION_MZONE,LOCATION_MZONE,c,syncard,c,f)
-	local res=g:CheckWithSumEqual(Card.GetSynchroLevel,lv,minc,maxc,syncard)
-	return res
-end
-function c73941492.synop(e,tp,eg,ep,ev,re,r,rp,syncard,f,minc,maxc)
-	local c=e:GetHandler()
-	local lv=syncard:GetLevel()-c:GetLevel()
-	local g=Duel.GetMatchingGroup(c73941492.synfilter,syncard:GetControler(),LOCATION_MZONE,LOCATION_MZONE,c,syncard,c,f)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SMATERIAL)
-	local sg=g:SelectWithSumEqual(tp,Card.GetSynchroLevel,lv,minc,maxc,syncard)
-	Duel.SetSynchroMaterial(sg)
 end
 function c73941492.spcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

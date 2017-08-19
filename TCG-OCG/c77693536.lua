@@ -82,5 +82,5 @@ function c77693536.mttg(e,c)
 end
 function c77693536.mtval(e,c)
 	if not c then return false end
-	return c:IsSetCard(0xe1) and c:IsControler(e:GetHandlerPlayer())
+	return c:IsSetCard(0xe1)
 end

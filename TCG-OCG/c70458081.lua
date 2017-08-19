@@ -28,7 +28,7 @@ end
 function c70458081.reptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return not Duel.IsPlayerAffectedByEffect(e:GetHandlerPlayer(),69832741) 
 		and e:GetHandler():IsAbleToRemove() and eg:IsExists(c70458081.repfilter,1,nil,tp) end
-	return Duel.SelectYesNo(tp,aux.Stringid(70458081,0))
+	return Duel.SelectEffectYesNo(tp,e:GetHandler(),96)
 end
 function c70458081.repval(e,c)
 	return c70458081.repfilter(c,e:GetHandlerPlayer())

@@ -1,6 +1,4 @@
 --DDD怒濤大王エグゼクティブ・シーザー
---D/D/D Wave High King Executive Caesar
---Scripted by Eerie Code
 function c79559912.initial_effect(c)
 	c:EnableReviveLimit()
 	aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsRace,RACE_FIEND),6,2)
@@ -37,7 +35,7 @@ function c79559912.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 function c79559912.discon(e,tp,eg,ep,ev,re,r,rp)
-	if not Duel.IsChainNegatable(ev) then return false end
+	if e:GetHandler():IsStatus(STATUS_BATTLE_DESTROYED) or not Duel.IsChainNegatable(ev) then return false end
 	if not re:IsActiveType(TYPE_MONSTER) and not re:IsHasType(EFFECT_TYPE_ACTIVATE) then return false end
 	return re:IsHasCategory(CATEGORY_SPECIAL_SUMMON)
 end

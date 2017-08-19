@@ -1,9 +1,7 @@
 --LL－インディペンデント・ナイチンゲール
---Lyrical Luscinia - Independent Nightingale
---Scripted by Eerie Code
 function c76815942.initial_effect(c)
 	c:EnableReviveLimit()
-	aux.AddFusionProcMix(c,true,true,48608796,c76815942.ffilter)
+	aux.AddFusionProcMix(c,true,true,48608796,aux.FilterBoolFunction(Card.IsFusionSetCard,0xf7))
 	--increase level
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(76815942,0))
@@ -48,9 +46,6 @@ function c76815942.initial_effect(c)
 	e4:SetOperation(c76815942.damop)
 	c:RegisterEffect(e4)
 end
-function c76815942.ffilter(c)
-	return c:IsFusionSetCard(0xf7) or c:IsFusionCode(8491961)
-end
 function c76815942.matval(c)
 	local b
 	if Card.IsOriginalSetCard then
@@ -68,7 +63,7 @@ function c76815942.valcheck(e,c)
 	e:GetLabelObject():SetLabel(val)
 end
 function c76815942.lvcon(e,tp,eg,ep,ev,re,r,rp)
-	return bit.band(e:GetHandler():GetSummonType(),SUMMON_TYPE_FUSION)==SUMMON_TYPE_FUSION and e:GetLabel()>0
+	return e:GetHandler():IsSummonType(SUMMON_TYPE_FUSION) and e:GetLabel()>0
 end
 function c76815942.lvop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

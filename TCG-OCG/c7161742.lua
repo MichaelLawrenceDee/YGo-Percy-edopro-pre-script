@@ -1,6 +1,4 @@
 --捕食植物コーディセップス
---Predaplant Cordyceps
---Script by dest
 function c7161742.initial_effect(c)
 	--special summon
 	local e1=Effect.CreateEffect(c)
@@ -11,7 +9,7 @@ function c7161742.initial_effect(c)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetRange(LOCATION_GRAVE)
 	e1:SetCondition(c7161742.spcon)
-	e1:SetCost(c7161742.spcost)
+	e1:SetCost(aux.bfgcost)
 	e1:SetTarget(c7161742.sptg)
 	e1:SetOperation(c7161742.spop)
 	c:RegisterEffect(e1)
@@ -19,15 +17,10 @@ end
 function c7161742.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()==tp
 end
-function c7161742.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return not Duel.IsPlayerAffectedByEffect(e:GetHandlerPlayer(),69832741) 
-		and e:GetHandler():IsAbleToRemoveAsCost() end
-	Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_COST)
-end
 function c7161742.filter(c,e,tp)
 	return c:IsLevelBelow(4) and c:IsSetCard(0x10f3) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
-function c7161742.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
+function c7161742.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and c7161742.filter(chkc,e,tp) end
 	if chk==0 then return not Duel.IsPlayerAffectedByEffect(tp,59822133)
 		and Duel.GetLocationCount(tp,LOCATION_MZONE)>1
@@ -55,6 +48,9 @@ function c7161742.spop(e,tp,eg,ep,ev,re,r,rp)
 	local e2=e1:Clone()
 	e2:SetCode(EFFECT_CANNOT_SUMMON)
 	Duel.RegisterEffect(e2,tp)
+	local e3=e1:Clone()
+	e3:SetCode(EFFECT_CANNOT_MSET)
+	Duel.RegisterEffect(e3,tp)
 end
 function c7161742.splimit(e,c)
 	return not c:IsType(TYPE_FUSION)
