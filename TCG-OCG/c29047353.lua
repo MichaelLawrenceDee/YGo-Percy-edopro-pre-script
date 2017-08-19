@@ -20,7 +20,7 @@ function c29047353.initial_effect(c)
 	e3:SetCode(EFFECT_IMMUNE_EFFECT)
 	e3:SetRange(LOCATION_SZONE)
 	e3:SetTargetRange(LOCATION_MZONE,0)
-	e3:SetTarget(aux.TargetBoolFunction(Card.IsSetCard,0xcd))
+	e3:SetTarget(aux.TargetBoolFunction(Card.IsSetCard,0x10cd))
 	e3:SetValue(c29047353.efilter)
 	c:RegisterEffect(e3)
 	--spsummon

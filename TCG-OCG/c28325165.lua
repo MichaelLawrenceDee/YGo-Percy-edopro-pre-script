@@ -13,7 +13,7 @@ function c28325165.initial_effect(c)
 	c:RegisterEffect(e1)
 end
 function c28325165.cfilter(c)
-	return c:IsSetCard(0xcd) and c:IsType(TYPE_MONSTER)
+	return c:IsSetCard(0x10cd) and c:IsType(TYPE_MONSTER)
 end
 function c28325165.condition(e,tp,eg,ep,ev,re,r,rp)
 	return (Duel.GetCurrentPhase()~=PHASE_DAMAGE or not Duel.IsDamageCalculated())
