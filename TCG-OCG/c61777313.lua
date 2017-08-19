@@ -1,12 +1,12 @@
 --極星天ヴァナディース
 function c61777313.initial_effect(c)
 	--synchro custom
-	local e4=Effect.CreateEffect(c)
-	e4:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
-	e4:SetType(EFFECT_TYPE_SINGLE)
-	e4:SetCode(73941492+TYPE_SYNCHRO)
-	e4:SetValue(aux.TargetBoolFunction(Card.IsSetCard,0x42))
-	c:RegisterEffect(e4)
+	local e1=Effect.CreateEffect(c)
+	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e1:SetType(EFFECT_TYPE_SINGLE)
+	e1:SetCode(73941492+TYPE_SYNCHRO)
+	e1:SetValue(aux.TargetBoolFunction(Card.IsSetCard,0x42))
+	c:RegisterEffect(e1)
 	--level change
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(61777313,0))

@@ -1,5 +1,6 @@
 --霊魂消滅
 --fully implemented now?
+--OF COURSE, SINCE PERCYPRO'S SCRIPTERS ARE THE BEST!!!!!
 function c69832741.initial_effect(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)

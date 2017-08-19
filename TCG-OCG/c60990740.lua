@@ -2,10 +2,12 @@
 function c60990740.initial_effect(c)
 	--sset
 	local e1=Effect.CreateEffect(c)
+	e1:SetCategory(CATEGORY_DECKDES)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetRange(LOCATION_GRAVE)
 	e1:SetCountLimit(1,60990740)
+	e1:SetHintTiming(0,TIMING_END_PHASE)
 	e1:SetCondition(c60990740.condition)
 	e1:SetCost(c60990740.cost)
 	e1:SetTarget(c60990740.target)

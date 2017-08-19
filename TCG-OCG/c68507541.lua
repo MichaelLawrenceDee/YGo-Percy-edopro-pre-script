@@ -1,6 +1,4 @@
 --アマゾネスペット虎獅子
---Amazoness Pet Liger
---Scripted by Eerie Code
 function c68507541.initial_effect(c)
 	c:EnableReviveLimit()
 	aux.AddFusionProcMix(c,true,true,10979723,aux.FilterBoolFunction(Card.IsFusionSetCard,0x4))
@@ -17,7 +15,7 @@ function c68507541.initial_effect(c)
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(68507541,1))
 	e2:SetCategory(CATEGORY_ATKCHANGE)
-	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_F)
+	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e2:SetCode(EVENT_BATTLED)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
@@ -72,5 +70,5 @@ function c68507541.atkop2(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c68507541.atktg(e,c)
-	return c~=e:GetHandler()
+	return c:IsFaceup() and c:IsSetCard(0x4) and c~=e:GetHandler()
 end

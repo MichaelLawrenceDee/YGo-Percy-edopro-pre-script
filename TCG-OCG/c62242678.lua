@@ -45,7 +45,7 @@ function c62242678.matfilter(c)
 	return c:IsRace(RACE_DRAGON) and c:IsAttribute(ATTRIBUTE_DARK) and c:IsType(TYPE_SYNCHRO)
 end
 function c62242678.limcon(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():GetSummonType()==SUMMON_TYPE_SYNCHRO
+	return e:GetHandler():IsSummonType(SUMMON_TYPE_SYNCHRO)
 end
 function c62242678.limtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end

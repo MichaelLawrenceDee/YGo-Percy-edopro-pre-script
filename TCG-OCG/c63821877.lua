@@ -14,7 +14,7 @@ function c63821877.initial_effect(c)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,63821877)
-	e2:SetCost(c63821877.tgcost)
+	e2:SetCost(aux.bfgcost)
 	e2:SetTarget(c63821877.tgtg)
 	e2:SetOperation(c63821877.tgop)
 	c:RegisterEffect(e2)
@@ -48,7 +48,7 @@ function c63821877.efop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.RegisterFlagEffect(p,63821877,RESET_PHASE+PHASE_END,0,1)
 end
 function c63821877.atkcon(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():GetSummonType()==SUMMON_TYPE_XYZ
+	return e:GetHandler():IsSummonType(SUMMON_TYPE_XYZ)
 end
 function c63821877.atkop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
@@ -60,11 +60,6 @@ function c63821877.atkop(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetReset(RESET_EVENT+0x1ff0000)
 		c:RegisterEffect(e1)
 	end
-end
-function c63821877.tgcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return not Duel.IsPlayerAffectedByEffect(e:GetHandlerPlayer(),69832741) 
-		and e:GetHandler():IsAbleToRemoveAsCost() end
-	Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_COST)
 end
 function c63821877.tgfilter(c)
 	return (c:IsSetCard(0x10db) or (c:IsSetCard(0xdb) and c:IsType(TYPE_SPELL+TYPE_TRAP))) and c:IsAbleToGrave()
