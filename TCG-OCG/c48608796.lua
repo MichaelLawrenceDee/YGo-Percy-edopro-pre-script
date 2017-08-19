@@ -1,6 +1,4 @@
 --LL－アセンブリー・ナイチンゲール
---Lyrical Luscinia - Assembly Nightingale
---Scripted by Eerie Code
 function c48608796.initial_effect(c)
 	c:EnableReviveLimit()
 	aux.AddXyzProcedure(c,nil,1,2,nil,nil,99)
@@ -61,7 +59,7 @@ function c48608796.indop(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetCode(EFFECT_INDESTRUCTABLE_BATTLE)
 	e1:SetValue(1)
 	e1:SetTargetRange(LOCATION_MZONE,0)
-	e1:SetTarget(c48608796.indtg)
+	e1:SetTarget(aux.TargetBoolFunction(Card.IsSetCard,0xf7))
 	e1:SetReset(RESET_PHASE+PHASE_END)
 	Duel.RegisterEffect(e1,tp)
 	local e2=e1:Clone()
@@ -75,7 +73,4 @@ function c48608796.indop(e,tp,eg,ep,ev,re,r,rp)
 	e3:SetValue(1)
 	e3:SetReset(RESET_PHASE+PHASE_END)
 	Duel.RegisterEffect(e3,tp)
-end
-function c48608796.indtg(e,c)
-	return c:IsSetCard(0xf7) or c:IsCode(8491961)
 end

@@ -1,10 +1,8 @@
 --覇王紫竜オッドアイズ・ヴェノム・ドラゴン
---Odd-Eyes Venom Dragon
---Scripted by Eerie Code
 function c45014450.initial_effect(c)
 	c:EnableReviveLimit()
 	aux.EnablePendulumAttribute(c,false)
-	aux.AddFusionProcMix(c,true,true,c45014450.matfilter,aux.FilterBoolFunction(Card.IsFusionSetCard,0x99))
+	aux.AddFusionProcMix(c,true,true,aux.FilterBoolFunction(Card.IsFusionSetCard,0x1050),aux.FilterBoolFunction(Card.IsFusionSetCard,0x99))
 	--spsummon condition
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
@@ -46,9 +44,6 @@ function c45014450.initial_effect(c)
 	e6:SetOperation(c45014450.penop)
 	c:RegisterEffect(e6)
 end
-function c45014450.matfilter(c)
-	return c:IsFusionCode(41209827) or c:IsFusionSetCard(0x1050)
-end
 function c45014450.splimit(e,se,sp,st)
 	return bit.band(st,SUMMON_TYPE_FUSION)==SUMMON_TYPE_FUSION or bit.band(st,SUMMON_TYPE_PENDULUM)==SUMMON_TYPE_PENDULUM
 end
@@ -79,11 +74,14 @@ function c45014450.copycost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():GetFlagEffect(45014450)==0 end
 	e:GetHandler():RegisterFlagEffect(45014450,RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END,0,1)
 end
+function c45014450.copyfilter(c)
+	return c:IsFaceup() and not c:IsType(TYPE_TOKEN)
+end
 function c45014450.copytg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsControler(1-tp) and chkc:IsLocation(LOCATION_MZONE) and chkc:IsFaceup() end
-	if chk==0 then return Duel.IsExistingTarget(Card.IsFaceup,tp,0,LOCATION_MZONE,1,nil) end
+	if chkc then return chkc:IsControler(1-tp) and chkc:IsLocation(LOCATION_MZONE) and c45014450.copyfilter(chkc) end
+	if chk==0 then return Duel.IsExistingTarget(c45014450.copyfilter,tp,0,LOCATION_MZONE,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
-	Duel.SelectTarget(tp,Card.IsFaceup,tp,0,LOCATION_MZONE,1,1,nil)
+	Duel.SelectTarget(tp,c45014450.copyfilter,tp,0,LOCATION_MZONE,1,1,nil)
 end
 function c45014450.copyop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
@@ -99,6 +97,18 @@ function c45014450.copyop(e,tp,eg,ep,ev,re,r,rp)
 		c:RegisterEffect(e1)
 		if not tc:IsType(TYPE_TRAPMONSTER) then
 			local cid=c:CopyEffect(code,RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END,1)
+			local e3=Effect.CreateEffect(c)
+			e3:SetDescription(aux.Stringid(45014450,2))
+			e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+			e3:SetCode(EVENT_PHASE+PHASE_END)
+			e3:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+			e3:SetCountLimit(1)
+			e3:SetRange(LOCATION_MZONE)
+			e3:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END)
+			e3:SetLabelObject(e1)
+			e3:SetLabel(cid)
+			e3:SetOperation(c45014450.rstop)
+			c:RegisterEffect(e3)
 		end
 		local atk=tc:GetAttack()
 		local e2=Effect.CreateEffect(c)
@@ -107,18 +117,6 @@ function c45014450.copyop(e,tp,eg,ep,ev,re,r,rp)
 		e2:SetValue(atk)
 		e2:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END)
 		c:RegisterEffect(e2)
-		local e3=Effect.CreateEffect(c)
-		e3:SetDescription(aux.Stringid(45014450,2))
-		e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-		e3:SetCode(EVENT_PHASE+PHASE_END)
-		e3:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
-		e3:SetCountLimit(1)
-		e3:SetRange(LOCATION_MZONE)
-		e3:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END)
-		e3:SetLabelObject(e1)
-		e3:SetLabel(cid)
-		e3:SetOperation(c45014450.rstop)
-		c:RegisterEffect(e3)
 	end
 end
 function c45014450.rstop(e,tp,eg,ep,ev,re,r,rp)

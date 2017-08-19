@@ -36,20 +36,17 @@ function c44508094.condition(e,tp,eg,ep,ev,re,r,rp)
 	return ex and tg~=nil and tc+tg:FilterCount(Card.IsOnField,nil)-tg:GetCount()>0
 end
 function c44508094.cfcost(c)
-	return c:IsCode(100213053) and c:IsAbleToRemoveAsCost()
+	return c:IsCode(84012625) and c:IsAbleToRemoveAsCost()
 end
 function c44508094.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local b1=e:GetHandler():IsReleasable()
 	local b2=Duel.IsExistingMatchingCard(c44508094.cfcost,tp,LOCATION_GRAVE,0,1,nil)
 	if chk==0 then return b1 or b2 end
-	if (b2 and b1 and Duel.SelectYesNo(tp,aux.Stringid(100213053,0)))
-		or (b2 and not b1) then
+	if b2 and (not b1 or Duel.SelectYesNo(tp,aux.Stringid(84012625,0))) then
 		local tg=Duel.GetFirstMatchingCard(c44508094.cfcost,tp,LOCATION_GRAVE,0,nil)
 		Duel.Remove(tg,POS_FACEUP,REASON_COST)
-		e:SetLabel(0)
 	else
 		Duel.Release(e:GetHandler(),REASON_COST)
-		e:SetLabel(1)
 	end	
 end
 function c44508094.target(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -60,13 +57,10 @@ function c44508094.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	end
 end
 function c44508094.operation(e,tp,eg,ep,ev,re,r,rp)
-	Duel.NegateActivation(ev)
-	if re:GetHandler():IsRelateToEffect(re) then
+	if Duel.NegateActivation(ev) and re:GetHandler():IsRelateToEffect(re) then
 		Duel.Destroy(eg,REASON_EFFECT)
 	end
-	if e:GetLabel()==1 then
-		e:GetHandler():RegisterFlagEffect(44508094,RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END,0,0)
-	end
+	e:GetHandler():RegisterFlagEffect(44508094,RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END,0,0)
 end
 function c44508094.sumtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()

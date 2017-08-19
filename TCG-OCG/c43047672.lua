@@ -1,6 +1,4 @@
 --RR－ファイナル・フォートレス・ファルコン
---Raidraptor - Final Fortress Falcon
---Script by dest
 function c43047672.initial_effect(c)
 	--xyz summon
 	aux.AddXyzProcedure(c,nil,12,3)

@@ -1,6 +1,4 @@
 --覇王眷竜ダーク・リベリオン
---Supreme King Servant Dragon Dark Rebellion
---Scripted by Eerie Code
 function c42160203.initial_effect(c)
 	c:EnableReviveLimit()
 	aux.AddXyzProcedure(c,c42160203.matfilter,4,2)
@@ -37,7 +35,7 @@ function c42160203.initial_effect(c)
 	c:RegisterEffect(e4)
 end
 function c42160203.matfilter(c)
-	return c:IsType(TYPE_PENDULUM) and c:IsAttribute(ATTRIBUTE_DARK)
+	return c:IsXyzType(TYPE_PENDULUM) and c:IsAttribute(ATTRIBUTE_DARK)
 end
 function c42160203.atkcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
@@ -79,24 +77,23 @@ function c42160203.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SendtoDeck(c,nil,0,REASON_COST)
 end
 function c42160203.spfilter(c,e,tp)
-	return c:IsFaceup() and (c:IsSetCard(0x10f8) or c:IsSetCard(0x20f8)) 
+	return c:IsFaceup() and (c:IsSetCard(0x10f8) or c:IsSetCard(0x20f8))
 		and c:IsType(TYPE_PENDULUM) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP_DEFENSE)
-		and Duel.GetLocationCountFromEx(tp,tp,e:GetHandler(),c)
 end
 function c42160203.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c42160203.spfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
+	if chk==0 then return (Duel.GetLocationCountFromEx(tp)>0 or e:GetHandler():CheckMZoneFromEx(tp))
+		and Duel.IsExistingMatchingCard(c42160203.spfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 function c42160203.spop(e,tp,eg,ep,ev,re,r,rp)
-	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
+	local ft=Duel.GetLocationCountFromEx(tp)
 	if ft==0 then return end
 	ft=math.min(ft,2)
-	if Duel.IsPlayerAffectedByEffect(tp,29724053) then
-		ft=math.min(ft,c29724053[tp])
-	end
 	if Duel.IsPlayerAffectedByEffect(tp,59822133) then
 		ft=1
 	end
+	local ect=c29724053 and Duel.IsPlayerAffectedByEffect(tp,29724053) and c29724053[tp]
+	if ect~=nil then ft=math.min(ft,ect) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,c42160203.spfilter,tp,LOCATION_EXTRA,0,1,ft,nil,e,tp)
 	if g:GetCount()>0 then

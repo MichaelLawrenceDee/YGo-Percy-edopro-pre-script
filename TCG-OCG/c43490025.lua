@@ -1,5 +1,4 @@
 --FNo.0 未来皇ホープ－フューチャー・スラッシュ
---Number F0: Utopic Future - Future Slash
 function c43490025.initial_effect(c)
 	--xyz summon
 	aux.AddXyzProcedure(c,c43490025.xyzfilter,nil,2,c43490025.ovfilter,aux.Stringid(43490025,1),nil,nil,false,true)

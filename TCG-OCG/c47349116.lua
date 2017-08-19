@@ -1,6 +1,4 @@
 --星刻の魔術師
---Startime Magician
---Scripted by Eerie Code
 function c47349116.initial_effect(c)
 	c:EnableReviveLimit()
 	aux.AddXyzProcedure(c,c47349116.matfilter,4,2,nil,nil,nil,nil,true)
@@ -40,7 +38,7 @@ function c47349116.initial_effect(c)
 	c:RegisterEffect(e4)
 end
 function c47349116.matfilter(c)
-	return c:IsSetCard(0x98) and c:IsType(TYPE_PENDULUM)
+	return c:IsSetCard(0x98) and c:IsXyzType(TYPE_PENDULUM)
 end
 function c47349116.splimit(e,se,sp,st)
 	return not e:GetHandler():IsLocation(LOCATION_EXTRA) or (bit.band(st,SUMMON_TYPE_XYZ)==SUMMON_TYPE_XYZ and not se)
@@ -54,37 +52,31 @@ function c47349116.thfilter(c)
 		and (c:IsFaceup() or not c:IsLocation(LOCATION_EXTRA)) and c:IsAbleToHand()
 end
 function c47349116.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	local g=Duel.GetMatchingGroup(c47349116.thfilter,tp,LOCATION_DECK+LOCATION_GRAVE+LOCATION_EXTRA,0,nil)
-	if chk==0 then return g:GetCount()>0 end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g,1,0,0)
+	if chk==0 then return Duel.IsExistingMatchingCard(c47349116.thfilter,tp,LOCATION_DECK+LOCATION_GRAVE+LOCATION_EXTRA,0,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE+LOCATION_EXTRA)
 end
 function c47349116.thop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SelectMatchingCard(tp,c47349116.thfilter,tp,LOCATION_DECK+LOCATION_GRAVE+LOCATION_EXTRA,0,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(c47349116.thfilter),tp,LOCATION_DECK+LOCATION_GRAVE+LOCATION_EXTRA,0,1,1,nil)
 	local tc=g:GetFirst()
 	if not tc then return end
-	if tc:IsHasEffect(EFFECT_NECRO_VALLEY) and Duel.IsChainDisablable(0) then
-		Duel.NegateEffect(0)
-		return
-	end
 	Duel.SendtoHand(tc,nil,REASON_EFFECT)
 	Duel.ConfirmCards(1-tp,tc)
 end
 function c47349116.repfilter(c,tp)
-	local seq=c:GetSequence()
 	return c:IsFaceup() and c:IsControler(tp) and c:IsLocation(LOCATION_MZONE+LOCATION_PZONE)
 		and c:IsType(TYPE_PENDULUM) and c:IsReason(REASON_BATTLE+REASON_EFFECT)
 end
-function c47349116.repcfilter(c)
+function c47349116.tgfilter(c)
 	return c:IsRace(RACE_SPELLCASTER) and c:IsAbleToGrave()
 end
 function c47349116.reptg(e,tp,eg,ep,ev,re,r,rp,chk)
-	local ct=eg:FilterCount(c47349116.repfilter,nil,tp)
-	local g=Duel.GetMatchingGroup(c47349116.repcfilter,tp,LOCATION_DECK,0,nil)
-	if chk==0 then return ct>0 and g:GetCount()>0 end
-	if Duel.SelectYesNo(tp,aux.Stringid(47349116,1)) then
+	if chk==0 then return eg:IsExists(c47349116.repfilter,1,nil,tp)
+		and Duel.IsExistingMatchingCard(c47349116.tgfilter,tp,LOCATION_DECK,0,1,nil) end
+	if Duel.SelectEffectYesNo(tp,e:GetHandler(),96) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-		local sg=g:Select(tp,1,1,nil)
+		local sg=Duel.SelectMatchingCard(tp,c47349116.tgfilter,tp,LOCATION_DECK,0,1,1,nil)
+		Duel.Hint(HINT_CARD,0,47349116)
 		Duel.SendtoGrave(sg,REASON_EFFECT)
 		return true
 	else return false end

@@ -8,7 +8,7 @@ function c45184165.initial_effect(c)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
 	e1:SetCountLimit(1,45184165)
 	e1:SetCondition(c45184165.thcon)
-	e1:SetCost(c45184165.thcost)
+	e1:SetCost(aux.bfgcost)
 	e1:SetTarget(c45184165.thtg)
 	e1:SetOperation(c45184165.thop)
 	c:RegisterEffect(e1)
@@ -24,11 +24,6 @@ function c45184165.thcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	return c:IsReason(REASON_COST) and re:IsHasType(0x7e0) and re:IsActiveType(TYPE_MONSTER)
 		and c:IsPreviousLocation(LOCATION_OVERLAY)
-end
-function c45184165.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return not Duel.IsPlayerAffectedByEffect(e:GetHandlerPlayer(),69832741) 
-		and e:GetHandler():IsAbleToRemoveAsCost() end
-	Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_COST)
 end
 function c45184165.thfilter(c)
 	return c:IsSetCard(0xba) and c:IsAbleToHand()
@@ -71,7 +66,7 @@ function c45184165.efop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c45184165.atkcon(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():GetSummonType()==SUMMON_TYPE_XYZ
+	return e:GetHandler():IsSummonType(SUMMON_TYPE_XYZ)
 end
 function c45184165.atkop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

@@ -3,24 +3,19 @@ function c45118716.initial_effect(c)
 	--todeck
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(45118716,0))
-	e1:SetCategory(CATEGORY_TODECK)
+	e1:SetCategory(CATEGORY_DECKDES+CATEGORY_TODECK)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e1:SetCode(EVENT_ATTACK_ANNOUNCE)
 	e1:SetRange(LOCATION_GRAVE)
 	e1:SetCondition(c45118716.condition)
-	e1:SetCost(c45118716.cost)
+	e1:SetCost(aux.bfgcost)
 	e1:SetTarget(c45118716.target)
 	e1:SetOperation(c45118716.operation)
 	c:RegisterEffect(e1)
 end
 function c45118716.condition(e,tp,eg,ep,ev,re,r,rp)
 	return ep~=tp
-end
-function c45118716.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return not Duel.IsPlayerAffectedByEffect(e:GetHandlerPlayer(),69832741) 
-		and e:GetHandler():IsAbleToRemoveAsCost() end
-	Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_COST)
 end
 function c45118716.filter(c)
 	return c:IsType(TYPE_SPELL) and c:IsAbleToDeck()
