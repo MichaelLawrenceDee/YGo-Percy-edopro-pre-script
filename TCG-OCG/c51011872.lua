@@ -1,6 +1,5 @@
 --トリックスター・ブラッディマリー
 --Trickstar Bloody Mary
---Script by nekrozar
 function c51011872.initial_effect(c)
 	--link summon
 	aux.AddLinkProcedure(c,aux.FilterBoolFunction(Card.IsSetCard,0xfb),2,2)

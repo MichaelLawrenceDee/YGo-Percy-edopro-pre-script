@@ -1,6 +1,5 @@
 --星遺物の加護
 --Star Relic's Aegis
---Script by mercury233
 function c97648103.initial_effect(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)
@@ -21,21 +20,6 @@ function c97648103.initial_effect(c)
 	e2:SetValue(c97648103.repval)
 	e2:SetOperation(c97648103.repop)
 	c:RegisterEffect(e2)
-	--
-	if not Card.IsLinkState then
-		function Card.IsLinkState(c)
-			if not c then return false end
-			if c:IsType(TYPE_LINK) and c:GetLinkedGroupCount()>0 then return true end
-			local g=Duel.GetMatchingGroup(Card.IsType,0,LOCATION_MZONE,LOCATION_MZONE,nil,TYPE_LINK)
-			local lc=g:GetFirst()
-			while lc do
-				local lg=lc:GetLinkedGroup()
-				if lg and lg:IsContains(c) then return true end
-				lc=g:GetNext()
-			end
-			return false
-		end
-	end
 end
 function c97648103.thfilter(c,e)
 	return c:IsType(TYPE_MONSTER) and c:IsSetCard(0xfd) and c:IsAbleToHand() and c:IsCanBeEffectTarget(e)
@@ -65,7 +49,7 @@ function c97648103.repfilter(c,tp)
 end
 function c97648103.reptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsAbleToRemove() and eg:IsExists(c97648103.repfilter,1,nil,tp) end
-	return Duel.SelectYesNo(tp,aux.Stringid(97648103,0))
+	return Duel.SelectEffectYesNo(tp,e:GetHandler(),96)
 end
 function c97648103.repval(e,c)
 	return c97648103.repfilter(c,e:GetHandlerPlayer())

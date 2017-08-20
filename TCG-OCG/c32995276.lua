@@ -1,7 +1,7 @@
 --リンク・ディサイプル
 --Link Disciple
---Scripted by Eerie Code
 function c32995276.initial_effect(c)
+	--link summon
 	c:EnableReviveLimit()
 	aux.AddLinkProcedure(c,c32995276.matfilter,1,1)
 	--draw
@@ -9,6 +9,7 @@ function c32995276.initial_effect(c)
 	e1:SetDescription(aux.Stringid(32995276,0))
 	e1:SetCategory(CATEGORY_DRAW)
 	e1:SetType(EFFECT_TYPE_IGNITION)
+	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,32995276)
 	e1:SetCost(c32995276.cost)
@@ -17,10 +18,10 @@ function c32995276.initial_effect(c)
 	c:RegisterEffect(e1)
 end
 function c32995276.matfilter(c)
-	return c:IsLevelBelow(4) and c:IsRace(RACE_CYBERS)
+	return c:IsLevelBelow(4) and c:IsRace(RACE_CYBERSE)
 end
 function c32995276.cfilter(c,g)
-	return g:IsContains(c) and not c:IsStatus(STATUS_BATTLE_DESTROYED)
+	return g:IsContains(c)
 end
 function c32995276.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local lg=e:GetHandler():GetLinkedGroup()
@@ -36,7 +37,7 @@ function c32995276.target(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function c32995276.operation(e,tp,eg,ep,ev,re,r,rp)
 	local p,d=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER,CHAININFO_TARGET_PARAM)
-	if Duel.Draw(p,d,REASON_EFFECT)<1 then return end
+	if Duel.Draw(p,d,REASON_EFFECT)==0 then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 	local g=Duel.SelectMatchingCard(tp,Card.IsAbleToDeck,tp,LOCATION_HAND,0,1,1,nil)
 	if g:GetCount()>0 then

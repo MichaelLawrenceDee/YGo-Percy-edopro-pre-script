@@ -1,6 +1,5 @@
 --トポロジック・ボマー・ドラゴン
 --Topologic Bomber Dragon
---Script by nekrozar
 function c5821478.initial_effect(c)
 	--link summon
 	aux.AddLinkProcedure(c,aux.FilterBoolFunction(Card.IsLinkType,TYPE_EFFECT),2)
@@ -27,15 +26,14 @@ function c5821478.initial_effect(c)
 	e2:SetOperation(c5821478.damop)
 	c:RegisterEffect(e2)
 end
-function c5821478.lgfilter(c)
-	return c:IsFaceup() and c:IsType(TYPE_LINK)
-end
-function c5821478.cfilter(c,g)
-	return g:IsContains(c)
+function c5821478.cfilter(c,zone)
+	local seq=c:GetSequence()
+	if c:IsControler(1) then seq=seq+16 end
+	return bit.extract(zone,seq)~=0
 end
 function c5821478.descon(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetLinkedGroup(tp,1,1)
-	return not eg:IsContains(e:GetHandler()) and eg:IsExists(c5821478.cfilter,1,nil,g)
+	local zone=Duel.GetLinkedZone(0)+Duel.GetLinkedZone(1)*0x10000
+	return not eg:IsContains(e:GetHandler()) and eg:IsExists(c5821478.cfilter,1,nil,zone)
 end
 function c5821478.desfilter(c)
 	return c:GetSequence()<5

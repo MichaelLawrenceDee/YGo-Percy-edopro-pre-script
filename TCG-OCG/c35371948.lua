@@ -1,6 +1,5 @@
 --トリックスター・ライトステージ
 --Trickster Lightstage
---Scripted by Eerie Code
 function c35371948.initial_effect(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)
@@ -61,111 +60,82 @@ function c35371948.operation(e,tp,eg,ep,ev,re,r,rp)
 	if c:IsRelateToEffect(e) and tc:IsFacedown() and tc:IsRelateToEffect(e) then
 		c:SetCardTarget(tc)
 		e:SetLabelObject(tc)
-		tc:RegisterFlagEffect(35371948,RESET_EVENT+0x1fe0000,0,1)
+		local fid=c:GetFieldID()
+		c:RegisterFlagEffect(35371948,RESET_EVENT+0x1fe0000,0,1,fid)
+		tc:RegisterFlagEffect(35371948,RESET_EVENT+0x1fe0000,0,1,fid)
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetProperty(EFFECT_FLAG_OWNER_RELATE)
 		e1:SetCode(EFFECT_CANNOT_TRIGGER)
 		e1:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_DRAW)
+		e1:SetLabelObject(tc)
 		e1:SetCondition(c35371948.rcon)
 		e1:SetValue(1)
 		tc:RegisterEffect(e1)
-		--Activate or send
+		--End of e1
 		local e2=Effect.CreateEffect(c)
 		e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-		e2:SetRange(LOCATION_FZONE)
 		e2:SetCode(EVENT_PHASE+PHASE_END)
 		e2:SetCountLimit(1)
 		e2:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_DRAW)
-		e2:SetLabelObject(tc)
-		e2:SetOperation(c35371948.agop)
-		c:RegisterEffect(e2)
-	end
-end
-function c35371948.tcost(cost,typea,code,property,te)
-	return function (e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return (not cost or cost(te,te:GetHandlerPlayer(),eg,ep,ev,re,r,rp,0)) end
-		te:SetType(typea)
-		te:SetCode(code)
-		te:SetProperty(property)
-		te:GetHandler():CreateEffectRelation(te)
-		Duel.ChangePosition(te:GetHandler(),POS_FACEUP)
-		if cost then
-			te:SetCost(cost)
-			cost(te,te:GetHandlerPlayer(),eg,ep,ev,re,r,rp,1)
-		end
-	end
-end
-function c35371948.ttarget(target,te)
-	return function (e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return target(te,te:GetHandlerPlayer(),eg,ep,ev,re,r,rp,0) end
-		te:SetTarget(target)
-		target(te,te:GetHandlerPlayer(),eg,ep,ev,re,r,rp,1)
-	end
-end
-function c35371948.top(operation,te)
-	return function (e,tp,eg,ep,ev,re,r,rp)
-		te:SetOperation(operation)
-		operation(te,te:GetHandlerPlayer(),eg,ep,ev,re,r,rp)
+		e2:SetLabel(fid)
+		e2:SetLabelObject(e1)
+		e2:SetCondition(c35371948.rstcon)
+		e2:SetOperation(c35371948.rstop)
+		Duel.RegisterEffect(e2,tp)
+		--send to grave
+		local e3=Effect.CreateEffect(c)
+		e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		e3:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
+		e3:SetCode(EVENT_PHASE+PHASE_END)
+		e3:SetCountLimit(1)
+		e3:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_DRAW)
+		e3:SetLabel(fid)
+		e3:SetLabelObject(tc)
+		e3:SetCondition(c35371948.agcon)
+		e3:SetOperation(c35371948.agop)
+		Duel.RegisterEffect(e3,1-tp)
 	end
 end
 function c35371948.rcon(e)
 	return e:GetOwner():IsHasCardTarget(e:GetHandler()) and e:GetHandler():GetFlagEffect(35371948)~=0
 end
+function c35371948.rstcon(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	local tc=e:GetLabelObject():GetLabelObject()
+	if tc:GetFlagEffectLabel(35371948)==e:GetLabel()
+		and c:GetFlagEffectLabel(35371948)==e:GetLabel() then
+		return not c:IsDisabled()
+	else
+		e:Reset()
+		return false
+	end
+end
+function c35371948.rstop(e,tp,eg,ep,ev,re,r,rp)
+	local te=e:GetLabelObject()
+	te:Reset()
+	Duel.HintSelection(Group.FromCards(e:GetHandler()))
+end
+function c35371948.agcon(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	local tc=e:GetLabelObject()
+	if tc:GetFlagEffectLabel(35371948)==e:GetLabel()
+		and c:GetFlagEffectLabel(35371948)==e:GetLabel() then
+		return not c:IsDisabled()
+	else
+		e:Reset()
+		return false
+	end
+end
 function c35371948.agop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=e:GetLabelObject()
-	if not tc or tc:IsFaceup() or not tc:IsLocation(LOCATION_SZONE) then return end
-	tc:ResetFlagEffect(35371948)
-	local act=true
-	local te=tc:GetActivateEffect()
-	local tep=tc:GetControler()
-	local condition=nil
-	local cost=nil
-	local target=nil
-	local operation=nil
-	if te then
-		condition=te:GetCondition()
-		cost=te:GetCost()
-		target=te:GetTarget()
-		operation=te:GetOperation()
-		act=te:GetCode()==EVENT_FREE_CHAIN and te:IsActivatable(tep)
-			and (not condition or condition(te,tep,eg,ep,ev,re,r,rp))
-			and (not cost or cost(te,tep,eg,ep,ev,re,r,rp,0))
-			and (not target or target(te,tep,eg,ep,ev,re,r,rp,0))
-	end
-	local op=0
-	if act then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_OPTION)
-		op=Duel.SelectOption(tep,aux.Stringid(35371948,3),aux.Stringid(35371948,4))
-	else
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_OPTION)
-		op=Duel.SelectOption(tep,aux.Stringid(35371948,4))+1
-	end
-	if op==0 then
-		Duel.ClearTargetCard()
-		local typea=te:GetType()
-		local code=te:GetCode()
-		local property=te:GetProperty()
-		te:SetType(EFFECT_TYPE_TRIGGER_F)
-		te:SetCost(c35371948.tcost(cost,typea,code,property,te))
-		if target then 
-			te:SetTarget(c35371948.ttarget(target,te))
-		end
-		if operation then 
-			te:SetOperation(c35371948.top(operation,te))
-		end
-		if not te:IsHasProperty(EFFECT_FLAG_SET_AVAILABLE)then
-		te:SetProperty(property+EFFECT_FLAG_SET_AVAILABLE)
-		end
-	else
-		Duel.SendtoGrave(tc,REASON_EFFECT)
-	end
+	Duel.SendtoGrave(tc,REASON_RULE)
 end
 function c35371948.damcon1(e,tp,eg,ep,ev,re,r,rp)
 	return ep~=tp and eg:GetFirst():IsSetCard(0xfb)
 end
 function c35371948.damcon2(e,tp,eg,ep,ev,re,r,rp)
-	return ep~=tp and bit.band(r,REASON_BATTLE)==0 and re 
+	return ep~=tp and bit.band(r,REASON_BATTLE)==0 and re
 		and re:IsActiveType(TYPE_MONSTER) and re:GetHandler():IsSetCard(0xfb)
 end
 function c35371948.damop(e,tp,eg,ep,ev,re,r,rp)

@@ -1,6 +1,5 @@
 --V－LAN ヒドラ
 --V-LAN Hydra
---Script by nekrozar
 function c13536606.initial_effect(c)
 	--link summon
 	c:EnableReviveLimit()
@@ -28,12 +27,8 @@ end
 function c13536606.matfilter(c)
 	return not c:IsLinkType(TYPE_TOKEN)
 end
-function c13536606.cfilter(c,mc)
-	local lg=c:GetLinkedGroup()
-	return lg and lg:IsContains(mc)
-end
 function c13536606.atkval(e,c)
-	return c:GetLinkedGroup():FilterCount(c13536606.cfilter,nil,c)*300
+	return c:GetMutualLinkedGroupCount()*300
 end
 function c13536606.rfilter(c,tp,g)
 	local lk=c:GetLink()
@@ -43,10 +38,10 @@ function c13536606.rfilter(c,tp,g)
 end
 function c13536606.tktg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()
-	local lg=c:GetLinkedGroup():Filter(c13536606.cfilter,nil,c)
+	local lg=c:GetMutualLinkedGroup()
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and c13536606.rfilter(chkc,tp,lg) end
 	if chk==0 then return Duel.IsExistingTarget(c13536606.rfilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil,tp,lg)
-		and Duel.IsPlayerCanSpecialSummonMonster(tp,13536607,0,0x4011,0,0,1,RACE_CYBERS,ATTRIBUTE_LIGHT) end
+		and Duel.IsPlayerCanSpecialSummonMonster(tp,13536607,0,0x4011,0,0,1,RACE_CYBERSE,ATTRIBUTE_LIGHT) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
 	local rg=Duel.SelectTarget(tp,c13536606.rfilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil,tp,lg)
 	local ct=rg:GetFirst():GetLink()
@@ -56,10 +51,10 @@ end
 function c13536606.tkop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	local ct=tc:GetLink()
-	if tc:IsRelateToEffect(e) and not tc:IsImmuneToEffect(e) and Duel.Release(tc,REASON_EFFECT)>0 then
+	if tc and tc:IsRelateToEffect(e) and not tc:IsImmuneToEffect(e) and Duel.Release(tc,REASON_EFFECT)>0 then
 		local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
 		if ft<ct or (ft>1 and Duel.IsPlayerAffectedByEffect(tp,59822133)) then return end
-		if not Duel.IsPlayerCanSpecialSummonMonster(tp,13536607,0,0x4011,0,0,1,RACE_CYBERS,ATTRIBUTE_LIGHT) then return end
+		if not Duel.IsPlayerCanSpecialSummonMonster(tp,13536607,0,0x4011,0,0,1,RACE_CYBERSE,ATTRIBUTE_LIGHT) then return end
 		for i=1,ct do
 			local token=Duel.CreateToken(tp,13536607)
 			Duel.SpecialSummonStep(token,0,tp,tp,false,false,POS_FACEUP)

@@ -1,6 +1,5 @@
 --クイック・リボルブ
 --Quick Revolve
---Scripted by Eerie Code
 function c31443476.initial_effect(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)
@@ -12,7 +11,7 @@ function c31443476.initial_effect(c)
 	c:RegisterEffect(e1)
 end
 function c31443476.filter(c,e,tp)
-	return c:IsSetCard(0x201) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsSetCard(0x102) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function c31443476.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0

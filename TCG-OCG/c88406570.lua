@@ -1,6 +1,5 @@
 --剛鬼デストロイ・オーガ
 --Gouki Destroy Ogre
---Script by nekrozar
 function c88406570.initial_effect(c)
 	--link summon
 	aux.AddLinkProcedure(c,aux.FilterBoolFunction(Card.IsSetCard,0xfc),2)

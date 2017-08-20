@@ -1,6 +1,5 @@
 --ファイアウォール・ドラゴン
 --Firewall Dragon
---Script by nekrozar
 function c5043010.initial_effect(c)
 	--link summon
 	aux.AddLinkProcedure(c,nil,2)
@@ -23,60 +22,58 @@ function c5043010.initial_effect(c)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 	e2:SetRange(LOCATION_MZONE)
-	e2:SetCode(EVENT_LEAVE_FIELD_P)
+	e2:SetCode(EVENT_BATTLE_DESTROYED)
+	e2:SetCondition(c5043010.regcon)
 	e2:SetOperation(c5043010.regop)
 	c:RegisterEffect(e2)
-	local e3=Effect.CreateEffect(c)
-	e3:SetDescription(aux.Stringid(5043010,1))
-	e3:SetCategory(CATEGORY_SPECIAL_SUMMON)
-	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e3:SetProperty(EFFECT_FLAG_DELAY)
-	e3:SetCode(EVENT_BATTLE_DESTROYED)
-	e3:SetRange(LOCATION_MZONE)
-	e3:SetLabelObject(e2)
-	e3:SetCondition(c5043010.spcon)
-	e3:SetTarget(c5043010.sptg)
-	e3:SetOperation(c5043010.spop)
+	local e3=e2:Clone()
+	e3:SetCode(EVENT_TO_GRAVE)
+	e3:SetCondition(c5043010.regcon2)
 	c:RegisterEffect(e3)
-	local e4=e3:Clone()
-	e4:SetCode(EVENT_TO_GRAVE)
+	local e4=Effect.CreateEffect(c)
+	e4:SetDescription(aux.Stringid(5043010,1))
+	e4:SetCategory(CATEGORY_SPECIAL_SUMMON)
+	e4:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e4:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP)
+	e4:SetCode(EVENT_CUSTOM+5043010)
+	e4:SetRange(LOCATION_MZONE)
+	e4:SetTarget(c5043010.sptg)
+	e4:SetOperation(c5043010.spop)
 	c:RegisterEffect(e4)
-end
-function c5043010.ctfilter(c,mc)
-	local lg=c:GetLinkedGroup()
-	return lg and lg:IsContains(mc)
 end
 function c5043010.thfilter(c)
 	return c:IsType(TYPE_MONSTER) and c:IsAbleToHand()
 end
 function c5043010.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()
-	local lg=c:GetLinkedGroup()
-	local ct=lg:FilterCount(c5043010.ctfilter,nil,c)
+	local ct=c:GetMutualLinkedGroupCount()
 	if chkc then return chkc:IsLocation(LOCATION_MZONE+LOCATION_GRAVE) and c5043010.thfilter(chkc) end
 	if chk==0 then return ct>0 and Duel.IsExistingTarget(c5043010.thfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,LOCATION_MZONE+LOCATION_GRAVE,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
 	local g=Duel.SelectTarget(tp,c5043010.thfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,LOCATION_MZONE+LOCATION_GRAVE,1,ct,nil)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g,g:GetCount(),0,0)
+	c:RegisterFlagEffect(0,RESET_EVENT+0x1fe0000,EFFECT_FLAG_CLIENT_HINT,1,0,aux.Stringid(5043010,2))
 end
 function c5043010.thop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS):Filter(Card.IsRelateToEffect,nil,e)
 	Duel.SendtoHand(g,nil,REASON_EFFECT)
 end
+function c5043010.cfilter(c,tp,zone)
+	local seq=c:GetPreviousSequence()
+	if c:GetPreviousControler()~=tp then seq=seq+16 end
+	return c:IsPreviousLocation(LOCATION_MZONE) and bit.extract(zone,seq)~=0
+end
+function c5043010.regcon(e,tp,eg,ep,ev,re,r,rp)
+	return eg:IsExists(c5043010.cfilter,1,nil,tp,e:GetHandler():GetLinkedZone())
+end
+function c5043010.cfilter2(c,tp,zone)
+	return not c:IsReason(REASON_BATTLE) and c5043010.cfilter(c,tp,zone)
+end
+function c5043010.regcon2(e,tp,eg,ep,ev,re,r,rp)
+	return eg:IsExists(c5043010.cfilter2,1,nil,tp,e:GetHandler():GetLinkedZone())
+end
 function c5043010.regop(e,tp,eg,ep,ev,re,r,rp)
-	local g=e:GetHandler():GetLinkedGroup()
-	if not g then return end
-	local lg=g:Clone()
-	lg:KeepAlive()
-	e:SetLabelObject(lg)
-end
-function c5043010.cfilter(c,g)
-	return g:IsContains(c)
-end
-function c5043010.spcon(e,tp,eg,ep,ev,re,r,rp)
-	local lg=e:GetLabelObject():GetLabelObject()
-	if not lg then return false end
-	return eg:IsExists(c5043010.cfilter,1,nil,lg)
+	Duel.RaiseSingleEvent(e:GetHandler(),EVENT_CUSTOM+5043010,e,0,tp,0,0)
 end
 function c5043010.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0

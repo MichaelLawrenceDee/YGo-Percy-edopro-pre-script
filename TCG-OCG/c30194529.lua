@@ -1,6 +1,5 @@
 --星杯戦士ニンギルス
 --Star Grail Warrior Ningirsu
---Scripted by Eerie Code
 function c30194529.initial_effect(c)
 	--link summon
 	c:EnableReviveLimit()
@@ -40,7 +39,7 @@ function c30194529.initial_effect(c)
 	c:RegisterEffect(e5)
 end
 function c30194529.drcon(e,tp,eg,ep,ev,re,r,rp)
-	return bit.band(e:GetHandler():GetSummonType(),SUMMON_TYPE_LINK)==SUMMON_TYPE_LINK
+	return e:GetHandler():IsSummonType(SUMMON_TYPE_LINK)
 end
 function c30194529.drfilter(c)
 	return c:IsFaceup() and c:IsSetCard(0xfd)

@@ -1,6 +1,5 @@
 --エクスクローラー・シナプシス
 --Excrawler Synapses
---Scripted by Eerie Code
 function c39998992.initial_effect(c)
 	--link summon
 	c:EnableReviveLimit()
@@ -11,7 +10,7 @@ function c39998992.initial_effect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e1:SetCode(EVENT_LEAVE_FIELD)
-	e1:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
 	e1:SetCondition(c39998992.spcon)
 	e1:SetTarget(c39998992.sptg)
 	e1:SetOperation(c39998992.spop)
@@ -36,7 +35,7 @@ function c39998992.initial_effect(c)
 	--extra attack
 	local e5=e2:Clone()
 	e5:SetCode(EFFECT_EXTRA_ATTACK_MONSTER)
-	c:RegisterEffect(e5)	
+	c:RegisterEffect(e5)
 end
 function c39998992.spcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
@@ -44,11 +43,11 @@ function c39998992.spcon(e,tp,eg,ep,ev,re,r,rp)
 		and c:IsPreviousPosition(POS_FACEUP)
 end
 function c39998992.spfilter1(c,e,tp)
-	return c:IsSetCard(0x204) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEDOWN_DEFENSE)
+	return c:IsSetCard(0x104) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEDOWN_DEFENSE)
 		and Duel.IsExistingTarget(c39998992.spfilter2,tp,LOCATION_GRAVE,0,1,c,c:GetCode(),e,tp)
 end
 function c39998992.spfilter2(c,cd,e,tp)
-	return not c:IsCode(cd) and c:IsSetCard(0x204) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEDOWN_DEFENSE)
+	return not c:IsCode(cd) and c:IsSetCard(0x104) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEDOWN_DEFENSE)
 end
 function c39998992.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return false end
@@ -78,5 +77,5 @@ function c39998992.spop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c39998992.indtg(e,c)
-	return e:GetHandler():GetLinkedGroup():IsContains(c) and c:IsSetCard(0x204)
+	return e:GetHandler():GetLinkedGroup():IsContains(c) and c:IsSetCard(0x104)
 end

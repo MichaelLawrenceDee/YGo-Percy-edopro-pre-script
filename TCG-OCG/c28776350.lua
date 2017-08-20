@@ -2,6 +2,7 @@
 --Akashic Magician
 function c28776350.initial_effect(c)
 	c:EnableReviveLimit()
+	--link summon
 	aux.AddLinkProcedure(c,c28776350.filter,2,nil,true)
 	--splimit
 	local e1=Effect.CreateEffect(c)
@@ -32,6 +33,10 @@ function c28776350.initial_effect(c)
 	e3:SetOperation(c28776350.acop)
 	c:RegisterEffect(e3)
 end
+function c28776350.filter(c,chk,tp,sg)
+	if chk then return sg:IsExists(Card.IsRace,1,c,c:GetRace()) end
+	return not c:IsLinkType(TYPE_TOKEN) 
+end
 function c28776350.regcon(e,tp,eg,ep,ev,re,r,rp)
 	return bit.band(e:GetHandler():GetSummonType(),SUMMON_TYPE_LINK)==SUMMON_TYPE_LINK
 end
@@ -48,10 +53,6 @@ end
 function c28776350.splimit(e,c,sump,sumtype,sumpos,targetp,se)
 	return c:IsCode(28776350) and bit.band(sumtype,SUMMON_TYPE_LINK)==SUMMON_TYPE_LINK
 end
-function c28776350.filter(c,chk,tp,sg)
-	if chk then return sg:IsExists(Card.IsRace,1,c,c:GetRace()) end
-	return not c:IsLinkType(TYPE_TOKEN) 
-end
 function c28776350.thcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_LINK)
 end
@@ -64,30 +65,27 @@ function c28776350.thop(e,tp,eg,ep,ev,re,r,rp)
 	local lg=e:GetHandler():GetLinkedGroup():Filter(Card.IsAbleToHand,nil)
 	Duel.SendtoHand(lg,nil,REASON_EFFECT)
 end
-function c28776350.cfilter(c,mc)
-	local lg=c:GetLinkedGroup()
-	return lg and lg:IsContains(mc)
-end
 function c28776350.actg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		local c=e:GetHandler()
-		local lg=c:GetLinkedGroup():Filter(c28776350.cfilter,nil,c)
+		local lg=c:GetMutualLinkedGroup()
 		local ct=lg:GetSum(Card.GetLink)
 		if ct<=0 or not Duel.IsPlayerCanDiscardDeck(tp,ct) then return false end
 		local g=Duel.GetDecktopGroup(tp,ct)
 		return g:FilterCount(Card.IsAbleToHand,nil)>0
 	end
-	Duel.Hint(HINT_SELECTMSG,tp,0)
-	local ac=Duel.AnnounceCard(tp)
+	Duel.Hint(HINT_SELECTMSG,tp,564)
+	c28776350.announce_filter={TYPE_FUSION+TYPE_SYNCHRO+TYPE_XYZ+TYPE_LINK,OPCODE_ISTYPE,OPCODE_NOT}
+	local ac=Duel.AnnounceCardFilter(tp,table.unpack(c28776350.announce_filter))
 	Duel.SetTargetParam(ac)
-	Duel.SetOperationInfo(0,CATEGORY_ANNOUNCE,nil,0,tp,ANNOUNCE_CARD)
+	Duel.SetOperationInfo(0,CATEGORY_ANNOUNCE,nil,0,tp,ANNOUNCE_CARD_FILTER)
 end
 function c28776350.thfilter(c,code)
 	return c:IsCode(code) and c:IsAbleToHand()
 end
 function c28776350.acop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local lg=c:GetLinkedGroup():Filter(c28776350.cfilter,nil,c)
+	local lg=c:GetMutualLinkedGroup()
 	local ct=lg:GetSum(Card.GetLink)
 	if ct<=0 or not Duel.IsPlayerCanDiscardDeck(tp,ct) then return end
 	Duel.ConfirmDecktop(tp,ct)

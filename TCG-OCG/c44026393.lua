@@ -1,6 +1,5 @@
 --幻獣機ライテン
 --Mecha Phantom Beast Raiten
---Scripted by Eerie Code
 function c44026393.initial_effect(c)
 	--level
 	local e1=Effect.CreateEffect(c)
@@ -35,12 +34,7 @@ function c44026393.initial_effect(c)
 end
 function c44026393.lvval(e,c)
 	local tp=c:GetControler()
-	local lv=0
-	for i=0,4 do
-		local tc=Duel.GetFieldCard(tp,LOCATION_MZONE,i)
-		if tc and tc:IsCode(31533705) then lv=lv+tc:GetLevel() end
-	end
-	return lv
+	return Duel.GetMatchingGroup(Card.IsCode,tp,LOCATION_MZONE,0,nil,31533705):GetSum(Card.GetLevel)
 end
 function c44026393.indcon(e)
 	return Duel.IsExistingMatchingCard(Card.IsType,e:GetHandlerPlayer(),LOCATION_MZONE,0,1,nil,TYPE_TOKEN)
@@ -70,11 +64,9 @@ function c44026393.spop(e,tp,eg,ep,ev,re,r,rp)
 	local e3=e1:Clone()
 	e3:SetCode(EFFECT_CANNOT_BE_XYZ_MATERIAL)
 	Duel.RegisterEffect(e3,tp)
-	if EFFECT_CANNOT_BE_LINK_MATERIAL then
-		local e4=e1:Clone()
-		e4:SetCode(EFFECT_CANNOT_BE_LINK_MATERIAL)
-		Duel.RegisterEffect(e4,tp)
-	end
+	local e4=e1:Clone()
+	e4:SetCode(EFFECT_CANNOT_BE_LINK_MATERIAL)
+	Duel.RegisterEffect(e4,tp)
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
 	if Duel.IsPlayerCanSpecialSummonMonster(tp,44026394,0x101b,0x4011,0,0,3,RACE_MACHINE,ATTRIBUTE_WIND) then
 		local token=Duel.CreateToken(tp,44026394)

@@ -1,6 +1,5 @@
 --サイバネット・ユニバース
 --Cybenet Universe
---Script by nekrozar
 function c61583217.initial_effect(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)
@@ -37,9 +36,6 @@ function c61583217.initial_effect(c)
 	e4:SetTarget(c61583217.tgtg)
 	e4:SetOperation(c61583217.tgop)
 	c:RegisterEffect(e4)
-	if not TYPE_LINK then
-		TYPE_LINK=0x4000000
-	end
 end
 function c61583217.tdfilter(c)
 	return c:IsType(TYPE_MONSTER) and c:IsAbleToDeck()
@@ -55,7 +51,7 @@ function c61583217.tdop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if not c:IsRelateToEffect(e) then return end
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
+	if tc and tc:IsRelateToEffect(e) then
 		Duel.SendtoDeck(tc,nil,2,REASON_EFFECT)
 	end
 end

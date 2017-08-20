@@ -1,6 +1,5 @@
 --リモート・リボーン
 --Remote Reborn
---Scripted by Sahim
 function c54658815.initial_effect(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)
@@ -18,7 +17,7 @@ end
 function c54658815.filter(c,e,tp,zone)
 	return c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP,1-tp,zone)
 end
-function c54658815.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)  
+function c54658815.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local zone=0
 	local lg=Duel.GetMatchingGroup(c54658815.lkfilter,tp,LOCATION_MZONE,0,nil)
 	for tc in aux.Next(lg) do
