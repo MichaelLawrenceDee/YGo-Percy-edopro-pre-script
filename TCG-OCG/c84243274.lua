@@ -3,7 +3,7 @@ function c84243274.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
 	aux.AddFusionProcMix(c,true,true,58859575,91998119)
-	aux.AddContactFusion(c,c84243274.contactfil,c84243274.contactop)
+ +	aux.AddContactFusion(c,c84243274.contactfil,c84243274.contactop)
 	--spsummon condition
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
@@ -33,16 +33,16 @@ function c84243274.initial_effect(c)
 	e4:SetOperation(c84243274.posop)
 	c:RegisterEffect(e4)
 end
+function c84243274.splimit(e,se,sp,st)
+	return not e:GetHandler():IsLocation(LOCATION_EXTRA)
+end
 function c84243274.contactfil(tp)
 	return Duel.GetMatchingGroup(Card.IsAbleToRemoveAsCost,tp,LOCATION_ONFIELD,0,nil)
 end
 function c84243274.contactop(g)
 	Duel.Remove(g,POS_FACEUP,REASON_COST+REASON_MATERIAL)
 end
-function c84243274.splimit(e,se,sp,st)
-	return not e:GetHandler():IsLocation(LOCATION_EXTRA)
-end
-function c84243274.rmtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+ function c84243274.rmtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsOnField() and chkc:IsControler(1-tp) and chkc:IsAbleToRemove() end
 	if chk==0 then return Duel.IsExistingTarget(Card.IsAbleToRemove,tp,0,LOCATION_ONFIELD,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
@@ -51,20 +51,20 @@ function c84243274.rmtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 function c84243274.rmop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
+	if tc and tc:IsRelateToEffect(e) then
 		Duel.Remove(tc,POS_FACEUP,REASON_EFFECT)
 	end
 end
 function c84243274.postg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return false end
 	local bc=Duel.GetAttackTarget()
-	if chk==0 then return bc and bc:IsCanBeEffectTarget(e) end
+	if chk==0 then return bc and bc:IsCanChangePosition() and bc:IsCanBeEffectTarget(e) end
 	Duel.SetTargetCard(bc)
 	Duel.SetOperationInfo(0,CATEGORY_POSITION,bc,1,0,0)
 end
 function c84243274.posop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
+	if tc and tc:IsRelateToEffect(e) then
 		Duel.ChangePosition(tc,POS_FACEUP_DEFENSE,POS_FACEDOWN_DEFENSE,POS_FACEUP_ATTACK,POS_FACEUP_ATTACK,true)
 	end
 end

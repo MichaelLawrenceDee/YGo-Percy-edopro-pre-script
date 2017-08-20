@@ -18,7 +18,7 @@ function c84650463.initial_effect(c)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,84650463)
 	e2:SetCondition(c84650463.spcon)
-	e2:SetCost(c84650463.spcost)
+	e2:SetCost(aux.bfgcost)
 	e2:SetTarget(c84650463.sptg)
 	e2:SetOperation(c84650463.spop)
 	c:RegisterEffect(e2)
@@ -43,11 +43,6 @@ end
 function c84650463.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetMatchingGroupCount(c84650463.cfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil)==3
 end
-function c84650463.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return not Duel.IsPlayerAffectedByEffect(e:GetHandlerPlayer(),69832741) 
-		and e:GetHandler():IsAbleToRemoveAsCost() end
-	Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_COST)
-end
 function c84650463.filter(c,e,tp)
 	return c:IsLevelAbove(5) and c:IsRace(RACE_SEASERPENT) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
@@ -61,7 +56,7 @@ function c84650463.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 function c84650463.spop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
+	if tc and tc:IsRelateToEffect(e) then
 		Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP)
 	end
 end

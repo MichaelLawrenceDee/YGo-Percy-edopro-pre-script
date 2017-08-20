@@ -2,7 +2,7 @@
 function c7394770.initial_effect(c)
 	--activate
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_FUSION_SUMMON+CATEGORY_DECKDES)
+	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_FUSION_SUMMON)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetCountLimit(1,7394770+EFFECT_COUNT_CODE_OATH)
@@ -27,6 +27,8 @@ function c7394770.initial_effect(c)
 	e3:SetTarget(c7394770.atktg)
 	e3:SetOperation(c7394770.atkop)
 	c:RegisterEffect(e3)
+	if not AshBlossomTable then AshBlossomTable={} end
+	table.insert(AshBlossomTable,e1)
 end
 function c7394770.filter0(c)
 	return c:IsType(TYPE_MONSTER) and c:IsCanBeFusionMaterial() and c:IsAbleToGrave()
@@ -34,21 +36,22 @@ end
 function c7394770.filter1(c,e)
 	return c:IsType(TYPE_MONSTER) and c:IsCanBeFusionMaterial() and c:IsAbleToGrave() and not c:IsImmuneToEffect(e)
 end
-function c7394770.filter2(c,e,tp,m,f)
+function c7394770.filter2(c,e,tp,m,f,chkf)
 	return c:IsType(TYPE_FUSION) and c:IsSetCard(0x1047) and (not f or f(c))
-		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,false) and c:CheckFusionMaterial(m,nil,tp)
+		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,false) and c:CheckFusionMaterial(m,nil,chkf)
 end
 function c7394770.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
+		local chkf=Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and PLAYER_NONE or tp
 		local mg1=Duel.GetMatchingGroup(c7394770.filter0,tp,LOCATION_DECK,0,nil)
-		local res=Duel.IsExistingMatchingCard(c7394770.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,mg1,nil)
+		local res=Duel.IsExistingMatchingCard(c7394770.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,mg1,nil,chkf)
 		if not res then
 			local ce=Duel.GetChainMaterial(tp)
 			if ce~=nil then
 				local fgroup=ce:GetTarget()
 				local mg2=fgroup(ce,e,tp)
 				local mf=ce:GetValue()
-				res=Duel.IsExistingMatchingCard(c7394770.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,mg2,mf)
+				res=Duel.IsExistingMatchingCard(c7394770.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,mg2,mf,chkf)
 			end
 		end
 		return res
@@ -57,8 +60,9 @@ function c7394770.target(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function c7394770.activate(e,tp,eg,ep,ev,re,r,rp)
 	if not e:GetHandler():IsRelateToEffect(e) then return end
+	local chkf=Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and PLAYER_NONE or tp
 	local mg1=Duel.GetMatchingGroup(c7394770.filter1,tp,LOCATION_DECK,0,nil,e)
-	local sg1=Duel.GetMatchingGroup(c7394770.filter2,tp,LOCATION_EXTRA,0,nil,e,tp,mg1,nil)
+	local sg1=Duel.GetMatchingGroup(c7394770.filter2,tp,LOCATION_EXTRA,0,nil,e,tp,mg1,nil,chkf)
 	local mg2=nil
 	local sg2=nil
 	local ce=Duel.GetChainMaterial(tp)
@@ -66,7 +70,7 @@ function c7394770.activate(e,tp,eg,ep,ev,re,r,rp)
 		local fgroup=ce:GetTarget()
 		mg2=fgroup(ce,e,tp)
 		local mf=ce:GetValue()
-		sg2=Duel.GetMatchingGroup(c7394770.filter2,tp,LOCATION_EXTRA,0,nil,e,tp,mg2,mf)
+		sg2=Duel.GetMatchingGroup(c7394770.filter2,tp,LOCATION_EXTRA,0,nil,e,tp,mg2,mf,chkf)
 	end
 	if sg1:GetCount()>0 or (sg2~=nil and sg2:GetCount()>0) then
 		local sg=sg1:Clone()
@@ -84,13 +88,13 @@ function c7394770.activate(e,tp,eg,ep,ev,re,r,rp)
 		e2:SetCode(EFFECT_SET_DEFENSE_FINAL)
 		tc:RegisterEffect(e2)
 		if sg1:IsContains(tc) and (sg2==nil or not sg2:IsContains(tc) or not Duel.SelectYesNo(tp,ce:GetDescription())) then
-			local mat1=Duel.SelectFusionMaterial(tp,tc,mg1,nil,tp)
+			local mat1=Duel.SelectFusionMaterial(tp,tc,mg1,nil,chkf)
 			tc:SetMaterial(mat1)
 			Duel.SendtoGrave(mat1,REASON_EFFECT+REASON_MATERIAL+REASON_FUSION)
 			Duel.BreakEffect()
 			Duel.SpecialSummon(tc,SUMMON_TYPE_FUSION,tp,tp,false,false,POS_FACEUP)
 		else
-			local mat2=Duel.SelectFusionMaterial(tp,tc,mg2,nil,tp)
+			local mat2=Duel.SelectFusionMaterial(tp,tc,mg2,nil,chkf)
 			local fop=ce:GetOperation()
 			fop(ce,e,tp,tc,mat2)
 		end

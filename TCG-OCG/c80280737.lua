@@ -19,7 +19,7 @@ function c80280737.filter1(c,e,tp)
 	return c:IsType(TYPE_SYNCHRO) and Duel.IsExistingMatchingCard(c80280737.filter2,tp,LOCATION_DECK,0,1,nil,c:GetCode(),e,tp)
 end
 function c80280737.filter2(c,tcode,e,tp)
-	return c:IsSetCard(0x104f) and c.assault_mode and c.assault_mode=tcode and c:IsCanBeSpecialSummoned(e,0,tp,true,false)
+	return c:IsSetCard(0x104f) and c.assault_mode and c.assault_mode==tcode and c:IsCanBeSpecialSummoned(e,0,tp,true,false)
 end
 function c80280737.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
@@ -29,14 +29,15 @@ function c80280737.target(e,tp,eg,ep,ev,re,r,rp,chk)
 			and Duel.CheckReleaseGroup(tp,c80280737.filter1,1,nil,e,tp)
 	end
 	local rg=Duel.SelectReleaseGroup(tp,c80280737.filter1,1,1,nil,e,tp)
-	e:SetLabel(rg:GetFirst():GetCode())
+	Duel.SetTargetParam(rg:GetFirst():GetCode())
 	Duel.Release(rg,REASON_COST)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_DECK)
 end
 function c80280737.activate(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
-	local code=e:GetLabel()
-	local tc=Duel.GetFirstMatchingCard(c80280737.filter2,tp,LOCATION_DECK,0,nil,code,e,tp)
+	local code=Duel.GetChainInfo(0,CHAININFO_TARGET_PARAM)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+	local tc=Duel.SelectMatchingCard(tp,c80280737.filter2,tp,LOCATION_DECK,0,1,1,nil,code,e,tp):GetFirst()
 	if tc and Duel.SpecialSummon(tc,0,tp,tp,true,false,POS_FACEUP_ATTACK)>0 then
 		tc:CompleteProcedure()
 	end
