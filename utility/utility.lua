@@ -615,6 +615,16 @@ function Card.IsAllColumn(c)
 	return c:GetColumnGroupCount(0,0,Duel.GetMasterRule()>3)==3+ex
 end
 
+--in case of moving to utility
+--change live2017 to live folder name
+--dofile("expansions/live2017/script/proc_fusion.lua")
+--dofile("expansions/live2017/script/proc_ritual.lua")
+--dofile("expansions/live2017/script/proc_synchro.lua")
+--dofile("expansions/live2017/script/proc_union.lua")
+--dofile("expansions/live2017/script/proc_xyz.lua")
+--dofile("expansions/live2017/script/proc_pendulum.lua")
+--dofile("expansions/live2017/script/proc_link.lua")
+
 dofile("script/proc_fusion.lua")
 dofile("script/proc_ritual.lua")
 dofile("script/proc_synchro.lua")
