@@ -1,5 +1,4 @@
 --覇王門零
---Supreme King Gate Zero
 function c96227613.initial_effect(c)
 	aux.EnablePendulumAttribute(c)
 	--avoid damage
@@ -84,17 +83,15 @@ end
 function c96227613.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c96227613.thfilter,tp,LOCATION_DECK,0,1,nil) end
 	local c=e:GetHandler()
-	local pc=Duel.GetFieldCard(tp,LOCATION_SZONE,13-c:GetSequence())
-	local g=Group.FromCards(c,pc)
+	local g=Duel.GetFieldGroup(tp,LOCATION_PZONE,0)
 	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,2,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 function c96227613.thop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if not c:IsRelateToEffect(e) then return end
-	local pc=Duel.GetFieldCard(tp,LOCATION_SZONE,13-c:GetSequence())
-	if not pc then return end
-	local g=Group.FromCards(c,pc)
+	local g=Duel.GetFieldGroup(tp,LOCATION_PZONE,0)
+	if g:GetCount()<2 then return end
 	if Duel.Destroy(g,REASON_EFFECT)==2 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 		local sg=Duel.SelectMatchingCard(tp,c96227613.thfilter,tp,LOCATION_DECK,0,1,1,nil)
@@ -177,6 +174,6 @@ function c96227613.penop(e,tp,eg,ep,ev,re,r,rp)
 	if not Duel.CheckLocation(tp,LOCATION_PZONE,0) and not Duel.CheckLocation(tp,LOCATION_PZONE,1) then return false end
 	local c=e:GetHandler()
 	if c:IsRelateToEffect(e) then
-		Duel.MoveToField(c,tp,tp,LOCATION_SZONE,POS_FACEUP,true)
+		Duel.MoveToField(c,tp,tp,LOCATION_PZONE,POS_FACEUP,true)
 	end
 end

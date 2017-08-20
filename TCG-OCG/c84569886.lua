@@ -1,5 +1,4 @@
 --DDD超死偉王パープリッシュ・ヘル・アーマゲドン
---D/D/D Superdoom King Purplish Armageddon
 function c84569886.initial_effect(c)
 	c:EnableReviveLimit()
 	aux.EnablePendulumAttribute(c,false)
