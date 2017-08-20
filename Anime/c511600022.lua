@@ -52,7 +52,7 @@ function c511600022.initial_effect(c)
 	c:RegisterEffect(e6)
 end
 function c511600022.cfilter(c)
-	return c:IsFaceup() and c:IsType(TYPE_LINK) and c:IsRace(RACE_CYBERS)
+	return c:IsFaceup() and c:IsType(TYPE_LINK) and c:IsRace(RACE_CYBERSE)
 end
 function c511600022.condition(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsExistingMatchingCard(c511600022.cfilter,tp,LOCATION_MZONE,LOCATION_MZONE,2,nil)
@@ -121,10 +121,10 @@ function c511600022.lvop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c511600022.cyberse(c)
-	return c:IsRace(RACE_CYBERS) and c:IsFaceup() and c:IsType(TYPE_MONSTER)
+	return c:IsRace(RACE_CYBERSE) and c:IsFaceup() and c:IsType(TYPE_MONSTER)
 end
 function c511600022.disable(e,c)
-	return c:IsRace(RACE_CYBERS)
+	return c:IsRace(RACE_CYBERSE)
 end
 ------------------------------------
 function c511600022.filter(c)

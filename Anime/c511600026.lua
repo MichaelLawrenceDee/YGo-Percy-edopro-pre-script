@@ -24,7 +24,7 @@ function c511600026.discon(e,tp,eg,ep,ev,re,r,rp)
 	return rp~=tp and re:IsActiveType(TYPE_MONSTER)
 end
 function c511600026.filter(c)
-	return c:IsRace(RACE_CYBERS) and c:IsType(TYPE_LINK)
+	return c:IsRace(RACE_CYBERSE) and c:IsType(TYPE_LINK)
 end
 function c511600026.efilter(e,te)
 	return te:GetHandler()~=e:GetHandler()
@@ -42,7 +42,7 @@ function c511600026.disop(e,tp,eg,ep,ev,re,r,rp)
 end
 -----------------------------------------------
 function c511600026.condition(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetAttacker():IsRace(RACE_CYBERS)
+	return Duel.GetAttacker():IsRace(RACE_CYBERSE)
 end
 function c511600026.desfilter(c,e,tp)
 	return c:GetSequence()<5
@@ -68,7 +68,7 @@ function c511600026.activate(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c511600026.spfilter(c,e,tp)
-	return c:IsRace(RACE_CYBERS) and c:IsType(TYPE_LINK)
+	return c:IsRace(RACE_CYBERSE) and c:IsType(TYPE_LINK)
 		and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and c:IsLocation(LOCATION_GRAVE)
 end
 function c511600026.spop(e,tp,eg,ep,ev,re,r,rp)
