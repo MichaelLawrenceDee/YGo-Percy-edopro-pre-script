@@ -573,47 +573,6 @@ function Auxiliary.ResetEffects(g,eff)
 		end
 	end
 end
-function Card.GetColumnGroup(c,left,right,excheck)
-	local seq=c:GetSequence()
-	if c:IsLocation(LOCATION_MZONE) then
-		if seq==5 then seq=1 end
-		if seq==6 then seq=3 end
-	end
-	if excheck==nil then excheck=Duel.GetMasterRule()>3 end
-	if Duel.GetMasterRule()<=3 then excheck=false end
-	if not left then left=0 end
-	if not right then right=0 end
-	local min=seq-left
-	if min<0 then min=0 end
-	local max=seq+right
-	if max>4 then max=4 end
-	return Duel.GetMatchingGroup(function(c,min,max,excheck,p)
-		local seq=c:GetSequence()
-		if excheck and seq>4 then
-			if seq==5 then seq=1 end
-			if seq==6 then seq=3 end
-		end
-		local omin=min+4
-		if omin>4 then omin=4 end
-		local omax=max-4
-		if omax<0 then omax=0 end
-		return(c:GetControler()==p and seq>=min and seq<=max) or
-				(c:GetControler()==1-p and seq<=omin and seq>=omax)
-	end,0,LOCATION_ONFIELD,LOCATION_ONFIELD,c,min,max,excheck,c:GetControler())
-end
-function Card.GetColumnGroupCount(c,left,right,excheck)
-	return c:GetColumnGroup(left,right,excheck):GetCount()
-end
-function Card.IsAllColumn(c)
-	local ex=0
-	local seq=c:GetSequence()
-	if c:IsLocation(LOCATION_MZONE) then
-		if seq==5 then seq=1 end
-		if seq==6 then seq=3 end
-	end
-	if (seq==1 or seq==3) and Duel.GetMasterRule()>3 then ex=1 end
-	return c:GetColumnGroupCount(0,0,Duel.GetMasterRule()>3)==3+ex
-end
 
 --in case of moving to utility
 --change live2017 to live folder name
