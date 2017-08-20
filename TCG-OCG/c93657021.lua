@@ -1,6 +1,4 @@
 --D-HERO ダスクユートピアガイ
---Destiny HERO – Duskutopiaguy
---Scripted by Eerie Code
 function c93657021.initial_effect(c)
 	c:EnableReviveLimit()
 	aux.AddFusionProcMix(c,true,true,c93657021.matfilter,aux.FilterBoolFunction(Card.IsFusionSetCard,0xc008))
@@ -32,7 +30,7 @@ function c93657021.matfilter(c)
 	return c:IsFusionType(TYPE_FUSION) and c:IsFusionSetCard(0xc008)
 end
 function c93657021.spcon(e,tp,eg,ep,ev,re,r,rp)
-	return bit.band(e:GetHandler():GetSummonType(),SUMMON_TYPE_FUSION)==SUMMON_TYPE_FUSION
+	return e:GetHandler():IsSummonType(SUMMON_TYPE_FUSION)
 end
 function c93657021.spfilter1(c,e)
 	return not c:IsImmuneToEffect(e)
@@ -108,12 +106,12 @@ function c93657021.indop(e,tp,eg,ep,ev,re,r,rp)
 		tc:RegisterEffect(e1)
 		local e2=e1:Clone()
 		e2:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
-		tc:RegisterEffect(e2)	  
+		tc:RegisterEffect(e2)
 		local e3=e1:Clone()
 		e3:SetCode(EFFECT_NO_BATTLE_DAMAGE)
-		tc:RegisterEffect(e3)	  
+		tc:RegisterEffect(e3)
 		local e4=e1:Clone()
 		e4:SetCode(EFFECT_AVOID_BATTLE_DAMAGE)
-		tc:RegisterEffect(e4)	  
+		tc:RegisterEffect(e4)
 	end
 end

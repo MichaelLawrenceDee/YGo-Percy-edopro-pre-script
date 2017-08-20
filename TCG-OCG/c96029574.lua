@@ -1,7 +1,7 @@
 --ブラック・ブルドラゴ
 function c96029574.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,nil,1,1,aux.NonTuner(Card.IsType,TYPE_DUAL),1,99)
+	aux.AddSynchroProcedure(c,nil,1,1,aux.NonTuner(Card.IsSynchroType,TYPE_DUAL),1,99)
 	c:EnableReviveLimit()
 	--destroy
 	local e1=Effect.CreateEffect(c)
@@ -48,7 +48,7 @@ function c96029574.destg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 function c96029574.desop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
+	if tc and tc:IsRelateToEffect(e) then
 		Duel.Destroy(tc,REASON_EFFECT)
 	end
 end
@@ -68,7 +68,7 @@ function c96029574.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 function c96029574.spop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) and Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP)~=0 then
+	if tc and tc:IsRelateToEffect(e) and Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP)~=0 then
 		tc:EnableDualState()
 	end
 end
