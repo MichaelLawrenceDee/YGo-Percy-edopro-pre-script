@@ -420,7 +420,7 @@ function Auxiliary.AddContactFusion(c,group,op,sumcon,condition,sumtype)
 	e1:SetTarget(Auxiliary.ContactTg(group))
 	e1:SetOperation(Auxiliary.ContactOp(op))
 	c:RegisterEffect(e1)
-	if sumcon and sumcon~=nil then
+	if sumcon then
 		--spsummon condition
 		local e2=Effect.CreateEffect(c)
 		e2:SetType(EFFECT_TYPE_SINGLE)

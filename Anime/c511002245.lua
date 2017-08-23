@@ -1,15 +1,7 @@
 --Solidroid beta
 function c511002245.initial_effect(c)
 	aux.AddFusionProcMix(c,true,true,98049038,511002240,511000660)
-	aux.AddContactFusion(c,c511002245.contactfilter,c511002245.contactop)
-	c:EnableReviveLimit()
-	--spsummon condition
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
-	e1:SetCode(EFFECT_SPSUMMON_CONDITION)
-	e1:SetValue(c511002245.splimit)
-	c:RegisterEffect(e1)
+	aux.AddContactFusion(c,c511002245.contactfilter,c511002245.contactop,c511002245.splimit)
 	--destroy
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(16304628,0))

@@ -1,15 +1,7 @@
 --Valkyrion the Magna Warrior (Anime)
 function c511000462.initial_effect(c)
 	aux.AddFusionProcMix(c,true,true,99785935,39256679,11549357)
-	aux.AddContactFusion(c,c511000462.contactfilter,c511000462.contactop)
-	c:EnableReviveLimit()
-	--spsummon condition
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
-	e1:SetCode(EFFECT_SPSUMMON_CONDITION)
-	e1:SetValue(c511000462.splimit)
-	c:RegisterEffect(e1)
+	aux.AddContactFusion(c,c511000462.contactfilter,c511000462.contactop,c511000462.splimit)
 	--special summon
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(511000462,0))
