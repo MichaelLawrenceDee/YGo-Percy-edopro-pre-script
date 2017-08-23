@@ -3,14 +3,7 @@ function c28677304.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
 	aux.AddFusionProcMix(c,true,true,89943723,43237273)
-	aux.AddContactFusion(c,c28677304.contactfil,c28677304.contactop)
-	--spsummon condition
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
-	e1:SetCode(EFFECT_SPSUMMON_CONDITION)
-	e1:SetValue(c28677304.splimit)
-	c:RegisterEffect(e1)
+	aux.AddContactFusion(c,c28677304.contactfil,c28677304.contactop,c28677304.splimit)
 	--return
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(28677304,0))

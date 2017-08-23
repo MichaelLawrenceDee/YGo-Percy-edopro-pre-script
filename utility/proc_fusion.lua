@@ -399,7 +399,7 @@ function Auxiliary.FSelectMixRep(c,tp,mg,sg,fc,sub,sub2,chkf,...)
 	mg:Merge(rg)
 	return res
 end
-function Auxiliary.AddContactFusion(c,group,op,condition,sumtype)
+function Auxiliary.AddContactFusion(c,group,op,sumcon,condition,sumtype)
 	local code=c:GetOriginalCode()
 	local mt=_G["c" .. code]
 	local t={}
@@ -415,13 +415,22 @@ function Auxiliary.AddContactFusion(c,group,op,condition,sumtype)
 	e1:SetRange(LOCATION_EXTRA)
 	if sumtype then
 		e1:SetValue(sumtype)
-	else
-		e1:SetValue(1)
 	end
 	e1:SetCondition(Auxiliary.ContactCon(group,condition))
 	e1:SetTarget(Auxiliary.ContactTg(group))
 	e1:SetOperation(Auxiliary.ContactOp(op))
 	c:RegisterEffect(e1)
+	if sumcon and sumcon~=nil then
+		--spsummon condition
+		local e2=Effect.CreateEffect(c)
+		e2:SetType(EFFECT_TYPE_SINGLE)
+		e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+		e2:SetCode(EFFECT_SPSUMMON_CONDITION)
+		if type(sumcon)=='function' then
+			e2:SetValue(sumcon)
+		end
+		c:RegisterEffect(e2)
+	end
 end
 function Auxiliary.ContactCon(f,fcon)
 	return function(e,c)

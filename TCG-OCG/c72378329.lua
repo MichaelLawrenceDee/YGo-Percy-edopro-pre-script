@@ -3,14 +3,7 @@ function c72378329.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
 	aux.AddFusionProcMix(c,true,true,c72378329.ffilter,aux.FilterBoolFunction(Card.IsRace,RACE_BEAST))
-	aux.AddContactFusion(c,c72378329.contactfil,c72378329.contactop)
-	--spsummon condition
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
-	e1:SetCode(EFFECT_SPSUMMON_CONDITION)
-	e1:SetValue(c72378329.splimit)
-	c:RegisterEffect(e1)
+	aux.AddContactFusion(c,c72378329.contactfil,c72378329.contactop,c72378329.splimit)
 	--damage
 	local e3=Effect.CreateEffect(c)
 	e3:SetCategory(CATEGORY_DAMAGE)

@@ -3,14 +3,7 @@ function c22638495.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
 	aux.AddFusionProcMix(c,true,true,c22638495.ffilter,aux.FilterBoolFunction(Card.IsFusionType,TYPE_PENDULUM))
-	aux.AddContactFusion(c,c22638495.contactfil,c22638495.contactop)
-	--spsummon condition
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
-	e1:SetCode(EFFECT_SPSUMMON_CONDITION)
-	e1:SetValue(c22638495.splimit)
-	c:RegisterEffect(e1)
+	aux.AddContactFusion(c,c22638495.contactfil,c22638495.contactop,c22638495.splimit)
 	--spsummon
 	local e3=Effect.CreateEffect(c)
 	e3:SetCategory(CATEGORY_SPECIAL_SUMMON)
