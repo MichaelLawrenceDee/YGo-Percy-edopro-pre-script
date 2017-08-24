@@ -608,7 +608,7 @@ function Auxiliary.XyzTarget2(alterf,op)
 	return	function(e,tp,eg,ep,ev,re,r,rp,chk,c,og,min,max)
 				local cancel=not og and Duel.GetCurrentChain()<=0
 				Auxiliary.ProcCancellable=cancel
-				local cg,apply=false,ok
+				local cg,apply,ok
 				::rep::
 				if op then
 					ok,apply,cg=op(e,tp,1)
