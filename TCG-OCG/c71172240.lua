@@ -22,7 +22,7 @@ function c71172240.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 function c71172240.filter(c)
-	return c:IsFaceup() and c:GetSequence()>=5
+	return c:GetSequence()>=5
 end
 function c71172240.spcon(e,c)
 	if c==nil then return true end
