@@ -36,7 +36,7 @@ function c71172240.tdcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.Release(e:GetHandler(),REASON_COST)
 end
 function c71172240.tdfilter(c)
-	return c:IsFaceup() and c:GetSequence()>=5 and c:IsAbleToDeck()
+	return c:GetSequence()>=5 and c:IsAbleToDeck()
 end
 function c71172240.tdtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c71172240.tdfilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil) end
