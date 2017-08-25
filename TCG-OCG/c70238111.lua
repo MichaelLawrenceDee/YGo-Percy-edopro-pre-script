@@ -58,11 +58,11 @@ function c70238111.activate(e,tp,eg,ep,ev,re,r,rp)
 		end
 	end
 end
-function c70238111.spfilter(c)
+function c70238111.spcfilter(c)
 	return c:GetSequence()>=5
 end
 function c70238111.spcon(e,tp,eg,ep,ev,re,r,rp)
-	return not Duel.IsExistingMatchingCard(c70238111.spfilter,tp,LOCATION_MZONE,0,1,nil)
+	return not Duel.IsExistingMatchingCard(c70238111.spcfilter,tp,LOCATION_MZONE,0,1,nil)
 end
 function c70238111.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsAbleToRemoveAsCost() end
