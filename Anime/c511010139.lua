@@ -62,17 +62,16 @@ function c511010139.ovfilter(c)
 	return c:IsFaceup() and c:IsCode(84013237)
 end
 function c511010139.xyzop(e,tp,eg,ep,ev,re,r,rp,c,og,min,max)
-	local g=e:GetLabelObject()
-	local mg2=g:GetFirst():GetOverlayGroup()
+	local tc=e:GetLabelObject()
+	local mg2=tc:GetOverlayGroup()
 	if mg2:GetCount()~=0 then
 		Duel.Overlay(c,mg2)
 	end
-	c:SetMaterial(g)
-	Duel.Overlay(c,g)
-	if not g:GetFirst():IsCode(84013237) then
+	c:SetMaterial(Group.FromCards(tc))
+	Duel.Overlay(c,Group.FromCards(tc))
+	if not tc:IsCode(84013237) then
 		Duel.SendtoGrave(mg2,REASON_RULE)
 	end
-	g:DeleteGroup()
 end
 function c511010139.atkcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end
