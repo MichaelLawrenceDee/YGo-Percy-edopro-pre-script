@@ -31,6 +31,33 @@ Card.EnableCounterPermit=function(c,countertype,location)
 	end)
 	c:RegisterEffect(e1)
 end
+function Auxiliary.ExtraLinked(c,emc,card,eg)
+	eg:AddCard(c)
+	local res
+	if c==emc then
+		res=eg:IsContains(card)
+	else
+		local g=c:GetMutualLinkedGroup()
+		res=g and g:IsExists(Auxiliary.ExtraLinked,1,eg,emc,card,eg)
+	end
+	eg:RemoveCard(c)
+	return res
+end
+Card.IsExtraLinked=function(c)
+	local card50=Duel.GetFieldCard(0,LOCATION_SZONE,5)
+	local card60=Duel.GetFieldCard(0,LOCATION_SZONE,6)
+	if card50 and card60 then
+		local mg=card50:GetMutualLinkedGroup()
+		return mg and mg:IsExists(Auxiliary.ExtraLinked,1,nil,card60,c,Group.FromCards(card50))
+	end
+	local card51=Duel.GetFieldCard(1,LOCATION_SZONE,5)
+	local card61=Duel.GetFieldCard(1,LOCATION_SZONE,6)
+	if card51 and card61 then
+		local mg=card51:GetMutualLinkedGroup()
+		return mg and mg:IsExists(Auxiliary.ExtraLinked,1,nil,card61,c,Group.FromCards(card51))
+	end
+	return false
+end
 
 
 function Auxiliary.Stringid(code,id)
