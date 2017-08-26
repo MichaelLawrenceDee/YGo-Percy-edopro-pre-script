@@ -601,22 +601,17 @@ function Auxiliary.XyzCondition2(alterf,op)
 				else
 					mg=Duel.GetFieldGroup(tp,LOCATION_MZONE,LOCATION_MZONE)
 				end
-				return (not min or min<=1) and (not op or op(e,tp,0)) and mg:IsExists(Auxiliary.XyzAlterFilter,1,nil,alterf,c,e,tp,op)
+				return (not min or min<=1) and mg:IsExists(Auxiliary.XyzAlterFilter,1,nil,alterf,c,e,tp,op)
 			end
 end
 function Auxiliary.XyzTarget2(alterf,op)
 	return	function(e,tp,eg,ep,ev,re,r,rp,chk,c,og,min,max)
 				local cancel=not og and Duel.GetCurrentChain()<=0
 				Auxiliary.ProcCancellable=cancel
-				local cg,apply,ok
-				::rep::
-				if op then
-					ok,apply,cg=op(e,tp,1)
-					if not ok then return false end
-				end
 				if og and not min then
 					og:KeepAlive()
 					e:SetLabelObject(og)
+					if op then op(e,tp,1,og:GetFirst()) end
 					return true
 				else
 					local mg=nil
@@ -627,12 +622,10 @@ function Auxiliary.XyzTarget2(alterf,op)
 					end
 					Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
 					local oc=mg:Filter(Auxiliary.XyzAlterFilter,nil,alterf,c,e,tp,op):SelectUnselect(Group.CreateGroup(),tp,cancel,cancel)
-					if not oc and apply then
-						goto rep
-					elseif not oc then
-						return false
-					end
-					if op then op(e,tp,2,oc,cg) end
+					if not oc then return false end
+					local ok=true
+					if op then ok=op(e,tp,1,oc) end
+					if not ok then return false end
 					e:SetLabelObject(oc)
 					return true
 				end
