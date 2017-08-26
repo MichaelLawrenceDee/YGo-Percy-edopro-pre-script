@@ -66,13 +66,19 @@ function c54366836.damcost2(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function c54366836.damop2(e,tp,eg,ep,ev,re,r,rp)
 	local e1=Effect.CreateEffect(e:GetHandler())
-	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetCode(EFFECT_REFLECT_BATTLE_DAMAGE)
-	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-	e1:SetTargetRange(1,0)
+	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e1:SetCode(EVENT_PRE_BATTLE_DAMAGE)
+	e1:SetOperation(c54366836.damop)
 	e1:SetReset(RESET_PHASE+PHASE_DAMAGE_CAL)
 	Duel.RegisterEffect(e1,tp)
 end
 function c54366836.indcon(e)
 	return e:GetHandler():IsPosition(POS_FACEUP_ATTACK)
+end
+function c54366836.damop(e,tp,eg,ep,ev,re,r,rp)
+	local dam=Duel.GetBattleDamage(tp)
+	if dam>0 then
+		Duel.ChangeBattleDamage(1-tp,Duel.GetBattleDamage(1-tp)+dam,false)
+		Duel.ChangeBattleDamage(tp,0)
+	end
 end

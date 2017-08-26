@@ -30,9 +30,9 @@ function c95442074.initial_effect(c)
 	--reflect
 	local e4=Effect.CreateEffect(c)
 	e4:SetType(EFFECT_TYPE_SINGLE)
-	e4:SetCode(EFFECT_REFLECT_BATTLE_DAMAGE)
+	e4:SetCode(EVENT_PRE_BATTLE_DAMAGE)
 	e4:SetCondition(c95442074.refcon)
-	e4:SetValue(1)
+	e4:SetOperation(c95442074.refop)
 	c:RegisterEffect(e4)
 	local e5=Effect.CreateEffect(c)
 	e5:SetType(EFFECT_TYPE_SINGLE)
@@ -84,5 +84,9 @@ function c95442074.indcon(e)
 end
 function c95442074.refcon(e)
 	return Duel.IsExistingMatchingCard(c95442074.filter,e:GetHandlerPlayer(),LOCATION_MZONE,0,1,nil)
-		and Duel.GetAttackTarget()==e:GetHandler()
+		and Duel.GetAttackTarget()==e:GetHandler() and Duel.GetBattleDamage(tp)>0
+end
+function c95442074.refop(e,tp,eg,ep,ev,re,r,rp)
+	Duel.ChangeBattleDamage(1-tp,Duel.GetBattleDamage(1-tp)+Duel.GetBattleDamage(tp),false)
+	Duel.ChangeBattleDamage(tp,0)
 end

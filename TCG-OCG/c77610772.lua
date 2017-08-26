@@ -50,12 +50,12 @@ function c77610772.incon(e)
 	return c:IsLinkState()
 end
 function c77610772.repfilter(c,tp,hc)
-	return c:IsFaceup() and c:IsLocation(LOCATION_MZONE)
+	return c:IsFaceup() and c:IsLocation(LOCATION_MZONE) and not c:IsReason(REASON_REPLACE) 
 		and c:IsControler(tp) and c:IsReason(REASON_EFFECT) and hc:GetLinkedGroup():IsContains(c)
 end
 function c77610772.reptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsAbleToGrave() and eg:IsExists(c77610772.repfilter,1,nil,tp,e:GetHandler()) end
-	return Duel.SelectYesNo(tp,aux.Stringid(77610772,0))
+	return Duel.SelectEffectYesNo(tp,e:GetHandler(),96)
 end
 function c77610772.repval(e,c)
 	return c77610772.repfilter(c,e:GetHandlerPlayer(),e:GetHandler())

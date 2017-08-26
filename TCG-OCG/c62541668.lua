@@ -37,8 +37,12 @@ function c62541668.ovfilter(c)
 end
 function c62541668.xyzop(e,tp,chk)
 	if chk==0 then return true end
-	e:GetHandler():RegisterFlagEffect(62541668,RESET_EVENT+0xfe0000+RESET_PHASE+PHASE_END,0,1)
-	return true
+	if chk==1 then
+		return true,false
+	end
+	if chk==2 then
+		e:GetHandler():RegisterFlagEffect(62541668,RESET_EVENT+0xfe0000+RESET_PHASE+PHASE_END,0,1)
+	end
 end
 function c62541668.rmcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,2,REASON_COST) end
@@ -68,7 +72,7 @@ function c62541668.rmop(e,tp,eg,ep,ev,re,r,rp)
 end
 function c62541668.reptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	if chk==0 then return c:IsReason(REASON_BATTLE+REASON_EFFECT)
+	if chk==0 then return not c:IsReason(REASON_REPLACE) and c:IsReason(REASON_BATTLE+REASON_EFFECT)
 		and c:CheckRemoveOverlayCard(tp,1,REASON_EFFECT) end
 	if Duel.SelectEffectYesNo(tp,c,96) then
 		c:RemoveOverlayCard(tp,1,1,REASON_EFFECT)

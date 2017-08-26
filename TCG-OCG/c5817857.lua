@@ -71,10 +71,11 @@ function c5817857.destg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		if eg:GetCount()~=1 then return false end
 		local tc=eg:GetFirst()
-		return tc:IsFaceup() and tc:IsLocation(LOCATION_MZONE) and tc:IsSetCard(0x1d) and tc:IsReason(REASON_BATTLE+REASON_EFFECT)
+		return tc:IsFaceup() and tc:IsLocation(LOCATION_MZONE) and tc:IsSetCard(0x1d) 
+			and not tc:IsReason(REASON_REPLACE) and tc:IsReason(REASON_BATTLE+REASON_EFFECT)
 			and Duel.IsExistingMatchingCard(c5817857.rfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,nil)
 	end
-	return Duel.SelectYesNo(tp,aux.Stringid(5817857,3))
+	return Duel.SelectEffectYesNo(tp,e:GetHandler(),96)
 end
 function c5817857.desop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)

@@ -45,7 +45,8 @@ function c59843383.tdop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c59843383.repfilter(c,tp)
-	return c:IsFaceup() and c:IsControler(tp) and c:IsLocation(LOCATION_MZONE) and c:IsRace(RACE_ZOMBIE) and c:IsReason(REASON_BATTLE+REASON_EFFECT)
+	return c:IsFaceup() and c:IsControler(tp) and c:IsLocation(LOCATION_MZONE) and c:IsRace(RACE_ZOMBIE) 
+		and not c:IsReason(REASON_REPLACE) and c:IsReason(REASON_BATTLE+REASON_EFFECT)
 end
 function c59843383.rmfilter(c)
 	if not c:IsSetCard(0xd9) or not c:IsType(TYPE_MONSTER) or not c:IsAbleToRemove() then return false end
@@ -61,7 +62,7 @@ function c59843383.reptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if Duel.SelectEffectYesNo(tp,e:GetHandler(),96) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 		local g=Duel.SelectMatchingCard(tp,c59843383.rmfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,1,nil)
-		Duel.Remove(g,POS_FACEUP,REASON_EFFECT)
+		Duel.Remove(g,POS_FACEUP,REASON_EFFECT+REASON_REPLACE)
 		return true
 	end
 	return false

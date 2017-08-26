@@ -38,8 +38,19 @@ function c93730230.operation(e,tp,eg,ep,ev,re,r,rp)
 		local e2=e1:Clone()
 		e2:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
 		c:RegisterEffect(e2)
-		local e3=e1:Clone()
-		e3:SetCode(EFFECT_REFLECT_BATTLE_DAMAGE)
+		local e3=Effect.CreateEffect(c)
+		e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
+		e3:SetCode(EVENT_PRE_BATTLE_DAMAGE)
+		e3:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
+		e3:SetOperation(c93730230.damop)
+		e3:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END)
 		c:RegisterEffect(e3)
+	end
+end
+function c93730230.damop(e,tp,eg,ep,ev,re,r,rp)
+	local dam=Duel.GetBattleDamage(tp)
+	if dam>0 then
+		Duel.ChangeBattleDamage(1-tp,Duel.GetBattleDamage(1-tp)+dam,false)
+		Duel.ChangeBattleDamage(tp,0)
 	end
 end

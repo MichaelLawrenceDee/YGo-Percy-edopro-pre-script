@@ -6,8 +6,8 @@ function c97403510.initial_effect(c)
 	--battle
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetCode(EFFECT_REFLECT_BATTLE_DAMAGE)
-	e1:SetValue(1)
+	e1:SetCode(EVENT_PRE_BATTLE_DAMAGE)
+	e1:SetOperation(c97403510.damop)
 	c:RegisterEffect(e1)
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_SINGLE)
@@ -119,5 +119,12 @@ function c97403510.atkop(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetValue(atk)
 		e1:SetReset(RESET_EVENT+0x1ff0000)
 		c:RegisterEffect(e1)
+	end
+end
+function c97403510.damop(e,tp,eg,ep,ev,re,r,rp)
+	local dam=Duel.GetBattleDamage(tp)
+	if dam>0 then
+		Duel.ChangeBattleDamage(1-tp,Duel.GetBattleDamage(1-tp)+dam,false)
+		Duel.ChangeBattleDamage(tp,0)
 	end
 end
