@@ -31,13 +31,9 @@ function c85004150.ovfilter(c,tp,xyzc)
 	return c:IsFaceup() and c:IsXyzType(TYPE_XYZ) and (c:GetRank()==5 or c:GetRank()==6) and c:IsRace(RACE_INSECT)
 end
 function c85004150.xyzop(e,tp,chk,mc)
- 	if chk==0 then return not mc or mc:CheckRemoveOverlayCard(tp,2,REASON_COST) end
-	if chk==1 then
-		return true
-	end
-	if chk==2 then
-		mc:RemoveOverlayCard(tp,2,2,REASON_COST)
-	end
+ 	if chk==0 then return mc:CheckRemoveOverlayCard(tp,2,REASON_COST) end
+	mc:RemoveOverlayCard(tp,2,2,REASON_COST)
+	return true
 end
 function c85004150.mfilter(c)
 	return c:IsRace(RACE_INSECT) and c:IsAttribute(ATTRIBUTE_LIGHT)

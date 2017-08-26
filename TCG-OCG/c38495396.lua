@@ -28,12 +28,8 @@ function c38495396.ovfilter(c)
 end
 function c38495396.xyzop(e,tp,chk)
 	if chk==0 then return true end
-	if chk==1 then
-		return true,false
-	end
-	if chk==2 then
-		e:GetHandler():RegisterFlagEffect(38495396,RESET_EVENT+0xfe0000+RESET_PHASE+PHASE_END,0,1)
-	end
+	e:GetHandler():RegisterFlagEffect(38495396,RESET_EVENT+0xfe0000+RESET_PHASE+PHASE_END,0,1)
+	return true
 end
 function c38495396.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end

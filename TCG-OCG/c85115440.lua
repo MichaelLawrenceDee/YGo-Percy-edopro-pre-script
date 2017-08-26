@@ -39,12 +39,8 @@ function c85115440.ovfilter(c)
 end
 function c85115440.xyzop(e,tp,chk)
 	if chk==0 then return Duel.GetFlagEffect(tp,85115440)==0 end
-	if chk==1 then
-		return true,false
-	end
-	if chk==2 then
-		Duel.RegisterFlagEffect(tp,85115440,RESET_PHASE+PHASE_END,0,1)
-	end
+	Duel.RegisterFlagEffect(tp,85115440,RESET_PHASE+PHASE_END,0,1)
+	return true
 end
 function c85115440.atkfilter(c)
 	return c:IsSetCard(0xf1) and c:GetAttack()>=0

@@ -32,20 +32,14 @@ end
 function c79985120.ovfilter(c)
 	return c:IsFaceup() and c:IsSetCard(0xba) and c:IsType(TYPE_XYZ) and c:IsRankBelow(5)
 end
-function c79985120.xyzop(e,tp,chk,mc,cg)
-	if chk==0 then return mc or Duel.IsExistingMatchingCard(c79985120.cfilter,tp,LOCATION_HAND,0,1,nil) end
-	if chk==1 then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DISCARD)
-		local c=Duel.GetMatchingGroup(c79985120.cfilter,tp,LOCATION_HAND,0,nil):SelectUnselect(Group.CreateGroup(),tp,aux.ProcCancellable,aux.ProcCancellable)
-		if c then
-			return true,true,Group.FromCards(c)
-		else
-			return false
-		end
-	end
-	if chk==2 then
-		Duel.SendtoGrave(cg,REASON_DISCARD+REASON_COST)
-	end
+function c79985120.xyzop(e,tp,chk,mc)
+	if chk==0 then return Duel.IsExistingMatchingCard(c79985120.cfilter,tp,LOCATION_HAND,0,1,nil) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DISCARD)
+	local tc=Duel.GetMatchingGroup(c79985120.cfilter,tp,LOCATION_HAND,0,nil):SelectUnselect(Group.CreateGroup(),tp,aux.ProcCancellable,aux.ProcCancellable)
+	if tc then
+		Duel.SendtoGrave(tc,REASON_DISCARD+REASON_COST)
+		return true
+	else return false end
 end
 function c79985120.descon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_XYZ)

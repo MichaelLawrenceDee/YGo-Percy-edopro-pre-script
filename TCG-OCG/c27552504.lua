@@ -39,21 +39,15 @@ end
 function c27552504.ovfilter(c)
 	return c:IsFaceup() and c:IsSetCard(0xd5)
 end
-function c27552504.xyzop(e,tp,chk,mc,cg)
-	if chk==0 then return mc or Duel.IsExistingMatchingCard(c27552504.cfilter,tp,LOCATION_HAND,0,1,nil) end
-	if chk==1 then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-		local c=Duel.GetMatchingGroup(c27552504.cfilter,tp,LOCATION_HAND,0,nil):SelectUnselect(Group.CreateGroup(),tp,aux.ProcCancellable,aux.ProcCancellable)
-		if c then
-			return true,true,Group.FromCards(c)
-		else
-			return false
-		end
-	end
-	if chk==2 then
-		Duel.SendtoGrave(cg,REASON_COST)
+function c27552504.xyzop(e,tp,chk,mc)
+	if chk==0 then return Duel.IsExistingMatchingCard(c27552504.cfilter,tp,LOCATION_HAND,0,1,nil) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
+	local tc=Duel.GetMatchingGroup(c27552504.cfilter,tp,LOCATION_HAND,0,nil):SelectUnselect(Group.CreateGroup(),tp,aux.ProcCancellable,aux.ProcCancellable)
+	if tc then
+		Duel.SendtoGrave(tc,REASON_COST)
 		e:GetHandler():RegisterFlagEffect(27552504,RESET_EVENT+0xfe0000+RESET_PHASE+PHASE_END,0,1)
-	end
+		return true
+	else return false end
 end
 function c27552504.tgcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end
