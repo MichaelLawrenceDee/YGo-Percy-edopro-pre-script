@@ -145,8 +145,8 @@ function Duel.MoveToDMZone(c,p)
 	if Duel.GetMasterRule()<4 then
 		Duel.MoveToField(c,p,p,LOCATION_MZONE,POS_FACEUP_ATTACK,true,bit.lshift(1,5))
 	else
-		Duel.MoveToField(c,p,p,LOCATION_SZONE,POS_FACEUP_ATTACK,true,bit.lshift(1,6))
-		-- Duel.MoveSequence(c,6)
+		Duel.MoveToField(c,p,p,LOCATION_SZONE,POS_FACEUP_ATTACK,true)
+		Duel.MoveSequence(c,6)
 	end
 end
 
@@ -216,71 +216,66 @@ function c300.con(e,tp,eg,ep,ev,re,r,rp)
     return Duel.GetTurnCount()==1
 end
 function c300.op(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.SelectYesNo(0,1) and Duel.SelectYesNo(1,1) then
-		local g1=getmatchg(function(c) return c.dm and not c.dm_no_activable end,0,0xff,0,nil)
-		local g2=getmatchg(function(c) return c.dm and not c.dm_no_activable end,1,0xff,0,nil)
-		--Gets the Deck Master that wil be used as start, player 1 will have dm[0] and player 2 wil have dm[1], if a player doesn't have one, it creates a random Deck Master
-		local dm = {}
-		dm[0]=nil
-		dm[1]=nil
-		local aaa = {}
-		aaa[0]=Group.CreateGroup()
-		aaa[1]=Group.CreateGroup()
-		for _,i in ipairs(tableDm) do
-			aaa[0]:AddCard(Duel.CreateToken(0,i))
-			aaa[1]:AddCard(Duel.CreateToken(1,i))
-		end
-		if g1:GetCount()>0 then
-			if g1:GetCount()==1 then
-				dm[0]=g1:GetFirst()
-			else
-				dm[0]=g1:RandomSelect(0,1):GetFirst()
-			end
-		elseif g1:GetCount()==0 then
-			dm[0]=aaa[0]:Select(0,1,1,nil):GetFirst()
-		end
-		if g2:GetCount()>0 then
-			if g2:GetCount()==1 then
-				dm[1]=g2:GetFirst()
-			else
-				dm[1]=g2:RandomSelect(1,1):GetFirst()
-			end
-		elseif g2:GetCount()==0 then
-			dm[1]=aaa[1]:Select(1,1,1,nil):GetFirst()
-		end
-		--Move the Deck Masters to the field and place them in the appropriate zones and, if any, executes the custom operations, then add the special summon effect
-		for i=0,1 do
-			Duel.MoveToDMZone(dm[i],dm[i]:GetControler())
-			Duel.Hint(HINT_CARD,tp,dm[i]:GetOriginalCode())
-			if dm[i].dm_op then
-				dm[i].dm_op(dm[i])
-			end
-			if not dm[i].dm_custom then
-				--spsummon
-				local e1=Effect.CreateEffect(dm[i])
-				e1:SetDescription(aux.Stringid(51100567,1))
-				e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
-				e1:SetProperty(EFFECT_FLAG_UNCOPYABLE)
-				e1:SetType(EFFECT_TYPE_IGNITION)
-				e1:SetRange(0xff)
-				e1:SetTarget(c300.sptg)
-				if dm[i].dm_spsummon_op then
-					e1:SetOperation(dm[i].dm_spsummon_op)
-				else
-					e1:SetOperation(c300.spop)
-				end
-				dm[i]:RegisterEffect(e1)
-			end
-			dm[i]:RegisterFlagEffect(300,0,EFFECT_FLAG_CLIENT_HINT,1,0,63)
-			if dm[i]:GetPreviousLocation()==LOCATION_HAND then
-					Duel.Draw(i,1,REASON_RULE)
-			end
-		end
-		c300.VictoryEffects(dm[0])
-	else
-		local g=getmatchg(function(c) return c.dm end,0,0xff,0xff,nil)
-		c300.RemoveDeckMasters(g)
+	local g1=getmatchg(function(c) return c.dm and not c.dm_no_activable end,0,0xff,0,nil)
+	local g2=getmatchg(function(c) return c.dm and not c.dm_no_activable end,1,0xff,0,nil)
+	--Gets the Deck Master that wil be used as start, player 1 will have dm[0] and player 2 wil have dm[1], if a player doesn't have one, it makes the player select a Deck Master
+	local dm = {}
+	dm[0]=nil
+	dm[1]=nil
+	local aaa = {}
+	aaa[0]=Group.CreateGroup()
+	aaa[1]=Group.CreateGroup()
+	for _,i in ipairs(tableDm) do
+		aaa[0]:AddCard(Duel.CreateToken(0,i))
+		aaa[1]:AddCard(Duel.CreateToken(1,i))
 	end
+	if g1:GetCount()>0 then
+		if g1:GetCount()==1 then
+			dm[0]=g1:GetFirst()
+		else
+			dm[0]=g1:RandomSelect(0,1):GetFirst()
+		end
+	elseif g1:GetCount()==0 then
+		dm[0]=aaa[0]:Select(0,1,1,nil):GetFirst()
+	end
+	if g2:GetCount()>0 then
+		if g2:GetCount()==1 then
+			dm[1]=g2:GetFirst()
+		else
+			dm[1]=g2:RandomSelect(1,1):GetFirst()
+		end
+	elseif g2:GetCount()==0 then
+		dm[1]=aaa[1]:Select(1,1,1,nil):GetFirst()
+	end
+	--Move the Deck Masters to the field and place them in the appropriate zones and, if any, executes the custom operations, then add the special summon effect
+	for i=0,1 do
+		Duel.MoveToDMZone(dm[i],dm[i]:GetControler())
+		Duel.Hint(HINT_CARD,tp,dm[i]:GetOriginalCode())
+		if dm[i].dm_op then
+				dm[i].dm_op(dm[i])
+		end
+			if not dm[i].dm_custom then
+			--spsummon
+			local e1=Effect.CreateEffect(dm[i])
+			e1:SetDescription(aux.Stringid(51100567,1))
+			e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
+			e1:SetProperty(EFFECT_FLAG_UNCOPYABLE)
+			e1:SetType(EFFECT_TYPE_IGNITION)
+			e1:SetRange(0xff)
+			e1:SetTarget(c300.sptg)
+			if dm[i].dm_spsummon_op then
+				e1:SetOperation(dm[i].dm_spsummon_op)
+			else
+				e1:SetOperation(c300.spop)
+			end
+			dm[i]:RegisterEffect(e1)
+		end
+		dm[i]:RegisterFlagEffect(300,0,EFFECT_FLAG_CLIENT_HINT,1,0,63)
+		if dm[i]:GetPreviousLocation()==LOCATION_HAND then
+				Duel.Draw(i,1,REASON_RULE)
+		end
+	end
+	c300.VictoryEffects(dm[0])
 end
 
 function c300.VictoryEffects(c)
