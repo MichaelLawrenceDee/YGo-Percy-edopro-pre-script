@@ -1,4 +1,4 @@
---Fire Prison
+--Fire Prison (Anime)
 -- 天火の牢獄
 --scripted by Larry126
 function c511600022.initial_effect(c)
@@ -67,7 +67,7 @@ function c511600022.operation(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetRange(LOCATION_FZONE)
 	e1:SetTargetRange(LOCATION_MZONE+LOCATION_HAND+LOCATION_GRAVE,LOCATION_MZONE+LOCATION_HAND+LOCATION_GRAVE)
-	e1:SetTarget(c511600022.disable)
+	e1:SetTarget(aux.TargetBoolFunction(Card.IsRace,RACE_CYBERSE))
 	e1:SetProperty(EFFECT_FLAG_UNCOPYABLE)
 	e1:SetCode(EFFECT_DISABLE_EFFECT)
 	e1:SetReset(RESET_EVENT+0x1fe0000)
@@ -123,13 +123,9 @@ end
 function c511600022.cyberse(c)
 	return c:IsRace(RACE_CYBERSE) and c:IsFaceup() and c:IsType(TYPE_MONSTER)
 end
-function c511600022.disable(e,c)
-	return c:IsRace(RACE_CYBERSE)
-end
 ------------------------------------
 function c511600022.filter(c)
-	return c:IsFaceup() and c:IsType(TYPE_MONSTER)
---and c:IsType(TYPE_LINK)
+	return c:IsFaceup() and c:IsType(TYPE_MONSTER) and c:IsType(TYPE_LINK)
 end
 function c511600022.sumlimit(e,c,tp,sumtp,sumpos)
 	local g=Duel.GetMatchingGroup(c511600022.filter,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
