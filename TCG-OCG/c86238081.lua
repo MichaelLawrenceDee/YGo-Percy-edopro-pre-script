@@ -117,7 +117,7 @@ function c86238081.desop(e,tp,eg,ep,ev,re,r,rp)
 end
 function c86238081.valcheck(e,c)
 	local g=c:GetMaterial()
-	if g:IsExists(Card.IsType,1,nil,TYPE_XYZ) then
+	if g:IsExists(Card.IsXyzType,1,nil,TYPE_XYZ) then
 		e:GetLabelObject():SetLabel(1)
 	else
 		e:GetLabelObject():SetLabel(0)
