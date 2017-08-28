@@ -3,34 +3,6 @@ aux=Auxiliary
 POS_FACEUP_DEFENCE=POS_FACEUP_DEFENSE
 POS_FACEDOWN_DEFENCE=POS_FACEDOWN_DEFENSE
 
---to be removed once updated in core
-local rmf=Card.IsAbleToRemove
-Card.IsAbleToRemove=function(c,player,pos)
-	if not rmf(c,player) then return false end
-	return not pos or not c:IsType(TYPE_TOKEN) or bit.band(pos,POS_FACEDOWN)<=0
-end
-local rmfc=Card.IsAbleToRemoveAsCost
-Card.IsAbleToRemoveAsCost=function(c,pos)
-	if not rmfc(c) then return false end
-	return not pos or not c:IsType(TYPE_TOKEN) or bit.band(pos,POS_FACEDOWN)<=0
-end
-Card.EnableCounterPermit=function(c,countertype,location)
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetCode(EFFECT_COUNTER_PERMIT+countertype)
-	e1:SetProperty(EFFECT_FLAG_IGNORE_RANGE)
-	e1:SetCondition(function(e)
-		local self=e:GetHandler()
-		if self:IsOnField() then
-			if not location or tempchk then return true end
-			local fz=bit.band(location,LOCATION_FZONE)
-			local loc=bit.band(location,LOCATION_ONFIELD+LOCATION_PZONE)
-			return self:IsLocation(loc) or (fz>0 and self:IsLocation(LOCATION_SZONE) and self:GetSequence()==5)
-		end
-		return true
-	end)
-	c:RegisterEffect(e1)
-end
 function Auxiliary.ExtraLinked(c,emc,card,eg)
 	eg:AddCard(c)
 	local res
@@ -43,7 +15,7 @@ function Auxiliary.ExtraLinked(c,emc,card,eg)
 	eg:RemoveCard(c)
 	return res
 end
-Card.IsExtraLinked=function(c)
+function Card.IsExtraLinked(c)
 	local card50=Duel.GetFieldCard(0,LOCATION_MZONE,5)
 	local card60=Duel.GetFieldCard(0,LOCATION_MZONE,6)
 	if card50 and card60 then

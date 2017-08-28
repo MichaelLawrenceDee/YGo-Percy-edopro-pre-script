@@ -1,7 +1,6 @@
 --魔導加速
 --Magical Boost
 --Scripted by Eerie Code
---updated by MLD
 function c101003058.initial_effect(c)
 	--counter
 	local e1=Effect.CreateEffect(c)
@@ -54,10 +53,7 @@ function c101003058.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return rp~=tp and c:IsReason(REASON_EFFECT) and c:GetPreviousControler()==tp
 end
 function c101003058.spfilter(c,e,tp)
-	tempchk=true
-	local res=c:IsHasEffect(EFFECT_COUNTER_PERMIT+0x1) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
-	tempchk=false
-	return res
+	return c:IsCanAddCounter(0x1,1,false,true) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function c101003058.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
