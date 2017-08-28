@@ -80,6 +80,7 @@ function c511003045.scfilter1(c,tp,mc)
 end
 function c511003045.scfilter2(c,mc,sc)
 	local mg=Group.FromCards(c,mc)
+	c:AssumeProperty(ASSUME_TYPE,c:GetOriginalType())
 	return c:IsCanBeSynchroMaterial(sc) and sc:IsSynchroSummonable(nil,mg)
 end
 function c511003045.sctg(e,tp,eg,ep,ev,re,r,rp,chk)
