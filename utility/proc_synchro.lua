@@ -1,12 +1,3 @@
-local intf=Card.IsNotTuner
-Card.IsNotTuner=function(c,notsynchro)
-	if notsynchro then
-		return intf(c)
-	else
-		return not c:IsSynchroType(TYPE_TUNER) or c:IsHasEffect(EFFECT_NONTUNER)
-	end
-end
-
 function Auxiliary.NonTuner(f,a,b,c)
 	return	function(target)
 				return target:IsNotTuner() and (not f or f(target,a,b,c))
