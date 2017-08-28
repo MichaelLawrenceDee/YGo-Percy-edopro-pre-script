@@ -102,6 +102,7 @@ function c82224646.spop(e,tp,eg,ep,ev,re,r,rp)
 end
 function c82224646.scfilter1(c,e,tp,mc)
 	local mg=Group.FromCards(c,mc)
+	c:AssumeProperty(ASSUME_TYPE,c:GetOriginalType())
 	return c:IsCanBeSynchroMaterial() and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 		and Duel.IsExistingMatchingCard(c82224646.scfilter2,tp,LOCATION_EXTRA,0,1,nil,mg)
 end
