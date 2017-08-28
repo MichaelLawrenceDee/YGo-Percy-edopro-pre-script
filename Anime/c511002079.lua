@@ -95,7 +95,7 @@ function c511002079.regop(e,tp,eg,ep,ev,re,r,rp)
 	c:RegisterEffect(e1)
 end
 function c511002079.matfilter(c)
-	return c:IsSetCard(0xba) and c:IsType(TYPE_XYZ)
+	return c:IsSetCard(0xba) and c:IsXyzType(TYPE_XYZ)
 end
 function c511002079.valcheck(e,c)
 	local g=c:GetMaterial()

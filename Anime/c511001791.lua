@@ -120,7 +120,7 @@ function c511001791.desop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c511001791.matfilter(c)
-	return c:IsType(TYPE_XYZ) and c:IsXyzLevel(c,7)
+	return c:IsXyzType(TYPE_XYZ) and c:IsXyzLevel(c,7)
 end
 function c511001791.valcheck(e,c)
 	local g=c:GetMaterial()
