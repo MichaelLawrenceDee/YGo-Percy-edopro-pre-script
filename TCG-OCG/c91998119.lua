@@ -3,7 +3,7 @@ function c91998119.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
 	aux.AddFusionProcCode3(c,62651957,65622692,64500000,true,true)
-	aux.AddContactFusion(c,c91998119.contactfil,c91998119.contactop.c91998119.splimit)
+	aux.AddContactFusion(c,c91998119.contactfil,c91998119.contactop,c91998119.splimit)
 	--destroy
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(91998119,0))
