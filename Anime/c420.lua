@@ -1511,3 +1511,46 @@ function Card.IsBorrel(c,fbool)
 		return c:IsSetCard(0x56f) or c:IsCode(table.unpack(c420.OCGBorrel))
 	end
 end
+
+-- Monarch
+-- 帝
+-- てい
+-- Mobius the Frost Monarch/Strike of the Monarchs/The First Monarch
+-- Caius the Shadow Monarch/Granmarg the Mega Monarch/Escalation of the Monarchs
+-- March of the Monarchs/Pantheism of the Monarchs/Erebus the Underworld Monarch
+-- Mobius the Mega Monarch/Thestalos the Firestorm Monarch/The Monarchs Awaken
+-- Tenacity of the Monarchs/The Monarchs Erupt/Zaborg the Thunder Monarch
+-- The Prime Monarch/Kuraz the Light Monarch/Granmarg the Rock Monarch
+-- Return of the Monarchs/Angmarl the Fiendish Monarch/Thestalos the Mega Monarch
+-- Raiza the Mega Monarch/Raiza the Storm Monarch/The Monarchs Stormforth
+-- Domain of the True Monarchs/Delg the Dark Monarch/Caius the Mega Monarch
+-- Zaborg the Mega Monarch/Ehther the Heavenly Monarch/Frost Blast of the Monarchs
+-- Edea the Heavenly Squire/Eidos the Underworld Squire/Tenmataitei
+-- Emperor of the Land and Sea/Garum the Storm Vassal/Mithra the Thunder Vassal
+-- Escher the Frost Vassal/Lucius the Shadow Vassal/Berlineth the Firestorm Vassal
+-- Landrobe the Rock Vassal/Bujintei Kagutsuchi/Indiora Doom Volt the Cubic Emperor
+-- Meklord Emperor Granel/Meklord Emperor Skiel/Meklord Emperor Wisel
+-- Boon of the Meklord Emperor/The Great Emperor Penguin/Shark Caesar
+-- Empress Judge/Starliege Lord Galaxion/Geira Guile the Cubic King
+-- Royal Firestorm Guards/Empress Mantis/Bujintei Tsukuyomi
+-- Vulcan Dragni the Cubic King/Bujintei Susanowo/Mausoleum of the Emperor
+-- Odin, Father of the Aesir
+c420.OCGMonarch={
+4929256,5795980,8522996,9748752,15545291,18235309,
+9870120,22842126,23064604,23689697,26205777,26822796,
+33609262,48716527,51945556,54241725,57666212,60229110,
+61466310,65612386,69230391,69327790,73125233,79844764,
+84171830,85718645,87288189,87602890,96570609,99940363,
+95457011,59463312,90122655,11250655,22382087,22404675,
+24326617,58786132,59808784,95993388,1855932,3775068,
+4545683,31930787,68140974,12986778,6836211,14306092,
+15237615,40390147,40392714,54040221,58818411,73289035,
+75840616,77387463,80921533,93483212
+}
+function Card.IsMonarch(c,fbool)
+    if fbool then
+        return c:IsFusionSetCard(0x571) or c:IsFusionSetCard(0xbe) or c:IsFusionCode(table.unpack(c420.OCGMonarch))
+    else
+        return c:IsSetCard(0x571) or c:IsSetCard(0xbe) or c:IsCode(table.unpack(c420.OCGMonarch))
+    end
+end
