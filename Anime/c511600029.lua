@@ -12,6 +12,23 @@ function c511600029.initial_effect(c)
 	e1:SetTarget(c511600029.target)
 	e1:SetOperation(c511600029.activate)
 	c:RegisterEffect(e1)
+	if not c511600029.global_check then
+		c511600029.global_check=true
+		local ge1=Effect.CreateEffect(c)
+		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		ge1:SetCode(EVENT_ADJUST)
+		ge1:SetCountLimit(1)
+		ge1:SetProperty(EFFECT_FLAG_NO_TURN_RESET)
+		ge1:SetOperation(c511600029.archchk)
+		Duel.RegisterEffect(ge1,0)
+	end
+end
+function c511600029.archchk(e,tp,eg,ep,ev,re,r,rp)
+	if Duel.GetFlagEffect(0,420)==0 then 
+		Duel.CreateToken(tp,420)
+		Duel.CreateToken(1-tp,420)
+		Duel.RegisterFlagEffect(0,420,0,0,0)
+	end
 end
 function c511600029.cfilter(c)
 	return c:IsLevelBelow(3) and c:IsSetCard(0x102)
