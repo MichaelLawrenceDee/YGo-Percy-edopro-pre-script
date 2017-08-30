@@ -1534,7 +1534,8 @@ end
 -- Empress Judge/Starliege Lord Galaxion/Geira Guile the Cubic King
 -- Royal Firestorm Guards/Empress Mantis/Bujintei Tsukuyomi
 -- Vulcan Dragni the Cubic King/Bujintei Susanowo/Mausoleum of the Emperor
--- Odin, Father of the Aesir
+-- Odin, Father of the Aesir/Cyber Angel Natasha/Chaos Emperor Dragon - Envoy of the End
+-- Amazoness Empress/Vampire Kingdom/Susa Soldier/Musician King
 c420.OCGMonarch={
 4929256,5795980,8522996,9748752,15545291,18235309,
 9870120,22842126,23064604,23689697,26205777,26822796,
@@ -1545,7 +1546,8 @@ c420.OCGMonarch={
 24326617,58786132,59808784,95993388,1855932,3775068,
 4545683,31930787,68140974,12986778,6836211,14306092,
 15237615,40390147,40392714,54040221,58818411,73289035,
-75840616,77387463,80921533,93483212
+75840616,77387463,80921533,93483212,99427357,82301904,
+04591250,62188962,40473581,56907389
 }
 function Card.IsMonarch(c,fbool)
     if fbool then
