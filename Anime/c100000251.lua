@@ -21,6 +21,7 @@ function c100000251.rmfilter(c,e,tp)
 	if not c:IsSetCard(0x41) or not c:IsAbleToRemoveAsCost() then return false end
 	local code=c:GetCode()
 	local class=_G["c"..code]
+	if class==nil or class.lvup==nil then return end
 	if not Duel.IsExistingMatchingCard(c100000251.spfilter,tp,LOCATION_DECK,0,1,nil,class,e,tp) then return false end
 	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
 		return c:IsFaceup() and c:IsLocation(LOCATION_MZONE)
@@ -30,10 +31,7 @@ function c100000251.rmfilter(c,e,tp)
 end
 function c100000251.spfilter(c,class,e,tp)
 	local code=c:GetCode()
-	for i=1,class.lvupcount do
-		if code==class.lvup[i] then	return c:IsCanBeSpecialSummoned(e,0,tp,true,false) end
-	end
-	return false
+	return c:IsCode(table.unpack(class.lvup)) and c:IsCanBeSpecialSummoned(e,0,tp,true,false)
 end
 function c100000251.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
@@ -53,7 +51,7 @@ function c100000251.activate(e,tp,eg,ep,ev,re,r,rp)
 	local code=Duel.GetChainInfo(0,CHAININFO_TARGET_PARAM)
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
 	local class=_G["c"..code]
-	if class==nil or class.lvupcount==nil then return end
+	if class==nil or class.lvup==nil then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,c100000251.spfilter,tp,LOCATION_DECK,0,1,1,nil,class,e,tp)
 	if g:GetCount()>0 then
