@@ -46,6 +46,7 @@ end
 function Auxiliary.SynCondition(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req2,reqct2,reqm)
 	return	function(e,c,smat,mg)
 				if c==nil then return true end
+				if c:IsType(TYPE_PENDULUM) and c:IsFaceup() then return false end
 				local tp=c:GetControler()
 				local pe={Duel.GetPlayerEffect(tp,EFFECT_MUST_BE_SMATERIAL)}
 				local pg=Group.CreateGroup()
