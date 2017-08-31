@@ -338,6 +338,7 @@ function Auxiliary.XyzCondition(f,lv,minc,maxc,mustbemat,exchk)
 	--og: use special material
 	return	function(e,c,og,min,max)
 				if c==nil then return true end
+				if c:IsType(TYPE_PENDULUM) and c:IsFaceup() then return false end
 				local tp=c:GetControler()
 				local xg=nil
 				if tp==0 then
@@ -594,6 +595,7 @@ end
 function Auxiliary.XyzCondition2(alterf,op)
 	return	function(e,c,og,min,max)
 				if c==nil then return true end
+				if c:IsType(TYPE_PENDULUM) and c:IsFaceup() then return false end
 				local tp=c:GetControler()
 				local mg=nil
 				if og then
