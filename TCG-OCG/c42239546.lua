@@ -12,7 +12,7 @@ function c42239546.initial_effect(c)
 	e1:SetOperation(c42239546.spop)
 	c:RegisterEffect(e1)
 end
-c42682609.listed_names={80344569,42015635}
+c42239546.listed_names={80344569,42015635}
 function c42239546.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsEnvironment(42015635)
 end
