@@ -196,7 +196,15 @@ function Auxiliary.IsMaterialListCode(c,code)
 	return false
 end
 function Auxiliary.IsMaterialListSetCard(c,setcode)
-	return c.material_setcode and c.material_setcode==setcode
+	if not c.material_setcode then return false end
+	if type(c.material_setcode)=='table' then
+		for _,v in ipairs(c.material_setcode) do
+			if v==setcode then return true end
+		end
+		return false
+	else
+		return c.material_setcode==setcode
+	end
 end
 function Auxiliary.IsCodeListed(c,code)
 	if not c.card_code_list then return false end
