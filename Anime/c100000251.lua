@@ -19,8 +19,7 @@ function c100000251.cfilter(c,e,tp)
 end
 function c100000251.rmfilter(c,e,tp)
 	if not c:IsSetCard(0x41) or not c:IsAbleToRemoveAsCost() then return false end
-	local code=c:GetCode()
-	local class=_G["c"..code]
+	local class=_G["c"..c:GetOriginalCode()]
 	if class==nil or class.listed_names==nil then return end
 	if not Duel.IsExistingMatchingCard(c100000251.spfilter,tp,LOCATION_DECK,0,1,nil,class,e,tp) then return false end
 	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
@@ -30,7 +29,6 @@ function c100000251.rmfilter(c,e,tp)
 	end
 end
 function c100000251.spfilter(c,class,e,tp)
-	local code=c:GetCode()
 	return c:IsCode(table.unpack(class.listed_names)) and c:IsCanBeSpecialSummoned(e,0,tp,true,false)
 end
 function c100000251.target(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -41,7 +39,7 @@ function c100000251.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g1=Duel.SelectReleaseGroup(tp,c100000251.cfilter,1,1,nil,e,tp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 	local g2=Duel.SelectMatchingCard(tp,c100000251.rmfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,1,nil,e,tp)
-	local code=g2:GetFirst():GetCode()
+	local code=g2:GetFirst():GetOriginalCode()
 	Duel.Release(g1,REASON_COST)
 	Duel.Remove(g2,POS_FACEUP,REASON_COST)
 	Duel.SetTargetParam(code)

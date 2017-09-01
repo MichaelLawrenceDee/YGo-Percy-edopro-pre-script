@@ -17,13 +17,11 @@ function c100000252.condition(e,tp,eg,ep,ev,re,r,rp)
 end
 function c100000252.costfilter(c,e,tp)
 	if not c:IsSetCard(0x41) or not c:IsAbleToGraveAsCost() then return false end
-	local code=c:GetCode()
-	local class=_G["c"..code]
+	local class=_G["c"..c:GetOriginalCode()]
 	if class==nil or class.listed_names==nil then return false end
 	return Duel.IsExistingMatchingCard(c100000252.spfilter,tp,LOCATION_GRAVE,0,1,nil,class,e,tp)
 end
 function c100000252.spfilter(c,class,e,tp)
-	local code=c:GetCode()
 	return c:IsCode(table.unpack(class.listed_names)) and c:IsCanBeSpecialSummoned(e,0,tp,true,false)
 end
 function c100000252.cost(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -31,7 +29,7 @@ function c100000252.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
 	local g=Duel.SelectMatchingCard(tp,c100000252.costfilter,tp,LOCATION_MZONE,0,1,1,nil,e,tp)
 	Duel.SendtoGrave(g,REASON_COST)
-	e:SetLabel(g:GetFirst():GetCode())
+	e:SetLabel(g:GetFirst():GetOriginalCode())
 end
 function c100000252.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>-1 end
