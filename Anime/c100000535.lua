@@ -11,10 +11,9 @@ function c100000535.initial_effect(c)
 	e1:SetOperation(c100000535.operation)
 	c:RegisterEffect(e1)
 end
-c100000535.dark_magician_list=true
+c100000535.listed_names={46986414,92377303,46986414,,38033121,30208479}
 function c100000535.cfilter(c)
-	local code=c:GetCode()
-	return c:IsFaceup() and (code==92377303 or code==46986414 or code==38033121 or code==30208479)
+	return c:IsFaceup() and c:IsCode(92377303,46986414,,38033121,30208479)
 end
 function c100000535.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return false end
