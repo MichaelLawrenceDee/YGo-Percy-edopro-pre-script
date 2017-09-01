@@ -25,7 +25,7 @@ function c100004001.initial_effect(c)
 	e2:SetOperation(c100004001.operation)
 	c:RegisterEffect(e2)
 end
-c100004001.lvup={100004002}
+c100004001.listed_names={100004002}
 function c100004001.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return tp==Duel.GetTurnPlayer()
 end

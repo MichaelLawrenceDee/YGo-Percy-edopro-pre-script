@@ -26,7 +26,7 @@ function c87257460.initial_effect(c)
 	e2:SetLabelObject(e1)
 	c:RegisterEffect(e2)
 end
-c87257460.lvup={23756165}
+c87257460.listed_names={23756165}
 function c87257460.eqcon(e,tp,eg,ep,ev,re,r,rp)
 	local ec=e:GetLabelObject()
 	return ec==nil or ec:GetFlagEffect(87257460)==0

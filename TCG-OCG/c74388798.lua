@@ -26,7 +26,7 @@ function c74388798.initial_effect(c)
 	e3:SetOperation(c74388798.spop)
 	c:RegisterEffect(e3)
 end
-c74388798.lvup={37267041}
+c74388798.listed_names={37267041}
 c74388798.lvdn={1995985}
 function c74388798.efilter(e,te)
 	return te:IsActiveType(TYPE_SPELL) and te:GetOwnerPlayer()~=e:GetHandlerPlayer()

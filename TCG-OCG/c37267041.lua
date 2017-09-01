@@ -24,7 +24,7 @@ function c37267041.initial_effect(c)
 	e3:SetOperation(c37267041.disop)
 	c:RegisterEffect(e3)
 end
-c37267041.lvup={74388798}
+c37267041.listed_names={74388798}
 c37267041.lvdn={1995985,74388798}
 function c37267041.distg(e,c)
 	return c:IsType(TYPE_SPELL)

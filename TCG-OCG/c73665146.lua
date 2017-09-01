@@ -28,7 +28,7 @@ function c73665146.initial_effect(c)
 	e3:SetOperation(c73665146.spop)
 	c:RegisterEffect(e3)
 end
-c73665146.lvup={72443568}
+c73665146.listed_names={72443568}
 function c73665146.addc(e,tp,eg,ep,ev,re,r,rp)
 	if ep~=tp then
 		e:GetHandler():AddCounter(0x1,1)

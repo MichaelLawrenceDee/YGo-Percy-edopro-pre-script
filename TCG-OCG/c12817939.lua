@@ -20,7 +20,7 @@ function c12817939.initial_effect(c)
 	e2:SetOperation(c12817939.spop)
 	c:RegisterEffect(e2)
 end
-c12817939.lvup={85313220,58206034}
+c12817939.listed_names={85313220,58206034}
 c12817939.lvdn={85313220}
 function c12817939.disop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

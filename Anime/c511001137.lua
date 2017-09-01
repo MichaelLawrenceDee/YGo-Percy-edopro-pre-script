@@ -20,7 +20,7 @@ function c511001137.initial_effect(c)
 	e2:SetValue(c511001137.val)
 	c:RegisterEffect(e2)
 end
-c511001137.lvup={511001846}
+c511001137.listed_names={511001846}
 function c511001137.atkcon(e,tp,eg,ep,ev,re,r,rp)
 	local ect=e:GetHandler():GetEffectCount(511001137)
 	return tp==Duel.GetTurnPlayer() and 15-ect>0

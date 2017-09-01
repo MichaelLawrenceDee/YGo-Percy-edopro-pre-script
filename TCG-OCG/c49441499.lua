@@ -33,7 +33,7 @@ function c49441499.initial_effect(c)
 	e5:SetCode(EVENT_FLIP)
 	c:RegisterEffect(e5)
 end
-c49441499.lvup={34088136}
+c49441499.listed_names={34088136}
 function c49441499.efilter(e,te)
 	return te:IsActiveType(TYPE_SPELL)
 end

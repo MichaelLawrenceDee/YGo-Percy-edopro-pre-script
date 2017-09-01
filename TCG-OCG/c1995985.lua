@@ -32,7 +32,7 @@ function c1995985.initial_effect(c)
 	e5:SetCode(EVENT_FLIP)
 	c:RegisterEffect(e5)
 end
-c1995985.lvup={74388798}
+c1995985.listed_names={74388798}
 function c1995985.disop(e,tp,eg,ep,ev,re,r,rp)
 	if not re:GetHandler():IsType(TYPE_SPELL) or rp==tp then return end
 	if not re:IsHasProperty(EFFECT_FLAG_CARD_TARGET) then return end

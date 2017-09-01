@@ -47,7 +47,7 @@ function c33776734.initial_effect(c)
 		Duel.RegisterEffect(ge2,0)
 	end
 end
-c33776734.lvup={33776734}
+c33776734.listed_names={33776734}
 function c33776734.checkop1(e,tp,eg,ep,ev,re,r,rp)
 	if re and re:IsHasType(EFFECT_TYPE_ACTIVATE) and re:IsActiveType(TYPE_SPELL) then
 		re:GetHandler():RegisterFlagEffect(33776734,RESET_EVENT+0x1fe0000,0,1)

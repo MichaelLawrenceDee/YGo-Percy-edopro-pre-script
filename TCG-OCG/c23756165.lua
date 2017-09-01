@@ -20,7 +20,7 @@ function c23756165.initial_effect(c)
 	e2:SetLabelObject(e1)
 	c:RegisterEffect(e2)
 end
-c23756165.lvup={50140163,87257460}
+c23756165.listed_names={50140163,87257460}
 c23756165.lvdn={87257460}
 function c23756165.regop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

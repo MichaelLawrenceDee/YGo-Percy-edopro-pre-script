@@ -13,7 +13,7 @@ function c100004003.initial_effect(c)
 	e2:SetOperation(c100004003.operation)
 	c:RegisterEffect(e2)
 end
-c100004003.lvup={100004002}
+c100004003.listed_names={100004002}
 c100004003.lvdn={100004002,100004001}
 function c100004003.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end

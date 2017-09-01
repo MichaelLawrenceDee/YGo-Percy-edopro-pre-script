@@ -27,7 +27,7 @@ function c511001846.initial_effect(c)
 	e2:SetValue(c511001846.val)
 	c:RegisterEffect(e2)
 end
-c511001846.lvup={511001847}
+c511001846.listed_names={511001847}
 function c511001846.atkcon(e,tp,eg,ep,ev,re,r,rp)
 	local ect=e:GetHandler():GetEffectCount(511001846)
 	return tp==Duel.GetTurnPlayer() and 11-ect>0 and not e:GetHandler():IsStatus(STATUS_SPSUMMON_TURN)
