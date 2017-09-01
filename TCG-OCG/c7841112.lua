@@ -47,6 +47,7 @@ function c7841112.initial_effect(c)
 	e5:SetOperation(c7841112.spop)
 	c:RegisterEffect(e5)
 end
+c7841112.listed_names={21159309,44508094}
 function c7841112.negcon(e,tp,eg,ep,ev,re,r,rp)
 	return not e:GetHandler():IsStatus(STATUS_BATTLE_DESTROYED) and ep~=tp and Duel.IsChainNegatable(ev)
 end
