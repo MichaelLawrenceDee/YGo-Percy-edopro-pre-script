@@ -12,7 +12,7 @@ end
 function c16616620.filter1(c,e,tp)
 	local class=_G["c"..c:GetOriginalCode()]
 	if class==nil or class.listed_names==nil then return false end
-	return Duel.IsExistingMatchingCard(c16616620.filter2,tp,LOCATION_HAND+LOCATION_DECK,0,1,nil,class.listed_names,e,tp)
+	return c:IsSetCard(0x1e) and Duel.IsExistingMatchingCard(c16616620.filter2,tp,LOCATION_HAND+LOCATION_DECK,0,1,nil,class.listed_names,e,tp)
 end
 function c16616620.filter2(c,tcode,e,tp)
 	return c:IsCode(table.unpack(tcode)) and c:IsCanBeSpecialSummoned(e,0,tp,true,false)
@@ -27,10 +27,10 @@ function c16616620.activate(e,tp,eg,ep,ev,re,r,rp)
 	if g:GetCount()==0 then return end
 	Duel.SendtoGrave(g,REASON_EFFECT)
 	local sg=Group.CreateGroup()
-	for tc in aux.Next(sg) do
+	for tc in aux.Next(g) do
 		local class=_G["c"..tc:GetOriginalCode()]
 		if not (class==nil or class.listed_names==nil) then
-			local tg=Duel.GetMatchingGroup(c16616620.filter2,tp,LOCATION_HAND+LOCATION_DECK,0,nil,tcode,e,tp)
+			local tg=Duel.GetMatchingGroup(c16616620.filter2,tp,LOCATION_HAND+LOCATION_DECK,0,nil,class.listed_names,e,tp)
 			sg:Merge(tg)
 		end
 	end

@@ -20,7 +20,7 @@ end
 function c43644025.filter1(c,e,tp)
 	local class=_G["c"..c:GetOriginalCode()]
 	if class==nil or class.listed_names==nil then return false end
-	return Duel.IsExistingTarget(c43644025.filter2,tp,LOCATION_GRAVE,LOCATION_GRAVE,1,nil,class.listed_names,e,tp)
+	return c:IsSetCard(0x1e) and Duel.IsExistingTarget(c43644025.filter2,tp,LOCATION_GRAVE,LOCATION_GRAVE,1,nil,class.listed_names,e,tp)
 end
 function c43644025.filter2(c,tcode,e,tp)
 	return c:IsCode(table.unpack(tcode)) and c:IsCanBeSpecialSummoned(e,0,tp,true,false) and c:IsSetCard(0x1f)
