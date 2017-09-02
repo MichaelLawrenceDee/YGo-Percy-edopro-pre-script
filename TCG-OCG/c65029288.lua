@@ -27,6 +27,7 @@ function c65029288.initial_effect(c)
 	e3:SetOperation(c65029288.atkop)
 	c:RegisterEffect(e3)
 end
+c65029288.material_setcode={0x99,0x9f}
 function c65029288.immcon(e,tp,eg,ep,ev,re,r,rp)
 	return re and re:GetHandler():IsCode(24094653) and e:GetHandler():IsSummonType(SUMMON_TYPE_FUSION)
 end

@@ -42,15 +42,12 @@ function c86346643.initial_effect(c)
 	e4:SetOperation(c86346643.tdop3)
 	c:RegisterEffect(e4)
 end
-c86346643.material_setcode=0x8
-function c86346643.cfilter1(c)
-	return c:IsAbleToGraveAsCost()
-end
+c86346643.material_setcode={0x8,0x3008,0x9,0x34,0x2034}
 function c86346643.tdcost1(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c86346643.cfilter1,tp,LOCATION_MZONE,0,1,nil) end
+	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsAbleToGraveAsCost,tp,LOCATION_MZONE,0,1,nil) end
 	Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g=Duel.SelectMatchingCard(tp,c86346643.cfilter1,tp,LOCATION_MZONE,0,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,Card.IsAbleToGraveAsCost,tp,LOCATION_MZONE,0,1,1,nil)
 	Duel.SendtoGrave(g,REASON_COST)
 end
 function c86346643.tdtg1(e,tp,eg,ep,ev,re,r,rp,chk)

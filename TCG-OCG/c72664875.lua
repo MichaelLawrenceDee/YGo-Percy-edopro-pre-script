@@ -48,6 +48,7 @@ function c72664875.initial_effect(c)
 	e5:SetOperation(c72664875.damop)
 	c:RegisterEffect(e5)
 end
+c72664875.material_setcode=0xe3
 function c72664875.tgvalue(e,re,rp)
 	return rp~=e:GetHandlerPlayer()
 end

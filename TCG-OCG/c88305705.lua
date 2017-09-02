@@ -32,6 +32,7 @@ function c88305705.initial_effect(c)
 	e3:SetOperation(c88305705.rmop)
 	c:RegisterEffect(e3)
 end
+c88305705.material_setcode={0xf2,0x10f2}
 function c88305705.atkcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():GetSummonType()==SUMMON_TYPE_FUSION
 end

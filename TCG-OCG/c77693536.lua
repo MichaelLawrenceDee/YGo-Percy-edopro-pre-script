@@ -34,6 +34,7 @@ function c77693536.initial_effect(c)
 	e3:SetValue(c77693536.mtval)
 	c:RegisterEffect(e3)
 end
+c77693536.material_setcode=0xe1
 function c77693536.eqcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()~=tp
 end
@@ -53,7 +54,7 @@ function c77693536.eqop(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(tp,LOCATION_SZONE)<=0 then return end
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
-	if not (tc:IsRelateToEffect(e) and tc:IsFaceup() and tc:IsType(TYPE_EFFECT)) then return end
+	if not tc or not (tc:IsRelateToEffect(e) and tc:IsFaceup() and tc:IsType(TYPE_EFFECT)) then return end
 	if c:IsFaceup() and c:IsRelateToEffect(e) then
 		local atk=tc:GetTextAttack()
 		if atk<0 then atk=0 end

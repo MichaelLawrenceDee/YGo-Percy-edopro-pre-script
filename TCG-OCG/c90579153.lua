@@ -28,7 +28,7 @@ function c90579153.initial_effect(c)
 	e2:SetOperation(c90579153.desop)
 	c:RegisterEffect(e2)
 end
-c90579153.material_setcode=0x8
+c90579153.material_setcode={0x8,0xc008}
 function c90579153.filter(c)
 	return c:IsSetCard(0xc008) and c:IsLevelBelow(4) and c:GetAttack()>0
 end
@@ -41,7 +41,7 @@ function c90579153.damtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 function c90579153.damop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
+	if tc and tc:IsRelateToEffect(e) then
 		Duel.Damage(1-tp,tc:GetAttack(),REASON_EFFECT)
 	end
 end
@@ -59,7 +59,7 @@ end
 function c90579153.desop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) and Duel.Destroy(tc,REASON_EFFECT)~=0 then
+	if tc and tc:IsRelateToEffect(e) and Duel.Destroy(tc,REASON_EFFECT)~=0 then
 		local atk=c:GetBaseAttack()
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_SINGLE)

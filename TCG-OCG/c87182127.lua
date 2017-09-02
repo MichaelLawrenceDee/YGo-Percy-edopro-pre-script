@@ -33,6 +33,7 @@ function c87182127.initial_effect(c)
 	e3:SetOperation(c87182127.operation)
 	c:RegisterEffect(e3)
 end
+c87182127.material_setcode=0x7
 function c87182127.efilter(e,te)
 	return te:GetOwner()~=e:GetOwner()
 end

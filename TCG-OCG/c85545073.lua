@@ -14,6 +14,7 @@ function c85545073.initial_effect(c)
 	e1:SetOperation(c85545073.eqop)
 	c:RegisterEffect(e1)
 end
+c85545073.material_setcode={0xc3,0xa9}
 function c85545073.eqcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=c:GetBattleTarget()
@@ -30,7 +31,7 @@ end
 function c85545073.eqop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
-	if c:IsRelateToEffect(e) and c:IsFaceup() and tc:IsRelateToEffect(e) then
+	if c:IsRelateToEffect(e) and c:IsFaceup() and tc and tc:IsRelateToEffect(e) then
 		if not Duel.Equip(tp,tc,c,false) then return end
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE)

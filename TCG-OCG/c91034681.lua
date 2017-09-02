@@ -26,6 +26,7 @@ function c91034681.initial_effect(c)
 	e2:SetOperation(c91034681.damop2)
 	c:RegisterEffect(e2)
 end
+c91034681.material_setcode={0xc3,0xa9}
 function c91034681.damtg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
 	Duel.SetTargetPlayer(1-tp)

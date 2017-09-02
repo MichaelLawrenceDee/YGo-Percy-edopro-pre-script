@@ -28,6 +28,7 @@ function c84988419.initial_effect(c)
 	e4:SetOperation(c84988419.operation)
 	c:RegisterEffect(e4)
 end
+c84988419.material_setcode={0x9b,0x109b}
 function c84988419.condition(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local bc=c:GetBattleTarget()
@@ -43,6 +44,7 @@ function c84988419.target(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function c84988419.operation(e,tp,eg,ep,ev,re,r,rp)
 	local bc=Duel.GetFirstTarget()
+	if not bc then return false end
 	local atk=math.abs(e:GetHandler():GetBaseAttack()-bc:GetBaseAttack())
 	if bc:IsRelateToEffect(e) and bc:IsFaceup() and Duel.Damage(1-tp,atk,REASON_EFFECT)~=0 then
 		Duel.Destroy(bc,REASON_EFFECT)

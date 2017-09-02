@@ -31,6 +31,7 @@ function c75380687.initial_effect(c)
 	e3:SetOperation(c75380687.spop)
 	c:RegisterEffect(e3)
 end
+c75380687.material_setcode=0x10a2
 function c75380687.splimit(e,se,sp,st)
 	return bit.band(st,SUMMON_TYPE_FUSION)==SUMMON_TYPE_FUSION or se:GetHandler():IsCode(1784686)
 end

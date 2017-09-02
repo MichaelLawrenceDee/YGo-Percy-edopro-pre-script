@@ -17,6 +17,7 @@ function c57594700.initial_effect(c)
 	e1:SetOperation(c57594700.operation)
 	c:RegisterEffect(e1)
 end
+c84988419.material_setcode=0x9b
 function c57594700.condition(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetCurrentPhase()~=PHASE_DAMAGE or not Duel.IsDamageCalculated()
 end

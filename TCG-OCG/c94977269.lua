@@ -48,6 +48,7 @@ function c94977269.initial_effect(c)
 	e5:SetOperation(c94977269.thop)
 	c:RegisterEffect(e5)
 end
+c94977269.material_setcode=0x9d
 function c94977269.ffilter1(c)
 	return (c:IsFusionSetCard(0x9d) or c:IsHasEffect(511002961)) and not c:IsHasEffect(6205579)
 end

@@ -34,6 +34,7 @@ function c85507811.initial_effect(c)
 	e5:SetOperation(c85507811.desop)
 	c:RegisterEffect(e5)
 end
+c85507811.material_setcode={0x8,0x3008,0x9,0x1f}
 function c85507811.contactfil(tp)
 	return Duel.GetMatchingGroup(Card.IsAbleToDeckOrExtraAsCost,tp,LOCATION_ONFIELD,0,nil)
 end
@@ -41,7 +42,6 @@ function c85507811.contactop(g,tp)
 	Duel.ConfirmCards(1-tp,g)
 	Duel.SendtoDeck(g,nil,2,REASON_COST+REASON_MATERIAL)
 end
-c85507811.material_setcode=0x8
 function c85507811.splimit(e,se,sp,st)
 	return not e:GetHandler():IsLocation(LOCATION_EXTRA)
 end
@@ -74,7 +74,7 @@ function c85507811.destg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 function c85507811.desop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) and tc:IsFaceup() then
+	if tc and tc:IsRelateToEffect(e) and tc:IsFaceup() then
 		Duel.Destroy(tc,REASON_EFFECT)
 		local c=e:GetHandler()
 		if c:IsFacedown() or not c:IsRelateToEffect(e) then return end

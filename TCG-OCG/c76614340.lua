@@ -26,6 +26,7 @@ function c76614340.initial_effect(c)
 	e4:SetCode(EFFECT_PIERCE)
 	c:RegisterEffect(e4)
 end
+c76614340.material_setcode={0x47,0x1047}
 function c76614340.splimit(e,se,sp,st)
 	return not e:GetHandler():IsLocation(LOCATION_EXTRA) or bit.band(st,SUMMON_TYPE_FUSION)==SUMMON_TYPE_FUSION
 end

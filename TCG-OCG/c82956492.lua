@@ -13,6 +13,7 @@ function c82956492.initial_effect(c)
 	e2:SetValue(c82956492.rev)
 	c:RegisterEffect(e2)
 end
+c82956492.material_setcode=0xaf
 function c82956492.rev(e,re,r,rp,rc)
 	return bit.band(r,REASON_EFFECT)~=0
 end

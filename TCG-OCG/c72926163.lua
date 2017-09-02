@@ -35,7 +35,7 @@ function c72926163.initial_effect(c)
 	e5:SetCode(EFFECT_NO_BATTLE_DAMAGE)
 	c:RegisterEffect(e5)
 end
-c72926163.material_setcode=0x8
+c72926163.material_setcode={0x8,0x3008,0x9}
 function c72926163.valcheck(e,c)
 	local g=c:GetMaterial()
 	local atk=0

@@ -30,6 +30,7 @@ function c80889750.initial_effect(c)
 	e4:SetOperation(c80889750.indop)
 	c:RegisterEffect(e4)
 end
+c80889750.material_setcode={0xa9,0xc3,0xad}
 function c80889750.mfilter1(c)
 	return c:IsFusionSetCard(0xad) and c:IsFusionType(TYPE_FUSION)
 end
@@ -52,7 +53,7 @@ function c80889750.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 function c80889750.spop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
+	if tc and tc:IsRelateToEffect(e) then
 		Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP)
 	end
 end

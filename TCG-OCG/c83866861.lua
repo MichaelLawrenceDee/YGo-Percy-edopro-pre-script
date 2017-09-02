@@ -39,6 +39,7 @@ function c83866861.initial_effect(c)
 	e4:SetValue(c83866861.atkval)
 	c:RegisterEffect(e4)
 end
+c83866861.material_setcode=0xad
 function c83866861.aclimit(e,re,tp)
 	return not re:GetHandler():IsImmuneToEffect(e)
 end

@@ -2,7 +2,7 @@
 function c61204971.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcMix(c,true,true,20721928,84327329)
+	aux.AddFusionProcCode2(c,20721928,84327329,true,true)
 	--spsummon condition
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
@@ -23,7 +23,7 @@ function c61204971.initial_effect(c)
 	e2:SetOperation(c61204971.desop)
 	c:RegisterEffect(e2)
 end
-c61204971.material_setcode=0x8
+c61204971.material_setcode={0x8,0x3008}
 function c61204971.descost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsDiscardable,tp,LOCATION_HAND,0,1,nil) end
 	Duel.DiscardHand(tp,Card.IsDiscardable,1,1,REASON_COST+REASON_DISCARD)
@@ -41,7 +41,7 @@ end
 function c61204971.desop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
-	if c:IsRelateToEffect(e) and c:IsFaceup() and tc:IsFaceup() and tc:IsRelateToEffect(e)
+	if c:IsRelateToEffect(e) and c:IsFaceup() and tc and tc:IsFaceup() and tc:IsRelateToEffect(e)
 		and tc:GetBaseAttack()<c:GetAttack() then
 		Duel.Destroy(tc,REASON_EFFECT)
 	end

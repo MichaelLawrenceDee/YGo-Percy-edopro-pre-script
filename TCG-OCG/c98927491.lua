@@ -22,6 +22,7 @@ function c98927491.initial_effect(c)
 	e2:SetOperation(c98927491.activate)
 	c:RegisterEffect(e2)
 end
+c98927491.material_setcode=0x16
 function c98927491.filter(c,e,tp)
 	return c:IsLocation(LOCATION_GRAVE) and c:IsReason(REASON_BATTLE) and c:GetPreviousControler()==tp
 		and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP_DEFENSE)

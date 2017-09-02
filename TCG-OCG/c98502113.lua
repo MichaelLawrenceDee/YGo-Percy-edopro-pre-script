@@ -32,6 +32,7 @@ function c98502113.initial_effect(c)
 	e3:SetValue(aux.fuslimit)
 	c:RegisterEffect(e3)
 end
+c98502113.material_setcode={0x10a2,0xd7}
 function c98502113.val(e,c)
 	return Duel.GetMatchingGroupCount(c98502113.filter,0,0x14,0x14,nil)*500
 end

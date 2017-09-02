@@ -9,7 +9,7 @@ function c66235877.initial_effect(c)
 	e1:SetCode(EFFECT_DISABLE)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
-	e1:SetTarget(c66235877.distg)
+	e1:SetTarget(aux.TargetBoolFunction(Card.IsType,TYPE_FLIP))
 	c:RegisterEffect(e1)
 	--disable effect
 	local e2=Effect.CreateEffect(c)
@@ -26,9 +26,7 @@ function c66235877.initial_effect(c)
 	e3:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
 	c:RegisterEffect(e3)
 end
-function c66235877.distg(e,c)
-	return c:IsType(TYPE_FLIP)
-end
+c66235877.material_setcode=0x45
 function c66235877.disop(e,tp,eg,ep,ev,re,r,rp)
 	if re:IsActiveType(TYPE_FLIP) then Duel.NegateEffect(ev) end
 	if re:IsActiveType(TYPE_TRAP) and re:IsHasProperty(EFFECT_FLAG_CARD_TARGET) then

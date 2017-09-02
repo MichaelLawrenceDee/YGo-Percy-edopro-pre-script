@@ -42,7 +42,7 @@ function c95486586.initial_effect(c)
 	e4:SetOperation(c95486586.spop)
 	c:RegisterEffect(e4)
 end
-c95486586.material_setcode=0x8
+c95486586.material_setcode={0x8,0x3008}
 function c95486586.atkop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if c:IsRelateToEffect(e) and c:IsFaceup() then
@@ -83,7 +83,7 @@ function c95486586.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 function c95486586.spop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
+	if tc and tc:IsRelateToEffect(e) then
 		Duel.SpecialSummon(tc,0,tp,tp,true,false,POS_FACEUP)
 	end
 end
