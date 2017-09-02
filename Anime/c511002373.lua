@@ -32,6 +32,7 @@ function c511002373.initial_effect(c)
 	e4:SetOperation(c511002373.desop)
 	c:RegisterEffect(e4)
 end
+c511002373.material_setcode=0xdf
 function c511002373.unval(e,te)
 	return te:GetOwnerPlayer()~=e:GetHandlerPlayer()
 end

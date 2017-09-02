@@ -14,6 +14,7 @@ function c511002039.initial_effect(c)
 	e2:SetOperation(c511002039.disop)
 	c:RegisterEffect(e2)
 end
+c511002039.material_setcode=0x544
 function c511002039.distg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(nil,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,e:GetHandler()) end
 end

@@ -40,6 +40,7 @@ function c511002991.initial_effect(c)
 	e4:SetOperation(c511002991.disop)
 	c:RegisterEffect(e4)
 end
+c511002991.material_setcode=0x93
 function c511002991.con(e)
 	return Duel.GetFieldGroupCount(e:GetHandlerPlayer(),0,LOCATION_MZONE)==e:GetLabel()
 end

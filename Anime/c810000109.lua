@@ -35,6 +35,7 @@ function c810000109.initial_effect(c)
 	e3:SetOperation(c810000109.acop)
 	c:RegisterEffect(e3)
 end
+c810000109.material_setcode=0xad
 function c810000109.spcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local bc=c:GetBattleTarget()

@@ -14,6 +14,7 @@ function c511002018.initial_effect(c)
 	e1:SetOperation(c511002018.eqop)
 	c:RegisterEffect(e1)
 end
+c511002018.material_setcode={0xc3,0xa9}
 function c511002018.eqcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=c:GetBattleTarget()

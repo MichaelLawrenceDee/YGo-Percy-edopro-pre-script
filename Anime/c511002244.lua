@@ -19,6 +19,7 @@ function c511002244.initial_effect(c)
 	e5:SetCode(EVENT_FLIP_SUMMON_SUCCESS)
 	c:RegisterEffect(e5)
 end
+c511002244.material_setcode=0x16
 function c511002244.contactfilter(tp)
 	return Duel.GetMatchingGroup(Card.IsAbleToGraveAsCost,tp,LOCATION_HAND,0,nil)
 end

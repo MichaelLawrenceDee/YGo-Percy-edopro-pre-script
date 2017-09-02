@@ -23,6 +23,7 @@ function c511002031.initial_effect(c)
 	e4:SetValue(1)
 	c:RegisterEffect(e4)
 end
+c511002031.material_setcode={0x8,0x3008,0x9}
 function c511002031.valcheck(e,c)
 	local g=c:GetMaterial()
 	local atk=-1

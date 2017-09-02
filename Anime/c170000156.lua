@@ -11,6 +11,7 @@ function c170000156.initial_effect(c)
 	e3:SetValue(1)
 	c:RegisterEffect(e3)
 end
+c170000156.material_setcode=0xdd
 function c170000156.splimit(e,se,sp,st)
 	return e:GetHandler():GetLocation()~=LOCATION_EXTRA
 end

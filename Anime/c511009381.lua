@@ -35,6 +35,7 @@ function c511009381.initial_effect(c)
 	e3:SetOperation(c511009381.desop)
 	c:RegisterEffect(e3)
 end
+c511009381.material_setcode={0xf3,0x10f3}
 function c511009381.ffilter(c)
 	return c:IsFusionAttribute(ATTRIBUTE_DARK) and c:IsLevelAbove(8)
 end

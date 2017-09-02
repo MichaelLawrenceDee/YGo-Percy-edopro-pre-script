@@ -13,6 +13,7 @@ function c170000157.initial_effect(c)
 	e1:SetOperation(c170000157.desop)
 	c:RegisterEffect(e1)
 end
+c170000157.material_setcode={0x10a2,0x20a2}
 function c170000157.descost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsAbleToGraveAsCost,tp,LOCATION_HAND,0,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
@@ -23,12 +24,13 @@ function c170000157.destg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	local tc=Duel.GetAttacker()
 	if tc==c then tc=Duel.GetAttackTarget() end
-	if chk==0 then return tc and tc:IsDestructable() end
+	if chk==0 then return tc end
 	Duel.SetOperationInfo(0,CATEGORY_DESTROY,tc,1,0,0)
 end
 function c170000157.desop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetAttacker()
+	if not tc then return end
 	if tc==c then tc=Duel.GetAttackTarget() end
 	if tc:IsRelateToBattle() then Duel.Destroy(tc,REASON_EFFECT) end
 end

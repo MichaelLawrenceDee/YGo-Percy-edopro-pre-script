@@ -32,6 +32,7 @@ function c511009344.initial_effect(c)
 	e1:SetOperation(c511009344.eqop)
 	c:RegisterEffect(e1)
 end
+c511009344.material_setcode=0x53d
 function c511009344.val(e,c)
 	local val1=Duel.GetMatchingGroupCount(c511009344.filter,0,LOCATION_ONFIELD,LOCATION_ONFIELD,nil)
 	local val2=Duel.GetMatchingGroupCount(c511009344.filter2,0,LOCATION_ONFIELD,LOCATION_ONFIELD,nil)

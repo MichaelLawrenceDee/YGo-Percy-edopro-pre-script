@@ -25,6 +25,7 @@ function c511009307.initial_effect(c)
 	e2:SetValue(c511009307.unval)
 	c:RegisterEffect(e2)
 end
+c511009307.material_setcode=0x7
 function c511009307.filter(c)
 	return c:IsFaceup() and c:IsType(TYPE_SPELL)
 end

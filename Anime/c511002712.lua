@@ -2,7 +2,7 @@
 function c511002712.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcMixN(c,true,true,aux.FilterBoolFunction(Card.IsEarthbound,true),2)
+	aux.AddFusionProcMixN(c,true,true,function(c) return c:IsEarthbound(true) end,2)
 	--destroy
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(48009503,0))
@@ -27,6 +27,7 @@ function c511002712.initial_effect(c)
 		Duel.RegisterEffect(ge2,0)
 	end
 end
+c511002712.material_setcode=0x151a
 function c511002712.archchk(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetFlagEffect(0,420)==0 then 
 		Duel.CreateToken(tp,420)

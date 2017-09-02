@@ -33,6 +33,7 @@ function c511002959.initial_effect(c)
 	e4:SetOperation(c511002959.atkop)
 	c:RegisterEffect(e4)
 end
+c511002959.material_setcode=0x16
 function c511002959.eqfilter(c,tp)
 	return c:IsFaceup() and not c:IsRace(RACE_MACHINE) and (c:IsControler(tp) or c:IsAbleToChangeControler())
 end

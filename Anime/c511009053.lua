@@ -39,7 +39,7 @@ function c511009053.initial_effect(c)
 	
 	end
 end
-
+c511009053.material_setcode={0x8,0xc008}
 function c511009053.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return bit.band(e:GetHandler():GetSummonType(),SUMMON_TYPE_FUSION)==SUMMON_TYPE_FUSION
 end
@@ -55,14 +55,10 @@ function c511009053.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 function c511009053.spop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
+	if tc and tc:IsRelateToEffect(e) then
 		Duel.Damage(1-tp,tc:GetAttack(),REASON_EFFECT)
 	end
 end
-
-
-
--------------------------------------------
 function c511009053.operation(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()	
 	local g=Duel.GetMatchingGroup(Card.IsFaceup,0,LOCATION_MZONE,LOCATION_MZONE,nil)

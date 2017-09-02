@@ -14,6 +14,7 @@ function c511000462.initial_effect(c)
 	e2:SetOperation(c511000462.operation)
 	c:RegisterEffect(e2)
 end
+c511000462.material_setcode={0x66,0x2066}
 function c511000462.splimit(e,se,sp,st)
 	return not e:GetHandler():IsLocation(LOCATION_EXTRA)
 end

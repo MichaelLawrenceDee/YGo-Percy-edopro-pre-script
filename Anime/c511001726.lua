@@ -25,6 +25,7 @@ function c511001726.initial_effect(c)
 	e3:SetOperation(c511001726.atkop)
 	c:RegisterEffect(e3)
 end
+c511001726.material_setcode=0x7
 function c511001726.lpcon(e,tp,eg,ep,ev,re,r,rp)
 	return bit.band(e:GetHandler():GetSummonType(),SUMMON_TYPE_FUSION)==SUMMON_TYPE_FUSION
 end

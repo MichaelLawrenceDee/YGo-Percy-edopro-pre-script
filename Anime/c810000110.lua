@@ -16,6 +16,7 @@ function c810000110.initial_effect(c)
 	e1:SetOperation(c810000110.desop)
 	c:RegisterEffect(e1)
 end
+c810000110.material_setcode={0xc3,0xa9}
 function c810000110.destg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) end
 	if chk==0 then return Duel.IsExistingTarget(aux.TRUE,tp,0,LOCATION_MZONE,1,nil) end

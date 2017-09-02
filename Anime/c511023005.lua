@@ -34,7 +34,7 @@ function c511023005.initial_effect(c)
 	e4:SetOperation(c511023005.desop)
 	c:RegisterEffect(e4)
 end
-c511023005.material_setcode=0x8
+c511023005.material_setcode={0x8,0x3008}
 function c511023005.poscon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsRelateToBattle()
 end

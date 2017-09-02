@@ -30,6 +30,7 @@ function c511002963.initial_effect(c)
 	e3:SetOperation(c511002963.atkop)
 	c:RegisterEffect(e3)
 end
+c511002963.material_setcode=0x4
 function c511002963.atcon(e)
 	local ph=Duel.GetCurrentPhase()
 	return (ph==PHASE_DAMAGE or ph==PHASE_DAMAGE_CAL) and e:GetHandler()==Duel.GetAttacker()

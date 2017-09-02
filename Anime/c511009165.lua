@@ -22,6 +22,7 @@ function c511009165.initial_effect(c)
 	e1:SetOperation(c511009165.posop)
 	c:RegisterEffect(e1)
 end
+c511009165.material_setcode={0xc3,0xa9}
 function c511009165.poscon(e,tp,eg,ep,ev,re,r,rp)
 	return tp==Duel.GetTurnPlayer()
 end

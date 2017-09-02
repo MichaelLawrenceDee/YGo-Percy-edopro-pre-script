@@ -2,7 +2,7 @@
 function c511002487.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcMix(c,true,true,c511002487.mfilter,aux.FilterBoolFunction(Card.IsFusionSetCard,0x9b))
+	aux.AddFusionProcMix(c,true,true,function(c) return c:IsMelodiousSongtress(true) end,aux.FilterBoolFunction(Card.IsFusionSetCard,0x9b))
 	--effect
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_DESTROY+CATEGORY_DAMAGE)
@@ -11,9 +11,24 @@ function c511002487.initial_effect(c)
 	e1:SetCondition(c511002487.condition)
 	e1:SetOperation(c511002487.operation)
 	c:RegisterEffect(e1)
+	if not c511002487.global_check then
+		c511002487.global_check=true
+		local ge2=Effect.CreateEffect(c)
+		ge2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		ge2:SetCode(EVENT_ADJUST)
+		ge2:SetCountLimit(1)
+		ge2:SetProperty(EFFECT_FLAG_NO_TURN_RESET)
+		ge2:SetOperation(c511002487.archchk)
+		Duel.RegisterEffect(ge2,0)
+	end
 end
-function c511002487.mfilter(c)
-	return c:IsFusionSetCard(0x209b) or c:IsCode(14763299) or c:IsCode(62895219)
+c511002487.material_setcode={0x9b,0x209b}
+function c511002487.archchk(e,tp,eg,ep,ev,re,r,rp)
+	if Duel.GetFlagEffect(0,420)==0 then 
+		Duel.CreateToken(tp,420)
+		Duel.CreateToken(1-tp,420)
+		Duel.RegisterFlagEffect(0,420,0,0,0)
+	end
 end
 function c511002487.condition(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

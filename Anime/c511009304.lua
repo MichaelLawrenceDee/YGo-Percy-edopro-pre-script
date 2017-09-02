@@ -62,6 +62,7 @@ function c511009304.initial_effect(c)
 		Duel.RegisterEffect(ge2,0)
 	end
 end
+c511009304.material_setcode=0x19
 function c511009304.ffilter(c)
 	return c:IsFusionSetCard(0x19) and c:GetLevel()>=5
 end

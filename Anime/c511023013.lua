@@ -20,7 +20,7 @@ function c511023013.initial_effect(c)
 	c:RegisterEffect(e2)
 	e1:SetLabelObject(e2)
 end
-c511023013.material_setcode=0x8
+c511023013.material_setcode={0x8,0x3008}
 function c511023013.cfilter(c,tp)
 	return c:IsSetCard(0x3008) and Duel.IsExistingMatchingCard(c511023013.filter,tp,LOCATION_MZONE,LOCATION_MZONE,1,c)
 end

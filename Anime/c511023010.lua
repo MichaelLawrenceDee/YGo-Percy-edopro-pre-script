@@ -32,7 +32,7 @@ function c511023010.initial_effect(c)
 	e5:SetOperation(c511023010.desop)
 	c:RegisterEffect(e5)
 end
-c511023010.material_setcode=0x8
+c511023010.material_setcode={0x8,0x3008,0x9,0x1f}
 function c511023010.splimit(e,se,sp,st)
 	return not e:GetHandler():IsLocation(LOCATION_EXTRA)
 end

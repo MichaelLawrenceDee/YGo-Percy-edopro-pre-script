@@ -21,6 +21,7 @@ function c511002808.initial_effect(c)
 	e4:SetLabelObject(e3)
 	c:RegisterEffect(e4)
 end
+c511002808.material_setcode={0xf2,0x10f2}
 function c511002808.damcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local bc=c:GetBattleTarget()

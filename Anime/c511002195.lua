@@ -35,6 +35,7 @@ function c511002195.initial_effect(c)
 	e4:SetValue(1)
 	c:RegisterEffect(e4)
 end
+c511002195.material_setcode={0x8,0xc008}
 function c511002195.descost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetActivityCount(tp,ACTIVITY_BATTLE_PHASE)==0 end
 	local e1=Effect.CreateEffect(e:GetHandler())

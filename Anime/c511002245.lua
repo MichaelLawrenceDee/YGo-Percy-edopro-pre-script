@@ -18,6 +18,7 @@ function c511002245.initial_effect(c)
 	e5:SetCode(EVENT_FLIP_SUMMON_SUCCESS)
 	c:RegisterEffect(e5)
 end
+c511002245.material_setcode=0x16
 function c511002245.splimit(e,se,sp,st)
 	return not e:GetHandler():IsLocation(LOCATION_EXTRA)
 end

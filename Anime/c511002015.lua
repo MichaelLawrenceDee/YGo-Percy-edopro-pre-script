@@ -2,7 +2,7 @@
 function c511002015.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcMix(c,true,true,aux.FilterBoolFunction(Card.IsSky,true),aux.FilterBoolFunction(Card.IsEarth,true))
+	aux.AddFusionProcMix(c,true,true,function(c) return c:IsSky(true) end,function(c) return c:IsEarth(true) end)
 	--damage
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_DAMAGE)
@@ -25,6 +25,7 @@ function c511002015.initial_effect(c)
 		Duel.RegisterEffect(ge2,0)
 	end
 end
+c511002015.material_setcode={0x54a,0x51a}
 function c511002015.archchk(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetFlagEffect(0,420)==0 then 
 		Duel.CreateToken(tp,420)

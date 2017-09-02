@@ -36,6 +36,7 @@ function c511002463.initial_effect(c)
 	e6:SetOperation(c511002463.damop)
 	c:RegisterEffect(e6)
 end
+c511002463.material_setcode={0x93,0x1093}
 function c511002463.sucop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local e1=Effect.CreateEffect(c)

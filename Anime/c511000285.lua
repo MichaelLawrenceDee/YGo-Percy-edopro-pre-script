@@ -1,5 +1,5 @@
 --Egyptian God Slime 
-    --ジェムナイト·ジルコニア
+--ジェムナイト·ジルコニア
 function c511000285.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
@@ -37,6 +37,7 @@ function c511000285.initial_effect(c)
 	e4:SetOperation(c511000285.spop)
 	c:RegisterEffect(e4)
 end
+c511000285.material_setcode=0x54b
 function c511000285.regcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsLocation(LOCATION_GRAVE) and e:GetHandler():IsReason(REASON_BATTLE)
 end

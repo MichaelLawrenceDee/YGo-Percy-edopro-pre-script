@@ -30,6 +30,7 @@ function c511002228.initial_effect(c)
 	e3:SetOperation(c511002228.efop)
 	c:RegisterEffect(e3)
 end
+c511002228.material_setcode={0xc3,0xa9,0xad}
 function c511002228.mfilter1(c)
 	return c:IsFusionSetCard(0xad) and c:IsLevelAbove(6)
 end

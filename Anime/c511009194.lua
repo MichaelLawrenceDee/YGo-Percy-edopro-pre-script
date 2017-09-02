@@ -39,6 +39,7 @@ function c511009194.initial_effect(c)
 	e4:SetOperation(c511009194.operation)
 	c:RegisterEffect(e4)
 end
+c511009194.material_setcode=0xf7
 function c511009194.valcheck(e,c)
 	local g=c:GetMaterial()
 	local lvl=0

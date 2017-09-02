@@ -31,6 +31,7 @@ function c511001544.initial_effect(c)
 	e2:SetValue(2)
 	c:RegisterEffect(e2)
 end
+c511001544.material_setcode=0x7
 function c511001544.fil1(c,fc,sub1,sub2)
 	return c:IsFusionCode(42878636) or (sub and c:CheckFusionSubstitute(fc)) or (sub2 and c:IsHasEffect(511002961))
 end

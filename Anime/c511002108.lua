@@ -22,6 +22,7 @@ function c511002108.initial_effect(c)
 	e4:SetOperation(c511002108.tgop)
 	c:RegisterEffect(e4)
 end
+c511002108.material_setcode={0x93,0x1093}
 function c511002108.sucop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local e1=Effect.CreateEffect(c)

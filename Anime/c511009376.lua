@@ -44,6 +44,7 @@ function c511009376.initial_effect(c)
 	e4:SetOperation(c511009376.prop)
 	c:RegisterEffect(e4)
 end
+c511009376.material_setcode={0x8,0xc008}
 function c511009376.regcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():GetSummonType()==SUMMON_TYPE_FUSION
 end

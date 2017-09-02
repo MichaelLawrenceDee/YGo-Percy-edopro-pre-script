@@ -35,7 +35,7 @@ function c511023009.initial_effect(c)
 	e5:SetValue(c511023009.atkval)
 	c:RegisterEffect(e5)
 end
-c511023009.material_setcode=0x8
+c511023009.material_setcode={0x8,0x3008}
 function c511023009.dacon(e)
 	return e:GetHandler():IsDefensePos()
 end

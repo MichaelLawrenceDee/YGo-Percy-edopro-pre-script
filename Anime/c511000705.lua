@@ -16,3 +16,4 @@ function c511000705.initial_effect(c)
 	e4:SetCode(EFFECT_SET_DEFENSE_FINAL)
 	c:RegisterEffect(e4)
 end
+c511000705.material_setcode={0xdd,0x550}

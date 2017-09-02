@@ -28,6 +28,7 @@ function c511000508.initial_effect(c)
 	e3:SetCode(EFFECT_SET_DEFENSE)
 	c:RegisterEffect(e3)
 end
+c511000508.material_setcode=0xa4
 function c511000508.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsPlayerCanDraw(tp,1) end
 	Duel.SetTargetPlayer(tp)

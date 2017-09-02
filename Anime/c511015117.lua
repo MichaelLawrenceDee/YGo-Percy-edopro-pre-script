@@ -15,6 +15,7 @@ function c511015117.initial_effect(c)
 	e3:SetOperation(c511015117.damop)
 	c:RegisterEffect(e3)
 end
+c511015117.material_setcode=0x16
 function c511015117.contactfilter(tp)
 	if Duel.GetLocationCount(tp,LOCATION_SZONE)>2 then
 		return Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,0,nil)

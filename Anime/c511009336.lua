@@ -35,6 +35,7 @@ function c511009336.initial_effect(c)
 	e3:SetOperation(c511009336.effop)
 	c:RegisterEffect(e3)
 end
+c511009336.material_setcode=0x52
 function c511009336.ffilter(c)
 	return c:IsSetCard(0x52) and c:IsFusionAttribute(ATTRIBUTE_LIGHT)
 end

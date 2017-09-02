@@ -19,6 +19,7 @@ function c511002859.initial_effect(c)
 	e2:SetValue(c511002859.atkval)
 	c:RegisterEffect(e2)
 end
+c511002859.material_setcode={0xdd,0x10cf,0xcf}
 function c511002859.filter(c)
 	return (c:IsLocation(LOCATION_GRAVE) or c:IsFaceup()) and c:IsRace(RACE_DRAGON)
 end

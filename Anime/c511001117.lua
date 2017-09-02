@@ -32,6 +32,7 @@ end
 function c511001117.splimit(e,se,sp,st)
 	return bit.band(st,SUMMON_TYPE_FUSION)==SUMMON_TYPE_FUSION
 end
+c511001117.material_setcode={0x93,0x4093}
 function c511001117.eqtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsRace(RACE_DRAGON) end
 	if chk==0 then return true end

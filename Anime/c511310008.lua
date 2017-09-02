@@ -20,7 +20,7 @@ function c511310008.initial_effect(c)
 	e3:SetCode(EVENT_FLIP_SUMMON_SUCCESS)
 	c:RegisterEffect(e3)
 end
-c511310008.material_setcode=0x8
+c511310008.material_setcode={0x8,0x3008}
 function c511310008.atkop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tg=Duel.GetMatchingGroup(Card.IsFaceup,tp,0,LOCATION_MZONE,nil)

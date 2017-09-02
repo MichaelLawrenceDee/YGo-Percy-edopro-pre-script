@@ -37,6 +37,7 @@ function c511001540.initial_effect(c)
 	e4:SetOperation(c511001540.desop)
 	c:RegisterEffect(e4)
 end
+c511001540.material_setcode=0x7
 function c511001540.atkop(e,tp,eg,ep,ev,re,r,rp)
 	local e1=Effect.CreateEffect(e:GetHandler())
 	e1:SetType(EFFECT_TYPE_FIELD)

@@ -10,6 +10,7 @@ function c511023011.initial_effect(c)
 	e1:SetValue(c511023011.value)
 	c:RegisterEffect(e1)
 end
+c511023011.material_setcode=0x8
 function c511023011.filter(c)
 	return c:IsFaceup() and c:IsRace(ATTRIBUTE_WATER)
 end

@@ -22,6 +22,7 @@ function c511002533.initial_effect(c)
 	e2:SetOperation(c511002533.desop)
 	c:RegisterEffect(e2)
 end
+c511002533.material_setcode={0x8,0x3008}
 function c511002533.filter(c,atk)
 	return c:IsFaceup() and c:GetBaseAttack()<atk and c:IsDestructable()
 end

@@ -31,12 +31,12 @@ function c511009105.initial_effect(c)
 	e5:SetCode(EVENT_BATTLE_START)
 	e5:SetRange(LOCATION_MZONE)
 	e5:SetProperty(EFFECT_FLAG_CARD_TARGET)
-
 	e5:SetCondition(c511009105.atkcon)
 	e5:SetTarget(c511009105.atktg)
 	e5:SetOperation(c511009105.atkop)
 	c:RegisterEffect(e5)
 end
+c511009105.material_setcode=0xc6
 function c511009105.target(e,c)
 	return c:IsSetCard(0xc6)
 end
@@ -46,8 +46,6 @@ end
 function c511009105.atcon(e)
 	return Duel.IsExistingMatchingCard(c511009105.atfilter,e:GetHandlerPlayer(),LOCATION_MZONE,0,1,e:GetHandler())
 end
-
-
 function c511009105.atkcon(e,tp,eg,ep,ev,re,r,rp)
 	local a=Duel.GetAttacker()
 	local d=Duel.GetAttackTarget()
@@ -65,7 +63,7 @@ function c511009105.atktg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 function c511009105.atkop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) and tc:IsFaceup() then
+	if tc and tc:IsRelateToEffect(e) and tc:IsFaceup() then
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_UPDATE_ATTACK)

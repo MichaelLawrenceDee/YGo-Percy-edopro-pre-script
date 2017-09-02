@@ -11,7 +11,7 @@ function c511017002.initial_effect(c)
 	e1:SetOperation(c511017002.regop)
 	c:RegisterEffect(e1)
 end
-c511017002.material_setcode=0x5008
+c511017002.material_setcode={0x8,0x5008}
 function c511017002.regcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():GetSummonType()==SUMMON_TYPE_FUSION and e:GetHandler():GetMaterialCount()==3
 end

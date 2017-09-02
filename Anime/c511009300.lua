@@ -39,6 +39,7 @@ function c511009300.initial_effect(c)
 	e5:SetOperation(c511009300.atkop)
 	c:RegisterEffect(e5)
 end
+c511009300.material_setcode=0x19
 function c511009300.splimit(e,se,sp,st)
 	return e:GetHandler():GetLocation()~=LOCATION_EXTRA
 end

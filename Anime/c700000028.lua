@@ -29,7 +29,7 @@ function c700000028.initial_effect(c)
 	e5:SetOperation(c700000028.atkop)
 	c:RegisterEffect(e5)
 end
-
+c700000028.material_setcode=0x7
 function c700000028.efilter1(e,te)
 	return te:IsActiveType(TYPE_TRAP+TYPE_SPELL) and te:GetOwnerPlayer()~=e:GetHandlerPlayer()
 end

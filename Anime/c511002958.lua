@@ -16,6 +16,7 @@ function c511002958.initial_effect(c)
 	e2:SetOperation(c511002958.rdop)
 	c:RegisterEffect(e2)
 end
+c511002958.material_setcode=0x16
 function c511002958.rdcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	return ep~=tp and c==Duel.GetAttacker() and Duel.GetAttackTarget()==nil

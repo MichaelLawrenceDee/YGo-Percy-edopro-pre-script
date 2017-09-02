@@ -24,6 +24,7 @@ function c511002353.initial_effect(c)
 	e3:SetOperation(c511002353.operation)
 	c:RegisterEffect(e3)
 end
+c511002353.material_setcode={0x8,0x3008}
 function c511002353.atkcon(e)
 	local ph=Duel.GetCurrentPhase()
 	if ph~=PHASE_DAMAGE and ph~=PHASE_DAMAGE_CAL then return false end
