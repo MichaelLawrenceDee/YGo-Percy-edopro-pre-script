@@ -28,6 +28,7 @@ function c49597193.initial_effect(c)
 	e4:SetValue(1)
 	c:RegisterEffect(e4)
 end
+c49597193.material_setcode={0x47,0x1047}
 function c49597193.splimit(e,se,sp,st)
 	return not e:GetHandler():IsLocation(LOCATION_EXTRA) or bit.band(st,SUMMON_TYPE_FUSION)==SUMMON_TYPE_FUSION
 end

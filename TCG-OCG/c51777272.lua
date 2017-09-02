@@ -29,6 +29,7 @@ function c51777272.initial_effect(c)
 	e3:SetOperation(c51777272.damop)
 	c:RegisterEffect(e3)
 end
+c51777272.material_setcode=0xdf
 function c51777272.condition(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsAbleToEnterBP()
 end

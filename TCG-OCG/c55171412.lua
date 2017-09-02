@@ -33,6 +33,7 @@ function c55171412.initial_effect(c)
 	e5:SetOperation(c55171412.desop)
 	c:RegisterEffect(e5)
 end
+c55171412.material_setcode={0x8,0x3008,0x9,0x1f}
 function c55171412.contactfil(tp)
 	return Duel.GetMatchingGroup(Card.IsAbleToDeckOrExtraAsCost,tp,LOCATION_ONFIELD,0,nil)
 end
@@ -40,7 +41,6 @@ function c55171412.contactop(g,tp)
 	Duel.ConfirmCards(1-tp,g)
 	Duel.SendtoDeck(g,nil,2,REASON_COST+REASON_MATERIAL)
 end
-c55171412.material_setcode=0x8
 function c55171412.splimit(e,se,sp,st)
 	return not e:GetHandler():IsLocation(LOCATION_EXTRA)
 end

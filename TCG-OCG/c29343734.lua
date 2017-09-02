@@ -37,7 +37,7 @@ function c29343734.initial_effect(c)
 	e5:SetValue(c29343734.val)
 	c:RegisterEffect(e5)
 end
-c29343734.material_setcode=0x8
+c29343734.material_setcode={0x8,0x3008}
 function c29343734.retcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_FUSION)
 end

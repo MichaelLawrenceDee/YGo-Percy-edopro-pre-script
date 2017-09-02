@@ -33,6 +33,7 @@ function c30864377.initial_effect(c)
 	e6:SetOperation(c30864377.spop)
 	c:RegisterEffect(e6)
 end
+c30864377.material_setcode=0x19
 function c30864377.matfilter(c)
 	return c:IsLevelAbove(5) and c:IsFusionSetCard(0x19)
 end

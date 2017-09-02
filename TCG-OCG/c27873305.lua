@@ -16,6 +16,7 @@ function c27873305.initial_effect(c)
 	e1:SetOperation(c27873305.operation)
 	c:RegisterEffect(e1)
 end
+c27873305.material_setcode={0xaf,0x10af}
 function c27873305.condition(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	return (Duel.GetAttacker()==c or Duel.GetAttackTarget()==c)

@@ -32,6 +32,7 @@ function c51570882.initial_effect(c)
 	e3:SetOperation(c51570882.spop)
 	c:RegisterEffect(e3)
 end
+c51570882.material_setcode={0xf3,0x10f3}
 function c51570882.ffilter2(c)
 	return c:GetOriginalLevel()>=8 and c:IsFusionAttribute(ATTRIBUTE_DARK)
 end

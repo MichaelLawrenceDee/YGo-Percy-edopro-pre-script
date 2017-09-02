@@ -24,6 +24,7 @@ function c43892408.initial_effect(c)
 	e2:SetOperation(c43892408.activate)
 	c:RegisterEffect(e2)
 end
+c43892408.material_setcode={0x10a2,0x20a2}
 function c43892408.splimit(e,se,sp,st)
 	return bit.band(st,SUMMON_TYPE_FUSION)==SUMMON_TYPE_FUSION or se:GetHandler():IsCode(1784686)
 end

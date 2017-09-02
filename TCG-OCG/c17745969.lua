@@ -26,6 +26,7 @@ function c17745969.initial_effect(c)
 	e2:SetOperation(c17745969.mvop)
 	c:RegisterEffect(e2)
 end
+c17745969.material_setcode=0x16
 function c17745969.matfilter(c)
 	return c:IsFusionType(TYPE_FUSION) and c:IsFusionSetCard(0x16)
 end
@@ -71,7 +72,7 @@ end
 function c17745969.mvop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) and tc:IsControler(tp) and Duel.SendtoHand(tc,nil,REASON_EFFECT)>0
+	if tc and tc:IsRelateToEffect(e) and tc:IsControler(tp) and Duel.SendtoHand(tc,nil,REASON_EFFECT)>0
 		and tc:IsLocation(LOCATION_HAND) and c:IsFaceup() and c:IsRelateToEffect(e) then
 		local seq=tc:GetPreviousSequence()
 		Duel.MoveSequence(c,seq)

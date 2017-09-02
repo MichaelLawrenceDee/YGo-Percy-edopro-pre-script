@@ -24,6 +24,7 @@ function c8463720.initial_effect(c)
 	e2:SetOperation(c8463720.desop)
 	c:RegisterEffect(e2)
 end
+c8463720.material_setcode={0xaf,0x10af}
 function c8463720.descon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()==tp
 end

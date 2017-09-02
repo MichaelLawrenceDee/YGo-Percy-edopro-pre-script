@@ -2,7 +2,7 @@
 function c28016193.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcMixN(c,true,true,aux.FilterBoolFunction(Card.IsFusionSetCard,0xe1),2)
+	aux.AddFusionProcFunRep(c,aux.FilterBoolFunction(Card.IsFusionSetCard,0xe1),2,false)
 	--pierce
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD)
@@ -29,6 +29,7 @@ function c28016193.initial_effect(c)
 	e3:SetOperation(c28016193.desop)
 	c:RegisterEffect(e3)
 end
+c28016193.material_setcode=0xe1
 function c28016193.damcon(e,tp,eg,ep,ev,re,r,rp)
 	local tc=eg:GetFirst()
 	return ep~=tp and tc:IsSetCard(0xe1) and tc:GetBattleTarget()~=nil and tc:GetBattleTarget():IsDefensePos()
@@ -48,7 +49,7 @@ function c28016193.destg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 function c28016193.desop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
+	if tc and tc:IsRelateToEffect(e) then
 		Duel.Destroy(tc,REASON_EFFECT)
 	end
 end

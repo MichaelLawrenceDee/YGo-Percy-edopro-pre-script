@@ -31,6 +31,7 @@ function c53315891.initial_effect(c)
 	e5:SetOperation(c53315891.spop)
 	c:RegisterEffect(e5)
 end
+c53315891.material_setcode=0xa0
 function c53315891.contactfil(tp)
 	return Duel.GetMatchingGroup(Card.IsAbleToGraveAsCost,tp,LOCATION_ONFIELD,0,nil)
 end

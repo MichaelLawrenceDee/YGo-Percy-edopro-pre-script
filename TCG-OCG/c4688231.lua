@@ -24,20 +24,18 @@ function c4688231.initial_effect(c)
 	e3:SetOperation(c4688231.spop)
 	c:RegisterEffect(e3)
 end
+c4688231.material_setcode=0xe1
 function c4688231.retfilter1(c)
 	return c:IsSetCard(0xe1) and c:IsAbleToDeck()
-end
-function c4688231.retfilter2(c)
-	return c:IsAbleToHand()
 end
 function c4688231.rettg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return false end
 	if chk==0 then return Duel.IsExistingTarget(c4688231.retfilter1,tp,LOCATION_GRAVE,0,2,nil)
-		and Duel.IsExistingTarget(c4688231.retfilter2,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil) end
+		and Duel.IsExistingTarget(Card.IsAbleToHand,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 	local g1=Duel.SelectTarget(tp,c4688231.retfilter1,tp,LOCATION_GRAVE,0,2,2,nil)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
-	local g2=Duel.SelectTarget(tp,c4688231.retfilter2,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)
+	local g2=Duel.SelectTarget(tp,Card.IsAbleToHand,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,g1,g1:GetCount(),0,0)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g2,1,0,0)
 end

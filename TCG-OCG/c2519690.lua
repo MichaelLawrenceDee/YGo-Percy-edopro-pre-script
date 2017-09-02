@@ -31,6 +31,7 @@ function c2519690.initial_effect(c)
 	e3:SetOperation(c2519690.posop)
 	c:RegisterEffect(e3)
 end
+c2519690.material_setcode=0xbd
 function c2519690.thfilter(c)
 	return c:IsCode(49328340) and c:IsAbleToHand()
 end
@@ -53,7 +54,7 @@ function c2519690.postg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function c2519690.posop(e,tp,eg,ep,ev,re,r,rp)
 	local d=Duel.GetAttackTarget()
-	if d:IsRelateToBattle() then
+	if d and d:IsRelateToBattle() then
 		Duel.ChangePosition(d,POS_FACEUP_DEFENSE,POS_FACEDOWN_DEFENSE,POS_FACEUP_ATTACK,POS_FACEUP_ATTACK)
 	end
 end

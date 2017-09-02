@@ -13,6 +13,7 @@ function c37057012.initial_effect(c)
 	e1:SetValue(c37057012.atkval)
 	c:RegisterEffect(e1)
 end
+c37057012.material_setcode=0x93
 function c37057012.atkcon(e)
 	return Duel.GetCurrentPhase()==PHASE_DAMAGE_CAL
 		and e:GetHandler()==Duel.GetAttacker() and Duel.GetAttackTarget()~=nil

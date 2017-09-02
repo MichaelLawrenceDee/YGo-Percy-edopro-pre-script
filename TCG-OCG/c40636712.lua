@@ -33,6 +33,7 @@ function c40636712.initial_effect(c)
 	e3:SetOperation(c40636712.posop)
 	c:RegisterEffect(e3)
 end
+c40636712.material_setcode={0xa9,0xc3}
 function c40636712.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return not e:GetHandler():IsDirectAttacked() end
 	local e1=Effect.CreateEffect(e:GetHandler())
@@ -51,7 +52,7 @@ function c40636712.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 function c40636712.operation(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
+	if tc and tc:IsRelateToEffect(e) then
 		Duel.SendtoGrave(tc,REASON_EFFECT)
 	end
 end

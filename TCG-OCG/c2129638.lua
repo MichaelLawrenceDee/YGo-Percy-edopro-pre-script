@@ -31,6 +31,7 @@ function c2129638.initial_effect(c)
 	e7:SetOperation(c2129638.rmop)
 	c:RegisterEffect(e7)
 end
+c2129638.material_setcode=0xdd
 function c2129638.splimit(e,se,sp,st)
 	return bit.band(st,SUMMON_TYPE_FUSION)==SUMMON_TYPE_FUSION
 end

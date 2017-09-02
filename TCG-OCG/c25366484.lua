@@ -30,7 +30,7 @@ function c25366484.initial_effect(c)
 	e3:SetValue(c25366484.atkup)
 	c:RegisterEffect(e3)
 end
-c25366484.material_setcode=0x8
+c25366484.material_setcode={0x8,0x3008}
 function c25366484.damtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
 	local bc=e:GetHandler():GetBattleTarget()
@@ -43,7 +43,7 @@ function c25366484.damtg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function c25366484.damop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
+	if tc and tc:IsRelateToEffect(e) then
 		local p=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER)
 		local dam=tc:GetAttack()
 		if dam<0 then dam=0 end

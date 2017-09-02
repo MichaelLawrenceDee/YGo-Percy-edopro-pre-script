@@ -34,6 +34,7 @@ function c54702678.initial_effect(c)
 	e4:SetCode(EFFECT_CANNOT_DIRECT_ATTACK)
 	c:RegisterEffect(e4)
 end
+c54702678.material_setcode=0x16
 function c54702678.ffilter(c)
 	return c:IsFusionSetCard(0x16) and c:IsRace(RACE_MACHINE)
 end

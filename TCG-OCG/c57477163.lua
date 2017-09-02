@@ -25,6 +25,7 @@ function c57477163.initial_effect(c)
 	e2:SetOperation(c57477163.operation)
 	c:RegisterEffect(e2)
 end
+c57477163.material_setcode={0xa9,0xc3}
 function c57477163.aclimit(e,re,tp)
 	return not re:GetHandler():IsImmuneToEffect(e)
 end

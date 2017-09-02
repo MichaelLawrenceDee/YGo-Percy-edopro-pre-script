@@ -35,6 +35,7 @@ function c4628897.initial_effect(c)
 	e3:SetOperation(c4628897.spop)
 	c:RegisterEffect(e3)
 end
+c4628897.material_setcode=0xe9
 function c4628897.negcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if ep==tp or c:IsStatus(STATUS_BATTLE_DESTROYED) then return false end

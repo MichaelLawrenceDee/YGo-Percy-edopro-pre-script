@@ -15,6 +15,7 @@ function c5128859.initial_effect(c)
 	e3:SetOperation(c5128859.desop)
 	c:RegisterEffect(e3)
 end
+c5128859.material_setcode={0x8,0x3008,0x9,0x1f}
 function c5128859.contactfil(tp)
 	return Duel.GetMatchingGroup(Card.IsAbleToDeckOrExtraAsCost,tp,LOCATION_ONFIELD,0,nil)
 end

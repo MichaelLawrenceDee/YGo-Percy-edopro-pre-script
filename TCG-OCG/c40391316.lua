@@ -11,6 +11,7 @@ function c40391316.initial_effect(c)
 	e2:SetOperation(c40391316.disop)
 	c:RegisterEffect(e2)
 end
+c40391316.material_setcode=0xf
 function c40391316.disop(e,tp)
 	local c=Duel.GetLocationCount(1-tp,LOCATION_MZONE)
 	if c==0 then return end

@@ -33,6 +33,7 @@ function c3897065.initial_effect(c)
 	e4:SetOperation(c3897065.atkop)
 	c:RegisterEffect(e4)
 end
+c3897065.material_setcode=0x16
 function c3897065.eqfilter(c,tp)
 	return c:IsFaceup() and not c:IsRace(RACE_MACHINE) and (c:IsControler(tp) or c:IsAbleToChangeControler())
 end
@@ -50,7 +51,7 @@ end
 function c3897065.eqop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
-	if tc:IsFaceup() and tc:IsType(TYPE_MONSTER) and not tc:IsRace(RACE_MACHINE) and tc:IsRelateToEffect(e) then
+	if tc and tc:IsFaceup() and tc:IsType(TYPE_MONSTER) and not tc:IsRace(RACE_MACHINE) and tc:IsRelateToEffect(e) then
 		if c:IsFaceup() and c:IsRelateToEffect(e) then
 			if not Duel.Equip(tp,tc,c,false) then return end
 			--equip limit

@@ -17,6 +17,7 @@ function c1516510.initial_effect(c)
 	e2:SetLabelObject(e1)
 	c:RegisterEffect(e2)
 end
+c1516510.material_setcode={0x99,0xf2,0x10f2}
 function c1516510.condition(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_FUSION)
 end

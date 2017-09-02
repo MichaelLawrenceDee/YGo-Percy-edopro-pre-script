@@ -29,10 +29,11 @@ function c48063985.initial_effect(c)
 	e4:SetOperation(c48063985.spop)
 	c:RegisterEffect(e4)
 end
-function c86274272.contactfil(tp)
+c48063985.material_setcode={0xb5,0x10b5,0x20b5}
+function c48063985.contactfil(tp)
 	return Duel.GetMatchingGroup(Card.IsAbleToRemoveAsCost,tp,LOCATION_ONFIELD,0,nil)
 end
-function c86274272.contactop(g)
+function c48063985.contactop(g)
 	Duel.Remove(g,POS_FACEUP,REASON_COST+REASON_MATERIAL)
 end
 function c48063985.tgfilter(c)

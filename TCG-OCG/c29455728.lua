@@ -14,6 +14,7 @@ function c29455728.initial_effect(c)
 	e1:SetOperation(c29455728.operation)
 	c:RegisterEffect(e1)
 end
+c29455728.material_setcode=0x55
 function c29455728.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsReleasable() end
 	Duel.Release(e:GetHandler(),REASON_COST)

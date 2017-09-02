@@ -24,7 +24,7 @@ function c464362.initial_effect(c)
 	e3:SetValue(c464362.atkval)
 	c:RegisterEffect(e3)
 end
-c464362.material_setcode=0xa9
+c464362.material_setcode={0xa9,0xc3}
 function c464362.descon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_FUSION)
 end

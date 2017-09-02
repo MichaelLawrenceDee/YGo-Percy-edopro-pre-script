@@ -33,6 +33,7 @@ function c18967507.initial_effect(c)
 	e3:SetOperation(c18967507.negop)
 	c:RegisterEffect(e3)
 end
+c18967507.material_setcode={0x93,0x4093}
 function c18967507.matfilter(c)
 	return c:IsType(TYPE_EFFECT) and c:IsFusionSetCard(0x4093)
 end

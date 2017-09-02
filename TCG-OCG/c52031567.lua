@@ -11,4 +11,4 @@ function c52031567.initial_effect(c)
 	e1:SetValue(aux.fuslimit)
 	c:RegisterEffect(e1)
 end
-c52031567.material_setcode=0x8
+c52031567.material_setcode={0x8,0x3008}

@@ -31,6 +31,7 @@ function c22638495.initial_effect(c)
 	e5:SetValue(aux.tgoval)
 	c:RegisterEffect(e5)
 end
+c22638495.material_setcode=0xc7
 function c22638495.ffilter(c,tp,fc)
 	return c:IsFusionSetCard(0xc7) and c:IsType(TYPE_PENDULUM)
 end

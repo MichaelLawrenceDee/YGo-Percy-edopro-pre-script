@@ -9,3 +9,4 @@ function c36256625.initial_effect(c)
 	e1:SetCode(EFFECT_PIERCE)
 	c:RegisterEffect(e1)
 end
+c36256625.material_setcode=0x16

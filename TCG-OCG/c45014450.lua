@@ -44,6 +44,7 @@ function c45014450.initial_effect(c)
 	e6:SetOperation(c45014450.penop)
 	c:RegisterEffect(e6)
 end
+c45014450.material_setcode={0x1050,0x50,0x99}
 function c45014450.splimit(e,se,sp,st)
 	return bit.band(st,SUMMON_TYPE_FUSION)==SUMMON_TYPE_FUSION or bit.band(st,SUMMON_TYPE_PENDULUM)==SUMMON_TYPE_PENDULUM
 end

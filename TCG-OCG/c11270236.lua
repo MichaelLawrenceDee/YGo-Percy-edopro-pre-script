@@ -32,6 +32,7 @@ function c11270236.initial_effect(c)
 	e3:SetOperation(c11270236.rmop)
 	c:RegisterEffect(e3)
 end
+c11502550.material_setcode=0xf4
 function c11270236.ffilter2(c)
 	return c:GetSummonLocation()==LOCATION_EXTRA and c:IsLocation(LOCATION_MZONE)
 end

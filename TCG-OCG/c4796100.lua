@@ -14,6 +14,7 @@ function c4796100.initial_effect(c)
 	e1:SetOperation(c4796100.spop)
 	c:RegisterEffect(e1)
 end
+c4796100.material_setcode=0x1b
 function c4796100.spfilter(c,e,tp)
 	return c:IsCode(5818798,77207191) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
@@ -27,7 +28,7 @@ function c4796100.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 function c4796100.spop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
+	if tc and tc:IsRelateToEffect(e) then
 		Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP)
 	end
 end

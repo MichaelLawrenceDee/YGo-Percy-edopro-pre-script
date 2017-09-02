@@ -36,6 +36,7 @@ function c12652643.initial_effect(c)
 	e4:SetOperation(c12652643.spop)
 	c:RegisterEffect(e4)
 end
+c12652643.material_setcode=0x7
 function c12652643.aclimit(e,re,tp)
 	return re:IsHasType(EFFECT_TYPE_ACTIVATE)
 end
@@ -55,7 +56,7 @@ function c12652643.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 function c12652643.spop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
+	if tc and tc:IsRelateToEffect(e) then
 		Duel.SpecialSummon(tc,0,tp,tp,true,false,POS_FACEUP)
 	end
 end

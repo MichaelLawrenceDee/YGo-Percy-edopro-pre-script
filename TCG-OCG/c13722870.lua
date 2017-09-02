@@ -19,6 +19,7 @@ function c13722870.initial_effect(c)
 	e2:SetValue(1)
 	c:RegisterEffect(e2)
 end
+c13722870.material_setcode=0x10a2
 function c13722870.spfilter(c,e,tp)
 	return c:IsCode(49217579) and c:IsCanBeSpecialSummoned(e,0,tp,true,false)
 end

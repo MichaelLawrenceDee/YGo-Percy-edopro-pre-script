@@ -40,6 +40,7 @@ function c51788412.initial_effect(c)
 	e5:SetCode(EFFECT_PIERCE)
 	c:RegisterEffect(e5)
 end
+c51788412.material_setcode=0x7
 function c51788412.efilter(e,te)
 	return te:IsActiveType(TYPE_SPELL+TYPE_TRAP)
 end

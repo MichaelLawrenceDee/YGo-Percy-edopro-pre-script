@@ -17,7 +17,7 @@ function c11039171.initial_effect(c)
 	e3:SetOperation(c11039171.atkop)
 	c:RegisterEffect(e3)
 end
-c11039171.material_setcode=0xa9
+c11039171.material_setcode={0xa9,0xc3}
 function c11039171.atkop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local e1=Effect.CreateEffect(c)

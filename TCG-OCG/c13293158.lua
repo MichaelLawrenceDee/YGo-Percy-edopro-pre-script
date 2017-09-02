@@ -31,7 +31,7 @@ function c13293158.initial_effect(c)
 	e3:SetOperation(c13293158.activate)
 	c:RegisterEffect(e3)
 end
-c13293158.material_setcode=0x8
+c13293158.material_setcode={0x8,0x3008}
 c13293158.dark_calling=true
 function c13293158.splimit(e,se,sp,st)
 	return st==SUMMON_TYPE_FUSION+0x10
@@ -45,15 +45,12 @@ end
 function c13293158.condition(e,tp,eg,ep,ev,re,r,rp)
 	return ep~=tp
 end
-function c13293158.filter(c)
-	return c:IsFacedown()
-end
 function c13293158.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
-	local g=Duel.GetMatchingGroup(c13293158.filter,tp,0,LOCATION_SZONE,nil)
+	local g=Duel.GetMatchingGroup(Card.IsFacedown,tp,0,LOCATION_SZONE,nil)
 	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,g:GetCount(),0,0)
 end
 function c13293158.activate(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(c13293158.filter,tp,0,LOCATION_SZONE,nil)
+	local g=Duel.GetMatchingGroup(Card.IsFacedown,tp,0,LOCATION_SZONE,nil)
 	Duel.Destroy(g,REASON_EFFECT)
 end

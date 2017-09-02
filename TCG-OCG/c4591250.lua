@@ -34,6 +34,7 @@ function c4591250.initial_effect(c)
 	e4:SetOperation(c4591250.spop)
 	c:RegisterEffect(e4)
 end
+c4591250.material_setcode=0x4
 function c4591250.indtg(e,c)
 	return c:IsSetCard(0x4) and c~=e:GetHandler()
 end

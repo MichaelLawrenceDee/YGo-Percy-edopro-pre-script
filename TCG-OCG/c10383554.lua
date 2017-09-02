@@ -22,6 +22,7 @@ function c10383554.initial_effect(c)
 	e2:SetOperation(c10383554.operation)
 	c:RegisterEffect(e2)
 end
+c10383554.material_setcode={0xa9,0xc3}
 function c10383554.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return not e:GetHandler():IsDirectAttacked() end
 	local e1=Effect.CreateEffect(e:GetHandler())
@@ -31,14 +32,11 @@ function c10383554.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	e1:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END)
 	e:GetHandler():RegisterEffect(e1)
 end
-function c10383554.filter(c)
-	return c:IsFaceup()
-end
 function c10383554.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) and c10383554.filter(chkc) end
-	if chk==0 then return Duel.IsExistingTarget(c10383554.filter,tp,0,LOCATION_MZONE,1,nil) end
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) and chkc:IsFaceup() end
+	if chk==0 then return Duel.IsExistingTarget(Card.IsFaceup,tp,0,LOCATION_MZONE,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
-	local g=Duel.SelectTarget(tp,c10383554.filter,tp,0,LOCATION_MZONE,1,1,nil)
+	local g=Duel.SelectTarget(tp,Card.IsFaceup,tp,0,LOCATION_MZONE,1,1,nil)
 	local atk=g:GetFirst():GetTextAttack()
 	if atk<0 then atk=0 end
 	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,1,0,0)
@@ -46,7 +44,7 @@ function c10383554.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 function c10383554.operation(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
+	if tc and tc:IsRelateToEffect(e) then
 		local atk=tc:GetTextAttack()
 		if atk<0 then atk=0 end
 		if Duel.Destroy(tc,REASON_EFFECT)~=0 then

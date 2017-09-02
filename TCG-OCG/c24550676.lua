@@ -40,21 +40,19 @@ function c24550676.initial_effect(c)
 	e4:SetOperation(c24550676.operation)
 	c:RegisterEffect(e4)
 end
+c24550676.material_setcode=0xdf
 function c24550676.tgvalue(e,re,rp)
 	return rp~=e:GetHandlerPlayer()
 end
 function c24550676.condition(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetAttacker()==e:GetHandler() and Duel.GetAttackTarget()
 end
-function c24550676.filter(c)
-	return c:IsSummonType(SUMMON_TYPE_SPECIAL)
-end
 function c24550676.target(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c24550676.filter,tp,0,LOCATION_MZONE,1,nil) end
-	local g=Duel.GetMatchingGroup(c24550676.filter,tp,0,LOCATION_MZONE,nil)
+	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsSummonType,tp,0,LOCATION_MZONE,1,nil,SUMMON_TYPE_SPECIAL) end
+	local g=Duel.GetMatchingGroup(Card.IsSummonType,tp,0,LOCATION_MZONE,nil,SUMMON_TYPE_SPECIAL)
 	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,g:GetCount(),0,0)
 end
 function c24550676.operation(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(c24550676.filter,tp,0,LOCATION_MZONE,nil)
+	local g=Duel.GetMatchingGroup(Card.IsSummonType,tp,0,LOCATION_MZONE,nil,SUMMON_TYPE_SPECIAL)
 	Duel.Destroy(g,REASON_EFFECT)
 end

@@ -25,6 +25,7 @@ function c56532353.initial_effect(c)
 	e2:SetOperation(c56532353.operation)
 	c:RegisterEffect(e2)
 end
+c56532353.material_setcode=0xdd
 function c56532353.costfilter(c)
 	return c:IsSetCard(0xdd) and c:IsType(TYPE_FUSION) and c:IsAbleToGraveAsCost()
 end
