@@ -1225,21 +1225,15 @@ function Card.IsSphere(c,fbool)
 	end
 end
 
--- Spirit
--- 精霊(スピリット)
--- Earthbound Spirit/Water Spirit/Great Spirit/Spirit Ryu
--- Blue-Eyes Spirit Dragon/Shire, Lightsworn Spirit
--- Dark Spirit of the Silent/Spirit Converter/Spirit Force
--- Spirit Burner/Spirit Barrier/Spirit's Invitation
-c420.OCGSpirit={
-	67105242,487395,92736188,67957315,59822133,2420921,
-	93599951,20802187,16674846,50418970,53239672,92394653
-}
+--- Spirit (archetype) 
+--- 精霊 
+--- スピリット
+--- Blue-Eyes Spirit Dragon
 function Card.IsSpirit(c,fbool)
 	if fbool then
-		return (c:IsFusionSetCard(0x54e) or c:IsFusionCode(table.unpack(c420.OCGSpirit))
+ 		return (c:IsFusionSetCard(0x54e) or c:IsFusionCode(59822133))
 	else
-		return (c:IsSetCard(0x54e) or c:IsCode(table.unpack(c420.OCGSpirit))
+	 	return (c:IsSetCard(0x54e) or c:IsCode(59822133))
 	end
 end
 
