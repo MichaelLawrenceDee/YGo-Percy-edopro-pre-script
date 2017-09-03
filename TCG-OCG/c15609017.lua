@@ -53,6 +53,7 @@ function c15609017.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	end
 	e:SetLabel(0)
 	local rsg=Group.CreateGroup()
+	local tc
 	::start::
 		rsg:AddCard(c)
 		local cancel=rsg:GetCount()>0 
@@ -61,7 +62,7 @@ function c15609017.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 		local g=rg:Filter(c15609017.filter,rsg,rg,rsg,c)
 		if g:GetCount()<=0 then goto jump end
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-		local tc=Group.SelectUnselect(g,rsg,tp,cancel,cancel)
+		tc=Group.SelectUnselect(g,rsg,tp,cancel,cancel)
 		if not tc then goto jump end
 		if rsg:IsContains(tc) then
 			rsg:RemoveCard(tc)
