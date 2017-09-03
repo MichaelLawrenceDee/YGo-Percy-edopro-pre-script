@@ -23,14 +23,18 @@ function c15609017.costfilter(c)
 		return c:IsLocation(LOCATION_GRAVE)
 	end
 end
-function c15609017.filter(c,g,sg)
+function c15609017.filter(c,g,sg,card)
 	sg:AddCard(c)
 	local res
 	if sg:GetCount()==1 then
-		res=Duel.IsExistingTarget(aux.TRUE,0,LOCATION_ONFIELD,LOCATION_ONFIELD,1,sg) 
-			or g:IsExists(c15609017.filter,1,sg,g,sg)
+		sg:AddCard(card)
+		local des=Duel.IsExistingTarget(aux.TRUE,0,LOCATION_ONFIELD,LOCATION_ONFIELD,1,sg)
+		sg:RemoveCard(card)
+		res=des or g:IsExists(c15609017.filter,1,sg,g,sg,card)
 	elseif sg:GetCount()==2 then
+		sg:AddCard(card)
 		res=Duel.IsExistingTarget(aux.TRUE,0,LOCATION_ONFIELD,LOCATION_ONFIELD,2,sg)
+		sg:RemoveCard(card)
 	else
 		res=false
 	end
@@ -38,20 +42,23 @@ function c15609017.filter(c,g,sg)
 	return res
 end
 function c15609017.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	local c=e:GetHandler()
 	local rg=Duel.GetMatchingGroup(c15609017.costfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil)
-	if chkc then return chkc:IsOnField() end
+	if chkc then return chkc:IsOnField() and chkc~=c end
 	if chk==0 then
 		if e:GetLabel()==1 then
 			e:SetLabel(0)
-			return rg:IsExists(c15609017.filter,1,nil,rg,Group.CreateGroup())
+			return rg:IsExists(c15609017.filter,1,nil,rg,Group.CreateGroup(),c)
 		else return false end
 	end
 	e:SetLabel(0)
 	local rsg=Group.CreateGroup()
 	::start::
+		rsg:AddCard(c)
 		local cancel=rsg:GetCount()>0 
 			and Duel.IsExistingTarget(aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,rsg:GetCount(),rsg)
 		local g=rg:Filter(c15609017.filter,rsg,rg,rsg)
+		rsg:RemoveCard(c)
 		if g:GetCount()<=0 then goto jump end
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 		local tc=Group.SelectUnselect(g,rsg,tp,cancel,cancel)
