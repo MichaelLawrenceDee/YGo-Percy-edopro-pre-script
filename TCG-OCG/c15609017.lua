@@ -57,8 +57,8 @@ function c15609017.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 		rsg:AddCard(c)
 		local cancel=rsg:GetCount()>0 
 			and Duel.IsExistingTarget(aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,rsg:GetCount(),rsg)
-		local g=rg:Filter(c15609017.filter,rsg,rg,rsg,c)
 		rsg:RemoveCard(c)
+		local g=rg:Filter(c15609017.filter,rsg,rg,rsg,c)
 		if g:GetCount()<=0 then goto jump end
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 		local tc=Group.SelectUnselect(g,rsg,tp,cancel,cancel)
