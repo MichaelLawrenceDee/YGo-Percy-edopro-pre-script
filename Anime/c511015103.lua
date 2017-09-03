@@ -69,12 +69,13 @@ function c511015103.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local sg=Group.CreateGroup()
 	if chk==0 then return Duel.IsPlayerCanSpecialSummonCount(tp,2) 
 		and mg:IsExists(c511015103.mfilter,1,nil,mg,sg,tp,ft,ftex,ftt,ect,e) end
+	local tc
 	::start::
 		local cancel=sg:GetCount()>0 and Duel.IsExistingMatchingCard(c511015103.xyzfilter,tp,LOCATION_EXTRA,0,1,sg,sg,mc)
 		local tg=mg:Filter(c511015103.mfilter,sg,mg,sg,tp,ft,ftex,ftt,ect,e)
 		if tg:GetCount()<=0 then goto jump end
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-		local tc=Group.SelectUnselect(tg,sg,tp,cancel,cancel)
+		tc=Group.SelectUnselect(tg,sg,tp,cancel,cancel)
 		if not tc then goto jump end
 		if sg:IsContains(tc) then
 			sg:RemoveCard(tc)

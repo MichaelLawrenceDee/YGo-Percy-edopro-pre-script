@@ -33,12 +33,13 @@ function c511001611.activate(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCountFromEx(tp)<=0 then return end
 	local mg=Duel.GetMatchingGroup(c511001611.filter,tp,LOCATION_EXTRA,0,nil)
 	local xg=Group.CreateGroup()
+	local tc
 	::start::
 		local cancel=xg:GetCount()>0 and Duel.IsExistingMatchingCard(c511001611.spfilter,tp,LOCATION_EXTRA,0,1,xg,e,tp,xg)
 		local g=mg:Filter(c511001611.filterchk,xg,mg,xg,e,tp)
 		if g:GetCount()<=0 then goto jump end
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-		local tc=Group.SelectUnselect(g,xg,tp,cancel,cancel)
+		tc=Group.SelectUnselect(g,xg,tp,cancel,cancel)
 		if not tc then goto jump end
 		if xg:IsContains(tc) then
 			xg:RemoveCard(tc)

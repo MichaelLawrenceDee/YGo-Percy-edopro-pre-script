@@ -40,12 +40,13 @@ function c511000657.target(e,tp,eg,ep,ev,re,r,rp,chk)
 		return cg:IsExists(c511000657.filter,1,nil,cg,Group.CreateGroup(),e,tp)
 			and (Duel.GetLocationCount(tp,LOCATION_MZONE)>0 or Duel.IsPlayerAffectedByEffect(tp,69832741)) end
 	local rg=Group.CreateGroup()
+	local tc
 	::start::
 		local cancel=rg:GetCount()>0 and Duel.IsExistingMatchingCard(c511000657.spfilter,tp,LOCATION_HAND,0,1,nil,e,tp,rg:GetCount())
 		local g=cg:Filter(c511000657.filter,rg,cg,rg,e,tp)
 		if g:GetCount()<=0 then goto jump end
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-		local tc=Group.SelectUnselect(g,rg,tp,cancel,cancel)
+		tc=Group.SelectUnselect(g,rg,tp,cancel,cancel)
 		if not tc then goto jump end
 		if rg:IsContains(tc) then
 			rg:RemoveCard(tc)

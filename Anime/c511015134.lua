@@ -55,12 +55,13 @@ function c511015134.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local mg=Duel.GetMatchingGroup(c511015134.filter,tp,LOCATION_GRAVE+LOCATION_ONFIELD,LOCATION_GRAVE+LOCATION_ONFIELD,nil)
 	if chk==0 then return mg:IsExists(c511015134.chkfilter,1,nil,mg,sg,e,tp) end
 	local reset={}
+	local tc
 	::start::
 		local cancel=sg:GetCount()>0 and Duel.IsExistingMatchingCard(c511015134.xyzfilter,tp,LOCATION_EXTRA,0,1,nil,sg,e,tp)
 		local tg=mg:Filter(c511015134.chkfilter,sg,mg,sg,e,tp)
 		if tg:GetCount()<=0 then goto jump end
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
-		local tc=Group.SelectUnselect(tg,sg,tp,cancel,cancel)
+		tc=Group.SelectUnselect(tg,sg,tp,cancel,cancel)
 		if not tc then goto jump end
 		if sg:IsContains(tc) then
 			sg:RemoveCard(tc)
