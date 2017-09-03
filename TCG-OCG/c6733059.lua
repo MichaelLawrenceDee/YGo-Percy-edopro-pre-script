@@ -29,7 +29,7 @@ function c6733059.cfilter(c)
 end
 function c6733059.filter(c,g,sg)
 	sg:AddCard(c)
-	local res=Duel.IsExistingMatchingCard(c6733059.tfilter,0,LOCATION_MZONE,LOCATION_MZONE,1,sg,sg:GetCount())	
+	local res=Duel.IsExistingMatchingCard(c6733059.tfilter,0,LOCATION_MZONE,LOCATION_MZONE,1,sg,sg:GetCount())
 		or g:IsExists(c6733059.filter,1,sg,g,sg)
 	sg:RemoveCard(c)
 	return res
@@ -52,12 +52,13 @@ function c6733059.descost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local cg=Duel.GetMatchingGroup(c6733059.cfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil)
 	if chk==0 then return cg:IsExists(c6733059.filter,1,nil,cg,Group.CreateGroup()) end
 	local rg=Group.CreateGroup()
+	local tc
 	::start::
-		local cancel=rg:GetCount()>0 and Duel.IsExistingMatchingCard(c6733059.tfilter,0,LOCATION_MZONE,LOCATION_MZONE,1,sg,sg:GetCount())
+		local cancel=rg:GetCount()>0 and Duel.IsExistingMatchingCard(c6733059.tfilter,0,LOCATION_MZONE,LOCATION_MZONE,1,rg,rg:GetCount())
 		local g=cg:Filter(c6733059.filter,rg,cg,rg)
 		if g:GetCount()<=0 then goto jump end
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-		local tc=Group.SelectUnselect(g,rg,tp,cancel,cancel)
+		tc=Group.SelectUnselect(g,rg,tp,cancel,cancel)
 		if not tc then goto jump end
 		if rg:IsContains(tc) then
 			rg:RemoveCard(tc)
