@@ -512,8 +512,8 @@ function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req
 					end
 				end
 				local lv=c:GetLevel()
+				local tsg=Group.CreateGroup()
 				if g:IsExists(Auxiliary.SynchroCheckFilterChk,1,nil,f1,f2,sub1,sub2) then
-					local tsg=Group.CreateGroup()
 					local ntsg=Group.CreateGroup()
 					local tune=true
 					local g2=Group.CreateGroup()
@@ -608,7 +608,6 @@ function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req
 					end
 					Duel.AssumeReset()
 				else
-					local tsg=Group.CreateGroup()
 					local ntsg=Group.CreateGroup()
 					local tune=true
 					local g2=Group.CreateGroup()
@@ -684,6 +683,17 @@ function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req
 				local hg=Duel.GetMatchingGroup(Card.IsHasEffect,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)
 				aux.ResetEffects(hg,EFFECT_HAND_SYNCHRO+EFFECT_SYNCHRO_CHECK)
 				if sg then
+					local subtsg=tsg:Filter(function(c) return sub1 and sub1(c) and ((f1 and not f1(c)) or not c:IsType(TYPE_TUNER)) end,nil)
+					local subc=subtsg:GetFirst()
+					while subc do
+						local e1=Effect.CreateEffect(c)
+						e1:SetType(EFFECT_TYPE_SINGLE)
+						e1:SetCode(EFFECT_ADD_TYPE)
+						e1:SetValue(TYPE_TUNER)
+						e1:SetReset(RESET_EVENT+0x1fe0000)
+						subc:RegisterEffect(e1,true)
+						subc=subtsg:GetNext()
+					end
 					sg:KeepAlive()
 					e:SetLabelObject(sg)
 					return true
