@@ -66,6 +66,7 @@ function c52653092.xyzop(e,tp,chk,mc)
 	local tc=Duel.GetMatchingGroup(c52653092.cfilter,tp,LOCATION_HAND,0,nil):SelectUnselect(Group.CreateGroup(),tp,aux.ProcCancellable,aux.ProcCancellable)
 	if tc then
 		Duel.SendtoGrave(tc,REASON_DISCARD+REASON_COST)
+		return true
 	else return false end
 end
 function c52653092.effcon(e)
