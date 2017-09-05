@@ -1,7 +1,7 @@
 --FNo.0 未来皇ホープ－フューチャー・スラッシュ
 function c43490025.initial_effect(c)
 	--xyz summon
-	aux.AddXyzProcedure(c,c43490025.xyzfilter,nil,2,c43490025.ovfilter,aux.Stringid(43490025,1),nil,nil,false,true)
+	aux.AddXyzProcedure(c,c43490025.xyzfilter,nil,2,c43490025.ovfilter,aux.Stringid(43490025,1),nil,nil,false,c43490025.xyzcheck)
 	c:EnableReviveLimit()
 	--atkup
 	local e2=Effect.CreateEffect(c)
@@ -38,9 +38,11 @@ function c43490025.initial_effect(c)
 end
 c43490025.xyz_number=0
 function c43490025.xyzfilter(c,chk,tp,sg)
-	if chk then return c:IsHasEffect(511001175) or sg:FilterCount(Card.IsType,c,TYPE_XYZ)==0 
-		or sg:IsExists(aux.FilterEqualFunction(Card.GetRank,c:GetRank()),1,c) end
 	return c:IsType(TYPE_XYZ) and not c:IsSetCard(0x48)
+end
+function c43490025.xyzcheck(g,tp,xyz)
+	local mg=g:Filter(function(c) return not c:IsHasEffect(511001175) end,nil)
+	return mg:GetClassCount(Card.GetRank)==1
 end
 function c43490025.ovfilter(c)
 	return c:IsFaceup() and (c:IsSetCard(0x107f) or c:IsCode(65305468))

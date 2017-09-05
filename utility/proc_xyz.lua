@@ -40,7 +40,7 @@ function Auxiliary.AddXyzProcedure(c,f,lv,ct,alterf,desc,maxct,op,mustbemat,exch
 	e1:SetTarget(Auxiliary.XyzTarget(f,lv,ct,maxct,mustbemat,exchk))
 	e1:SetOperation(Auxiliary.XyzOperation(f,lv,ct,maxct,mustbemat,exchk))
 	e1:SetValue(SUMMON_TYPE_XYZ)
-	e1:SetLabelObject(e0)
+	e1:SetLabelObject(chk1)
 	c:RegisterEffect(e1)
 	if alterf then
 		local chk2=chk1:Clone()
@@ -157,7 +157,7 @@ function Auxiliary.XyzRecursionChk1(c,mg,xyz,tp,min,max,minc,maxc,sg,matg,ct,mat
 			ok=Auxiliary.MatNumChkF(matg)
 		end
 		if exchk then
-			if matg:GetCount()>0 and not matg:IsExists(f,matg:GetCount(),nil,true,tp,matg) then ok=false end
+			if matg:GetCount()>0 and not exchk(matg,tp,xyz) then ok=false end
 		end
 		if ok then
 			if xyz:IsLocation(LOCATION_EXTRA) then
@@ -184,8 +184,8 @@ function Auxiliary.XyzRecursionChk1(c,mg,xyz,tp,min,max,minc,maxc,sg,matg,ct,mat
 					if matg:IsExists(Card.IsHasEffect,1,nil,91110378) then
 						ok=Auxiliary.MatNumChkF(matg)
 					end
-					if exchk then
-						if matg:GetCount()>0 and not matg:IsExists(f,matg:GetCount(),nil,true,tp,matg) then ok=false end
+					if ok and exchk then
+						if matg:GetCount()>0 and not exchk(matg,tp,xyz) then ok=false end
 					end
 					if ok then
 						if xyz:IsLocation(LOCATION_EXTRA) then
@@ -250,7 +250,7 @@ function Auxiliary.XyzRecursionChk2(c,mg,xyz,tp,minc,maxc,sg,matg,ct,mustbemat,e
 			ok=Auxiliary.MatNumChkF(matg)
 		end
 		if exchk then
-			if matg:GetCount()>0 and not matg:IsExists(f,matg:GetCount(),nil,true,tp,matg) then ok=false end
+			if matg:GetCount()>0 and not exchk(matg,tp,xyz) then ok=false end
 		end
 		if ok then
 			if xyz:IsLocation(LOCATION_EXTRA) then
@@ -283,7 +283,7 @@ function Auxiliary.XyzRecursionChk2(c,mg,xyz,tp,minc,maxc,sg,matg,ct,mustbemat,e
 						ok=Auxiliary.MatNumChkF(matg)
 					end
 					if exchk then
-						if matg:GetCount()>0 and not matg:IsExists(f,matg:GetCount(),nil,true,tp,matg) then ok=false end
+						if matg:GetCount()>0 and not exchk(matg,tp,xyz) then ok=false end
 					end
 					if ok then
 						if xyz:IsLocation(LOCATION_EXTRA) then

@@ -2,7 +2,7 @@
 function c57314798.initial_effect(c)
 	--xyz summon
 	c:EnableReviveLimit()
-	aux.AddXyzProcedure(c,c57314798.xyzfilter,nil,2,nil,nil,nil,nil,false,true)
+	aux.AddXyzProcedure(c,c57314798.xyzfilter,nil,2,nil,nil,nil,nil,false,c57314798.xyzcheck)
 	--atk up
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(57314798,0))
@@ -45,12 +45,11 @@ function c57314798.initial_effect(c)
 end
 c57314798.xyz_number=100
 function c57314798.xyzfilter(c,chk,tp,sg)
-	if chk then return c:IsHasEffect(511001175) or sg:FilterCount(Card.IsType,c,TYPE_XYZ)==0 
-		or sg:IsExists(c57314798.check,1,c,c:GetRank(),c:GetCode()) end
 	return c:IsXyzType(TYPE_XYZ) and c:IsSetCard(0x48)
 end
-function c57314798.check(c,rk,code)
-	return c:GetRank()==rk and c:IsCode(code)
+function c57314798.xyzcheck(g,tp,xyz)
+	local mg=g:Filter(function(c) return not c:IsHasEffect(511001175) end,nil)
+	return mg:GetClassCount(Card.GetRank)==1 and mg:GetClassCount(Card.GetCode)==1
 end
 function c57314798.atkcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end
