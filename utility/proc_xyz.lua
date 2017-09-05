@@ -156,7 +156,7 @@ function Auxiliary.XyzRecursionChk1(c,mg,xyz,tp,min,max,minc,maxc,sg,matg,ct,mat
 		if matg:IsExists(Card.IsHasEffect,1,nil,91110378) then
 			ok=Auxiliary.MatNumChkF(matg)
 		end
-		if exchk then
+		if ok and exchk then
 			if matg:GetCount()>0 and not exchk(matg,tp,xyz) then ok=false end
 		end
 		if ok then
@@ -249,7 +249,7 @@ function Auxiliary.XyzRecursionChk2(c,mg,xyz,tp,minc,maxc,sg,matg,ct,mustbemat,e
 		if matg:IsExists(Card.IsHasEffect,1,nil,91110378) then
 			ok=Auxiliary.MatNumChkF(matg)
 		end
-		if exchk then
+		if ok and exchk then
 			if matg:GetCount()>0 and not exchk(matg,tp,xyz) then ok=false end
 		end
 		if ok then
@@ -282,7 +282,7 @@ function Auxiliary.XyzRecursionChk2(c,mg,xyz,tp,minc,maxc,sg,matg,ct,mustbemat,e
 					if matg:IsExists(Card.IsHasEffect,1,nil,91110378) then
 						ok=Auxiliary.MatNumChkF(matg)
 					end
-					if exchk then
+					if ok and exchk then
 						if matg:GetCount()>0 and not exchk(matg,tp,xyz) then ok=false end
 					end
 					if ok then

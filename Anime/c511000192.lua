@@ -6,7 +6,6 @@ function c511000192.initial_effect(c)
 	c511000192.xyz_parameters={c511000192.xyz_filter,nil,2,nil,nil,2}
 	c511000192.minxyzct=ct
 	c511000192.maxxyzct=maxct
-	aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsType,TYPE_XYZ),nil,2)
 	local chk1=Effect.CreateEffect(c)
 	chk1:SetType(EFFECT_TYPE_SINGLE)
 	chk1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_SET_AVAILABLE)
