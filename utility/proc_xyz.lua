@@ -16,7 +16,7 @@ function Auxiliary.AddXyzProcedure(c,f,lv,ct,alterf,desc,maxct,op,mustbemat,exch
 	if c.xyz_filter==nil then
 		local code=c:GetOriginalCode()
 		local mt=_G["c" .. code]
-		mt.xyz_filter=function(mc,ignoretoken) return mc and (not f or f(mc)) and mc:IsXyzLevel(c,lv) and (not mc:IsType(TYPE_TOKEN) or ignoretoken) end
+		mt.xyz_filter=function(mc,ignoretoken,xyz,tp) return mc and (not f or f(mc,xyz,tp)) and (not lv or mc:IsXyzLevel(c,lv)) and (not mc:IsType(TYPE_TOKEN) or ignoretoken) end
 		mt.xyz_parameters={mt.xyz_filter,lv,ct,alterf,desc,maxct,op,mustbemat,exchk}
 		mt.minxyzct=ct
 		mt.maxxyzct=maxct
@@ -85,7 +85,7 @@ function Auxiliary.XyzMatFilter2(c,f,lv,xyz,tp)
 	return Auxiliary.XyzMatFilter(c,f,lv,xyz,tp)
 end
 function Auxiliary.XyzMatFilter(c,f,lv,xyz,tp)
-	return (not f or f(c)) and (not lv or c:IsXyzLevel(xyz,lv)) and c:IsCanBeXyzMaterial(xyz) 
+	return (not f or f(c,xyz,tp)) and (not lv or c:IsXyzLevel(xyz,lv)) and c:IsCanBeXyzMaterial(xyz) 
 		and (c:IsControler(tp) or c:IsHasEffect(EFFECT_XYZ_MATERIAL))
 end
 function Auxiliary.XyzSubMatFilter(c,fil,lv,xg)
