@@ -3,7 +3,7 @@
 function c28776350.initial_effect(c)
 	c:EnableReviveLimit()
 	--link summon
-	aux.AddLinkProcedure(c,c28776350.filter,2,nil,true)
+	aux.AddLinkProcedure(c,c28776350.filter,2,nil,c28776350.spcheck)
 	--splimit
 	local e1=Effect.CreateEffect(c)
 	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
@@ -33,9 +33,11 @@ function c28776350.initial_effect(c)
 	e3:SetOperation(c28776350.acop)
 	c:RegisterEffect(e3)
 end
-function c28776350.filter(c,chk,tp,sg)
-	if chk then return sg:IsExists(Card.IsRace,1,c,c:GetRace()) end
+function c28776350.filter(c)
 	return not c:IsLinkType(TYPE_TOKEN) 
+end
+function c28776350.spcheck(g,lc,tp)
+	return g:GetClassCount(Card.GetRace)==1
 end
 function c28776350.regcon(e,tp,eg,ep,ev,re,r,rp)
 	return bit.band(e:GetHandler():GetSummonType(),SUMMON_TYPE_LINK)==SUMMON_TYPE_LINK
