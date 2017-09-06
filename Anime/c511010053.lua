@@ -217,7 +217,7 @@ function c511010053.xyzcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():GetOverlayCount()==0
 end
 function c511010053.xyzfilter(c,e,tp)
-	return e:GetHandler():IsCanBeXyzMaterial(c) and c:IsCode(97403510)
+	return e:GetHandler():IsCanBeXyzMaterial(c,tp) and c:IsCode(97403510)
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false) and Duel.GetLocationCountFromEx(tp,tp,e:GetHandler(),c)>0
 end
 function c511010053.xyztg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

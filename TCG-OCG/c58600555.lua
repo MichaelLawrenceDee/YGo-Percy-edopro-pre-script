@@ -35,9 +35,9 @@ function c58600555.initial_effect(c)
 	c:RegisterEffect(e4)
 end
 function c58600555.ovfilter(c,tp,xyzc)
-	return c:IsFaceup() and c:IsXyzType(TYPE_XYZ) and (c:GetRank()==3 or c:GetRank()==4) and c:IsRace(RACE_INSECT)
+	return c:IsFaceup() and c:IsXyzType(TYPE_XYZ,xyzc,tp) and (c:GetRank()==3 or c:GetRank()==4) and c:IsRace(RACE_INSECT)
 end
-function c58600555.mfilter(c)
+function c58600555.mfilter(c,xyz,tp)
 	return c:IsRace(RACE_INSECT) and c:IsAttribute(ATTRIBUTE_LIGHT)
 end
 function c58600555.xyzop(e,tp,chk,mc)

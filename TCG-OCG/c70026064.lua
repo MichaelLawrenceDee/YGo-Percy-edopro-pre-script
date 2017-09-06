@@ -23,7 +23,7 @@ function c70026064.filter1(c,e,tp)
 		and Duel.GetLocationCountFromEx(tp,tp,c)>0
 end
 function c70026064.filter2(c,e,tp,mc,code)
-	return c:IsType(TYPE_XYZ) and c:IsSetCard(0x88) and not c:IsCode(code) and mc:IsCanBeXyzMaterial(c)
+	return c:IsType(TYPE_XYZ) and c:IsSetCard(0x88) and not c:IsCode(code) and mc:IsCanBeXyzMaterial(c,tp)
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
 end
 function c70026064.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

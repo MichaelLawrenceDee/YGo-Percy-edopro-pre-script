@@ -18,7 +18,7 @@ function c33252803.filter1(c,e,tp)
 end
 function c33252803.filter2(c,e,tp,mc,rk,no)
 	if c.rum_limit and not c.rum_limit(mc,e) then return false end
-	return c:GetRank()==rk and c:IsSetCard(0x1048) and c.xyz_number==no and mc:IsCanBeXyzMaterial(c)
+	return c:GetRank()==rk and c:IsSetCard(0x1048) and c.xyz_number==no and mc:IsCanBeXyzMaterial(c,tp)
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
 end
 function c33252803.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

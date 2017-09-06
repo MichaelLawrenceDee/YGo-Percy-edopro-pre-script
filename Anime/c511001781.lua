@@ -207,7 +207,7 @@ function c511001781.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return tp==Duel.GetTurnPlayer() and c:GetOverlayCount()==0
 end
 function c511001781.spfilter(c,e,tp,mc)
-	return c:IsCode(9161357) and mc:IsCanBeXyzMaterial(c) and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,true)
+	return c:IsCode(9161357) and mc:IsCanBeXyzMaterial(c,tp) and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,true)
 end
 function c511001781.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()

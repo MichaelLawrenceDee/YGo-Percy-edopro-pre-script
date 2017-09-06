@@ -44,8 +44,8 @@ function c57314798.initial_effect(c)
 	c:RegisterEffect(e5)
 end
 c57314798.xyz_number=100
-function c57314798.xyzfilter(c,chk,tp,sg)
-	return c:IsXyzType(TYPE_XYZ) and c:IsSetCard(0x48)
+function c57314798.xyzfilter(c,xyz,tp)
+	return c:IsXyzType(TYPE_XYZ,xyz,tp) and c:IsSetCard(0x48)
 end
 function c57314798.xyzcheck(g,tp,xyz)
 	local mg=g:Filter(function(c) return not c:IsHasEffect(511001175) end,nil)

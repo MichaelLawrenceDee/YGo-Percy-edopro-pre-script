@@ -80,7 +80,7 @@ function c83319610.spfilter1(c,e,tp)
 		and Duel.GetLocationCountFromEx(tp,tp,c)>0
 end
 function c83319610.spfilter2(c,e,tp,mc,rk)
-	return c:GetRank()==rk and c:IsSetCard(0x58) and mc:IsCanBeXyzMaterial(c)
+	return c:GetRank()==rk and c:IsSetCard(0x58) and mc:IsCanBeXyzMaterial(c,tp)
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
 end
 function c83319610.spcost(e,tp,eg,ep,ev,re,r,rp,chk)

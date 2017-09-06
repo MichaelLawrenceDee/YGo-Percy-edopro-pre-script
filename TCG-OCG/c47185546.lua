@@ -18,7 +18,7 @@ function c47185546.filter1(c,e,tp)
 		and Duel.GetLocationCountFromEx(tp,tp,c)>0
 end
 function c47185546.filter2(c,e,tp,mc,rk)
-	return (c:GetRank()==rk+2 or c:GetRank()==rk-2) and c:IsRace(RACE_INSECT) and mc:IsCanBeXyzMaterial(c)
+	return (c:GetRank()==rk+2 or c:GetRank()==rk-2) and c:IsRace(RACE_INSECT) and mc:IsCanBeXyzMaterial(c,tp)
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
 end
 function c47185546.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

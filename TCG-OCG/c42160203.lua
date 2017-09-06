@@ -34,8 +34,8 @@ function c42160203.initial_effect(c)
 	e4:SetOperation(c42160203.spop)
 	c:RegisterEffect(e4)
 end
-function c42160203.matfilter(c)
-	return c:IsXyzType(TYPE_PENDULUM) and c:IsAttribute(ATTRIBUTE_DARK)
+function c42160203.matfilter(c,xyz,tp)
+	return c:IsXyzType(TYPE_PENDULUM,xyz,tp) and c:IsAttribute(ATTRIBUTE_DARK)
 end
 function c42160203.atkcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

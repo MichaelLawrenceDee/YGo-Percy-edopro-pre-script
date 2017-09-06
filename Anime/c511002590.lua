@@ -17,7 +17,7 @@ function c511002590.filter(c,e,tp)
 end
 function c511002590.spfilter(c,e,tp,mc,rk)
 	if c.rum_limit and not c.rum_limit(mc,e) then return false end
-	return c:GetRank()==rk and c:IsSetCard(0xba) and mc:IsCanBeXyzMaterial(c)
+	return c:GetRank()==rk and c:IsSetCard(0xba) and mc:IsCanBeXyzMaterial(c,tp)
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
 end
 function c511002590.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

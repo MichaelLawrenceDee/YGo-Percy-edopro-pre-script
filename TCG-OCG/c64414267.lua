@@ -56,7 +56,7 @@ function c64414267.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	c:RegisterFlagEffect(64414267,RESET_CHAIN,0,1)
 end
 function c64414267.spfilter(c,e,tp,mc)
-	return c:IsAttribute(ATTRIBUTE_LIGHT) and c:IsSetCard(0x9c) and mc:IsCanBeXyzMaterial(c)
+	return c:IsAttribute(ATTRIBUTE_LIGHT) and c:IsSetCard(0x9c) and mc:IsCanBeXyzMaterial(c,tp)
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
 end
 function c64414267.sptg(e,tp,eg,ep,ev,re,r,rp,chk)

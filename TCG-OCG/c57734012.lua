@@ -50,7 +50,7 @@ function c57734012.filter1(c,e,tp)
 end
 function c57734012.filter2(c,e,tp,mc,no)
 	if c.rum_limit then return false end
-	return c.xyz_number==no and c:IsSetCard(0x1048) and mc:IsCanBeXyzMaterial(c)
+	return c.xyz_number==no and c:IsSetCard(0x1048) and mc:IsCanBeXyzMaterial(c,tp)
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
 end
 function c57734012.target(e,tp,eg,ep,ev,re,r,rp,chk)

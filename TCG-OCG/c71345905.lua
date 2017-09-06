@@ -17,7 +17,7 @@ function c71345905.filter1(c,e,tp)
 		and Duel.GetLocationCountFromEx(tp,tp,c)>0
 end
 function c71345905.filter2(c,e,tp,mc,rk)
-	return c:IsRankBelow(rk-1) and c:IsSetCard(0x107f) and mc:IsCanBeXyzMaterial(c)
+	return c:IsRankBelow(rk-1) and c:IsSetCard(0x107f) and mc:IsCanBeXyzMaterial(c,tp)
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
 end
 function c71345905.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

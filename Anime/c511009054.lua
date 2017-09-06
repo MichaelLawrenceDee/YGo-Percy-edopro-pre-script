@@ -28,7 +28,7 @@ function c511009054.filter1(c,e,tp)
 end
 function c511009054.filter2(c,e,tp,mc,rk)
 	if c.rum_limit and not c.rum_limit(mc,e) then return false end
-	return c:GetRank()==rk and mc:IsCanBeXyzMaterial(c) and Duel.GetLocationCountFromEx(tp,tp,mc,c)>0
+	return c:GetRank()==rk and mc:IsCanBeXyzMaterial(c,tp) and Duel.GetLocationCountFromEx(tp,tp,mc,c)>0
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
 end
 function c511009054.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
