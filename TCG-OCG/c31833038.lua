@@ -2,7 +2,7 @@
 --Varrel Load Dragon
 function c31833038.initial_effect(c)
 	--link summon
-	aux.AddLinkProcedure(c,aux.FilterBoolFunction(Card.IsLinkType,TYPE_EFFECT),3)
+	aux.AddLinkProcedure(c,aux.FilterBoolFunctionEx(Card.IsType,TYPE_EFFECT),3)
 	c:EnableReviveLimit()
 	--cannot be target
 	local e2=Effect.CreateEffect(c)

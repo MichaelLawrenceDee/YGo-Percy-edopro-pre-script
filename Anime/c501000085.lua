@@ -17,8 +17,8 @@ function c501000085.initial_effect(c)
 	e3:SetValue(c501000085.limit)
 	c:RegisterEffect(e3)
 end
-function c501000085.filter(c)
-	return c:IsLinkType(TYPE_EFFECT) and c:IsRace(RACE_DRAGON)
+function c501000085.filter(c,lc,sumtype,tp)
+	return c:IsType(TYPE_EFFECT,lc,sumtype,tp) and c:IsRace(RACE_DRAGON,lc,sumtype,tp)
 end
 function c501000085.con(e)
 	return e:GetHandler():IsExtraLinked()

@@ -2,7 +2,7 @@
 --Topologic Bomber Dragon
 function c5821478.initial_effect(c)
 	--link summon
-	aux.AddLinkProcedure(c,aux.FilterBoolFunction(Card.IsLinkType,TYPE_EFFECT),2)
+	aux.AddLinkProcedure(c,aux.FilterBoolFunctionEx(Card.IsType,TYPE_EFFECT),2)
 	c:EnableReviveLimit()
 	--damage
 	local e1=Effect.CreateEffect(c)

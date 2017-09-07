@@ -40,7 +40,7 @@ function c77610772.initial_effect(c)
 	c:RegisterEffect(e5)
 end
 function c77610772.spcheck(g,lc,tp)
-	return g:GetClassCount(Card.GetRace)>1 and g:GetClassCount(Card.GetAttribute)>1
+	return g:GetClassCount(Card.GetRace,lc,SUMMON_TYPE_LINK,tp)>1 and g:GetClassCount(Card.GetAttribute,lc,SUMMON_TYPE_LINK,tp)>1
 end
 function c77610772.incon(e)
 	return e:GetHandler():IsLinkState()

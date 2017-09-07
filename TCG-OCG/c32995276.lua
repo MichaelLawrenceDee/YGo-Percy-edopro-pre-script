@@ -17,8 +17,8 @@ function c32995276.initial_effect(c)
 	e1:SetOperation(c32995276.operation)
 	c:RegisterEffect(e1)
 end
-function c32995276.matfilter(c)
-	return c:IsLevelBelow(4) and c:IsRace(RACE_CYBERSE)
+function c32995276.matfilter(c,lc,sumtype,tp)
+	return c:IsLevelBelow(4) and c:IsRace(RACE_CYBERSE,lc,sumtype,tp)
 end
 function c32995276.cfilter(c,g)
 	return g:IsContains(c)

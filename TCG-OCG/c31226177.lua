@@ -34,8 +34,8 @@ function c31226177.initial_effect(c)
 	e3:SetOperation(c31226177.spop2)
 	c:RegisterEffect(e3)
 end
-function c31226177.matfilter(c)
-	return c:IsLinkType(TYPE_NORMAL) and not c:IsLinkType(TYPE_TOKEN)
+function c31226177.matfilter(c,lc,sumtype,tp)
+	return c:IsType(TYPE_NORMAL,lc,sumtype,tp) and not c:IsType(TYPE_TOKEN,lc,sumtype,tp)
 end
 function c31226177.destg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()

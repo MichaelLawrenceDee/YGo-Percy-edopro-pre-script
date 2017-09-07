@@ -24,8 +24,8 @@ function c13536606.initial_effect(c)
 	e2:SetOperation(c13536606.tkop)
 	c:RegisterEffect(e2)
 end
-function c13536606.matfilter(c)
-	return not c:IsLinkType(TYPE_TOKEN)
+function c13536606.matfilter(c,lc,sumtype,tp)
+	return not c:IsType(TYPE_TOKEN,lc,sumtype,tp)
 end
 function c13536606.atkval(e,c)
 	return c:GetMutualLinkedGroupCount()*300

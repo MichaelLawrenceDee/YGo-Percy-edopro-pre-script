@@ -33,11 +33,11 @@ function c28776350.initial_effect(c)
 	e3:SetOperation(c28776350.acop)
 	c:RegisterEffect(e3)
 end
-function c28776350.filter(c)
-	return not c:IsLinkType(TYPE_TOKEN) 
+function c28776350.filter(c,lc,sumtype,tp)
+	return not c:IsLinkType(TYPE_TOKEN,lc,sumtype,tp)
 end
 function c28776350.spcheck(g,lc,tp)
-	return g:GetClassCount(Card.GetRace)==1
+	return g:GetClassCount(Card.GetRace,lc,SUMMON_TYPE_LINK,tp)==1
 end
 function c28776350.regcon(e,tp,eg,ep,ev,re,r,rp)
 	return bit.band(e:GetHandler():GetSummonType(),SUMMON_TYPE_LINK)==SUMMON_TYPE_LINK

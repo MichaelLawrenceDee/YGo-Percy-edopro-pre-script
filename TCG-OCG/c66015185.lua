@@ -18,8 +18,8 @@ function c66015185.initial_effect(c)
 	e1:SetOperation(c66015185.spop)
 	c:RegisterEffect(e1)
 end
-function c66015185.mfilter(c)
-	return c:IsLevelBelow(4) and c:IsRace(RACE_DRAGON) and not c:IsLinkType(TYPE_TOKEN)
+function c66015185.mfilter(c,lc,sumtype,tp)
+	return c:IsLevelBelow(4) and c:IsRace(RACE_DRAGON,lc,sumtype,tp) and not c:IsType(TYPE_TOKEN,lc,sumtype,tp)
 end
 function c66015185.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_LINK)

@@ -29,8 +29,8 @@ function c79016563.initial_effect(c)
 	e2:SetOperation(c79016563.atkop)
 	c:RegisterEffect(e2)
 end
-function c79016563.matfilter(c)
-	return not c:IsLinkType(TYPE_TOKEN)
+function c79016563.matfilter(c,lc,sumtype,tp)
+	return not c:IsType(TYPE_TOKEN,lc,sumtype,tp)
 end
 function c79016563.reccon(e,tp,eg,ep,ev,re,r,rp)
 	local lg=e:GetHandler():GetMutualLinkedGroup()

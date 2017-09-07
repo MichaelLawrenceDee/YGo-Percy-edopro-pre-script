@@ -38,8 +38,8 @@ function c32617464.initial_effect(c)
 	e3:SetOperation(c32617464.negop)
 	c:RegisterEffect(e3)
 end
-function c32617464.matfilter(c)
-	return not c:IsLinkType(TYPE_TOKEN)
+function c32617464.matfilter(c,lc,sumtype,tp)
+	return not c:IsType(TYPE_TOKEN,lc,sumtype,tp)
 end
 function c32617464.damcon(e,tp,eg,ep,ev,re,r,rp)
 	local lg=e:GetHandler():GetMutualLinkedGroup()
