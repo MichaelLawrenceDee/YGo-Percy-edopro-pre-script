@@ -28,7 +28,7 @@ function Auxiliary.AddSynchroProcedure(c,...)
 	e1:SetValue(SUMMON_TYPE_SYNCHRO)
 	c:RegisterEffect(e1)
 end
-function Auxiliary.SynchroCheckFilterChk(c,f1,f2,sub1,sub2)
+function Auxiliary.SynchroCheckFilterChk(c,f1,f2,sub1,sub2,sc,tp)
 	local te=c:GetCardEffect(EFFECT_SYNCHRO_CHECK)
 	if not te then return false end
 	local f=te:GetValue()
@@ -36,17 +36,17 @@ function Auxiliary.SynchroCheckFilterChk(c,f1,f2,sub1,sub2)
 	if f(te,c) then
 		reset=true
 	end
-	local res=(c:IsSynchroType(TYPE_TUNER) and (not f1 or f1(c))) or not f2 or f2(c) or (sub1 and sub1(c)) or (sub2 and sub2(c))
+	local res=(c:IsType(TYPE_TUNER,sc,SUMMON_TYPE_SYNCHRO,tp) and (not f1 or f1(c,sc,SUMMON_TYPE_SYNCHRO,tp))) or not f2 or f2(c,sc,SUMMON_TYPE_SYNCHRO,tp) or (sub1 and sub1(c,sc,SUMMON_TYPE_SYNCHRO,tp)) or (sub2 and sub2(c,sc,SUMMON_TYPE_SYNCHRO,tp))
 	if reset then
 		Duel.AssumeReset()
 	end
 	return res
 end
-function Auxiliary.TunerFilter(c,f1,sub1)
-	return (c:IsSynchroType(TYPE_TUNER) and (not f1 or f1(c))) or (sub1 and sub1(c))
+function Auxiliary.TunerFilter(c,f1,sub1,sc,tp)
+	return (c:IsType(TYPE_TUNER,sc,SUMMON_TYPE_SYNCHRO,tp) and (not f1 or f1(c,sc,SUMMON_TYPE_SYNCHRO,tp))) or (sub1 and sub1(c,sc,SUMMON_TYPE_SYNCHRO,tp))
 end
-function Auxiliary.NonTunerFilter(c,f2,sub2)
-	return not f2 or f2(c) or (sub2 and sub2(c))
+function Auxiliary.NonTunerFilter(c,f2,sub2,sc,tp)
+	return not f2 or f2(c,sc,SUMMON_TYPE_SYNCHRO,tp) or (sub2 and sub2(c,sc,SUMMON_TYPE_SYNCHRO,tp))
 end
 function Auxiliary.SynCondition(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req2,reqct2,reqm)
 	return	function(e,c,smat,mg)
@@ -73,7 +73,7 @@ function Auxiliary.SynCondition(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,
 				if smat and smat:IsCanBeSynchroMaterial(c) then
 					g:AddCard(smat)
 				end
-				if g:IsExists(Auxiliary.SynchroCheckFilterChk,1,nil,f1,f2,sub1,sub2) then
+				if g:IsExists(Auxiliary.SynchroCheckFilterChk,1,nil,f1,f2,sub1,sub2,c,tp) then
 					--if there is a monster with EFFECT_SYNCHRO_CHECK (Genomix Fighter/Mono Synchron)
 					local g2=g:Clone()
 					if not mgchk then
@@ -97,19 +97,19 @@ function Auxiliary.SynCondition(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,
 					local tg
 					local ntg
 					if mgchk then
-						tg=g:Filter(Auxiliary.TunerFilter,nil,f1,sub1)
-						ntg=g:Filter(Auxiliary.NonTunerFilter,nil,f2,sub2)
+						tg=g:Filter(Auxiliary.TunerFilter,nil,f1,sub1,c,tp)
+						ntg=g:Filter(Auxiliary.NonTunerFilter,nil,f2,sub2,c,tp)
 					else
-						tg=g:Filter(Auxiliary.TunerFilter,nil,f1,sub1)
-						ntg=g:Filter(Auxiliary.NonTunerFilter,nil,f2,sub2)
+						tg=g:Filter(Auxiliary.TunerFilter,nil,f1,sub1,c,tp)
+						ntg=g:Filter(Auxiliary.NonTunerFilter,nil,f2,sub2,c,tp)
 						local thg=tg:Filter(Card.IsHasEffect,nil,EFFECT_HAND_SYNCHRO)
 						thg:Merge(ntg:Filter(Card.IsHasEffect,nil,EFFECT_HAND_SYNCHRO))
 						local hg=Duel.GetMatchingGroup(Card.IsCanBeSynchroMaterial,tp,LOCATION_HAND+LOCATION_GRAVE,0,c,c)
 						for thc in aux.Next(thg) do
 							local te=thc:GetCardEffect(EFFECT_HAND_SYNCHRO)
 							local val=te:GetValue()
-							local thag=hg:Filter(function(mc) return Auxiliary.TunerFilter(mc,f1,sub1) and val(te,mc,c) end,nil) --tuner
-							local nthag=hg:Filter(function(mc) return Auxiliary.NonTunerFilter(mc,f2,sub2) and val(te,mc,c) end,nil) --non-tuner
+							local thag=hg:Filter(function(mc) return Auxiliary.TunerFilter(mc,f1,sub1,c,tp) and val(te,mc,c) end,nil) --tuner
+							local nthag=hg:Filter(function(mc) return Auxiliary.NonTunerFilter(mc,f2,sub2,c,tp) and val(te,mc,c) end,nil) --non-tuner
 							tg:Merge(thag)
 							ntg:Merge(nthag)
 						end
@@ -133,7 +133,7 @@ function Auxiliary.SynchroCheckP31(c,g,tsg,ntsg,sg,f1,sub1,f2,sub2,min1,max1,min
 			local te=teg[i]
 			local val=te:GetValue()
 			local tg=g:Filter(function(mc) return val(te,mc) end,nil)
-			rg=tg:Filter(function(mc) return not Auxiliary.TunerFilter(mc,f1,sub1) and not Auxiliary.NonTunerFilter(mc,f2,sub2) end,nil)
+			rg=tg:Filter(function(mc) return not Auxiliary.TunerFilter(mc,f1,sub1,sc,tp) and not Auxiliary.NonTunerFilter(mc,f2,sub2,sc,tp) end,nil)
 		end
 	end
 	--c has the synchro limit
@@ -190,10 +190,10 @@ function Auxiliary.SynchroCheckP31(c,g,tsg,ntsg,sg,f1,sub1,f2,sub2,min1,max1,min
 		res=g:IsExists(Auxiliary.SynchroCheckP31,1,sg,g,tsg,ntsg,sg,f1,sub1,f2,sub2,min1,max1,min2,max2,req1,reqct1,req2,reqct2,reqm,lv,sc,tp,smat,pg,mgchk)
 	elseif tsg:GetCount()<max1 then
 		res=g:IsExists(Auxiliary.SynchroCheckP31,1,sg,g,tsg,ntsg,sg,f1,sub1,f2,sub2,min1,max1,min2,max2,req1,reqct1,req2,reqct2,reqm,lv,sc,tp,smat,pg,mgchk) 
-			or (tsg:IsExists(Auxiliary.TunerFilter,tsg:GetCount(),nil,f1,sub1) and (not req1 or tsg:IsExists(req1,reqct1,nil,tp)) 
+			or (tsg:IsExists(Auxiliary.TunerFilter,tsg:GetCount(),nil,f1,sub1,sc,tp) and (not req1 or tsg:IsExists(req1,reqct1,nil,tp)) 
 				and g:IsExists(Auxiliary.SynchroCheckP32,1,sg,g,tsg,ntsg,sg,f2,sub2,min2,max2,req2,reqct2,reqm,lv,sc,tp,smat,pg,mgchk))
 	else
-		res=tsg:IsExists(Auxiliary.TunerFilter,tsg:GetCount(),nil,f1,sub1) and (not req1 or tsg:IsExists(req1,reqct1,nil,tp)) 
+		res=tsg:IsExists(Auxiliary.TunerFilter,tsg:GetCount(),nil,f1,sub1,sc,tp) and (not req1 or tsg:IsExists(req1,reqct1,nil,tp)) 
 			and g:IsExists(Auxiliary.SynchroCheckP32,1,sg,g,tsg,ntsg,sg,f2,sub2,min2,max2,req2,reqct2,reqm,lv,sc,tp,smat,pg,mgchk)
 	end
 	g:Merge(rg)
@@ -213,7 +213,7 @@ function Auxiliary.SynchroCheckP32(c,g,tsg,ntsg,sg,f2,sub2,min2,max2,req2,reqct2
 			local te=teg[i]
 			local val=te:GetValue()
 			local tg=g:Filter(function(mc) return val(te,mc) end,nil)
-			rg=tg:Filter(function(mc) return not Auxiliary.NonTunerFilter(mc,f2,sub2) end,nil)
+			rg=tg:Filter(function(mc) return not Auxiliary.NonTunerFilter(mc,f2,sub2,sc,tp) end,nil)
 		end
 	end
 	--c has the synchro limit
@@ -271,12 +271,12 @@ function Auxiliary.SynchroCheckP32(c,g,tsg,ntsg,sg,f2,sub2,min2,max2,req2,reqct2
 	elseif ntsg:GetCount()<max2 then
 		res=g:IsExists(Auxiliary.SynchroCheckP32,1,sg,g,tsg,ntsg,sg,f2,sub2,min2,max2,req2,reqct2,reqm,lv,sc,tp,smat,pg,mgchk) 
 			or ((not req2 or ntsg:IsExists(req2,reqct2,nil,tp)) and (not reqm or sg:IsExists(reqm,1,nil,tp)) 
-				and ntsg:IsExists(Auxiliary.NonTunerFilter,ntsg:GetCount(),nil,f2,sub2) and (not smat or sg:IsContains(smat)) 
+				and ntsg:IsExists(Auxiliary.NonTunerFilter,ntsg:GetCount(),nil,f2,sub2,sc,tp) and (not smat or sg:IsContains(smat)) 
 				and (pg:GetCount()<=0 or pg:IsExists(function(mc) return sg:IsContains(mc) end,pg:GetCount(),nil)) 
 				and Auxiliary.SynchroCheckP43(tsg,ntsg,sg,lv,sc,tp))
 	else
 		res=(not req2 or ntsg:IsExists(req2,reqct2,nil,tp)) and (not reqm or sg:IsExists(reqm,1,nil,tp)) 
-			and ntsg:IsExists(Auxiliary.NonTunerFilter,ntsg:GetCount(),nil,f2,sub2)
+			and ntsg:IsExists(Auxiliary.NonTunerFilter,ntsg:GetCount(),nil,f2,sub2,sc,tp)
 			and (pg:GetCount()<=0 or pg:IsExists(function(mc) return sg:IsContains(mc) end,pg:GetCount(),nil))
 			and (not smat or sg:IsContains(smat))  and Auxiliary.SynchroCheckP43(tsg,ntsg,sg,lv,sc,tp)
 	end
@@ -499,26 +499,26 @@ function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req
 				local tg
 				local ntg
 				if mgchk then
-					tg=g:Filter(Auxiliary.TunerFilter,nil,f1,sub1)
-					ntg=g:Filter(Auxiliary.NonTunerFilter,nil,f2,sub2)
+					tg=g:Filter(Auxiliary.TunerFilter,nil,f1,sub1,c,tp)
+					ntg=g:Filter(Auxiliary.NonTunerFilter,nil,f2,sub2,c,tp)
 				else
-					tg=g:Filter(Auxiliary.TunerFilter,nil,f1,sub1)
-					ntg=g:Filter(Auxiliary.NonTunerFilter,nil,f2,sub2)
+					tg=g:Filter(Auxiliary.TunerFilter,nil,f1,sub1,c,tp)
+					ntg=g:Filter(Auxiliary.NonTunerFilter,nil,f2,sub2,c,tp)
 					local thg=tg:Filter(Card.IsHasEffect,nil,EFFECT_HAND_SYNCHRO)
 					thg:Merge(ntg:Filter(Card.IsHasEffect,nil,EFFECT_HAND_SYNCHRO))
 					local hg=Duel.GetMatchingGroup(Card.IsCanBeSynchroMaterial,tp,LOCATION_HAND+LOCATION_GRAVE,0,c,c)
 					for thc in aux.Next(thg) do
 						local te=thc:GetCardEffect(EFFECT_HAND_SYNCHRO)
 						local val=te:GetValue()
-						local thag=hg:Filter(function(mc) return Auxiliary.TunerFilter(mc,f1,sub1) and val(te,mc,c) end,nil) --tuner
-						local nthag=hg:Filter(function(mc) return Auxiliary.NonTunerFilter(mc,f2,sub2) and val(te,mc,c) end,nil) --non-tuner
+						local thag=hg:Filter(function(mc) return Auxiliary.TunerFilter(mc,f1,sub1,c,tp) and val(te,mc,c) end,nil) --tuner
+						local nthag=hg:Filter(function(mc) return Auxiliary.NonTunerFilter(mc,f2,sub2,c,tp) and val(te,mc,c) end,nil) --non-tuner
 						tg:Merge(thag)
 						ntg:Merge(nthag)
 					end
 				end
 				local lv=c:GetLevel()
 				local tsg=Group.CreateGroup()
-				if g:IsExists(Auxiliary.SynchroCheckFilterChk,1,nil,f1,f2,sub1,sub2) then
+				if g:IsExists(Auxiliary.SynchroCheckFilterChk,1,nil,f1,f2,sub1,sub2,c,tp) then
 					local ntsg=Group.CreateGroup()
 					local tune=true
 					local g2=Group.CreateGroup()
@@ -528,13 +528,13 @@ function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req
 							cancel=not mgchk and Duel.GetCurrentChain()<=0 and tsg:GetCount()==0
 							local g3=ntg:Filter(Auxiliary.SynchroCheckP32,sg,g,tsg,ntsg,sg,f2,sub2,min2,max2,req2,reqct2,reqm,lv,c,tp,smat,pg,mgchk)
 							g2=g:Filter(Auxiliary.SynchroCheckP31,sg,g,tsg,ntsg,sg,f1,sub1,f2,sub2,min1,max1,min2,max2,req1,reqct1,req2,reqct2,reqm,lv,c,tp,smat,pg,mgchk)
-							if g3:GetCount()>0 and tsg:GetCount()>=min1 and tsg:IsExists(Auxiliary.TunerFilter,tsg:GetCount(),nil,f1,sub1) and (not req1 or tsg:IsExists(req1,reqct1,nil,tp)) then
+							if g3:GetCount()>0 and tsg:GetCount()>=min1 and tsg:IsExists(Auxiliary.TunerFilter,tsg:GetCount(),nil,f1,sub1,c,tp) and (not req1 or tsg:IsExists(req1,reqct1,nil,tp)) then
 								g2:Merge(g3)
 							end
 							Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SMATERIAL)
 							local tc=Group.SelectUnselect(g2,sg,tp,cancel,cancel)
 							if not tc then
-								if tsg:GetCount()>=min1 and tsg:IsExists(Auxiliary.TunerFilter,tsg:GetCount(),nil,f1,sub1) and (not req1 or tsg:IsExists(req1,reqct1,nil,tp))
+								if tsg:GetCount()>=min1 and tsg:IsExists(Auxiliary.TunerFilter,tsg:GetCount(),nil,f1,sub1,c,tp) and (not req1 or tsg:IsExists(req1,reqct1,nil,tp))
 									and ntg:Filter(Auxiliary.SynchroCheckP32,sg,g,tsg,ntsg,sg,f2,sub2,min2,max2,req2,reqct2,reqm,lv,c,tp,smat,pg,mgchk):GetCount()>0 then tune=false
 								else
 									return false
@@ -567,7 +567,7 @@ function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req
 							end
 						else
 							if (ntsg:GetCount()>=min2 and (not req2 or ntsg:IsExists(req2,reqct2,nil,tp)) and (not reqm or sg:IsExists(reqm,1,nil,tp)) 
-								and ntsg:IsExists(Auxiliary.NonTunerFilter,ntsg:GetCount(),nil,f2,sub2)
+								and ntsg:IsExists(Auxiliary.NonTunerFilter,ntsg:GetCount(),nil,f2,sub2,c,tp)
 								and (not smat or sg:IsContains(smat)) and (pg:GetCount()<=0 or pg:IsExists(function(mc) return sg:IsContains(mc) end,pg:GetCount(),nil)) 
 								and Auxiliary.SynchroCheckP43(tsg,ntsg,sg,lv,c,tp)) or (not mgchk and Duel.GetCurrentChain()<=0) then
 									cancel=true
@@ -861,10 +861,10 @@ function Auxiliary.MajesticSynchroCheck2(sg,card1,card2,card3,lv,sc,tp,f1,cbt1,f
 		table.insert(funs[i%2],v)
 	end
 	local tunechk=false
-	if not f1(card1) or not f2(card2) or not f3(card3) then return false end
-	if cbt1 and card1:IsSynchroType(TYPE_TUNER) then tunechk=true end
-	if cbt2 and card2:IsSynchroType(TYPE_TUNER) then tunechk=true end
-	if cbt3 and card3:IsSynchroType(TYPE_TUNER) then tunechk=true end
+	if not f1(card1,sc,SUMMON_TYPE_SYNCHRO,tp) or not f2(card2,sc,SUMMON_TYPE_SYNCHRO,tp) or not f3(card3,sc,SUMMON_TYPE_SYNCHRO,tp) then return false end
+	if cbt1 and card1:IsType(TYPE_TUNER,sc,SUMMON_TYPE_SYNCHRO,tp) then tunechk=true end
+	if cbt2 and card2:IsType(TYPE_TUNER,sc,SUMMON_TYPE_SYNCHRO,tp) then tunechk=true end
+	if cbt3 and card3:IsType(TYPE_TUNER,sc,SUMMON_TYPE_SYNCHRO,tp) then tunechk=true end
 	if not tunechk then return false end
 	local lvchk=false
 	if #funs[0]>0 then
@@ -1148,7 +1148,7 @@ function Auxiliary.DarkSynchroCheck2(sg,card1,card2,plv,nlv,sc,tp,f1,f2,...)
 		c=sg:GetNext()
 	end]]
 	local reqm={...}
-	if (f1 and not f1(card1)) or (f2 and not f2(card2)) or not card2:IsSynchroType(TYPE_TUNER) or not card2:IsSetCard(0x600) then return false end
+	if (f1 and not f1(card1,sc,SUMMON_TYPE_SYNCHRO,tp)) or (f2 and not f2(card2,sc,SUMMON_TYPE_SYNCHRO,tp)) or not card2:IsType(TYPE_TUNER,sc,SUMMON_TYPE_SYNCHRO,tp) or not card2:IsSetCard(0x600) then return false end
 	local lvchk=false
 	if #reqm>0 then
 		for i=1,#reqm do
