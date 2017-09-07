@@ -3,6 +3,11 @@ function Auxiliary.NonTuner(f,a,b,c)
 				return target:IsNotTuner() and (not f or f(target,a,b,c))
 			end
 end
+function Auxiliary.NonTunerEx(f,val)
+	return	function(target,scard,sumtype,tp)
+				return target:IsNotTuner() and f(target,val,scard,sumtype,tp)
+			end
+end
 --Synchro monster, m-n tuners + m-n monsters
 function Auxiliary.AddSynchroProcedure(c,...)
 	--parameters (f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req2,reqct2,reqm)
