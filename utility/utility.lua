@@ -182,6 +182,12 @@ function Auxiliary.FilterEqualFunction(f,value,a,b,c)
 				return f(target,a,b,c)==value
 			end
 end
+--used for Material Types Filter Bool (works for IsRace, IsAttribute, IsType)
+function Auxiliary.FilterBoolFunctionEx(f,value)
+	return	function(target,scard,sumtype,tp)
+				return f(target,value,scard,sumtype,tp)
+			end
+end
 function Auxiliary.FilterBoolFunction(f,a,b,c)
 	return	function(target)
 				return f(target,a,b,c)
