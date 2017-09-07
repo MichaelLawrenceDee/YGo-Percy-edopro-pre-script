@@ -1,11 +1,11 @@
 function Auxiliary.NonTuner(f,a,b,c)
-	return	function(target)
-				return target:IsNotTuner() and (not f or f(target,a,b,c))
+	return	function(target,scard,sumtype,tp)
+				return target:IsNotTuner(scard,tp) and (not f or f(target,a,b,c))
 			end
 end
 function Auxiliary.NonTunerEx(f,val)
 	return	function(target,scard,sumtype,tp)
-				return target:IsNotTuner() and f(target,val,scard,sumtype,tp)
+				return target:IsNotTuner(scard,tp) and f(target,val,scard,sumtype,tp)
 			end
 end
 --Synchro monster, m-n tuners + m-n monsters
