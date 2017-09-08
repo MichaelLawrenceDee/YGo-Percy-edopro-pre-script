@@ -1,7 +1,7 @@
 --FA－クリスタル・ゼロ・ランサー
 function c99469936.initial_effect(c)
 	--xyz summon
-	aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsAttribute,ATTRIBUTE_WATER),6,3,c99469936.ovfilter,aux.Stringid(99469936,0))
+	aux.AddXyzProcedure(c,aux.FilterBoolFunctionEx(Card.IsAttribute,ATTRIBUTE_WATER),6,3,c99469936.ovfilter,aux.Stringid(99469936,0))
 	c:EnableReviveLimit()
 	--atk
 	local e1=Effect.CreateEffect(c)
@@ -38,8 +38,8 @@ function c99469936.initial_effect(c)
 	e4:SetLabelObject(e3)
 	c:RegisterEffect(e4)
 end
-function c99469936.ovfilter(c)
-	return c:IsFaceup() and c:GetRank()==5 and c:IsAttribute(ATTRIBUTE_WATER)
+function c99469936.ovfilter(c,tp,xyzc)
+	return c:IsFaceup() and c:GetRank()==5 and c:IsAttribute(ATTRIBUTE_WATER,xyzc,SUMMON_TYPE_XYZ,tp)
 end
 function c99469936.atkval(e,c)
 	return c:GetOverlayCount()*500

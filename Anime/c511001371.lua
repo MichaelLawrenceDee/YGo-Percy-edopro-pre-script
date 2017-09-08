@@ -1,7 +1,7 @@
 --CNo.40 ギミック・パペット－デビルズ・ストリングス
 function c511001371.initial_effect(c)
 	--xyz summon
-	aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsAttribute,ATTRIBUTE_DARK),9,3)
+	aux.AddXyzProcedure(c,aux.FilterBoolFunctionEx(Card.IsAttribute,ATTRIBUTE_DARK),9,3)
 	c:EnableReviveLimit()
 	--Rank Up Check
 	local e1=Effect.CreateEffect(c)

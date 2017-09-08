@@ -29,12 +29,12 @@ function c511001708.archchk(e,tp,eg,ep,ev,re,r,rp)
 end
 function c511001708.filter1(c,e,tp)
 	local rk=c:GetRank()
-	return (c:IsFaceup() or c:IsLocation(LOCATION_GRAVE)) and c:IsType(TYPE_XYZ) 
+	return (c:IsFaceup() or c:IsLocation(LOCATION_GRAVE))  
 		and c:IsNumberS() and Duel.IsExistingMatchingCard(c511001708.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,c,rk+1)
 end
 function c511001708.filter2(c,e,tp,mc,rk)
 	if c.rum_limit and not c.rum_limit(mc,e) then return false end
-	return c:GetRank()==rk and c:IsNumberS() and mc:IsCanBeXyzMaterial(c) and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false) 
+	return mc:IsType(TYPE_XYZ,c,SUMMON_TYPE_XYZ,tp) and c:GetRank()==rk and c:IsNumberS() and mc:IsCanBeXyzMaterial(c,tp) and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false) 
 		and Duel.GetLocationCountFromEx(tp,tp,mc,c)>0
 end
 function c511001708.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

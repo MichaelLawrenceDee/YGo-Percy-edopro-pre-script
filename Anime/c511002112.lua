@@ -1,7 +1,7 @@
 --超巨大空中宮殿ガンガリディア
 function c511002112.initial_effect(c)
 	--xyz summon
-	aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsRace,RACE_MACHINE),10,2)
+	aux.AddXyzProcedure(c,aux.FilterBoolFunctionEx(Card.IsRace,RACE_MACHINE),10,2)
 	c:EnableReviveLimit()
 	--destroy&damage
 	local e1=Effect.CreateEffect(c)

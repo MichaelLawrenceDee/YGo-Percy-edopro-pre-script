@@ -23,11 +23,11 @@ function c511000580.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.RegisterEffect(e1,tp)
 end
 function c511000580.filter(c,e,tp)
-	return c:IsReason(REASON_DESTROY) and c:IsType(TYPE_XYZ) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) 
+	return c:IsReason(REASON_DESTROY) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) 
 		and Duel.IsExistingMatchingCard(c511000580.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,c:GetRank(),c)
 end
 function c511000580.filter2(c,e,tp,rk,mc)
-	return c:GetRank()==rk+1 and mc:IsCanBeXyzMaterial(c) and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
+	return mc:IsType(TYPE_XYZ,c,SUMMON_TYPE_XYZ,tp) and c:GetRank()==rk+1 and mc:IsCanBeXyzMaterial(c,tp) and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
 end
 function c511000580.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and c511000580.filter(chkc,e,tp) end

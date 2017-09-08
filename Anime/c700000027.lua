@@ -2,7 +2,7 @@
 --Raidraptor - Satellite Cannon Falcon
 function c700000027.initial_effect(c)
 	--xyz summon
-	aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsRace,RACE_WINDBEAST),8,2)
+	aux.AddXyzProcedure(c,aux.FilterBoolFunctionEx(Card.IsRace,RACE_WINDBEAST),8,2)
 	c:EnableReviveLimit()
 	--Reduce ATK
 	local e1=Effect.CreateEffect(c)

@@ -1,7 +1,7 @@
 --No.64 古狸三太夫
 function c511010064.initial_effect(c)
 	--xyz summon
-	aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsRace,RACE_BEAST),2,2)
+	aux.AddXyzProcedure(c,aux.FilterBoolFunctionEx(Card.IsRace,RACE_BEAST),2,2)
 	c:EnableReviveLimit()
 	--token
 	local e1=Effect.CreateEffect(c)

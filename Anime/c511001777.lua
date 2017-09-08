@@ -1,7 +1,7 @@
 --CNo.43 魂魄傀儡鬼神カオス・マリオネッター
 function c511001777.initial_effect(c)
 	--xyz summon
-	aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsAttribute,ATTRIBUTE_DARK),3,4)
+	aux.AddXyzProcedure(c,aux.FilterBoolFunctionEx(Card.IsAttribute,ATTRIBUTE_DARK),3,4)
 	c:EnableReviveLimit()
 	--Rank Up Check
 	local e1=Effect.CreateEffect(c)

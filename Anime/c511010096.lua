@@ -1,7 +1,7 @@
 --No.96 ブラック・ミスト (Anime)
 function c511010096.initial_effect(c)
 	--xyz summon
-	aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsAttribute,ATTRIBUTE_DARK),2,3)
+	aux.AddXyzProcedure(c,aux.FilterBoolFunctionEx(Card.IsAttribute,ATTRIBUTE_DARK),2,3)
 	c:EnableReviveLimit()
 	--atk u/d
 	local e1=Effect.CreateEffect(c)

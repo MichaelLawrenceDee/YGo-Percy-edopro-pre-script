@@ -100,11 +100,11 @@ function c111011002.desop(e,tp,eg,ep,ev,re,r,rp)
 end
 function c111011002.tgfilter(c,e,tp)
 	local rank=c:GetRank()
-	return c:IsFaceup() and c:IsType(TYPE_XYZ) and c:GetFlagEffect(111011002)~=0
+	return c:IsFaceup() and c:GetFlagEffect(111011002)~=0
 		and Duel.IsExistingMatchingCard(c111011002.xyzfilter,tp,LOCATION_EXTRA,0,1,nil,rank,e,tp,c)
 end
 function c111011002.xyzfilter(c,rank,e,tp,mc)
-	return c:GetRank()==rank+1 and c:IsC() and mc:IsCanBeXyzMaterial(c) and Duel.GetLocationCountFromEx(tp,tp,mc,c)>0
+	return mc:IsType(TYPE_XYZ,c,SUMMON_TYPE_XYZ,tp) and c:GetRank()==rank+1 and c:IsC() and mc:IsCanBeXyzMaterial(c,tp) and Duel.GetLocationCountFromEx(tp,tp,mc,c)>0
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
 end
 function c111011002.xyztg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

@@ -29,12 +29,12 @@ function c86196216.checkop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c86196216.filter1(c,e,tp)
-	return c:IsSetCard(0xba) and c:IsType(TYPE_XYZ) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and c:GetFlagEffect(86196216)~=0
+	return c:IsSetCard(0xba) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and c:GetFlagEffect(86196216)~=0
 		and Duel.IsExistingMatchingCard(c86196216.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,c,c:GetRank()*2)
 end
 function c86196216.filter2(c,e,tp,mc,rk)
 	if c.rum_limit and not c.rum_limit(mc,e) then return false end
-	return c:GetRank()==rk and mc:IsCanBeXyzMaterial(c,tp)
+	return mc:IsType(TYPE_XYZ,c,SUMMON_TYPE_XYZ,tp) and c:GetRank()==rk and mc:IsCanBeXyzMaterial(c,tp)
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
 end
 function c86196216.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

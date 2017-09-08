@@ -14,12 +14,12 @@ end
 function c511001014.filter(c,e,tp,tid)
 	local rk=c:GetRank()
 	return rk>0 and c:GetTurnID()==tid and bit.band(c:GetReason(),REASON_BATTLE)~=0
-		and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and c:IsType(TYPE_XYZ)
+		and c:IsCanBeSpecialSummoned(e,0,tp,false,false) 
 		and Duel.IsExistingMatchingCard(c511001014.spfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp,rk,c)
 end
 function c511001014.spfilter(c,e,tp,rk,mc)
 	if c.rum_limit and not c.rum_limit(mc,e) then return false end
-	return c:GetRank()==rk+1 and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
+	return mc:IsType(TYPE_XYZ,c,SUMMON_TYPE_XYZ,tp) and c:GetRank()==rk+1 and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
 		and c:IsSetCard(0xba) and mc:IsCanBeXyzMaterial(c,tp)
 end
 function c511001014.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

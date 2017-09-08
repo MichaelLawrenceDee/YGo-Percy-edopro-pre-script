@@ -2,7 +2,7 @@
 function c511000192.initial_effect(c)
 	--xyz summon
 	c:EnableReviveLimit()
-	c511000192.xyz_filter=function(mc,ignoretoken) return mc and mc:IsType(TYPE_XYZ) and (not mc:IsType(TYPE_TOKEN) or ignoretoken) end
+	c511000192.xyz_filter=function(mc,ignoretoken,xyz,tp) return mc and mc:IsType(TYPE_XYZ,xyz,SUMMON_TYPE_XYZ,tp) and (not mc:IsType(TYPE_TOKEN) or ignoretoken) end
 	c511000192.xyz_parameters={c511000192.xyz_filter,nil,2,nil,nil,2}
 	c511000192.minxyzct=ct
 	c511000192.maxxyzct=maxct
@@ -10,8 +10,8 @@ function c511000192.initial_effect(c)
 	chk1:SetType(EFFECT_TYPE_SINGLE)
 	chk1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_SET_AVAILABLE)
 	chk1:SetCode(946)
-	chk1:SetCondition(Auxiliary.XyzCondition(aux.FilterBoolFunction(Card.IsType,TYPE_XYZ),nil,2,2))
-	chk1:SetTarget(Auxiliary.XyzTarget(aux.FilterBoolFunction(Card.IsType,TYPE_XYZ),nil,2,2))
+	chk1:SetCondition(Auxiliary.XyzCondition(aux.FilterBoolFunctionEx(Card.IsType,TYPE_XYZ),nil,2,2))
+	chk1:SetTarget(Auxiliary.XyzTarget(aux.FilterBoolFunctionEx(Card.IsType,TYPE_XYZ),nil,2,2))
 	chk1:SetOperation(c511000192.xyzop)
 	c:RegisterEffect(chk1)
 	local e1=Effect.CreateEffect(c)
@@ -20,8 +20,8 @@ function c511000192.initial_effect(c)
 	e1:SetCode(EFFECT_SPSUMMON_PROC)
 	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e1:SetRange(LOCATION_EXTRA)
-	e1:SetCondition(Auxiliary.XyzCondition(aux.FilterBoolFunction(Card.IsType,TYPE_XYZ),nil,2,2))
-	e1:SetTarget(Auxiliary.XyzTarget(aux.FilterBoolFunction(Card.IsType,TYPE_XYZ),nil,2,2))
+	e1:SetCondition(Auxiliary.XyzCondition(aux.FilterBoolFunctionEx(Card.IsType,TYPE_XYZ),nil,2,2))
+	e1:SetTarget(Auxiliary.XyzTarget(aux.FilterBoolFunctionEx(Card.IsType,TYPE_XYZ),nil,2,2))
 	e1:SetOperation(c511000192.xyzop)
 	e1:SetValue(SUMMON_TYPE_XYZ)
 	e1:SetLabelObject(chk1)
@@ -29,16 +29,16 @@ function c511000192.initial_effect(c)
 	--rank
 	c:SetStatus(STATUS_NO_LEVEL,true)
 	--indes
-    local e3=Effect.CreateEffect(c)
-    e3:SetType(EFFECT_TYPE_SINGLE)
+	local e3=Effect.CreateEffect(c)
+	e3:SetType(EFFECT_TYPE_SINGLE)
 	e3:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
 	e3:SetRange(LOCATION_MZONE)
 	e3:SetCode(EFFECT_INDESTRUCTABLE_BATTLE)
 	e3:SetValue(1)
 	c:RegisterEffect(e3)
 	--damage val
-    local e4=Effect.CreateEffect(c)
-    e4:SetType(EFFECT_TYPE_SINGLE)
+	local e4=Effect.CreateEffect(c)
+	e4:SetType(EFFECT_TYPE_SINGLE)
 	e4:SetCode(EFFECT_AVOID_BATTLE_DAMAGE)
 	e4:SetValue(1)
 	c:RegisterEffect(e4)

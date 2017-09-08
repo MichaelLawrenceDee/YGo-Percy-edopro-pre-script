@@ -1,7 +1,7 @@
 --RR－レヴォリューション・ファルコン－エアレイド
 function c79985120.initial_effect(c)
 	--xyz summon
-	aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsRace,RACE_WINDBEAST),6,3,c79985120.ovfilter,aux.Stringid(79985120,0),3,c79985120.xyzop)
+	aux.AddXyzProcedure(c,aux.FilterBoolFunctionEx(Card.IsRace,RACE_WINDBEAST),6,3,c79985120.ovfilter,aux.Stringid(79985120,0),3,c79985120.xyzop)
 	c:EnableReviveLimit()
 	--atkup
 	local e1=Effect.CreateEffect(c)
@@ -29,8 +29,8 @@ end
 function c79985120.cfilter(c)
 	return c:IsSetCard(0x95) and c:IsType(TYPE_SPELL) and c:IsDiscardable()
 end
-function c79985120.ovfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0xba) and c:IsType(TYPE_XYZ) and c:IsRankBelow(5)
+function c79985120.ovfilter(c,tp,xyzc)
+	return c:IsFaceup() and c:IsSetCard(0xba) and c:IsType(TYPE_XYZ,xyzc,SUMMON_TYPE_XYZ,tp) and c:IsRankBelow(5)
 end
 function c79985120.xyzop(e,tp,chk,mc)
 	if chk==0 then return Duel.IsExistingMatchingCard(c79985120.cfilter,tp,LOCATION_HAND,0,1,nil) end

@@ -1,7 +1,7 @@
 --覇王黒竜オッドアイズ・リベリオン・ドラゴン
 function c511001791.initial_effect(c)
 	--xyz summon
-	aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsRace,RACE_DRAGON),7,2)
+	aux.AddXyzProcedure(c,aux.FilterBoolFunctionEx(Card.IsRace,RACE_DRAGON),7,2)
 	c:EnableReviveLimit()
 	--pendulum summon
 	aux.EnablePendulumAttribute(c,false)
@@ -120,7 +120,7 @@ function c511001791.desop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c511001791.matfilter(c)
-	return c:IsXyzType(TYPE_XYZ) and c:IsXyzLevel(c,7)
+	return c:IsType(TYPE_XYZ) and c:IsXyzLevel(c,7)
 end
 function c511001791.valcheck(e,c)
 	local g=c:GetMaterial()

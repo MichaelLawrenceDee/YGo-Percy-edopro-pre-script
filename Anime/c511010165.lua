@@ -1,7 +1,7 @@
 --CNo.65 裁断魔王ジャッジ・デビル
 function c511010165.initial_effect(c)
 	--xyz summon
-	aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsAttribute,ATTRIBUTE_DARK),3,3)
+	aux.AddXyzProcedure(c,aux.FilterBoolFunctionEx(Card.IsAttribute,ATTRIBUTE_DARK),3,3)
 	c:EnableReviveLimit()
 	--Rank Up Check
 	local e1=Effect.CreateEffect(c)

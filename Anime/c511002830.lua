@@ -1,7 +1,7 @@
 --No.40 ギミック・パペット－ヘブンズ・ストリングス
 function c511002830.initial_effect(c)
 	--xyz summon
-	aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsAttribute,ATTRIBUTE_DARK),8,2)
+	aux.AddXyzProcedure(c,aux.FilterBoolFunctionEx(Card.IsAttribute,ATTRIBUTE_DARK),8,2)
 	c:EnableReviveLimit()
 	--counter
 	local e1=Effect.CreateEffect(c)

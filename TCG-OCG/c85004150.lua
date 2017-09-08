@@ -28,15 +28,15 @@ function c85004150.initial_effect(c)
 	c:RegisterEffect(e4)
 end
 function c85004150.ovfilter(c,tp,xyzc)
-	return c:IsFaceup() and c:IsXyzType(TYPE_XYZ,xyzc,tp) and (c:GetRank()==5 or c:GetRank()==6) and c:IsRace(RACE_INSECT)
+	return c:IsFaceup() and c:IsType(TYPE_XYZ,xyzc,SUMMON_TYPE_XYZ,tp) and (c:GetRank()==5 or c:GetRank()==6) and c:IsRace(RACE_INSECT,xyzc,SUMMON_TYPE_XYZ,tp)
 end
 function c85004150.xyzop(e,tp,chk,mc)
  	if chk==0 then return mc:CheckRemoveOverlayCard(tp,2,REASON_COST) end
 	mc:RemoveOverlayCard(tp,2,2,REASON_COST)
 	return true
 end
-function c85004150.mfilter(c,xyz,tp)
-	return c:IsRace(RACE_INSECT) and c:IsAttribute(ATTRIBUTE_LIGHT)
+function c85004150.mfilter(c,xyz,sumtype,tp)
+	return c:IsRace(RACE_INSECT,xyz,sumtype,tp) and c:IsAttribute(ATTRIBUTE_LIGHT,xyz,sumtype,tp)
 end
 function c85004150.desfilter(c)
 	return c:IsFaceup() and c:IsDefenseAbove(0)

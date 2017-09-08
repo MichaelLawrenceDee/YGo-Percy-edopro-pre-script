@@ -1,6 +1,6 @@
 
 function Auxiliary.XyzAlterFilter(c,alterf,xyzc,e,tp,op)
-	if not alterf(c) or not c:IsCanBeXyzMaterial(xyzc) or (c:IsControler(1-tp) and not c:IsHasEffect(EFFECT_XYZ_MATERIAL)) 
+	if not alterf(c,tp,xyzc) or not c:IsCanBeXyzMaterial(xyzc,tp) or (c:IsControler(1-tp) and not c:IsHasEffect(EFFECT_XYZ_MATERIAL)) 
 		or (op and not op(e,tp,0,c)) then return false end
 	if xyzc:IsLocation(LOCATION_EXTRA) then
 		return Duel.GetLocationCountFromEx(tp,tp,c,xyzc)>0
@@ -16,7 +16,7 @@ function Auxiliary.AddXyzProcedure(c,f,lv,ct,alterf,desc,maxct,op,mustbemat,exch
 	if c.xyz_filter==nil then
 		local code=c:GetOriginalCode()
 		local mt=_G["c" .. code]
-		mt.xyz_filter=function(mc,ignoretoken,xyz,tp) return mc and (not f or f(mc,xyz,tp)) and (not lv or mc:IsXyzLevel(c,lv)) and (not mc:IsType(TYPE_TOKEN) or ignoretoken) end
+		mt.xyz_filter=function(mc,ignoretoken,xyz,tp) return mc and (not f or f(mc,xyz,SUMMON_TYPE_XYZ,tp)) and (not lv or mc:IsXyzLevel(c,lv)) and (not mc:IsType(TYPE_TOKEN) or ignoretoken) end
 		mt.xyz_parameters={mt.xyz_filter,lv,ct,alterf,desc,maxct,op,mustbemat,exchk}
 		mt.minxyzct=ct
 		mt.maxxyzct=maxct
@@ -85,10 +85,10 @@ function Auxiliary.XyzMatFilter2(c,f,lv,xyz,tp)
 	return Auxiliary.XyzMatFilter(c,f,lv,xyz,tp)
 end
 function Auxiliary.XyzMatFilter(c,f,lv,xyz,tp)
-	return (not f or f(c,xyz,tp)) and (not lv or c:IsXyzLevel(xyz,lv)) and c:IsCanBeXyzMaterial(xyz) 
+	return (not f or f(c,xyz,SUMMON_TYPE_XYZ,tp)) and (not lv or c:IsXyzLevel(xyz,lv)) and c:IsCanBeXyzMaterial(xyz,tp) 
 		and (c:IsControler(tp) or c:IsHasEffect(EFFECT_XYZ_MATERIAL))
 end
-function Auxiliary.XyzSubMatFilter(c,fil,lv,xg)
+function Auxiliary.XyzSubMatFilter(c,fil,lv,xg,xyz,tp)
 	if not lv then return false end
 	--Solid Overlay-type
 	local te=c:GetCardEffect(511000189)
@@ -99,10 +99,10 @@ function Auxiliary.XyzSubMatFilter(c,fil,lv,xg)
 	else
 		if f~=lv then return false end
 	end
-	return xg:IsExists(Auxiliary.XyzSubFilterChk,1,nil,fil)
+	return xg:IsExists(Auxiliary.XyzSubFilterChk,1,nil,fil,xyz,tp)
 end
-function Auxiliary.XyzSubFilterChk(c,f)
-	return (not f or f(c))
+function Auxiliary.XyzSubFilterChk(c,f,xyz,tp)
+	return (not f or f(c,xyz,SUMMON_TYPE_XYZ,tp))
 end
 function Auxiliary.CheckValidMultiXyzMaterial(c,xyz)
 	if not c:IsHasEffect(511001225) then return false end
@@ -359,7 +359,7 @@ function Auxiliary.XyzCondition(f,lv,minc,maxc,mustbemat,exchk)
 							eqmg:Merge(eq)
 						end
 						mg:Merge(eqmg)
-						mg:Merge(Duel.GetMatchingGroup(Auxiliary.XyzSubMatFilter,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,nil,f,lv,xg))
+						mg:Merge(Duel.GetMatchingGroup(Auxiliary.XyzSubMatFilter,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,nil,f,lv,xg,c,tp))
 					end
 				end
 				if not mustbemat then
@@ -481,7 +481,7 @@ function Auxiliary.XyzTarget(f,lv,minc,maxc,mustbemat,exchk)
 								eqmg:Merge(eq)
 							end
 							mg:Merge(eqmg)
-							mg:Merge(Duel.GetMatchingGroup(Auxiliary.XyzSubMatFilter,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,nil,f,lv,xg))
+							mg:Merge(Duel.GetMatchingGroup(Auxiliary.XyzSubMatFilter,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,nil,f,lv,xg,c,tp))
 						end
 					end
 					if not mustbemat then

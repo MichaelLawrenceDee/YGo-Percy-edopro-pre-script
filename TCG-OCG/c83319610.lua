@@ -75,12 +75,11 @@ function c83319610.mtop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c83319610.spfilter1(c,e,tp)
-	return c:IsFaceup() and c:IsSetCard(0x58) and c:IsType(TYPE_XYZ)
-		and Duel.IsExistingMatchingCard(c83319610.spfilter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,c,c:GetRank()+1)
+	return c:IsFaceup() and c:IsSetCard(0x58) and Duel.IsExistingMatchingCard(c83319610.spfilter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,c,c:GetRank()+1)
 		and Duel.GetLocationCountFromEx(tp,tp,c)>0
 end
 function c83319610.spfilter2(c,e,tp,mc,rk)
-	return c:GetRank()==rk and c:IsSetCard(0x58) and mc:IsCanBeXyzMaterial(c,tp)
+	return mc:IsType(TYPE_XYZ,c,SUMMON_TYPE_XYZ,tp) and c:GetRank()==rk and c:IsSetCard(0x58) and mc:IsCanBeXyzMaterial(c,tp)
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
 end
 function c83319610.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -98,7 +97,7 @@ end
 function c83319610.spop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if Duel.GetLocationCountFromEx(tp,tp,tc)<=0 then return end
-	if tc:IsFacedown() or not tc:IsRelateToEffect(e) or tc:IsControler(1-tp) or tc:IsImmuneToEffect(e) then return end
+	if not tc or tc:IsFacedown() or not tc:IsRelateToEffect(e) or tc:IsControler(1-tp) or tc:IsImmuneToEffect(e) then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,c83319610.spfilter2,tp,LOCATION_EXTRA,0,1,1,nil,e,tp,tc,tc:GetRank()+1)
 	local sc=g:GetFirst()

@@ -34,8 +34,8 @@ function c511002778.initial_effect(c)
 	e3:SetLabel(c:GetOriginalCode())
 	c:RegisterEffect(e3)
 end
-function c511002778.mfilter(c)
-	return c:IsRace(RACE_MACHINE) and c:IsAttribute(ATTRIBUTE_EARTH)
+function c511002778.mfilter(c,xyz,sumtype,tp)
+	return c:IsRace(RACE_MACHINE,xyz,sumtype,tp) and c:IsAttribute(ATTRIBUTE_EARTH,xyz,sumtype,tp)
 end
 function c511002778.atkcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end

@@ -1,7 +1,7 @@
 --CNo.102 光堕天使ノーブル・デーモン
 function c511001429.initial_effect(c)
 	--xyz summon
-	aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsAttribute,ATTRIBUTE_LIGHT),5,4)
+	aux.AddXyzProcedure(c,aux.FilterBoolFunctionEx(Card.IsAttribute,ATTRIBUTE_LIGHT),5,4)
 	c:EnableReviveLimit()
 	--Rank Up Check
 	local e1=Effect.CreateEffect(c)
