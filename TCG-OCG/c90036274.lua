@@ -1,7 +1,7 @@
 --クリアウィング・ファスト・ドラゴン
 function c90036274.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,nil,1,1,aux.NonTuner(Card.IsAttribute,ATTRIBUTE_WIND),1,99)
+	aux.AddSynchroProcedure(c,nil,1,1,aux.NonTunerEx(Card.IsAttribute,ATTRIBUTE_WIND),1,99)
 	c:EnableReviveLimit()
 	--pendulum summon
 	aux.EnablePendulumAttribute(c,false)

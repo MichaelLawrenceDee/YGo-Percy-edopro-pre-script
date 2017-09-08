@@ -1,7 +1,7 @@
 --Bee Force - Hama the Devil Conquering Bow
 function c511001949.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsType,TYPE_SYNCHRO),1,1,aux.NonTuner(Card.IsSetCard,0x50a),1,99)
+	aux.AddSynchroProcedure(c,aux.FilterBoolFunctionEx(Card.IsType,TYPE_SYNCHRO),1,1,aux.NonTuner(Card.IsSetCard,0x50a),1,99)
 	c:EnableReviveLimit()
 	--atk
 	local e1=Effect.CreateEffect(c)

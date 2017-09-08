@@ -2,7 +2,7 @@
 function c511001603.initial_effect(c)
 	--synchro summon
 	c:EnableReviveLimit()
-	aux.AddSynchroProcedure(c,nil,2,2,aux.NonTuner(Card.IsType,TYPE_SYNCHRO),1,1)
+	aux.AddSynchroProcedure(c,nil,2,2,aux.NonTunerEx(Card.IsType,TYPE_SYNCHRO),1,1)
 	--damage
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(53981499,0))

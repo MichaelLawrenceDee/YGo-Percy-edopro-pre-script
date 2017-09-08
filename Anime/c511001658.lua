@@ -1,7 +1,7 @@
 --真閃珖竜 スターダスト・クロニクル
 function c511001658.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsType,TYPE_SYNCHRO),1,1,aux.NonTuner(Card.IsType,TYPE_SYNCHRO),1,99)
+	aux.AddSynchroProcedure(c,aux.FilterBoolFunctionEx(Card.IsType,TYPE_SYNCHRO),1,1,aux.NonTunerEx(Card.IsType,TYPE_SYNCHRO),1,99)
 	c:EnableReviveLimit()
 	--
 	local e1=Effect.CreateEffect(c)

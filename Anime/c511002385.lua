@@ -1,6 +1,6 @@
 --C/C/C Rock Shooter of Shooting
 function c511002385.initial_effect(c)
-	aux.AddSynchroProcedure(c,nil,1,1,aux.NonTuner(Card.IsAttribute,ATTRIBUTE_EARTH),1,99)
+	aux.AddSynchroProcedure(c,nil,1,1,aux.NonTunerEx(Card.IsAttribute,ATTRIBUTE_EARTH),1,99)
 	c:EnableReviveLimit()
 	--atk
 	local e1=Effect.CreateEffect(c)

@@ -1,7 +1,7 @@
 --ワンハンドレッド・アイ・ドラゴン
 function c95453143.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsAttribute,ATTRIBUTE_DARK),1,1,aux.NonTuner(Card.IsRace,RACE_FIEND),1,99)
+	aux.AddSynchroProcedure(c,aux.FilterBoolFunctionEx(Card.IsAttribute,ATTRIBUTE_DARK),1,1,aux.NonTunerEx(Card.IsRace,RACE_FIEND),1,99)
 	c:EnableReviveLimit()
 	--copy
 	local e1=Effect.CreateEffect(c)

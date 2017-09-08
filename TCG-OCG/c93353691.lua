@@ -1,7 +1,7 @@
 --不退の荒武者
 function c93353691.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsRace,RACE_WARRIOR),1,1,aux.NonTuner(Card.IsRace,RACE_WARRIOR),1,99)
+	aux.AddSynchroProcedure(c,aux.FilterBoolFunctionEx(Card.IsRace,RACE_WARRIOR),1,1,aux.NonTunerEx(Card.IsRace,RACE_WARRIOR),1,99)
 	c:EnableReviveLimit()
 	--indes
 	local e1=Effect.CreateEffect(c)

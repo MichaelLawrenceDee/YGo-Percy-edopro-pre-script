@@ -1,7 +1,7 @@
 --T.G. Blade Blaster (TF5)
 function c511000076.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsType,TYPE_SYNCHRO),1,1,aux.NonTuner(Card.IsType,TYPE_SYNCHRO),1,1)
+	aux.AddSynchroProcedure(c,aux.FilterBoolFunctionEx(Card.IsType,TYPE_SYNCHRO),1,1,aux.NonTunerEx(Card.IsType,TYPE_SYNCHRO),1,1)
 	c:EnableReviveLimit()
 	--Negate
 	local e1=Effect.CreateEffect(c)
