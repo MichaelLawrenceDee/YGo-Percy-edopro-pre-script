@@ -2,7 +2,7 @@
 function c79229522.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcMixRep(c,true,true,aux.FilterBoolFunction(Card.IsRace,RACE_MACHINE),1,99,70095154)
+	aux.AddFusionProcMixRep(c,true,true,aux.FilterBoolFunctionEx(Card.IsRace,RACE_MACHINE),1,99,70095154)
 	aux.AddContactFusion(c,c79229522.contactfil,c79229522.contactop,c79229522.splimit)
 	--cannot be fusion material
 	local e3=Effect.CreateEffect(c)

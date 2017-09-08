@@ -2,7 +2,7 @@
 function c40101111.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcMix(c,true,true,c40101111.ffilter,aux.FilterBoolFunction(Card.IsRace,RACE_PSYCHO))
+	aux.AddFusionProcMix(c,true,true,c40101111.ffilter,aux.FilterBoolFunctionEx(Card.IsRace,RACE_PSYCHO))
 	--pierce
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_SINGLE)
@@ -41,8 +41,8 @@ function c40101111.splimit(e,se,sp,st)
 	end
 	return true
 end
-function c40101111.ffilter(c)
-	return c:IsFusionType(TYPE_SYNCHRO) and c:IsRace(RACE_PSYCHO)
+function c40101111.ffilter(c,fc,sumtype,tp)
+	return c:IsType(TYPE_SYNCHRO,fc,sumtype,tp) and c:IsRace(RACE_PSYCHO,fc,sumtype,tp)
 end
 function c40101111.recon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

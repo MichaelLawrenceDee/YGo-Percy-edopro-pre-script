@@ -2,7 +2,7 @@
 function c86240887.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcMix(c,true,true,78193831,aux.FilterBoolFunction(Card.IsRace,RACE_DRAGON))
+	aux.AddFusionProcMix(c,true,true,78193831,aux.FilterBoolFunctionEx(Card.IsRace,RACE_DRAGON))
 	--cannot direct attack
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)

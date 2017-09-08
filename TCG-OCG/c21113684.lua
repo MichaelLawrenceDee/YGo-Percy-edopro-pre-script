@@ -3,7 +3,7 @@ function c21113684.initial_effect(c)
 	c:EnableCounterPermit(0x1)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcMix(c,true,true,c21113684.ffilter,aux.FilterBoolFunction(Card.IsRace,RACE_SPELLCASTER))
+	aux.AddFusionProcMix(c,true,true,c21113684.ffilter,aux.FilterBoolFunctionEx(Card.IsRace,RACE_SPELLCASTER))
 	--attackup
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_SINGLE)
@@ -59,8 +59,8 @@ function c21113684.splimit(e,se,sp,st)
 	end
 	return true
 end
-function c21113684.ffilter(c)
-	return c:IsFusionType(TYPE_SYNCHRO) and c:IsRace(RACE_SPELLCASTER)
+function c21113684.ffilter(c,fc,sumtype,tp)
+	return c:IsType(TYPE_SYNCHRO,fc,sumtype,tp) and c:IsRace(RACE_SPELLCASTER,fc,sumtype,tp)
 end
 function c21113684.attackup(e,c)
 	return c:GetCounter(0x1)*1000

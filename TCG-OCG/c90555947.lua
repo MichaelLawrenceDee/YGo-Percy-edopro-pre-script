@@ -18,8 +18,8 @@ function c90555947.initial_effect(c)
 	c:RegisterEffect(e1)
 end
 c90555947.miracle_synchro_fusion=true
-function c90555947.ffilter(c)
-	return c:IsFusionAttribute(ATTRIBUTE_EARTH) and c:IsFusionType(TYPE_SYNCHRO)
+function c90555947.ffilter(c,fc,sumtype,tp)
+	return c:IsAttribute(ATTRIBUTE_EARTH,fc,sumtype,tp) and c:IsType(TYPE_SYNCHRO,fc,sumtype,tp)
 end
 function c90555947.discon(e,tp,eg,ep,ev,re,r,rp)
 	if e:GetHandler():IsStatus(STATUS_BATTLE_DESTROYED) then return false end

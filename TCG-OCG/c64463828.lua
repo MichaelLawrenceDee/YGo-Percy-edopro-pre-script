@@ -2,7 +2,7 @@
 function c64463828.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcMixN(c,true,true,aux.FilterBoolFunction(Card.IsFusionType,TYPE_DUAL),2)
+	aux.AddFusionProcMixN(c,true,true,aux.FilterBoolFunctionEx(Card.IsType,TYPE_DUAL),2)
 	--duel status
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD)

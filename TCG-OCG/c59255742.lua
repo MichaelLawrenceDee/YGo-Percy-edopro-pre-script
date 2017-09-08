@@ -42,8 +42,8 @@ function c59255742.initial_effect(c)
 	c:RegisterEffect(e4)
 end
 c59255742.miracle_synchro_fusion=true
-function c59255742.ffilter(c)
-	return c:IsFusionAttribute(ATTRIBUTE_EARTH) and c:IsRace(RACE_WARRIOR) and c:IsFusionType(TYPE_SYNCHRO)
+function c59255742.ffilter(c,fc,sumtype,tp)
+	return c:IsAttribute(ATTRIBUTE_EARTH,fc,sumtype,tp) and c:IsRace(RACE_WARRIOR,fc,sumtype,tp) and c:IsType(TYPE_SYNCHRO,fc,sumtype,tp)
 end
 function c59255742.spcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

@@ -2,7 +2,7 @@
 function c17412721.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcMixN(c,true,true,c17412721.ffilter,2)
+	aux.AddFusionProcMixN(c,true,true,aux.FilterBoolFunctionEx(Card.IsType,TYPE_XYZ+TYPE_SYNCHRO),2)
 	--spsummon
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(17412721,1))
@@ -22,9 +22,6 @@ function c17412721.initial_effect(c)
 	e1:SetLabelObject(e2)
 end
 c17412721.miracle_synchro_fusion=true
-function c17412721.ffilter(c)
-	return c:IsFusionType(TYPE_XYZ+TYPE_SYNCHRO)
-end
 function c17412721.filter(c,e,tp)
 	return c:IsLevelBelow(4) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end

@@ -45,14 +45,14 @@ c74009824.material_setcode=0x9d
 function c74009824.ffilter1(c)
 	return (c:IsFusionSetCard(0x9d) or c:IsHasEffect(511002961)) and not c:IsHasEffect(6205579)
 end
-function c74009824.ffilter2(c)
-	return (c:IsHasEffect(511002961) or c:IsFusionAttribute(ATTRIBUTE_WIND) or c:IsHasEffect(4904633)) and not c:IsHasEffect(6205579)
+function c74009824.ffilter2(c,fc,sumtype,tp)
+	return (c:IsHasEffect(511002961) or c:IsAttribute(ATTRIBUTE_WIND,fc,sumtype,tp) or c:IsHasEffect(4904633)) and not c:IsHasEffect(6205579)
 end
-function c74009824.exfilter(c,g,fc)
-	return c:IsFaceup() and c:IsCanBeFusionMaterial(fc) and not g:IsContains(c) and (c74009824.ffilter1(c) or c74009824.ffilter2(c))
+function c74009824.exfilter(c,g,fc,sumtype,tp)
+	return c:IsFaceup() and c:IsCanBeFusionMaterial(fc) and not g:IsContains(c) and (c74009824.ffilter1(c) or c74009824.ffilter2(c,fc,sumtype,tp))
 end
-function c74009824.ffilter(c,fc)
-	return c:IsCanBeFusionMaterial(fc) and (c74009824.ffilter1(c) or c74009824.ffilter2(c))
+function c74009824.ffilter(c,fc,sumtype,tp)
+	return c:IsCanBeFusionMaterial(fc) and (c74009824.ffilter1(c) or c74009824.ffilter2(c,fc,sumtype,tp))
 end
 function c74009824.filterchk(c,tp,mg,sg,exg,fc,chkf)
 	local res
@@ -101,12 +101,12 @@ function c74009824.fuscon(e,g,gc,chkf)
 	if g==nil then return true end
 	local chkf=bit.band(chkf,0xff)
 	local c=e:GetHandler()
-	local mg=g:Filter(c74009824.ffilter,nil,c)
+	local mg=g:Filter(c74009824.ffilter,nil,c,SUMMON_TYPE_FUSION,tp)
 	local exg=Group.CreateGroup()
 	local tp=e:GetHandlerPlayer()
 	local fc=Duel.GetFieldCard(tp,LOCATION_SZONE,5)
 	if fc and fc:IsHasEffect(81788994) and fc:IsCanRemoveCounter(tp,0x16,3,REASON_EFFECT) then
-		exg=Duel.GetMatchingGroup(c74009824.exfilter,tp,0,LOCATION_MZONE,nil,g,c)
+		exg=Duel.GetMatchingGroup(c74009824.exfilter,tp,0,LOCATION_MZONE,nil,g,c,SUMMON_TYPE_FUSION,tp)
 		mg:Merge(exg)
 	end
 	if gc then
@@ -126,12 +126,12 @@ function c74009824.fusop(e,tp,eg,ep,ev,re,r,rp,gc,chkf)
 	local fc=Duel.GetFieldCard(tp,LOCATION_SZONE,5)
 	local tp=e:GetHandlerPlayer()
 	local exg=Group.CreateGroup()
-	local mg=eg:Filter(c74009824.ffilter,nil,c)
+	local mg=eg:Filter(c74009824.ffilter,nil,c,SUMMON_TYPE_FUSION,tp)
 	local p=tp
 	local sfhchk=false
 	local urg=Group.CreateGroup()
 	if fc and fc:IsHasEffect(81788994) and fc:IsCanRemoveCounter(tp,0x16,3,REASON_EFFECT) then
-		local sg=Duel.GetMatchingGroup(c74009824.exfilter,tp,0,LOCATION_MZONE,nil,eg)
+		local sg=Duel.GetMatchingGroup(c74009824.exfilter,tp,0,LOCATION_MZONE,nil,eg,c,SUMMON_TYPE_FUSION,tp)
 		exg:Merge(sg)
 		mg:Merge(sg)
 	end

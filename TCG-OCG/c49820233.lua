@@ -2,7 +2,7 @@
 function c49820233.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcFun2(c,aux.FilterBoolFunction(Card.IsFusionSetCard,0x9f),aux.FilterBoolFunction(c49820233.ffilter),true)
+	aux.AddFusionProcFun2(c,aux.FilterBoolFunction(Card.IsFusionSetCard,0x9f),c49820233.ffilter,true)
 	--destroy
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(49820233,0))
@@ -23,8 +23,8 @@ function c49820233.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 c49820233.material_setcode=0x9f
-function c49820233.ffilter(c)
-	return c:IsFusionAttribute(ATTRIBUTE_DARK) and c:IsLevelAbove(5)
+function c49820233.ffilter(c,fc,sumtype,tp)
+	return c:IsAttribute(ATTRIBUTE_DARK,fc,sumtype,tp) and c:IsLevelAbove(5)
 end
 function c49820233.damcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_FUSION)

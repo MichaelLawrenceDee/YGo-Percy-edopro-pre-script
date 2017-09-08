@@ -37,8 +37,8 @@ function c41209827.initial_effect(c)
 	e3:SetOperation(c41209827.desop)
 	c:RegisterEffect(e3)
 end
-function c41209827.ffilter(c)
-	return c:IsFusionAttribute(ATTRIBUTE_DARK) and c:IsOnField() and not c:IsType(TYPE_TOKEN)
+function c41209827.ffilter(c,fc,sumtype,tp)
+	return c:IsAttribute(ATTRIBUTE_DARK,fc,sumtype,tp) and c:IsOnField() and not c:IsType(TYPE_TOKEN,fc,sumtype,tp)
 end
 function c41209827.atkcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_FUSION)

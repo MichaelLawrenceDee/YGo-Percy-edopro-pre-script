@@ -42,8 +42,8 @@ c86676862.dark_calling=true
 function c86676862.splimit(e,se,sp,st)
 	return st==SUMMON_TYPE_FUSION+0x10
 end
-function c86676862.ffilter(c)
-	return c:IsRace(RACE_FIEND) and c:GetLevel()>=6
+function c86676862.ffilter(c,fc,sumtype,tp)
+	return c:IsRace(RACE_FIEND,fc,sumtype,tp) and c:GetLevel()>=6
 end
 function c86676862.poscon(e)
 	local ph=Duel.GetCurrentPhase()

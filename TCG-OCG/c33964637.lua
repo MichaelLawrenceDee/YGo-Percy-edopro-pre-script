@@ -34,8 +34,8 @@ function c33964637.initial_effect(c)
 	c:RegisterEffect(e5)
 end
 c33964637.material_setcode=0x3d
-function c33964637.ffilter(c,fc,sub,mg,sg)
-	return c:IsFusionSetCard(0x3d) and c:GetFusionAttribute()~=0 and (not sg or not sg:IsExists(c33964637.fusfilter,1,c,c:GetFusionAttribute()))
+function c33964637.ffilter(c,fc,sumtype,tp,sub,mg,sg)
+	return c:IsFusionSetCard(0x3d) and c:GetAttribute(fc,sumtype,tp)~=0 and (not sg or not sg:IsExists(c33964637.fusfilter,1,c,c:GetFusionAttribute(fc,sumtype,tp),fc,sumtype,tp))
 end
 function c33964637.contactfil(tp)
 	return Duel.GetMatchingGroup(Card.IsAbleToGraveAsCost,tp,LOCATION_ONFIELD,0,nil)
@@ -43,8 +43,8 @@ end
 function c33964637.contactop(g)
 	Duel.SendtoGrave(g,REASON_COST+REASON_MATERIAL)
 end
-function c33964637.fusfilter(c,attr)
-	return c:IsFusionAttribute(attr) and not c:IsHasEffect(511002961)
+function c33964637.fusfilter(c,attr,fc,sumtype,tp)
+	return c:IsAttribute(attr,fc,sumtype,tp) and not c:IsHasEffect(511002961)
 end
 function c33964637.splimit(e,se,sp,st)
 	return e:GetHandler():GetLocation()~=LOCATION_EXTRA

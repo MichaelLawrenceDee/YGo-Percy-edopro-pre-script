@@ -16,8 +16,8 @@ function c43387895.initial_effect(c)
 	e3:SetOperation(c43387895.copyop)
 	c:RegisterEffect(e3)
 end
-function c43387895.ffilter(c)
-	return c:IsFusionAttribute(ATTRIBUTE_DARK) and c:IsFusionType(TYPE_PENDULUM)
+function c43387895.ffilter(c,fc,sumtype,tp)
+	return c:IsAttribute(ATTRIBUTE_DARK,fc,sumtype,tp) and c:IsType(TYPE_PENDULUM,fc,sumtype,tp)
 end
 function c43387895.contactfil(tp)
 	return Duel.GetReleaseGroup(tp)

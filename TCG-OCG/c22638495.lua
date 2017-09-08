@@ -2,7 +2,7 @@
 function c22638495.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcMix(c,true,true,c22638495.ffilter,aux.FilterBoolFunction(Card.IsFusionType,TYPE_PENDULUM))
+	aux.AddFusionProcMix(c,true,true,c22638495.ffilter,aux.FilterBoolFunctionEx(Card.IsType,TYPE_PENDULUM))
 	aux.AddContactFusion(c,c22638495.contactfil,c22638495.contactop,c22638495.splimit)
 	--spsummon
 	local e3=Effect.CreateEffect(c)
@@ -32,8 +32,8 @@ function c22638495.initial_effect(c)
 	c:RegisterEffect(e5)
 end
 c22638495.material_setcode=0xc7
-function c22638495.ffilter(c,tp,fc)
-	return c:IsFusionSetCard(0xc7) and c:IsType(TYPE_PENDULUM)
+function c22638495.ffilter(c,fc,sumtype,tp)
+	return c:IsFusionSetCard(0xc7) and c:IsType(TYPE_PENDULUM,fc,sumtype,tp)
 end
 function c22638495.contactfil(tp)
 	return Duel.GetReleaseGroup(tp)

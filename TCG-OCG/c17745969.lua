@@ -27,8 +27,8 @@ function c17745969.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 c17745969.material_setcode=0x16
-function c17745969.matfilter(c)
-	return c:IsFusionType(TYPE_FUSION) and c:IsFusionSetCard(0x16)
+function c17745969.matfilter(c,fc,sumtype,tp)
+	return c:IsType(TYPE_FUSION,fc,sumtype,tp) and c:IsFusionSetCard(0x16)
 end
 function c17745969.spfilter1(c,e,tp,loc)
 	return c:IsFaceup() and Duel.IsExistingMatchingCard(c17745969.spfilter2,tp,loc,0,1,nil,e,tp,c:GetAttack())

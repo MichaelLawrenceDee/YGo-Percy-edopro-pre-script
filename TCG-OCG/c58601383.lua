@@ -21,8 +21,8 @@ function c58601383.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 c58601383.miracle_synchro_fusion=true
-function c58601383.ffilter(c)
-	return c:IsFusionType(TYPE_SYNCHRO) and not c:IsFusionType(TYPE_EFFECT)
+function c58601383.ffilter(c,fc,sumtype,tp)
+	return c:IsType(TYPE_SYNCHRO,fc,sumtype,tp) and not c:IsType(TYPE_EFFECT,fc,sumtype,tp)
 end
 function c58601383.efilter1(e,re,rp)
 	return re:IsActiveType(TYPE_EFFECT)

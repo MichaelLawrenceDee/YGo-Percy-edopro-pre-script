@@ -3,7 +3,7 @@ function c80532587.initial_effect(c)
 	c:SetSPSummonOnce(80532587)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcMix(c,true,true,aux.FilterBoolFunction(Card.IsFusionType,TYPE_SYNCHRO),aux.FilterBoolFunction(Card.IsFusionType,TYPE_XYZ))
+	aux.AddFusionProcMix(c,true,true,aux.FilterBoolFunctionEx(Card.IsType,TYPE_SYNCHRO),aux.FilterBoolFunctionEx(Card.IsType,TYPE_XYZ))
 	aux.AddContactFusion(c,c80532587.contactfil,c80532587.contactop,true)
 	--special summon
 	local e3=Effect.CreateEffect(c)

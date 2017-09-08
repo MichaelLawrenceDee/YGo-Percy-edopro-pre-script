@@ -26,8 +26,8 @@ function c93657021.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 c93657021.material_setcode={0x8,0xc008}
-function c93657021.matfilter(c)
-	return c:IsFusionType(TYPE_FUSION) and c:IsFusionSetCard(0xc008)
+function c93657021.matfilter(c,fc,sumtype,tp)
+	return c:IsType(TYPE_FUSION,fc,sumtype,tp) and c:IsFusionSetCard(0xc008)
 end
 function c93657021.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_FUSION)

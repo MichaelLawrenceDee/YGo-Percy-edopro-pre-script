@@ -28,11 +28,11 @@ function c45349196.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 c45349196.material_setcode={0x3b,0x45}
-function c45349196.mfilter1(c)
-	return c:IsFusionSetCard(0x45) and c:IsFusionType(TYPE_NORMAL) and c:GetLevel()==6
+function c45349196.mfilter1(c,fc,sumtype,tp)
+	return c:IsFusionSetCard(0x45) and c:IsType(TYPE_NORMAL,fc,sumtype,tp) and c:GetLevel()==6
 end
-function c45349196.mfilter2(c)
-	return c:IsFusionSetCard(0x3b) and c:IsFusionType(TYPE_NORMAL)
+function c45349196.mfilter2(c,fc,sumtype,tp)
+	return c:IsFusionSetCard(0x3b) and c:IsType(TYPE_NORMAL,fc,sumtype,tp)
 end
 function c45349196.accon(e)
 	return Duel.GetAttacker()==e:GetHandler() or Duel.GetAttackTarget()==e:GetHandler()

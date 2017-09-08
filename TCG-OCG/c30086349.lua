@@ -30,8 +30,8 @@ c30086349.material_setcode=0x3b
 function c30086349.mfilter1(c)
 	return c:IsFusionSetCard(0x3b) and c:GetLevel()==7
 end
-function c30086349.mfilter2(c)
-	return c:IsRace(RACE_DRAGON) and c:GetLevel()==6
+function c30086349.mfilter2(c,fc,sumtype,tp)
+	return c:IsRace(RACE_DRAGON,fc,sumtype,tp) and c:GetLevel()==6
 end
 function c30086349.damcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_FUSION)

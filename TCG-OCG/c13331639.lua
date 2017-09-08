@@ -74,17 +74,17 @@ function c13331639.initial_effect(c)
 	c:RegisterEffect(e8)
 end
 c13331639.miracle_synchro_fusion=true
-function c13331639.fusfilter1(c)
-	return c:IsRace(RACE_DRAGON) and c:IsFusionType(TYPE_FUSION)
+function c13331639.fusfilter1(c,fc,sumtype,tp)
+	return c:IsRace(RACE_DRAGON,fc,sumtype,tp) and c:IsType(TYPE_FUSION,fc,sumtype,tp)
 end
-function c13331639.fusfilter2(c)
-	return c:IsRace(RACE_DRAGON) and c:IsFusionType(TYPE_SYNCHRO)
+function c13331639.fusfilter2(c,fc,sumtype,tp)
+	return c:IsRace(RACE_DRAGON,fc,sumtype,tp) and c:IsType(TYPE_SYNCHRO,fc,sumtype,tp)
 end
-function c13331639.fusfilter3(c)
-	return c:IsRace(RACE_DRAGON) and c:IsFusionType(TYPE_XYZ)
+function c13331639.fusfilter3(c,fc,sumtype,tp)
+	return c:IsRace(RACE_DRAGON,fc,sumtype,tp) and c:IsType(TYPE_XYZ,fc,sumtype,tp)
 end
-function c13331639.fusfilter4(c)
-	return c:IsRace(RACE_DRAGON) and c:IsFusionType(TYPE_PENDULUM)
+function c13331639.fusfilter4(c,fc,sumtype,tp)
+	return c:IsRace(RACE_DRAGON,fc,sumtype,tp) and c:IsType(TYPE_PENDULUM,fc,sumtype,tp)
 end
 function c13331639.limval(e,re,rp)
 	local rc=re:GetHandler()
