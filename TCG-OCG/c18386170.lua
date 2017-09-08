@@ -41,7 +41,7 @@ function c18386170.initial_effect(c)
 	c:RegisterEffect(e4)
 end
 c18386170.material_setcode=0xb1
-function c18386170.ffilter(c,fc,sub,mg,sg)
+function c18386170.ffilter(c,fc,sumtype,tp,sub,mg,sg)
 	return c:IsFusionSetCard(0xb1) and (not sg or not sg:IsExists(c18386170.fusfilter,1,c,c:GetFusionCode()))
 end
 function c18386170.fusfilter(c,code)
