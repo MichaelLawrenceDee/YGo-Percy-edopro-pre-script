@@ -35,8 +35,8 @@ function c12615446.initial_effect(c)
 	e3:SetLabel(c:GetOriginalCode())
 	c:RegisterEffect(e3)
 end
-function c12615446.matfilter(c)
-	return c:IsRace(RACE_INSECT) and c:IsAttribute(ATTRIBUTE_LIGHT)
+function c12615446.matfilter(c,xyz,sumtype,tp)
+	return c:IsRace(RACE_INSECT,xyz,sumtype,tp) and c:IsAttribute(ATTRIBUTE_LIGHT,xyz,sumtype,tp)
 end
 function c12615446.poscost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,2,REASON_COST) end

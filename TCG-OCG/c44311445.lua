@@ -1,7 +1,7 @@
 --マドルチェ・プディンセス・ショコ・ア・ラ・モード
 function c44311445.initial_effect(c)
 	--xyz summon
-	aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsAttribute,ATTRIBUTE_EARTH),5,2,c44311445.ovfilter,aux.Stringid(44311445,0))
+	aux.AddXyzProcedure(c,aux.FilterBoolFunctionEx(Card.IsAttribute,ATTRIBUTE_EARTH),5,2,c44311445.ovfilter,aux.Stringid(44311445,0))
 	c:EnableReviveLimit()
 	--todeck
 	local e1=Effect.CreateEffect(c)

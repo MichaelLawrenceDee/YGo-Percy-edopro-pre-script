@@ -1,7 +1,7 @@
 --SNo.39 希望皇ホープ・ザ・ライトニング
 function c56832966.initial_effect(c)
 	--xyz summon
-	aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsAttribute,ATTRIBUTE_LIGHT),5,3,c56832966.ovfilter,aux.Stringid(56832966,0))
+	aux.AddXyzProcedure(c,aux.FilterBoolFunctionEx(Card.IsAttribute,ATTRIBUTE_LIGHT),5,3,c56832966.ovfilter,aux.Stringid(56832966,0))
 	c:EnableReviveLimit()
 	--
 	local e1=Effect.CreateEffect(c)
@@ -40,8 +40,8 @@ function c56832966.initial_effect(c)
 	c:RegisterEffect(e4)
 end
 c56832966.xyz_number=39
-function c56832966.ovfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0x107f) and c:IsType(TYPE_XYZ) and c:GetRank()==4
+function c56832966.ovfilter(c,tp,xyzc)
+	return c:IsFaceup() and c:IsSetCard(0x107f) and c:IsType(TYPE_XYZ,xyzc,SUMMON_TYPE_XYZ,tp) and c:GetRank()==4
 end
 function c56832966.aclimit(e,re,tp)
 	return not re:GetHandler():IsImmuneToEffect(e)

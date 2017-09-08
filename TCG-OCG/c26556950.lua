@@ -46,9 +46,9 @@ function c26556950.initial_effect(c)
 	c:RegisterEffect(e5)
 end
 c26556950.xyz_number=84
-function c26556950.ovfilter(c)
+function c26556950.ovfilter(c,tp,xyzc)
 	local rk=c:GetRank()
-	return c:IsFaceup() and c:GetOverlayCount()>=2 and c:IsType(TYPE_XYZ) and c:IsAttribute(ATTRIBUTE_DARK) and rk>=8 and rk<=10
+	return c:IsFaceup() and c:GetOverlayCount()>=2 and c:IsType(TYPE_XYZ,xyzc,SUMMON_TYPE_XYZ,tp) and c:IsAttribute(ATTRIBUTE_DARK,xyzc,SUMMON_TYPE_XYZ,tp) and rk>=8 and rk<=10
 end
 function c26556950.defval(e,c)
 	local g=Duel.GetMatchingGroup(Card.IsFaceup,c:GetControler(),LOCATION_MZONE,0,nil)

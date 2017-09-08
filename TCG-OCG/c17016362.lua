@@ -1,7 +1,7 @@
 --Emトラピーズ・マジシャン
 function c17016362.initial_effect(c)
 	--xyz summon
-	aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsRace,RACE_SPELLCASTER),4,2)
+	aux.AddXyzProcedure(c,aux.FilterBoolFunctionEx(Card.IsRace,RACE_SPELLCASTER),4,2)
 	c:EnableReviveLimit()
 	--avoid damage
 	local e1=Effect.CreateEffect(c)

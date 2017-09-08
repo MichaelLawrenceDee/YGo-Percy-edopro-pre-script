@@ -37,8 +37,8 @@ function c58820923.initial_effect(c)
 	c:RegisterEffect(e4)
 end
 c58820923.xyz_number=95
-function c58820923.ovfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0x107b) and c:IsType(TYPE_XYZ)
+function c58820923.ovfilter(c,tp,xyzc)
+	return c:IsFaceup() and c:IsSetCard(0x107b) and c:IsType(TYPE_XYZ,xyzc,SUMMON_TYPE_XYZ,tp)
 end
 function c58820923.rmcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_XYZ)

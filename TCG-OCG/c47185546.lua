@@ -13,12 +13,11 @@ function c47185546.initial_effect(c)
 end
 function c47185546.filter1(c,e,tp)
 	local rk=c:GetRank()
-	return c:IsFaceup() and c:IsRace(RACE_INSECT) and c:IsType(TYPE_XYZ)
-		and Duel.IsExistingMatchingCard(c47185546.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,c,rk)
+	return c:IsFaceup() and Duel.IsExistingMatchingCard(c47185546.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,c,rk)
 		and Duel.GetLocationCountFromEx(tp,tp,c)>0
 end
 function c47185546.filter2(c,e,tp,mc,rk)
-	return (c:GetRank()==rk+2 or c:GetRank()==rk-2) and c:IsRace(RACE_INSECT) and mc:IsCanBeXyzMaterial(c,tp)
+	return mc:IsRace(RACE_INSECT,c,SUMMON_TYPE_XYZ,tp) and mc:IsType(TYPE_XYZ,c,SUMMON_TYPE_XYZ,tp) and (c:GetRank()==rk+2 or c:GetRank()==rk-2) and c:IsRace(RACE_INSECT) and mc:IsCanBeXyzMaterial(c,tp)
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
 end
 function c47185546.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

@@ -34,8 +34,8 @@ function c39030163.initial_effect(c)
 	e3:SetLabelObject(e2)
 	c:RegisterEffect(e3)
 end
-function c39030163.ovfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0x107b) and c:IsType(TYPE_XYZ) and not c:IsCode(39030163)
+function c39030163.ovfilter(c,tp,xyzc)
+	return c:IsFaceup() and c:IsSetCard(0x107b) and c:IsType(TYPE_XYZ,xyzc,SUMMON_TYPE_XYZ,tp) and not c:IsCode(39030163)
 end
 function c39030163.mtcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end

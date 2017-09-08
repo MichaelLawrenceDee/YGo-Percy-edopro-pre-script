@@ -27,8 +27,8 @@ function c23187256.initial_effect(c)
 	c:RegisterEffect(e4)
 end
 c23187256.xyz_number=93
-function c23187256.xyzfilter(c,chk,tp,sg)
-	return c:IsType(TYPE_XYZ) and c:IsSetCard(0x48) and c:GetOverlayCount()>0
+function c23187256.xyzfilter(c,xyz,sumtype,tp)
+	return c:IsType(TYPE_XYZ,xyz,sumtype,tp) and c:IsSetCard(0x48) and c:GetOverlayCount()>0
 end
 function c23187256.xyzcheck(g,tp,xyz)
 	local mg=g:Filter(function(c) return not c:IsHasEffect(511001175) end,nil)

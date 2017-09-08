@@ -23,8 +23,8 @@ function c38495396.initial_effect(c)
 	e2:SetLabel(c:GetOriginalCode())
 	c:RegisterEffect(e2)
 end
-function c38495396.ovfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0x53) and c:GetCode()~=38495396 and c:IsType(TYPE_XYZ)
+function c38495396.ovfilter(c,tp,xyzc)
+	return c:IsFaceup() and c:IsSetCard(0x53) and c:GetCode()~=38495396 and c:IsType(TYPE_XYZ,xyzc,SUMMON_TYPE_XYZ,tp)
 end
 function c38495396.xyzop(e,tp,chk)
 	if chk==0 then return true end

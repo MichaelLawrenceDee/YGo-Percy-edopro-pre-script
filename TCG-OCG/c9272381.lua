@@ -1,7 +1,7 @@
 --星輝士 セイクリッド・ダイヤ
 function c9272381.initial_effect(c)
 	--xyz summon
-	aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsAttribute,ATTRIBUTE_LIGHT),5,3,c9272381.ovfilter,aux.Stringid(9272381,0),99)
+	aux.AddXyzProcedure(c,aux.FilterBoolFunctionEx(Card.IsAttribute,ATTRIBUTE_LIGHT),5,3,c9272381.ovfilter,aux.Stringid(9272381,0),99)
 	c:EnableReviveLimit()
 	--
 	local e1=Effect.CreateEffect(c)
@@ -50,8 +50,8 @@ function c9272381.initial_effect(c)
 	e5:SetLabelObject(e4)
 	c:RegisterEffect(e5)
 end
-function c9272381.ovfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0x9c) and c:IsType(TYPE_XYZ) and not c:IsCode(9272381) and Duel.GetCurrentPhase()==PHASE_MAIN2
+function c9272381.ovfilter(c,tp,xyzc)
+	return c:IsFaceup() and c:IsSetCard(0x9c) and c:IsType(TYPE_XYZ,xyzc,SUMMON_TYPE_XYZ,tp) and not c:IsCode(9272381) and Duel.GetCurrentPhase()==PHASE_MAIN2
 end
 function c9272381.effcon(e)
 	return e:GetHandler():GetOverlayCount()>0

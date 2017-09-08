@@ -1,14 +1,7 @@
 --聖剣 EX－カリバーン
 function c46008667.initial_effect(c)
 	--Activate
-	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_EQUIP)
-	e1:SetType(EFFECT_TYPE_ACTIVATE)
-	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e1:SetTarget(c46008667.target)
-	e1:SetOperation(c46008667.operation)
-	c:RegisterEffect(e1)
+	aux.AddEquipProcedure(c,nil,aux.FilterBoolFunction(Card.IsSetCard,0x107a))
 	--spsummon
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(46008667,0))
@@ -29,41 +22,14 @@ function c46008667.initial_effect(c)
 	e3:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
 	e3:SetValue(aux.tgoval)
 	c:RegisterEffect(e3)
-	--Equip limit
-	local e4=Effect.CreateEffect(c)
-	e4:SetType(EFFECT_TYPE_SINGLE)
-	e4:SetCode(EFFECT_EQUIP_LIMIT)
-	e4:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
-	e4:SetValue(c46008667.eqlimit)
-	c:RegisterEffect(e4)
-end
-function c46008667.eqlimit(e,c)
-	return c:IsSetCard(0x107a)
-end
-function c46008667.filter(c)
-	return c:IsFaceup() and c:IsSetCard(0x107a)
-end
-function c46008667.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and c46008667.filter(chkc) end
-	if chk==0 then return Duel.IsExistingTarget(c46008667.filter,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_EQUIP)
-	Duel.SelectTarget(tp,c46008667.filter,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil)
-	Duel.SetOperationInfo(0,CATEGORY_EQUIP,e:GetHandler(),1,0,0)
-end
-function c46008667.operation(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	local tc=Duel.GetFirstTarget()
-	if c:IsRelateToEffect(e) and tc:IsRelateToEffect(e) and tc:IsFaceup() then
-		Duel.Equip(tp,c,tc)
-	end
 end
 function c46008667.filter1(c,e,tp)
-	return c:IsFaceup() and c:IsType(TYPE_XYZ) and c:IsSetCard(0x107a)
+	return c:IsFaceup() and c:IsSetCard(0x107a)
 		and Duel.IsExistingMatchingCard(c46008667.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,c,c:GetCode())
 		and Duel.GetLocationCountFromEx(tp,tp,c)>0
 end
 function c46008667.filter2(c,e,tp,mc,code)
-	return c:IsType(TYPE_XYZ) and c:IsSetCard(0x107a) and not c:IsCode(code) and mc:IsCanBeXyzMaterial(c,tp)
+	return mc:IsType(TYPE_XYZ,c,SUMMON_TYPE_XYZ,tp) and c:IsType(TYPE_XYZ) and c:IsSetCard(0x107a) and not c:IsCode(code) and mc:IsCanBeXyzMaterial(c,tp)
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
 end
 function c46008667.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
@@ -76,7 +42,7 @@ end
 function c46008667.spop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if Duel.GetLocationCountFromEx(tp,tp,tc)<=0 then return end
-	if tc:IsFacedown() or not tc:IsRelateToEffect(e) or tc:IsControler(1-tp) or tc:IsImmuneToEffect(e) then return end
+	if not tc or tc:IsFacedown() or not tc:IsRelateToEffect(e) or tc:IsControler(1-tp) or tc:IsImmuneToEffect(e) then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,c46008667.filter2,tp,LOCATION_EXTRA,0,1,1,nil,e,tp,tc,tc:GetCode())
 	local sc=g:GetFirst()

@@ -1,7 +1,7 @@
 --FA－ブラック・レイ・ランサー
 function c25853045.initial_effect(c)
 	--xyz summon
-	aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsAttribute,ATTRIBUTE_WATER),4,3,c25853045.ovfilter,aux.Stringid(25853045,0))
+	aux.AddXyzProcedure(c,aux.FilterBoolFunctionEx(Card.IsAttribute,ATTRIBUTE_WATER),4,3,c25853045.ovfilter,aux.Stringid(25853045,0))
 	c:EnableReviveLimit()
 	--atk
 	local e1=Effect.CreateEffect(c)
@@ -31,8 +31,8 @@ function c25853045.initial_effect(c)
 	e3:SetOperation(c25853045.desop)
 	c:RegisterEffect(e3)
 end
-function c25853045.ovfilter(c)
-	return c:IsFaceup() and c:GetRank()==3 and c:IsAttribute(ATTRIBUTE_WATER) and c:GetOverlayCount()==0
+function c25853045.ovfilter(c,tp,xyzc)
+	return c:IsFaceup() and c:GetRank()==3 and c:IsAttribute(ATTRIBUTE_WATER,xyzc,SUMMON_TYPE_XYZ,tp) and c:GetOverlayCount()==0
 end
 function c25853045.atkval(e,c)
 	return c:GetOverlayCount()*200

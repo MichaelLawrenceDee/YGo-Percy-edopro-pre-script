@@ -37,8 +37,8 @@ function c34945480.initial_effect(c)
 	e4:SetLabel(c:GetOriginalCode())
 	c:RegisterEffect(e4)
 end
-function c34945480.ovfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0x10b7) and c:IsType(TYPE_XYZ)
+function c34945480.ovfilter(c,tp,xyzc)
+	return c:IsFaceup() and c:IsSetCard(0x10b7) and c:IsType(TYPE_XYZ,xyzc,SUMMON_TYPE_XYZ,tp)
 end
 function c34945480.sumcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_XYZ)

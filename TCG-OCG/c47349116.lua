@@ -37,8 +37,8 @@ function c47349116.initial_effect(c)
 	e4:SetLabel(c:GetOriginalCode())
 	c:RegisterEffect(e4)
 end
-function c47349116.matfilter(c,xyz,tp)
-	return c:IsSetCard(0x98) and c:IsXyzType(TYPE_PENDULUM,xyz,tp)
+function c47349116.matfilter(c,xyz,sumtype,tp)
+	return c:IsSetCard(0x98) and c:IsType(TYPE_PENDULUM,xyz,sumtype,tp)
 end
 function c47349116.splimit(e,se,sp,st)
 	return not e:GetHandler():IsLocation(LOCATION_EXTRA) or (bit.band(st,SUMMON_TYPE_XYZ)==SUMMON_TYPE_XYZ and not se)

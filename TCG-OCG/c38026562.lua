@@ -1,7 +1,7 @@
 --超化合獣メタン・ハイド
 function c38026562.initial_effect(c)
 	--xyz summon
-	aux.AddXyzProcedure(c,function(c,xyz,tp)return c:IsXyzType(TYPE_DUAL,xyz,tp) end,8,2)
+	aux.AddXyzProcedure(c,aux.FilterBoolFunctionEx(Card.IsType,TYPE_DUAL),8,2)
 	c:EnableReviveLimit()
 	--special summon
 	local e1=Effect.CreateEffect(c)

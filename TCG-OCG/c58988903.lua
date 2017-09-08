@@ -25,13 +25,12 @@ function c58988903.initial_effect(c)
 end
 function c58988903.filter1(c,e,tp)
 	local rk=c:GetRank()
-	return c:IsFaceup() and c:IsSetCard(0xba) and c:IsType(TYPE_XYZ)
-		and Duel.IsExistingMatchingCard(c58988903.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,c,rk+2)
+	return c:IsFaceup() and c:IsSetCard(0xba) and Duel.IsExistingMatchingCard(c58988903.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,c,rk+2)
 		and Duel.GetLocationCountFromEx(tp,tp,c)>0
 end
 function c58988903.filter2(c,e,tp,mc,rk)
 	if c.rum_limit and not c.rum_limit(mc,e) then return false end
-	return c:GetRank()==rk and c:IsSetCard(0xba) and mc:IsCanBeXyzMaterial(c,tp)
+	return mc:IsType(TYPE_XYZ,c,SUMMON_TYPE_XYZ,tp) and c:GetRank()==rk and c:IsSetCard(0xba) and mc:IsCanBeXyzMaterial(c,tp)
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
 end
 function c58988903.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

@@ -42,8 +42,8 @@ function c53334641.initial_effect(c)
 	e4:SetLabel(c:GetOriginalCode())
 	c:RegisterEffect(e4)
 end
-function c53334641.ovfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0x8d) and c:IsType(TYPE_XYZ) and not c:IsCode(53334641)
+function c53334641.ovfilter(c,tp,xyzc)
+	return c:IsFaceup() and c:IsSetCard(0x8d) and c:IsType(TYPE_XYZ,xyzc,SUMMON_TYPE_XYZ,tp) and not c:IsCode(53334641)
 end
 function c53334641.winop(e,tp,eg,ep,ev,re,r,rp)
 	local WIN_REASON_GHOSTRICK_SPOILEDANGEL=0x1b

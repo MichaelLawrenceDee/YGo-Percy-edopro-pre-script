@@ -1,7 +1,7 @@
 --DDD磐石王ダリウス
 function c51497409.initial_effect(c)
 	c:EnableReviveLimit()
-	aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsRace,RACE_FIEND),3,2)
+	aux.AddXyzProcedure(c,aux.FilterBoolFunctionEx(Card.IsRace,RACE_FIEND),3,2)
 	--Destroy and Draw
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(51497409,0))

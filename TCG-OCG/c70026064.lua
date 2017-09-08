@@ -18,12 +18,12 @@ function c70026064.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_COST)
 end
 function c70026064.filter1(c,e,tp)
-	return c:IsFaceup() and c:IsType(TYPE_XYZ) and c:IsSetCard(0x88)
+	return c:IsFaceup() and c:IsSetCard(0x88)
 		and Duel.IsExistingMatchingCard(c70026064.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,c,c:GetCode())
 		and Duel.GetLocationCountFromEx(tp,tp,c)>0
 end
 function c70026064.filter2(c,e,tp,mc,code)
-	return c:IsType(TYPE_XYZ) and c:IsSetCard(0x88) and not c:IsCode(code) and mc:IsCanBeXyzMaterial(c,tp)
+	return mc:IsType(TYPE_XYZ,c,SUMMON_TYPE_XYZ,tp) and c:IsType(TYPE_XYZ) and c:IsSetCard(0x88) and not c:IsCode(code) and mc:IsCanBeXyzMaterial(c,tp)
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
 end
 function c70026064.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

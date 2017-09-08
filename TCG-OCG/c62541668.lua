@@ -31,18 +31,14 @@ function c62541668.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 c62541668.xyz_number=77
-function c62541668.ovfilter(c)
+function c62541668.ovfilter(c,tp,xyzc)
 	local rk=c:GetRank()
-	return c:IsFaceup() and c:IsAttribute(ATTRIBUTE_DARK) and c:IsType(TYPE_XYZ) and (rk==10 or rk==11)
+	return c:IsFaceup() and c:IsAttribute(ATTRIBUTE_DARK,xyzc,SUMMON_TYPE_XYZ,tp) and c:IsType(TYPE_XYZ,xyzc,SUMMON_TYPE_XYZ,tp) and (rk==10 or rk==11)
 end
 function c62541668.xyzop(e,tp,chk)
 	if chk==0 then return true end
-	if chk==1 then
-		return true,false
-	end
-	if chk==2 then
-		e:GetHandler():RegisterFlagEffect(62541668,RESET_EVENT+0xfe0000+RESET_PHASE+PHASE_END,0,1)
-	end
+	e:GetHandler():RegisterFlagEffect(62541668,RESET_EVENT+0xfe0000+RESET_PHASE+PHASE_END,0,1)
+	return true
 end
 function c62541668.rmcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,2,REASON_COST) end
