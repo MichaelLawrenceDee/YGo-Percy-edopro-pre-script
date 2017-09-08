@@ -44,8 +44,8 @@ function c511003003.setop(e,tp,eg,ep,ev,re,r,rp)
 		c511003003[0]:AddCard(tc)
 	end
 end
-function c511003003.ffilter(c)
-	return c:IsRace(RACE_ROCK) and c:IsFusionSetCard(0x1047)
+function c511003003.ffilter(c,fc,sumtype,tp)
+	return c:IsRace(RACE_ROCK,fc,sumtype,tp) and c:IsFusionSetCard(0x1047)
 end
 function c511003003.filter(c,e,tp)
 	return c:IsCanBeFusionMaterial() and Duel.IsExistingMatchingCard(c511003003.spfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp,c)

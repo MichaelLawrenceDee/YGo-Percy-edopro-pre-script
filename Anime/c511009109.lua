@@ -20,10 +20,9 @@ function c511009109.initial_effect(c)
 	e5:SetOperation(c511009109.atkop)
 	c:RegisterEffect(e5)
 end
-function c511009109.ffilter(c)
-	return c:IsRace(RACE_WARRIOR) and c:GetLevel()>=5
+function c511009109.ffilter(c,fc,sumtype,tp)
+	return c:IsRace(RACE_WARRIOR,fc,sumtype,tp) and c:GetLevel()>=5
 end
-
 function c511009109.atkcon(e,tp,eg,ep,ev,re,r,rp)
 	local a=Duel.GetAttacker()
 	local d=Duel.GetAttackTarget()

@@ -110,7 +110,11 @@ function Auxiliary.FOperationMix(insf,sub,...)
 			end
 end
 function Auxiliary.FConditionFilterMix(c,fc,sub,sub,contact,tp,...)
-	if not c:IsCanBeFusionMaterial(fc,tp) then return false end
+	if contact then
+		if not c:IsCanBeFusionMaterial(fc,tp) then return false end
+	else
+		if not c:IsCanBeFusionMaterial(fc) then return false end
+	end
 	for i,f in ipairs({...}) do
 		if f(c,fc,sub,sub2,mg,sg,tp) then return true end
 	end

@@ -18,8 +18,8 @@ function c511009382.initial_effect(c)
 	e2:SetOperation(c511009382.effop)
 	c:RegisterEffect(e2)
 end
-function c511009382.ffilter(c)
-	return c:IsFusionAttribute(ATTRIBUTE_WIND) and c:IsLevelAbove(7)
+function c511009382.ffilter(c,fc,sumtype,tp)
+	return c:IsAttribute(ATTRIBUTE_WIND,fc,sumtype,tp) and c:IsLevelAbove(7)
 end
 function c511009382.attfilter(c)
 	return c:IsFaceup() and c:IsAttribute(ATTRIBUTE_WIND)

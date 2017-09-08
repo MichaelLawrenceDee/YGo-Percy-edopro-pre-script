@@ -13,8 +13,8 @@ function c511009390.initial_effect(c)
 	e1:SetOperation(c511009390.atkop)
 	c:RegisterEffect(e1)
 end
-function c511009390.ffilter(c)
-	return c:IsFusionAttribute(ATTRIBUTE_EARTH) and (c:GetLevel()==5 or c:GetLevel()==6)
+function c511009390.ffilter(c,fc,sumtype,tp)
+	return c:IsAttribute(ATTRIBUTE_EARTH,fc,sumtype,tp) and (c:GetLevel()==5 or c:GetLevel()==6)
 end
 function c511009390.filter(c)
 	return c:IsFaceup() and c:IsAttribute(ATTRIBUTE_EARTH)

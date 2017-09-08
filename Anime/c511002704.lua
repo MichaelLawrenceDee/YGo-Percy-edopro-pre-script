@@ -27,11 +27,11 @@ function c511002704.initial_effect(c)
 	e2:SetOperation(c511002704.sumop)
 	c:RegisterEffect(e2)
 end
-function c511002704.fusfilter1(c)
-	return c:IsLevelBelow(4) and c:IsRace(RACE_BEASTWARRIOR)
+function c511002704.fusfilter1(c,fc,sumtype,tp)
+	return c:IsLevelBelow(4) and c:IsRace(RACE_BEASTWARRIOR,fc,sumtype,tp)
 end
-function c511002704.fusfilter2(c)
-	return c:IsLevelBelow(4) and c:IsRace(RACE_MACHINE)
+function c511002704.fusfilter2(c,fc,sumtype,tp)
+	return c:IsLevelBelow(4) and c:IsRace(RACE_MACHINE,fc,sumtype,tp)
 end
 function c511002704.damcon(e,tp,eg,ep,ev,re,r,rp)
 	return ep~=tp

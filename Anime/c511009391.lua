@@ -13,8 +13,8 @@ function c511009391.initial_effect(c)
 	e1:SetOperation(c511009391.atkop)
 	c:RegisterEffect(e1)
 end
-function c511009391.ffilter(c)
-	return c:IsFusionAttribute(ATTRIBUTE_WATER) and (c:GetLevel()==5 or c:GetLevel()==6)
+function c511009391.ffilter(c,fc,sumtype,tp)
+	return c:IsAttribute(ATTRIBUTE_WATER,fc,sumtype,tp) and (c:GetLevel()==5 or c:GetLevel()==6)
 end
 function c511009391.filter(c)
 	return c:IsFaceup() and c:IsAttribute(ATTRIBUTE_WATER)

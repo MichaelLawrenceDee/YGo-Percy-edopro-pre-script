@@ -14,11 +14,11 @@ function c511002721.initial_effect(c)
 end
 c511002721.material_setcode={0x151a,0x351a}
 c511002721.miracle_synchro_fusion=true
-function c511002721.fusfilter1(c)
-	return c:IsSetCard(0x351a) and c:IsType(TYPE_FUSION)
+function c511002721.fusfilter1(c,fc,sumtype,tp)
+	return c:IsSetCard(0x351a) and c:IsType(TYPE_FUSION,fc,sumtype,tp)
 end
-function c511002721.fusfilter2(c)
-	return c:IsSetCard(0x351a) and c:IsType(TYPE_SYNCHRO)
+function c511002721.fusfilter2(c,fc,sumtype,tp)
+	return c:IsSetCard(0x351a) and c:IsType(TYPE_SYNCHRO,fc,sumtype,tp)
 end
 function c511002721.cfilter(tc)
 	return tc and tc:IsFaceup()

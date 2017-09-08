@@ -5,7 +5,7 @@ function c511009415.initial_effect(c)
 	--pendulum summon
 	aux.EnablePendulumAttribute(c,false)
 	--fusion material
-	aux.AddFusionProcMixN(c,true,true,aux.FilterBoolFunction(Card.IsFusionAttribute,ATTRIBUTE_DARK),2)
+	aux.AddFusionProcMixN(c,true,true,aux.FilterBoolFunctionEx(Card.IsAttribute,ATTRIBUTE_DARK),2)
 	--reduce
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(16178681,0))

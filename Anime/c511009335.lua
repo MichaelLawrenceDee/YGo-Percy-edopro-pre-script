@@ -36,8 +36,8 @@ function c511009335.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 c511009335.material_setcode=0x52
-function c511009335.ffilter(c)
-	return c:IsSetCard(0x52) and c:IsFusionAttribute(ATTRIBUTE_DARK)
+function c511009335.ffilter(c,fc,sumtype,tp)
+	return c:IsSetCard(0x52) and c:IsAttribute(ATTRIBUTE_DARK,fc,sumtype,tp)
 end
 function c511009335.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0

@@ -3,7 +3,7 @@
 --fixed by MLD
 function c511009368.initial_effect(c)
 	--fusion material
-	aux.AddFusionProcFun2(c,c511009368.ffilter,aux.FilterBoolFunction(Card.IsFusionSetCard,0x9f),true)
+	aux.AddFusionProcMix(c,true,true,c511009368.ffilter,aux.FilterBoolFunction(Card.IsFusionSetCard,0x9f))
 	c:EnableReviveLimit()
 	--damage
 	local e1=Effect.CreateEffect(c)
@@ -38,8 +38,8 @@ function c511009368.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 c511009368.material_setcode=0x9f
-function c511009368.ffilter(c)
-	return c:IsFusionAttribute(ATTRIBUTE_DARK) and c:IsLevelAbove(5)
+function c511009368.ffilter(c,fc,sumtype,tp)
+	return c:IsAttribute(ATTRIBUTE_DARK,fc,sumtype,tp) and c:IsLevelAbove(5)
 end
 function c511009368.damcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_FUSION)

@@ -36,8 +36,8 @@ function c511009381.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 c511009381.material_setcode={0xf3,0x10f3}
-function c511009381.ffilter(c)
-	return c:IsFusionAttribute(ATTRIBUTE_DARK) and c:IsLevelAbove(8)
+function c511009381.ffilter(c,fc,sumtype,tp)
+	return c:IsAttribute(ATTRIBUTE_DARK,fc,sumtype,tp) and c:IsLevelAbove(8)
 end
 function c511009381.con(e,tp,eg,ep,ev,re,r,rp)
 	return bit.band(e:GetHandler():GetSummonType(),SUMMON_TYPE_FUSION)==SUMMON_TYPE_FUSION

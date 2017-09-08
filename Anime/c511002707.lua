@@ -2,7 +2,7 @@
 function c511002707.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcMix(c,true,true,c511002707.ffilter,aux.FilterBoolFunction(Card.IsRace,RACE_WARRIOR))
+	aux.AddFusionProcMix(c,true,true,c511002707.ffilter,aux.FilterBoolFunctionEx(Card.IsRace,RACE_WARRIOR))
 	--cannot spsummon
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
@@ -34,8 +34,8 @@ function c511002707.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 c511002707.miracle_synchro_fusion=true
-function c511002707.ffilter(c)
-	return c:IsRace(RACE_DRAGON) and c:IsType(TYPE_SYNCHRO)
+function c511002707.ffilter(c,fc,sumtype,tp)
+	return c:IsRace(RACE_DRAGON,fc,sumtype,tp) and c:IsType(TYPE_SYNCHRO,fc,sumtype,tp)
 end
 function c511002707.splimit(e,se,sp,st)
 	return bit.band(st,SUMMON_TYPE_FUSION)==SUMMON_TYPE_FUSION
