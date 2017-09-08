@@ -1,7 +1,7 @@
 --ナチュル・ビースト
 function c33198837.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,c33198837.synfilter,1,1,aux.NonTuner(c33198837.synfilter),1,99)
+	aux.AddSynchroProcedure(c,aux.FilterBoolFunctionEx(Card.IsAttribute,ATTRIBUTE_EARTH),1,1,aux.NonTunerEx(Card.IsAttribute,ATTRIBUTE_EARTH),1,99)
 	c:EnableReviveLimit()
 	--negate
 	local e1=Effect.CreateEffect(c)
@@ -16,9 +16,6 @@ function c33198837.initial_effect(c)
 	e1:SetTarget(c33198837.distg)
 	e1:SetOperation(c33198837.disop)
 	c:RegisterEffect(e1)
-end
-function c33198837.synfilter(c)
-	return c:IsAttribute(ATTRIBUTE_EARTH)
 end
 function c33198837.discon(e,tp,eg,ep,ev,re,r,rp)
 	return not e:GetHandler():IsStatus(STATUS_BATTLE_DESTROYED)

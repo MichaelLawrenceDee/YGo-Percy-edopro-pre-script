@@ -3,7 +3,7 @@ function c80896940.initial_effect(c)
 	c:EnableReviveLimit()
 	--pendulum summon
 	aux.EnablePendulumAttribute(c,false)
-	aux.AddSynchroProcedure(c,nil,1,1,aux.NonTuner(Card.IsType,TYPE_SYNCHRO),1,99,c80896940.matfilter)
+	aux.AddSynchroProcedure(c,nil,1,1,aux.NonTunerEx(Card.IsType,TYPE_SYNCHRO),1,99,c80896940.matfilter)
 	--indes
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
@@ -58,8 +58,8 @@ function c80896940.initial_effect(c)
 	e7:SetOperation(c80896940.penop)
 	c:RegisterEffect(e7)
 end
-function c80896940.matfilter(c)
-	return c:IsType(TYPE_PENDULUM) and c:IsSummonType(SUMMON_TYPE_PENDULUM)
+function c80896940.matfilter(c,scard,sumtype,tp)
+	return c:IsType(TYPE_PENDULUM,scard,sumtype,tp) and c:IsSummonType(SUMMON_TYPE_PENDULUM)
 end
 function c80896940.indcon(e,tp,eg,ep,ev,re,r,rp)
 	local a=Duel.GetAttacker()

@@ -1,7 +1,7 @@
 --ＷＷ－ウィンター・ベル
 function c14577226.initial_effect(c)
 	c:EnableReviveLimit()
-	aux.AddSynchroProcedure(c,nil,1,1,aux.NonTuner(Card.IsAttribute,ATTRIBUTE_WIND),1,99)
+	aux.AddSynchroProcedure(c,nil,1,1,aux.NonTunerEx(Card.IsAttribute,ATTRIBUTE_WIND),1,99)
 	--damage
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(14577226,0))

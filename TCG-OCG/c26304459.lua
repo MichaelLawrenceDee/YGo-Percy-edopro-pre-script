@@ -1,7 +1,7 @@
 --エンシェント・ゴッド・フレムベル
 function c26304459.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsAttribute,ATTRIBUTE_FIRE),1,1,aux.NonTuner(Card.IsRace,RACE_PYRO),1,99)
+	aux.AddSynchroProcedure(c,aux.FilterBoolFunctionEx(Card.IsAttribute,ATTRIBUTE_FIRE),1,1,aux.NonTunerEx(Card.IsRace,RACE_PYRO),1,99)
 	c:EnableReviveLimit()
 	--remove
 	local e1=Effect.CreateEffect(c)

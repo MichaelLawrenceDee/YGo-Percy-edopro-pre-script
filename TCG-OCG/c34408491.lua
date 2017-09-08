@@ -1,7 +1,7 @@
 --魔王龍 ベエルゼ
 function c34408491.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsAttribute,ATTRIBUTE_DARK),1,1,aux.NonTuner(nil),1,99)
+	aux.AddSynchroProcedure(c,aux.FilterBoolFunctionEx(Card.IsAttribute,ATTRIBUTE_DARK),1,1,aux.NonTuner(nil),1,99)
 	c:EnableReviveLimit()
 	--indes
 	local e1=Effect.CreateEffect(c)

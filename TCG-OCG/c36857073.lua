@@ -1,7 +1,7 @@
 --琰魔竜 レッド・デーモン・ベリアル
 function c36857073.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,nil,1,1,aux.NonTuner(c36857073.sfilter),1,1)
+	aux.AddSynchroProcedure(c,nil,1,1,aux.NonTunerEx(c36857073.sfilter),1,1)
 	c:EnableReviveLimit()
 	--spsummon
 	local e1=Effect.CreateEffect(c)
@@ -27,8 +27,8 @@ function c36857073.initial_effect(c)
 	e2:SetOperation(c36857073.spop2)
 	c:RegisterEffect(e2)
 end
-function c36857073.sfilter(c)
-	return c:IsRace(RACE_DRAGON) and c:IsAttribute(ATTRIBUTE_DARK) and c:IsType(TYPE_SYNCHRO)
+function c36857073.sfilter(c,scard,sumtype,tp)
+	return c:IsRace(RACE_DRAGON,scard,sumtype,tp) and c:IsAttribute(ATTRIBUTE_DARK,scard,sumtype,tp) and c:IsType(TYPE_SYNCHRO,scard,sumtype,tp)
 end
 function c36857073.cfilter(c,ft,tp)
 	return ft>0 or (c:IsControler(tp) and c:GetSequence()<5)

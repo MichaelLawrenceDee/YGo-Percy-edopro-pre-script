@@ -2,7 +2,7 @@
 function c31924889.initial_effect(c)
 	c:EnableCounterPermit(0x1)
 	--synchro summon
-	aux.AddSynchroProcedure(c,nil,1,1,aux.NonTuner(Card.IsRace,RACE_SPELLCASTER),1,99)
+	aux.AddSynchroProcedure(c,nil,1,1,aux.NonTunerEx(Card.IsRace,RACE_SPELLCASTER),1,99)
 	c:EnableReviveLimit()
 	--attackup
 	local e1=Effect.CreateEffect(c)

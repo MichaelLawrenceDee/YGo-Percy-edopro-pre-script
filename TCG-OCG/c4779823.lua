@@ -1,7 +1,7 @@
 --ライトロード・アーク ミカエル
 function c4779823.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,nil,1,1,aux.NonTuner(Card.IsAttribute,ATTRIBUTE_LIGHT),1,99)
+	aux.AddSynchroProcedure(c,nil,1,1,aux.NonTunerEx(Card.IsAttribute,ATTRIBUTE_LIGHT),1,99)
 	c:EnableReviveLimit()
 	--remove
 	local e1=Effect.CreateEffect(c)

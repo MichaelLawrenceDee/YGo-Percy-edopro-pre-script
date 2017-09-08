@@ -1,7 +1,7 @@
 --メンタルオーバー・デーモン
 function c24221808.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsRace,RACE_PSYCHO),1,1,aux.NonTuner(Card.IsRace,RACE_PSYCHO),2,99)
+	aux.AddSynchroProcedure(c,aux.FilterBoolFunctionEx(Card.IsRace,RACE_PSYCHO),1,1,aux.NonTunerEx(Card.IsRace,RACE_PSYCHO),2,99)
 	c:EnableReviveLimit()
 	--remove
 	local e1=Effect.CreateEffect(c)

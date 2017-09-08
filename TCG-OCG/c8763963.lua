@@ -1,7 +1,7 @@
 --魔王超龍 ベエルゼウス
 function c8763963.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsAttribute,ATTRIBUTE_DARK),1,1,aux.NonTuner(nil),2,99)
+	aux.AddSynchroProcedure(c,aux.FilterBoolFunctionEx(Card.IsAttribute,ATTRIBUTE_DARK),1,1,aux.NonTuner(nil),2,99)
 	c:EnableReviveLimit()
 	--indes
 	local e1=Effect.CreateEffect(c)

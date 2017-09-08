@@ -1,7 +1,7 @@
 --超重忍者シノビ－Ａ・Ｃ
 function c50065971.initial_effect(c)
 	c:EnableReviveLimit()
-	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsRace,RACE_MACHINE),1,1,aux.NonTuner(Card.IsRace,RACE_MACHINE),1,99)
+	aux.AddSynchroProcedure(c,aux.FilterBoolFunctionEx(Card.IsRace,RACE_MACHINE),1,1,aux.NonTunerEx(Card.IsRace,RACE_MACHINE),1,99)
 	--defense attack
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)

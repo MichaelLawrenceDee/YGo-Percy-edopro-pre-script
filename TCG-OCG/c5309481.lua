@@ -1,7 +1,7 @@
 --蘇りし魔王 ハ・デス
 function c5309481.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsCode,33420078),1,1,aux.NonTuner(Card.IsRace,RACE_ZOMBIE),1,99)
+	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsCode,33420078),1,1,aux.NonTunerEx(Card.IsRace,RACE_ZOMBIE),1,99)
 	c:EnableReviveLimit()
 	--Disable
 	local e1=Effect.CreateEffect(c)

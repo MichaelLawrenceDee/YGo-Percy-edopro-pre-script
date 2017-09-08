@@ -1,7 +1,7 @@
 --神聖騎士パーシアス
 function c69514125.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,nil,1,1,aux.NonTuner(Card.IsAttribute,ATTRIBUTE_LIGHT),1,99)
+	aux.AddSynchroProcedure(c,nil,1,1,aux.NonTunerEx(Card.IsAttribute,ATTRIBUTE_LIGHT),1,99)
 	c:EnableReviveLimit()
 	--pos
 	local e1=Effect.CreateEffect(c)

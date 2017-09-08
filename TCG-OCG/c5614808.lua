@@ -1,7 +1,7 @@
 --白闘気白鯨
 function c5614808.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsAttribute,ATTRIBUTE_WATER),1,1,aux.NonTuner(Card.IsAttribute,ATTRIBUTE_WATER),1,99)
+	aux.AddSynchroProcedure(c,aux.FilterBoolFunctionEx(Card.IsAttribute,ATTRIBUTE_WATER),1,1,aux.NonTunerEx(Card.IsAttribute,ATTRIBUTE_WATER),1,99)
 	c:EnableReviveLimit()
 	--destroy
 	local e1=Effect.CreateEffect(c)

@@ -1,7 +1,7 @@
 --ナチュル・ランドオルス
 function c43932460.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,c43932460.synfilter,1,1,aux.NonTuner(c43932460.synfilter),1,99)
+	aux.AddSynchroProcedure(c,aux.FilterBoolFunctionEx(Card.IsAttribute,ATTRIBUTE_EARTH),1,1,aux.NonTunerEx(Card.IsAttribute,ATTRIBUTE_EARTH),1,99)
 	c:EnableReviveLimit()
 	--negate
 	local e1=Effect.CreateEffect(c)
@@ -16,9 +16,6 @@ function c43932460.initial_effect(c)
 	e1:SetTarget(c43932460.distg)
 	e1:SetOperation(c43932460.disop)
 	c:RegisterEffect(e1)
-end
-function c43932460.synfilter(c)
-	return c:IsAttribute(ATTRIBUTE_EARTH)
 end
 function c43932460.discon(e,tp,eg,ep,ev,re,r,rp)
 	return e~=re and not e:GetHandler():IsStatus(STATUS_BATTLE_DESTROYED)

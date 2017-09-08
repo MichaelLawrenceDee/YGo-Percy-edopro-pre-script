@@ -1,7 +1,7 @@
 --超重忍者サルト－B
 function c76471944.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsRace,RACE_MACHINE),1,1,aux.NonTuner(Card.IsSetCard,0x9a),1,99)
+	aux.AddSynchroProcedure(c,aux.FilterBoolFunctionEx(Card.IsRace,RACE_MACHINE),1,1,aux.NonTuner(Card.IsSetCard,0x9a),1,99)
 	c:EnableReviveLimit()
 	--defense attack
 	local e1=Effect.CreateEffect(c)

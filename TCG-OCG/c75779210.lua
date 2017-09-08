@@ -1,7 +1,7 @@
 --ヴァイロン・エプシロン
 function c75779210.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsAttribute,ATTRIBUTE_LIGHT),1,1,aux.NonTuner(nil),1,99)
+	aux.AddSynchroProcedure(c,aux.FilterBoolFunctionEx(Card.IsAttribute,ATTRIBUTE_LIGHT),1,1,aux.NonTuner(nil),1,99)
 	c:EnableReviveLimit()
 	--untargetable
 	local e1=Effect.CreateEffect(c)

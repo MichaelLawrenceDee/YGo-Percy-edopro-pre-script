@@ -1,7 +1,7 @@
 --超重荒神スサノ－O
 function c494922.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsRace,RACE_MACHINE),1,1,aux.NonTuner(Card.IsSetCard,0x9a),1,99)
+	aux.AddSynchroProcedure(c,aux.FilterBoolFunctionEx(Card.IsRace,RACE_MACHINE),1,1,aux.NonTuner(Card.IsSetCard,0x9a),1,99)
 	c:EnableReviveLimit()
 	--defense attack
 	local e1=Effect.CreateEffect(c)

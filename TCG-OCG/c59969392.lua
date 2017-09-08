@@ -1,7 +1,7 @@
 --アンデット・スカル・デーモン
 function c59969392.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsCode,33420078),1,1,aux.NonTuner(Card.IsRace,RACE_ZOMBIE),2,99)
+	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsCode,33420078),1,1,aux.NonTunerEx(Card.IsRace,RACE_ZOMBIE),2,99)
 	c:EnableReviveLimit()
 	--indes
 	local e1=Effect.CreateEffect(c)

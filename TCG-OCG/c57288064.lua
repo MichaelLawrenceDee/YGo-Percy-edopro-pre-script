@@ -2,7 +2,7 @@
 function c57288064.initial_effect(c)
 	c:SetSPSummonOnce(57288064)
 	--synchro summon
-	aux.AddSynchroProcedure(c,c57288064.synfilter,1,1,aux.NonTuner(c57288064.synfilter),1,99)
+	aux.AddSynchroProcedure(c,aux.FilterBoolFunctionEx(Card.IsRace,RACE_ZOMBIE),1,1,aux.NonTunerEx(Card.IsRace,RACE_ZOMBIE),1,99)
 	c:EnableReviveLimit()
 	--pos
 	local e1=Effect.CreateEffect(c)
@@ -25,9 +25,6 @@ function c57288064.initial_effect(c)
 	e2:SetTarget(c57288064.target)
 	e2:SetOperation(c57288064.operation)
 	c:RegisterEffect(e2)
-end
-function c57288064.synfilter(c)
-	return c:IsRace(RACE_ZOMBIE)
 end
 function c57288064.filter(c,tp)
 	local atk=c:GetAttack()

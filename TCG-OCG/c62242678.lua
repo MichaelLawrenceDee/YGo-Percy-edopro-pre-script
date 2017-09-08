@@ -2,7 +2,7 @@
 function c62242678.initial_effect(c)
 	--synchro summon
 	c:EnableReviveLimit()
-	aux.AddSynchroProcedure(c,nil,2,2,aux.NonTuner(c62242678.matfilter),1,1)
+	aux.AddSynchroProcedure(c,nil,2,2,aux.NonTunerEx(c62242678.matfilter),1,1)
 	--act limit
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(62242678,0))
@@ -41,8 +41,8 @@ function c62242678.initial_effect(c)
 	e5:SetCode(21142671)
 	c:RegisterEffect(e5)
 end
-function c62242678.matfilter(c)
-	return c:IsRace(RACE_DRAGON) and c:IsAttribute(ATTRIBUTE_DARK) and c:IsType(TYPE_SYNCHRO)
+function c62242678.matfilter(c,scard,sumtype,tp)
+	return c:IsRace(RACE_DRAGON,scard,sumtype,tp) and c:IsAttribute(ATTRIBUTE_DARK,scard,sumtype,tp) and c:IsType(TYPE_SYNCHRO,scard,sumtype,tp)
 end
 function c62242678.limcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_SYNCHRO)

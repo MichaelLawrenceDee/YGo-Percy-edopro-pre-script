@@ -2,7 +2,7 @@
 function c83283063.initial_effect(c)
 	c:SetSPSummonOnce(83283063)
 	--synchro summon
-	aux.AddSynchroProcedure(c,c83283063.synfilter,1,1,aux.NonTuner(c83283063.synfilter),1,99)
+	aux.AddSynchroProcedure(aux.FilterBoolFunctionEx(Card.IsRace,RACE_ZOMBIE),1,1,aux.NonTunerEx(Card.IsRace,RACE_ZOMBIE),1,99)
 	c:EnableReviveLimit()
 	--
 	local e1=Effect.CreateEffect(c)
@@ -23,9 +23,6 @@ function c83283063.initial_effect(c)
 	e2:SetTarget(c83283063.tgtg)
 	e2:SetOperation(c83283063.tgop)
 	c:RegisterEffect(e2)
-end
-function c83283063.synfilter(c)
-	return c:IsRace(RACE_ZOMBIE)
 end
 function c83283063.cfilter(c)
 	if not c:IsRace(RACE_ZOMBIE) or c:GetBaseAttack()<=0 or not c:IsAbleToRemoveAsCost() then return false end

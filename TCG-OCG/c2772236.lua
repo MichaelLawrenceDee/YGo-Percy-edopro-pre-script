@@ -1,7 +1,7 @@
 --エレキマイラ
 function c2772236.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsSetCard,0xe),1,1,aux.NonTuner(Card.IsRace,RACE_THUNDER),1,99)
+	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsSetCard,0xe),1,1,aux.NonTunerEx(Card.IsRace,RACE_THUNDER),1,99)
 	c:EnableReviveLimit()
 	--direct attack
 	local e1=Effect.CreateEffect(c)

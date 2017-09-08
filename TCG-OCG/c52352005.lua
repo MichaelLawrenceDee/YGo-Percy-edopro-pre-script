@@ -1,7 +1,7 @@
 --XX－セイバー ガトムズ
 function c52352005.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,nil,1,1,aux.FilterBoolFunction(Card.IsAttribute,ATTRIBUTE_EARTH),1,99)
+	aux.AddSynchroProcedure(c,nil,1,1,aux.FilterBoolFunctionEx(Card.IsAttribute,ATTRIBUTE_EARTH),1,99)
 	c:EnableReviveLimit()
 	--handes
 	local e1=Effect.CreateEffect(c)

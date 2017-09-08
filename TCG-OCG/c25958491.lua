@@ -1,7 +1,7 @@
 --エンシェント・ホーリー・ワイバーン
 function c25958491.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsAttribute,ATTRIBUTE_LIGHT),1,1,aux.NonTuner(nil),1,99)
+	aux.AddSynchroProcedure(c,aux.FilterBoolFunctionEx(Card.IsAttribute,ATTRIBUTE_LIGHT),1,1,aux.NonTuner(nil),1,99)
 	c:EnableReviveLimit()
 	--Atk update
 	local e1=Effect.CreateEffect(c)

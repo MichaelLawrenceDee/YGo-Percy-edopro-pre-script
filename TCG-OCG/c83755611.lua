@@ -1,7 +1,7 @@
 --輝竜星－ショウフク
 function c83755611.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,nil,1,1,aux.NonTuner(Card.IsRace,RACE_WYRM),1,99)
+	aux.AddSynchroProcedure(c,nil,1,1,aux.NonTunerEx(Card.IsRace,RACE_WYRM),1,99)
 	c:EnableReviveLimit()
 	--mat check
 	local e1=Effect.CreateEffect(c)

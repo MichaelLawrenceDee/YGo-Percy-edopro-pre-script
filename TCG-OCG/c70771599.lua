@@ -36,8 +36,8 @@ function c70771599.initial_effect(c)
 	e3:SetOperation(c70771599.spop)
 	c:RegisterEffect(e3)
 end
-function c70771599.matfilter(c)
-	return c:IsAttribute(ATTRIBUTE_DARK) and c:IsSynchroType(TYPE_PENDULUM)
+function c70771599.matfilter(c,sc,sumtype,tp)
+	return c:IsAttribute(ATTRIBUTE_DARK,sc,sumtype,tp) and c:IsType(TYPE_PENDULUM,sc,sumtype,tp)
 end
 function c70771599.descon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_SYNCHRO)

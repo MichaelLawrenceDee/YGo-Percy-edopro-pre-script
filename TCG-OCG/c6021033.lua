@@ -1,7 +1,7 @@
 --デスカイザー・ドラゴン
 function c6021033.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsCode,33420078),1,1,aux.NonTuner(Card.IsRace,RACE_ZOMBIE),1,99)
+	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsCode,33420078),1,1,aux.NonTunerEx(Card.IsRace,RACE_ZOMBIE),1,99)
 	c:EnableReviveLimit()
 	--special summon
 	local e1=Effect.CreateEffect(c)
