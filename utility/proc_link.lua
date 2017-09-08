@@ -13,7 +13,7 @@ function Auxiliary.AddLinkProcedure(c,f,min,max,specialchk)
 	c:RegisterEffect(e1)
 end
 function Auxiliary.LConditionFilter(c,f,lc,tp)
-	return c:IsFaceup() and c:IsCanBeLinkMaterial(lc) and (not f or f(c,lc,SUMMON_TYPE_LINK,tp))
+	return c:IsFaceup() and c:IsCanBeLinkMaterial(lc,tp) and (not f or f(c,lc,SUMMON_TYPE_LINK,tp))
 end
 function Auxiliary.GetLinkCount(c)
 	if c:IsType(TYPE_LINK) and c:GetLink()>1 then
