@@ -64,13 +64,13 @@ function Auxiliary.SynCondition(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,
 				local g
 				local mgchk
 				if mg then
-					g=mg:Filter(Card.IsCanBeSynchroMaterial,c,c,tp)
+					g=mg:Filter(Card.IsCanBeSynchroMaterial,c,c)
 					mgchk=true
 				else
-					g=Duel.GetMatchingGroup(function(mc) return mc:IsFaceup() and mc:IsCanBeSynchroMaterial(c,tp) end,tp,LOCATION_MZONE,LOCATION_MZONE,c)
+					g=Duel.GetMatchingGroup(function(mc) return mc:IsFaceup() and mc:IsCanBeSynchroMaterial(c) end,tp,LOCATION_MZONE,LOCATION_MZONE,c)
 					mgchk=false
 				end
-				if smat and smat:IsCanBeSynchroMaterial(c,tp) then
+				if smat and smat:IsCanBeSynchroMaterial(c) then
 					g:AddCard(smat)
 				end
 				if g:IsExists(Auxiliary.SynchroCheckFilterChk,1,nil,f1,f2,sub1,sub2,c,tp) then
@@ -78,7 +78,7 @@ function Auxiliary.SynCondition(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,
 					local g2=g:Clone()
 					if not mgchk then
 						local thg=g2:Filter(Card.IsHasEffect,nil,EFFECT_HAND_SYNCHRO)
-						local hg=Duel.GetMatchingGroup(Card.IsCanBeSynchroMaterial,tp,LOCATION_HAND+LOCATION_GRAVE,0,c,c,tp)
+						local hg=Duel.GetMatchingGroup(Card.IsCanBeSynchroMaterial,tp,LOCATION_HAND+LOCATION_GRAVE,0,c,c)
 						for thc in aux.Next(thg) do
 							local te=thc:GetCardEffect(EFFECT_HAND_SYNCHRO)
 							local val=te:GetValue()
@@ -104,7 +104,7 @@ function Auxiliary.SynCondition(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,
 						ntg=g:Filter(Auxiliary.NonTunerFilter,nil,f2,sub2,c,tp)
 						local thg=tg:Filter(Card.IsHasEffect,nil,EFFECT_HAND_SYNCHRO)
 						thg:Merge(ntg:Filter(Card.IsHasEffect,nil,EFFECT_HAND_SYNCHRO))
-						local hg=Duel.GetMatchingGroup(Card.IsCanBeSynchroMaterial,tp,LOCATION_HAND+LOCATION_GRAVE,0,c,c,tp)
+						local hg=Duel.GetMatchingGroup(Card.IsCanBeSynchroMaterial,tp,LOCATION_HAND+LOCATION_GRAVE,0,c,c)
 						for thc in aux.Next(thg) do
 							local te=thc:GetCardEffect(EFFECT_HAND_SYNCHRO)
 							local val=te:GetValue()
@@ -488,12 +488,12 @@ function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req
 				local g
 				if mg then
 					mgchk=true
-					g=mg:Filter(Card.IsCanBeSynchroMaterial,c,c,tp)
+					g=mg:Filter(Card.IsCanBeSynchroMaterial,c,c)
 				else
 					mgchk=false
-					g=Duel.GetMatchingGroup(function(mc) return mc:IsFaceup() and mc:IsCanBeSynchroMaterial(c,tp) end,tp,LOCATION_MZONE,LOCATION_MZONE,c)
+					g=Duel.GetMatchingGroup(function(mc) return mc:IsFaceup() and mc:IsCanBeSynchroMaterial(c) end,tp,LOCATION_MZONE,LOCATION_MZONE,c)
 				end
-				if smat and smat:IsCanBeSynchroMaterial(c,tp) then
+				if smat and smat:IsCanBeSynchroMaterial(c) then
 					g:AddCard(smat)
 				end
 				local tg
@@ -506,7 +506,7 @@ function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req
 					ntg=g:Filter(Auxiliary.NonTunerFilter,nil,f2,sub2,c,tp)
 					local thg=tg:Filter(Card.IsHasEffect,nil,EFFECT_HAND_SYNCHRO)
 					thg:Merge(ntg:Filter(Card.IsHasEffect,nil,EFFECT_HAND_SYNCHRO))
-					local hg=Duel.GetMatchingGroup(Card.IsCanBeSynchroMaterial,tp,LOCATION_HAND+LOCATION_GRAVE,0,c,c,tp)
+					local hg=Duel.GetMatchingGroup(Card.IsCanBeSynchroMaterial,tp,LOCATION_HAND+LOCATION_GRAVE,0,c,c)
 					for thc in aux.Next(thg) do
 						local te=thc:GetCardEffect(EFFECT_HAND_SYNCHRO)
 						local val=te:GetValue()
@@ -907,18 +907,18 @@ function Auxiliary.MajesticSynCondition(f1,cbt1,f2,cbt2,f3,cbt3,...)
 				local g
 				local mgchk
 				if mg then
-					g=mg:Filter(Card.IsCanBeSynchroMaterial,c,c,tp)
+					g=mg:Filter(Card.IsCanBeSynchroMaterial,c,c)
 					mgchk=true
 				else
-					g=Duel.GetMatchingGroup(function(mc) return mc:IsFaceup() and mc:IsCanBeSynchroMaterial(c,tp) end,tp,LOCATION_MZONE,LOCATION_MZONE,c)
+					g=Duel.GetMatchingGroup(function(mc) return mc:IsFaceup() and mc:IsCanBeSynchroMaterial(c) end,tp,LOCATION_MZONE,LOCATION_MZONE,c)
 					mgchk=false
 				end
-				if smat and smat:IsCanBeSynchroMaterial(c,tp) then
+				if smat and smat:IsCanBeSynchroMaterial(c) then
 					g:AddCard(smat)
 				end
 				if not mgchk then
 					local thg=g:Filter(Card.IsHasEffect,nil,EFFECT_HAND_SYNCHRO)
-					local hg=Duel.GetMatchingGroup(Card.IsCanBeSynchroMaterial,tp,LOCATION_HAND+LOCATION_GRAVE,0,c,c,tp)
+					local hg=Duel.GetMatchingGroup(Card.IsCanBeSynchroMaterial,tp,LOCATION_HAND+LOCATION_GRAVE,0,c,c)
 					for thc in aux.Next(thg) do
 						local te=thc:GetCardEffect(EFFECT_HAND_SYNCHRO)
 						local val=te:GetValue()
@@ -950,17 +950,17 @@ function Auxiliary.MajesticSynTarget(f1,cbt1,f2,cbt2,f3,cbt3,...)
 				local g
 				if mg then
 					mgchk=true
-					g=mg:Filter(Card.IsCanBeSynchroMaterial,c,c,tp)
+					g=mg:Filter(Card.IsCanBeSynchroMaterial,c,c)
 				else
 					mgchk=false
-					g=Duel.GetMatchingGroup(function(mc) return mc:IsFaceup() and mc:IsCanBeSynchroMaterial(c,tp) end,tp,LOCATION_MZONE,LOCATION_MZONE,c)
+					g=Duel.GetMatchingGroup(function(mc) return mc:IsFaceup() and mc:IsCanBeSynchroMaterial(c) end,tp,LOCATION_MZONE,LOCATION_MZONE,c)
 				end
-				if smat and smat:IsCanBeSynchroMaterial(c,tp) then
+				if smat and smat:IsCanBeSynchroMaterial(c) then
 					g:AddCard(smat)
 				end
 				if not mgchk then
 					local thg=g:Filter(Card.IsHasEffect,nil,EFFECT_HAND_SYNCHRO)
-					local hg=Duel.GetMatchingGroup(Card.IsCanBeSynchroMaterial,tp,LOCATION_HAND+LOCATION_GRAVE,0,c,c,tp)
+					local hg=Duel.GetMatchingGroup(Card.IsCanBeSynchroMaterial,tp,LOCATION_HAND+LOCATION_GRAVE,0,c,c)
 					for thc in aux.Next(thg) do
 						local te=thc:GetCardEffect(EFFECT_HAND_SYNCHRO)
 						local val=te:GetValue()
@@ -1208,18 +1208,18 @@ function Auxiliary.DarkSynCondition(f1,f2,plv,nlv,...)
 				local g
 				local mgchk
 				if mg then
-					g=mg:Filter(Card.IsCanBeSynchroMaterial,c,c,tp)
+					g=mg:Filter(Card.IsCanBeSynchroMaterial,c,c)
 					mgchk=true
 				else
-					g=Duel.GetMatchingGroup(function(mc) return mc:IsFaceup() and mc:IsCanBeSynchroMaterial(c,tp) end,tp,LOCATION_MZONE,LOCATION_MZONE,c)
+					g=Duel.GetMatchingGroup(function(mc) return mc:IsFaceup() and mc:IsCanBeSynchroMaterial(c) end,tp,LOCATION_MZONE,LOCATION_MZONE,c)
 					mgchk=false
 				end
-				if smat and smat:IsCanBeSynchroMaterial(c,tp) then
+				if smat and smat:IsCanBeSynchroMaterial(c) then
 					g:AddCard(smat)
 				end
 				if not mgchk then
 					local thg=g:Filter(Card.IsHasEffect,nil,EFFECT_HAND_SYNCHRO)
-					local hg=Duel.GetMatchingGroup(Card.IsCanBeSynchroMaterial,tp,LOCATION_HAND+LOCATION_GRAVE,0,c,c,tp)
+					local hg=Duel.GetMatchingGroup(Card.IsCanBeSynchroMaterial,tp,LOCATION_HAND+LOCATION_GRAVE,0,c,c)
 					for thc in aux.Next(thg) do
 						local te=thc:GetCardEffect(EFFECT_HAND_SYNCHRO)
 						local val=te:GetValue()
@@ -1258,17 +1258,17 @@ function Auxiliary.DarkSynTarget(f1,f2,plv,nlv,...)
 				local g
 				if mg then
 					mgchk=true
-					g=mg:Filter(Card.IsCanBeSynchroMaterial,c,c,tp)
+					g=mg:Filter(Card.IsCanBeSynchroMaterial,c,c)
 				else
 					mgchk=false
-					g=Duel.GetMatchingGroup(function(mc) return mc:IsFaceup() and mc:IsCanBeSynchroMaterial(c,tp) end,tp,LOCATION_MZONE,LOCATION_MZONE,c)
+					g=Duel.GetMatchingGroup(function(mc) return mc:IsFaceup() and mc:IsCanBeSynchroMaterial(c) end,tp,LOCATION_MZONE,LOCATION_MZONE,c)
 				end
-				if smat and smat:IsCanBeSynchroMaterial(c,tp) then
+				if smat and smat:IsCanBeSynchroMaterial(c) then
 					g:AddCard(smat)
 				end
 				if not mgchk then
 					local thg=g:Filter(Card.IsHasEffect,nil,EFFECT_HAND_SYNCHRO)
-					local hg=Duel.GetMatchingGroup(Card.IsCanBeSynchroMaterial,tp,LOCATION_HAND+LOCATION_GRAVE,0,c,c,tp)
+					local hg=Duel.GetMatchingGroup(Card.IsCanBeSynchroMaterial,tp,LOCATION_HAND+LOCATION_GRAVE,0,c,c)
 					for thc in aux.Next(thg) do
 						local te=thc:GetCardEffect(EFFECT_HAND_SYNCHRO)
 						local val=te:GetValue()
