@@ -34,7 +34,7 @@ function c28776350.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 function c28776350.filter(c,lc,sumtype,tp)
-	return not c:IsLinkType(TYPE_TOKEN,lc,sumtype,tp)
+	return not c:IsType(TYPE_TOKEN,lc,sumtype,tp)
 end
 function c28776350.spcheck(g,lc,tp)
 	return g:GetClassCount(Card.GetRace,lc,SUMMON_TYPE_LINK,tp)==1
