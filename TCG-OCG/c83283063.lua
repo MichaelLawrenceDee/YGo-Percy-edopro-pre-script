@@ -2,7 +2,7 @@
 function c83283063.initial_effect(c)
 	c:SetSPSummonOnce(83283063)
 	--synchro summon
-	aux.AddSynchroProcedure(aux.FilterBoolFunctionEx(Card.IsRace,RACE_ZOMBIE),1,1,aux.NonTunerEx(Card.IsRace,RACE_ZOMBIE),1,99)
+	aux.AddSynchroProcedure(c,aux.FilterBoolFunctionEx(Card.IsRace,RACE_ZOMBIE),1,1,aux.NonTunerEx(Card.IsRace,RACE_ZOMBIE),1,99)
 	c:EnableReviveLimit()
 	--
 	local e1=Effect.CreateEffect(c)
