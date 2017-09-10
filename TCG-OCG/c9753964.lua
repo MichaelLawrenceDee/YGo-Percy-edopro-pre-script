@@ -29,7 +29,7 @@ function c9753964.initial_effect(c)
 	e2:SetOperation(c9753964.spop)
 	c:RegisterEffect(e2)
 end
-function c9753964.sfilter(c,scard,sumtype,tp)
+function c9753964.sfilter(c,val,scard,sumtype,tp)
 	return c:IsRace(RACE_DRAGON,scard,sumtype,tp) and c:IsAttribute(ATTRIBUTE_DARK,scard,sumtype,tp) and c:IsType(TYPE_SYNCHRO,scard,sumtype,tp)
 end
 function c9753964.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
