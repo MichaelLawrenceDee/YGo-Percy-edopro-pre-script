@@ -99,7 +99,7 @@ function c511001791.pcop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c511001791.descon(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():GetSummonType()==SUMMON_TYPE_XYZ and e:GetLabel()==1
+	return e:GetHandler():IsSummonType(SUMMON_TYPE_XYZ) and e:GetLabel()==1
 end
 function c511001791.desfilter(c)
 	return c:IsFaceup() and c:IsLevelBelow(7) and c:IsDestructable()
@@ -120,7 +120,7 @@ function c511001791.desop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c511001791.matfilter(c)
-	return c:IsType(TYPE_XYZ) and c:IsXyzLevel(c,7)
+	return c:IsType(TYPE_XYZ,c,SUMMON_TYPE_XYZ) and c:IsXyzLevel(c,7)
 end
 function c511001791.valcheck(e,c)
 	local g=c:GetMaterial()
