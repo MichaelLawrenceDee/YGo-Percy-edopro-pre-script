@@ -56,8 +56,6 @@ function c511009340.pcop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.MoveToField(g:GetFirst(),tp,tp,LOCATION_SZONE,POS_FACEUP,true)
 	end
 end
-
-
 function c511009340.regcon(e,tp,eg,ep,ev,re,r,rp)
 	return bit.band(e:GetHandler():GetSummonType(),SUMMON_TYPE_XYZ)==SUMMON_TYPE_XYZ and e:GetLabel()==1
 end
@@ -142,18 +140,16 @@ function c511009340.desop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c511009340.matfilter(c)
-	return c:IsType(TYPE_XYZ) and c:IsXyzLevel(c,7)
+    return c:IsType(TYPE_XYZ,c,SUMMON_TYPE_XYZ) and c:IsXyzLevel(c,7)
 end
 function c511009340.valcheck(e,c)
-	local g=c:GetMaterial()
-	if g:IsExists(c511009340.matfilter,1,nil) then
-		e:GetLabelObject():SetLabel(1)
-	else
-		e:GetLabelObject():SetLabel(0)
-	end
+    local g=c:GetMaterial()
+    if g:IsExists(c511009340.matfilter,1,nil) then
+        e:GetLabelObject():SetLabel(1)
+    else
+        e:GetLabelObject():SetLabel(0)
+    end
 end
-
-
 function c511009340.pencon(e,tp,eg,ep,ev,re,r,rp)
 	return bit.band(r,REASON_EFFECT+REASON_BATTLE)~=0 and e:GetHandler():IsPreviousLocation(LOCATION_MZONE)
 end
