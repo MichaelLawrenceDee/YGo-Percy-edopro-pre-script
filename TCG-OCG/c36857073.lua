@@ -27,7 +27,7 @@ function c36857073.initial_effect(c)
 	e2:SetOperation(c36857073.spop2)
 	c:RegisterEffect(e2)
 end
-function c36857073.sfilter(c,scard,sumtype,tp)
+function c36857073.sfilter(c,val,scard,sumtype,tp)
 	return c:IsRace(RACE_DRAGON,scard,sumtype,tp) and c:IsAttribute(ATTRIBUTE_DARK,scard,sumtype,tp) and c:IsType(TYPE_SYNCHRO,scard,sumtype,tp)
 end
 function c36857073.cfilter(c,ft,tp)
