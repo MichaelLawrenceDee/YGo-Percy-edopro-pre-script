@@ -57,7 +57,7 @@ function c511009340.pcop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c511009340.regcon(e,tp,eg,ep,ev,re,r,rp)
-	return bit.band(e:GetHandler():GetSummonType(),SUMMON_TYPE_XYZ)==SUMMON_TYPE_XYZ and e:GetLabel()==1
+	return e:GetHandler():IsSummonType(SUMMON_TYPE_XYZ) and e:GetLabel()==1
 end
 function c511009340.regop(e,tp,eg,ep,ev,re,r,rp)
 local c=e:GetHandler()
