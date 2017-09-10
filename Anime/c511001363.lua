@@ -76,10 +76,10 @@ end
 function c511001363.filter(c,e,tp)
 	if not c:IsCanBeEffectTarget(e) or not c:IsHasEffect(511002571) then return false end
 	local eff={c:GetCardEffect(511002571)}
-	for i=1,#eff do
-		local te=eff[i]:GetLabelObject()
+	for _,teh in ipairs(eff) do
+		local te=teh:GetLabelObject()
 		local tg=te:GetTarget()
-		if te:GetValue()~=1 and (not tg or tg(e,tp,Group.CreateGroup(),PLAYER_NONE,0,eff[i],REASON_EFFECT,PLAYER_NONE,0)) then return true end
+		if te:GetValue()~=1 and (not tg or tg(e,tp,Group.CreateGroup(),PLAYER_NONE,0,teh,REASON_EFFECT,PLAYER_NONE,0)) then return true end
 	end
 	return false
 end
@@ -120,11 +120,11 @@ function c511001363.copyop(e,tp,eg,ep,ev,re,r,rp)
 		local te=nil
 		local acd={}
 		local ac={}
-		for i=1,#eff do
-			local temp=eff[i]:GetLabelObject()
+		for _,teh in ipairs(eff) do
+			local temp=teh:GetLabelObject()
 			local tg=temp:GetTarget()
-			if temp:GetValue()~=1 and (not tg or tg(e,tp,Group.CreateGroup(),PLAYER_NONE,0,eff[i],REASON_EFFECT,PLAYER_NONE,0)) then
-				table.insert(ac,temp)
+			if temp:GetValue()~=1 and (not tg or tg(e,tp,Group.CreateGroup(),PLAYER_NONE,0,teh,REASON_EFFECT,PLAYER_NONE,0)) then
+				table.insert(ac,teh)
 				table.insert(acd,temp:GetDescription())
 			end
 		end
@@ -135,9 +135,11 @@ function c511001363.copyop(e,tp,eg,ep,ev,re,r,rp)
 			te=ac[op]
 		end
 		if not te then return end
+		local teh=te
+		te=teh:GetLabelObject()
 		local tg=te:GetTarget()
 		local op=te:GetOperation()
-		if tg then tg(e,tp,Group.CreateGroup(),PLAYER_NONE,0,eff[1],REASON_EFFECT,PLAYER_NONE,1) end
+		if tg then tg(e,tp,Group.CreateGroup(),PLAYER_NONE,0,teh,REASON_EFFECT,PLAYER_NONE,1) end
 		Duel.BreakEffect()
 		tc:CreateEffectRelation(e)
 		Duel.BreakEffect()
@@ -149,7 +151,7 @@ function c511001363.copyop(e,tp,eg,ep,ev,re,r,rp)
 				etc=g:GetNext()
 			end
 		end
-		if op then op(e,tp,Group.CreateGroup(),PLAYER_NONE,0,eff[1],REASON_EFFECT,PLAYER_NONE,1) end
+		if op then op(e,tp,Group.CreateGroup(),PLAYER_NONE,0,teh,REASON_EFFECT,PLAYER_NONE,1) end
 		tc:ReleaseEffectRelation(e)
 		if etc then	
 			etc=g:GetFirst()

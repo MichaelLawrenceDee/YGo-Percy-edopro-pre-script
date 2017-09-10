@@ -74,26 +74,25 @@ function c511004123.copyop(e,tp,eg,ep,ev,re,r,rp)
 		local code=tc:GetOriginalCode()
 		if tc:IsHasEffect(511002571) then
 			local teff={tc:GetCardEffect(511002571)}
-			for i=1,#teff do
-				local te=teff[i]
+			for _,te in ipairs(teff) do
 				local code=te:GetLabel()
 				local ceff={c:GetCardEffect(511002571)}
 				local ok=true
-				for j=1,#ceff do
-					if code==ceff[j]:GetLabel() then ok=false end
+				for _,te2 in ipairs(ceff) do
+					if code==te2:GetLabel() then ok=false end
 					if ok then break end
 				end
 				if ok then
 					local copye={}
-					for k=1,#teff do
-						if teff[k]:GetLabel()==code then
+					for _,te3 in ipairs(teff) do
+						if te3:GetLabel()==code then
 							table.insert(copye,teff[k])
 						end
 					end
-					for l=1,#copye do
-						local tec2=copye[l]:GetLabelObject():Clone()
+					for _,te4 in ipairs(copye) do
+						local tec2=te4:GetLabelObject():Clone()
 						c:RegisterEffect(tec2)
-						local tec=copye[l]:Clone()
+						local tec=te4:Clone()
 						tec:SetLabelObject(tec2)
 						c:RegisterEffect(tec)
 						local rste=Effect.CreateEffect(e:GetOwner())
@@ -113,8 +112,7 @@ end
 function c511004123.codechk(c,code)
 	if not c:IsHasEffect(511002571) then return false end
 	local eff={c:GetCardEffect(511002571)}
-	for i=1,#eff do
-		local te=eff[i]
+	for _,te in ipairs(eff) do
 		if te:GetLabel()==code then return true end
 	end
 	return false

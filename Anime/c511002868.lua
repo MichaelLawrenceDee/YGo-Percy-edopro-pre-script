@@ -37,11 +37,11 @@ function c511002868.xyzop(e,tp,eg,ep,ev,re,r,rp)
 		local te=nil
 		local acd={}
 		local ac={}
-		for i=1,#eff do
-			local temp=eff[i]:GetLabelObject()
+		for _,teh in ipairs(eff) do
+			local temp=teh:GetLabelObject()
 			local tg=temp:GetTarget()
-			if not tg or tg(temp,tp,Group.CreateGroup(),PLAYER_NONE,0,eff[i],REASON_EFFECT,PLAYER_NONE,0) then
-				table.insert(ac,temp)
+			if not tg or tg(temp,tp,Group.CreateGroup(),PLAYER_NONE,0,teh,REASON_EFFECT,PLAYER_NONE,0) then
+				table.insert(ac,teh)
 				table.insert(acd,temp:GetDescription())
 			end
 		end
@@ -54,9 +54,11 @@ function c511002868.xyzop(e,tp,eg,ep,ev,re,r,rp)
 			te=ac[op]
 		end
 		if not te then return end
+		local teh=te
+		te=teh:GetLabelObject()
 		local tg=te:GetTarget()
 		local op=te:GetOperation()
-		if tg then tg(te,tp,Group.CreateGroup(),PLAYER_NONE,0,eff[1],REASON_EFFECT,PLAYER_NONE,1) end
+		if tg then tg(te,tp,Group.CreateGroup(),PLAYER_NONE,0,teh,REASON_EFFECT,PLAYER_NONE,1) end
 		Duel.BreakEffect()
 		tc:CreateEffectRelation(te)
 		Duel.BreakEffect()
@@ -68,7 +70,7 @@ function c511002868.xyzop(e,tp,eg,ep,ev,re,r,rp)
 				etc=g:GetNext()
 			end
 		end
-		if op then op(te,tp,Group.CreateGroup(),PLAYER_NONE,0,eff[1],REASON_EFFECT,PLAYER_NONE,1) end
+		if op then op(te,tp,Group.CreateGroup(),PLAYER_NONE,0,teh,REASON_EFFECT,PLAYER_NONE,1) end
 		tc:ReleaseEffectRelation(te)
 		if etc then	
 			etc=g:GetFirst()
