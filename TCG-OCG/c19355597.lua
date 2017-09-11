@@ -21,7 +21,7 @@ function c19355597.initial_effect(c)
 	e2:SetOperation(c19355597.spop)
 	c:RegisterEffect(e2)
 end
-c11502550.material_setcode={0x47,0x1047}
+c19355597.material_setcode={0x47,0x1047}
 function c19355597.splimit(e,se,sp,st)
 	return not e:GetHandler():IsLocation(LOCATION_EXTRA) or bit.band(st,SUMMON_TYPE_FUSION)==SUMMON_TYPE_FUSION
 end
