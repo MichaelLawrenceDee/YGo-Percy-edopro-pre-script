@@ -1,7 +1,7 @@
 --覇王眷竜 クリアウィング
 function c70771599.initial_effect(c)
 	c:EnableReviveLimit()
-	aux.AddSynchroProcedure(c,nil,1,1,aux.NonTuner(c70771599.matfilter),1,99)
+	aux.AddSynchroProcedure(c,nil,1,1,aux.NonTunerEx(c70771599.matfilter),1,99)
 	--destroy all
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(70771599,0))
@@ -36,7 +36,7 @@ function c70771599.initial_effect(c)
 	e3:SetOperation(c70771599.spop)
 	c:RegisterEffect(e3)
 end
-function c70771599.matfilter(c,sc,sumtype,tp)
+function c70771599.matfilter(c,val,sc,sumtype,tp)
 	return c:IsAttribute(ATTRIBUTE_DARK,sc,sumtype,tp) and c:IsType(TYPE_PENDULUM,sc,sumtype,tp)
 end
 function c70771599.descon(e,tp,eg,ep,ev,re,r,rp)
