@@ -397,6 +397,23 @@ function Auxiliary.evospcon(e,tp,eg,ep,ev,re,r,rp)
 	return st>=(SUMMON_TYPE_SPECIAL+150) and st<(SUMMON_TYPE_SPECIAL+180)
 end
 
+--check for Spirit Elimination
+function Auxiliary.SpElimFilter(c,mustbefaceup,includemzone)
+	--includemzone - contains MZONE in original requirement
+	--NOTE: Should only check LOCATION_MZONE+LOCATION_GRAVE
+	if c:IsType(TYPE_MONSTER) then
+		if mustbefaceup and c:IsFacedown() then return false end
+		if includemzone then return c:IsLocation(LOCATION_MZONE) or not Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) end
+		if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
+			return c:IsLocation(LOCATION_MZONE)
+		else
+			return c:IsLocation(LOCATION_GRAVE)
+		end
+	else
+		return c:IsLocation(LOCATION_GRAVE)
+	end
+end
+
 --add procedure to equip spells equipping by rule
 function Auxiliary.AddEquipProcedure(c,p,f,eqlimit,cost,tg,op,con)
 	--Note: p==0 is check equip spell controler, p==1 for opponent's, PLAYER_ALL for both player's monsters
@@ -620,21 +637,22 @@ function Auxiliary.ResetEffects(g,eff)
 	end
 end
 
---in case of moving to utility
---change live2017 to live folder name
---dofile("expansions/live2017/script/proc_fusion.lua")
---dofile("expansions/live2017/script/proc_ritual.lua")
---dofile("expansions/live2017/script/proc_synchro.lua")
---dofile("expansions/live2017/script/proc_union.lua")
---dofile("expansions/live2017/script/proc_xyz.lua")
---dofile("expansions/live2017/script/proc_pendulum.lua")
---dofile("expansions/live2017/script/proc_link.lua")
-
-dofile("script/proc_fusion.lua")
-dofile("script/proc_ritual.lua")
-dofile("script/proc_synchro.lua")
-dofile("script/proc_union.lua")
-dofile("script/proc_xyz.lua")
-dofile("script/proc_pendulum.lua")
-dofile("script/proc_link.lua")
+function loadutility(file)
+	local f1 = loadfile("expansions/live2017mr4/script/"..file)
+	local f2 = loadfile("expansions/script/"..file)
+	if(f1 == nil and f2== nil) then
+		dofile("script/"..file)
+	elseif(f1 == nil) then
+		f2()
+	else
+		f1()
+	end
+end
+loadutility("proc_fusion.lua")
+loadutility("proc_ritual.lua")
+loadutility("proc_synchro.lua")
+loadutility("proc_union.lua")
+loadutility("proc_xyz.lua")
+loadutility("proc_pendulum.lua")
+loadutility("proc_link.lua")
 pcall(dofile,"init.lua")
