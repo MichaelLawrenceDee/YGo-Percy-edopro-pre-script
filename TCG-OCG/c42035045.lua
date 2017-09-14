@@ -14,7 +14,7 @@ end
 function c42035045.atop(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.IsAttackCostPaid()~=2 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
-		local tc=Duel.GetReleaseGroup(tp):Filter(nil,e:GetHandler()):SelectUnselect(Group.CreateGroup(),tp,Duel.IsAttackCostPaid()==0, Duel.IsAttackCostPaid()==0)
+		local tc=Duel.GetReleaseGroup(tp):Filter(aux.TRUE,e:GetHandler()):SelectUnselect(Group.CreateGroup(),tp,Duel.IsAttackCostPaid()==0, Duel.IsAttackCostPaid()==0)
 		if tc then
 			Duel.Release(tc,REASON_COST)
 			Duel.AttackCostPaid()
