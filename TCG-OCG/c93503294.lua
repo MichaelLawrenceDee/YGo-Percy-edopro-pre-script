@@ -34,7 +34,7 @@ function c93503294.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetCurrentPhase()==PHASE_MAIN1 or Duel.GetCurrentPhase()==PHASE_MAIN2
 end
 function c93503294.spcfilter(c,g,zone)
-	return c:IsSetCard(0x205) and (zone~=0 or g:IsContains(c))
+	return c:IsSetCard(0x103) and (zone~=0 or g:IsContains(c))
 end
 function c93503294.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
@@ -48,10 +48,10 @@ function c93503294.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.Release(tc,REASON_COST)
 end
 function c93503294.spfilter0(c,e,tp)
-	return c:IsSetCard(0x205) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsSetCard(0x103) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function c93503294.spfilter1(c,e,tp,zone)
-	return c:IsSetCard(0x205) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP,tp,zone)
+	return c:IsSetCard(0x103) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP,tp,zone)
 end
 function c93503294.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
@@ -77,7 +77,7 @@ function c93503294.thcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsPreviousLocation(LOCATION_ONFIELD)
 end
 function c93503294.thfilter(c)
-	return c:IsSetCard(0x205) and c:IsAbleToHand()
+	return c:IsSetCard(0x103) and c:IsAbleToHand()
 end
 function c93503294.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and c93503294.thfilter(chkc) end
