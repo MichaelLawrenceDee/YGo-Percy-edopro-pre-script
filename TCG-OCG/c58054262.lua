@@ -33,8 +33,6 @@ function c58054262.atop(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.IsAttackCostPaid()~=2 and e:GetHandler():IsLocation(LOCATION_MZONE) then
 		Duel.PayLPCost(tp,1000)
 		Duel.AttackCostPaid()
-	else
-		Duel.AttackCostPaid(2)
 	end
 end
 function c58054262.spcost(e,tp,eg,ep,ev,re,r,rp,chk)

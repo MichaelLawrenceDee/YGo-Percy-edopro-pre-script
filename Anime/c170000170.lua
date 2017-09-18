@@ -70,7 +70,5 @@ function c170000170.atop(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.IsAttackCostPaid()~=2 and e:GetHandler():IsLocation(LOCATION_MZONE) then
 		Duel.DiscardDeck(tp,10,REASON_COST)
 		Duel.AttackCostPaid()
-	else
-		Duel.AttackCostPaid(2)
 	end
 end
