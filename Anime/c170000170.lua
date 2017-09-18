@@ -67,7 +67,7 @@ function c170000170.atcost(e,c,tp)
 	return Duel.IsPlayerCanDiscardDeckAsCost(tp,10)
 end
 function c170000170.atop(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.IsAttackCostPaid()~=2 and Duel.IsPlayerCanDiscardDeckAsCost(tp,10) then
+	if Duel.IsAttackCostPaid()~=2 and e:GetHandler():IsLocation(LOCATION_MZONE) then
 		Duel.DiscardDeck(tp,10,REASON_COST)
 		Duel.AttackCostPaid()
 	else

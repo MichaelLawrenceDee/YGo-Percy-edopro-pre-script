@@ -50,7 +50,7 @@ function c511015116.atcost(e,c,tp)
 	return Duel.CheckLPCost(tp,1000)
 end
 function c511015116.atop(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.IsAttackCostPaid()~=2 and Duel.CheckLPCost(tp,1000) then
+	if Duel.IsAttackCostPaid()~=2 and e:GetHandler():IsLocation(LOCATION_MZONE) then
 		Duel.PayLPCost(tp,1000)
 		Duel.AttackCostPaid()
 	else

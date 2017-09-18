@@ -13,8 +13,11 @@ function c82199284.atcost(e,c,tp)
 end
 function c82199284.atop(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.IsAttackCostPaid()~=2 then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
-		local tc=Duel.GetMatchingGroup(Card.IsAbleToHandAsCost,tp,LOCATION_ONFIELD,0,e:GetHandler()):SelectUnselect(Group.CreateGroup(),tp,Duel.IsAttackCostPaid()==0, Duel.IsAttackCostPaid()==0)
+		local tc
+		if e:GetHandler():IsLocation(LOCATION_MZONE) then
+			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
+			tc=Duel.GetMatchingGroup(Card.IsAbleToHandAsCost,tp,LOCATION_ONFIELD,0,e:GetHandler()):SelectUnselect(Group.CreateGroup(),tp,Duel.IsAttackCostPaid()==0, Duel.IsAttackCostPaid()==0)
+		end
 		if tc then
 			Duel.SendtoHand(tc,nil,REASON_COST)
 			Duel.AttackCostPaid()

@@ -19,8 +19,11 @@ function c37869028.atcost(e,c,tp)
 end
 function c37869028.atop(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.IsAttackCostPaid()~=2 then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
-		local tc=Duel.GetReleaseGroup(tp):Filter(Card.IsRace,e:GetHandler(),RACE_AQUA):SelectUnselect(Group.CreateGroup(),tp,Duel.IsAttackCostPaid()==0, Duel.IsAttackCostPaid()==0)
+		local tc
+		if e:GetHandler():IsLocation(LOCATION_MZONE) then
+			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
+			tc=Duel.GetReleaseGroup(tp):Filter(Card.IsRace,e:GetHandler(),RACE_AQUA):SelectUnselect(Group.CreateGroup(),tp,Duel.IsAttackCostPaid()==0, Duel.IsAttackCostPaid()==0)
+		end
 		if tc then
 			Duel.Release(tc,REASON_COST)
 			Duel.AttackCostPaid()
