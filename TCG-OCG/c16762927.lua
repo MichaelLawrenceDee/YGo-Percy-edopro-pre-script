@@ -29,8 +29,10 @@ function c16762927.atcost(e,c,tp)
 	return Duel.IsPlayerCanDiscardDeckAsCost(tp,ct)
 end
 function c16762927.atop(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.IsAttackCostPaid()~=2 then
+	if Duel.IsAttackCostPaid()~=2 and Duel.IsPlayerCanDiscardDeckAsCost(tp,Duel.GetFlagEffect(tp,16762927)) then
 		Duel.DiscardDeck(tp,1,REASON_COST)
 		Duel.AttackCostPaid()
+	else
+		Duel.AttackCostPaid(2)
 	end
 end

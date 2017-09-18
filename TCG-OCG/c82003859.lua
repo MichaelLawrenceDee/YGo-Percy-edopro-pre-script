@@ -29,8 +29,10 @@ function c82003859.atcost(e,c,tp)
 	return Duel.CheckLPCost(tp,ct*500)
 end
 function c82003859.atop(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.IsAttackCostPaid()~=2 then
+	if Duel.IsAttackCostPaid()~=2 and Duel.CheckLPCost(tp,Duel.GetFlagEffect(tp,82003859)*500) then
 		Duel.PayLPCost(tp,500)
 		Duel.AttackCostPaid()
+	else
+		Duel.AttackCostPaid(2)
 	end
 end

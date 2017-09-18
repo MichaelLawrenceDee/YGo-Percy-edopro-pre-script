@@ -12,8 +12,10 @@ function c21417692.atcost(e,c,tp)
 	return Duel.CheckLPCost(tp,1000)
 end
 function c21417692.atop(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.IsAttackCostPaid()~=2 then
+	if Duel.IsAttackCostPaid()~=2 and Duel.CheckLPCost(tp,1000) then
 		Duel.PayLPCost(tp,1000)
 		Duel.AttackCostPaid()
+	else
+		Duel.AttackCostPaid(2)
 	end
 end
