@@ -9,7 +9,7 @@ function c89818984.initial_effect(c)
 	e1:SetCode(EFFECT_SPSUMMON_PROC)
 	e1:SetCondition(c89818984.hspcon)
 	e1:SetOperation(c89818984.hspop)
-	c:RegisterEffect(e1)
+	c:RegisterEffect(e1,false,2)
 	--draw
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(89818984,0))

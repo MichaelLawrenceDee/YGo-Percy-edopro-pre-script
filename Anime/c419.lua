@@ -2,12 +2,6 @@
 function c419.initial_effect(c)
 	if not c419.global_check then
 		c419.global_check=true
-		--register for ocg cardians
-		local e3=Effect.CreateEffect(c)
-		e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-		e3:SetCode(EVENT_ADJUST)
-		e3:SetOperation(c419.op4)
-		Duel.RegisterEffect(e3,0)
 		--register for atk change
 		local e5=Effect.CreateEffect(c)
 		e5:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
@@ -26,179 +20,11 @@ function c419.initial_effect(c)
 		Duel.RegisterEffect(atkadj,0)
 	end
 end
-function c419.op4(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(Card.IsSetCard,0,0x13,0x13,nil,0xe6)
-	local tc=g:GetFirst()
-	while tc do
-		if tc:GetFlagEffect(227)==0 then
-			local code=tc:GetOriginalCode()
-			local mt=_G["c" .. code]
-			if mt.spe==nil then
-				if code==17141718 then
-					local e1=Effect.CreateEffect(tc)
-					e1:SetType(EFFECT_TYPE_IGNITION)
-					e1:SetRange(LOCATION_HAND)
-					e1:SetCondition(aux.FALSE)
-					tc:RegisterEffect(e1)
-					mt.spe=e1
-					mt.spcon=function(c,e)
-						if c==nil or not e then return false end
-						local tp=c:GetControler()
-						return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.IsExistingMatchingCard(c17141718.cfilter,tp,LOCATION_MZONE,0,1,nil)
-							and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
-					end
-				elseif code==81752019 then
-					mt.spe=false
-					mt.spcon=aux.FALSE()
-				elseif code==54135423 then
-					local e1=Effect.CreateEffect(tc)
-					e1:SetType(EFFECT_TYPE_IGNITION)
-					e1:SetRange(LOCATION_HAND)
-					e1:SetCondition(aux.FALSE)
-					tc:RegisterEffect(e1)
-					mt.spe=e1
-					mt.spcon=function(c,e)
-						if c==nil or not e then return false end
-						local tp=c:GetControler()
-						return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.IsExistingMatchingCard(c54135423.cfilter,tp,LOCATION_MZONE,0,1,nil)
-							and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
-					end
-				elseif code==80630522 then
-					local e1=Effect.CreateEffect(tc)
-					e1:SetType(EFFECT_TYPE_IGNITION)
-					e1:SetRange(LOCATION_HAND)
-					e1:SetCondition(aux.FALSE)
-					tc:RegisterEffect(e1)
-					mt.spe=e1
-					mt.spcon=function(c,e)
-						if c==nil or not e then return false end
-						local tp=c:GetControler()
-						return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.IsExistingMatchingCard(c80630522.cfilter,tp,LOCATION_MZONE,0,1,nil)
-							and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
-					end
-				elseif code==16024176 then
-					local e1=Effect.CreateEffect(tc)
-					e1:SetProperty(EFFECT_FLAG_UNCOPYABLE)
-					e1:SetType(EFFECT_TYPE_FIELD)
-					e1:SetRange(LOCATION_HAND)
-					e1:SetCode(EFFECT_SPSUMMON_PROC)
-					e1:SetCondition(aux.FALSE)
-					tc:RegisterEffect(e1)
-					mt.spe=e1
-					mt.spcon=function(c,e)
-						if c==nil or not e then return false end
-						local tp=c:GetControler()
-						return Duel.GetLocationCount(tp,LOCATION_MZONE)>-1 and Duel.CheckReleaseGroup(tp,c16024176.hspfilter,1,nil)
-							and Duel.IsPlayerCanSpecialSummonMonster(tp,c:GetOriginalCode(),0xe6,c:GetOriginalType(),c:GetOriginalLevel(),
-							c:GetBaseAttack(),c:GetBaseDefense(),c:GetOriginalRace(),c:GetOriginalAttribute())
-					end
-				elseif code==57261568 then
-					local e1=Effect.CreateEffect(tc)
-					e1:SetProperty(EFFECT_FLAG_UNCOPYABLE)
-					e1:SetType(EFFECT_TYPE_FIELD)
-					e1:SetRange(LOCATION_HAND)
-					e1:SetCode(EFFECT_SPSUMMON_PROC)
-					e1:SetCondition(aux.FALSE)
-					tc:RegisterEffect(e1)
-					mt.spe=e1
-					mt.spcon=function(c,e)
-						if c==nil or not e then return false end
-						local tp=c:GetControler()
-						return Duel.GetLocationCount(tp,LOCATION_MZONE)>-1 and Duel.CheckReleaseGroup(tp,c57261568.hspfilter,1,nil)
-							and Duel.IsPlayerCanSpecialSummonMonster(tp,c:GetOriginalCode(),0xe6,c:GetOriginalType(),c:GetOriginalLevel(),
-							c:GetBaseAttack(),c:GetBaseDefense(),c:GetOriginalRace(),c:GetOriginalAttribute())
-					end
-				elseif code==94388754 then
-					local e1=Effect.CreateEffect(tc)
-					e1:SetProperty(EFFECT_FLAG_UNCOPYABLE)
-					e1:SetType(EFFECT_TYPE_FIELD)
-					e1:SetRange(LOCATION_HAND)
-					e1:SetCode(EFFECT_SPSUMMON_PROC)
-					e1:SetCondition(aux.FALSE)
-					tc:RegisterEffect(e1)
-					mt.spe=e1
-					mt.spcon=function(c,e)
-						if c==nil or not e then return false end
-						local tp=c:GetControler()
-						return Duel.GetLocationCount(tp,LOCATION_MZONE)>-1 and Duel.CheckReleaseGroup(tp,c94388754.hspfilter,1,nil)
-							and Duel.IsPlayerCanSpecialSummonMonster(tp,c:GetOriginalCode(),0xe6,c:GetOriginalType(),c:GetOriginalLevel(),
-							c:GetBaseAttack(),c:GetBaseDefense(),c:GetOriginalRace(),c:GetOriginalAttribute())
-					end
-				elseif code==43413875 then
-					local e1=Effect.CreateEffect(tc)
-					e1:SetProperty(EFFECT_FLAG_UNCOPYABLE)
-					e1:SetType(EFFECT_TYPE_FIELD)
-					e1:SetRange(LOCATION_HAND)
-					e1:SetCode(EFFECT_SPSUMMON_PROC)
-					e1:SetCondition(aux.FALSE)
-					tc:RegisterEffect(e1)
-					mt.spe=e1
-					mt.spcon=function(c,e)
-						if c==nil or not e then return false end
-						local tp=c:GetControler()
-						return Duel.GetLocationCount(tp,LOCATION_MZONE)>-1 and Duel.CheckReleaseGroup(tp,c43413875.hspfilter,1,nil)
-							and Duel.IsPlayerCanSpecialSummonMonster(tp,c:GetOriginalCode(),0xe6,c:GetOriginalType(),c:GetOriginalLevel(),
-							c:GetBaseAttack(),c:GetBaseDefense(),c:GetOriginalRace(),c:GetOriginalAttribute())
-					end
-				elseif code==21772453 then
-					local e1=Effect.CreateEffect(tc)
-					e1:SetProperty(EFFECT_FLAG_UNCOPYABLE)
-					e1:SetType(EFFECT_TYPE_FIELD)
-					e1:SetRange(LOCATION_HAND)
-					e1:SetCode(EFFECT_SPSUMMON_PROC)
-					e1:SetCondition(aux.FALSE)
-					tc:RegisterEffect(e1)
-					mt.spe=e1
-					mt.spcon=function(c,e)
-						if c==nil or not e then return false end
-						local tp=c:GetControler()
-						return Duel.GetLocationCount(tp,LOCATION_MZONE)>-1 and Duel.CheckReleaseGroup(tp,c21772453.hspfilter,1,nil)
-							and Duel.IsPlayerCanSpecialSummonMonster(tp,c:GetOriginalCode(),0xe6,c:GetOriginalType(),c:GetOriginalLevel(),
-							c:GetBaseAttack(),c:GetBaseDefense(),c:GetOriginalRace(),c:GetOriginalAttribute())
-					end
-				elseif code==89818984 then
-					local e1=Effect.CreateEffect(tc)
-					e1:SetProperty(EFFECT_FLAG_UNCOPYABLE)
-					e1:SetType(EFFECT_TYPE_FIELD)
-					e1:SetRange(LOCATION_HAND)
-					e1:SetCode(EFFECT_SPSUMMON_PROC)
-					e1:SetCondition(aux.FALSE)
-					tc:RegisterEffect(e1)
-					mt.spe=e1
-					mt.spcon=function(c,e)
-						if c==nil or not e then return false end
-						local tp=c:GetControler()
-						return Duel.GetLocationCount(tp,LOCATION_MZONE)>-1 and Duel.CheckReleaseGroup(tp,c89818984.hspfilter,1,nil)
-							and Duel.IsPlayerCanSpecialSummonMonster(tp,c:GetOriginalCode(),0xe6,c:GetOriginalType(),c:GetOriginalLevel(),
-							c:GetBaseAttack(),c:GetBaseDefense(),c:GetOriginalRace(),c:GetOriginalAttribute())
-					end
-				elseif code==16802689 then
-					local e1=Effect.CreateEffect(tc)
-					e1:SetProperty(EFFECT_FLAG_UNCOPYABLE)
-					e1:SetType(EFFECT_TYPE_FIELD)
-					e1:SetRange(LOCATION_HAND)
-					e1:SetCode(EFFECT_SPSUMMON_PROC)
-					e1:SetCondition(aux.FALSE)
-					tc:RegisterEffect(e1)
-					mt.spe=e1
-					mt.spcon=function(c,e)
-						if c==nil or not e then return false end
-						local tp=c:GetControler()
-						return Duel.GetLocationCount(tp,LOCATION_MZONE)>-1 and Duel.CheckReleaseGroup(tp,c16802689.hspfilter,1,nil)
-							and Duel.IsPlayerCanSpecialSummonMonster(tp,c:GetOriginalCode(),0xe6,c:GetOriginalType(),c:GetOriginalLevel(),
-							c:GetBaseAttack(),c:GetBaseDefense(),c:GetOriginalRace(),c:GetOriginalAttribute())
-					end
-				end
-			end
-			tc:RegisterFlagEffect(227,nil,0,1) 	
-		end
-		tc=g:GetNext()
-	end
-end
 
 function c419.op5(e,tp,eg,ep,ev,re,r,rp)
 	--ATK = 285, prev ATK = 284
 	--LVL = 585, prev LVL = 584
+	--DEF = 385, prev DEF = 384
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(aux.TRUE,tp,0xff,0xff,nil)
 	if not g then return end
@@ -206,12 +32,20 @@ function c419.op5(e,tp,eg,ep,ev,re,r,rp)
 	while tc do
 		if tc:GetFlagEffect(285)==0 and tc:GetFlagEffect(585)==0 then
 			local atk=tc:GetAttack()
+			local def=tc:GetDefense()
 			if atk<=0 then
 				tc:RegisterFlagEffect(285,nil,0,1,0)
 				tc:RegisterFlagEffect(284,nil,0,1,0)
 			else
 				tc:RegisterFlagEffect(285,nil,0,1,atk)
 				tc:RegisterFlagEffect(284,nil,0,1,atk)
+			end
+			if def<=0 then
+				tc:RegisterFlagEffect(385,nil,0,1,0)
+				tc:RegisterFlagEffect(384,nil,0,1,0)
+			else
+				tc:RegisterFlagEffect(385,nil,0,1,atk)
+				tc:RegisterFlagEffect(384,nil,0,1,atk)
 			end
 			local lv=tc:GetLevel()
 			tc:RegisterFlagEffect(585,nil,0,1,lv)
@@ -224,6 +58,10 @@ function c419.atkcfilter(c)
 	if c:GetFlagEffect(285)==0 then return false end
 	return c:GetAttack()~=c:GetFlagEffectLabel(285)
 end
+function c419.defcfilter(c)
+	if c:GetFlagEffect(385)==0 then return false end
+	return c:GetDefense()~=c:GetFlagEffectLabel(385)
+end
 function c419.lvcfilter(c)
 	if c:GetFlagEffect(585)==0 then return false end
 	return c:GetLevel()~=c:GetFlagEffectLabel(585)
@@ -234,6 +72,12 @@ function c419.atkraiseeff(e,tp,eg,ep,ev,re,r,rp)
 	local g2=Group.CreateGroup() --gain atk
 	local g3=Group.CreateGroup() --lose atk
 	local g4=Group.CreateGroup() --gain atk from original
+	
+	local dg=Duel.GetMatchingGroup(c419.defcfilter,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
+	local g5=Group.CreateGroup() --change def
+	--local g6=Group.CreateGroup() --gain def
+	--local g7=Group.CreateGroup() --lose def
+	--local g8=Group.CreateGroup() --gain def from original
 	local tc=g:GetFirst()
 	while tc do
 		local prevatk=0
@@ -261,6 +105,35 @@ function c419.atkraiseeff(e,tp,eg,ep,ev,re,r,rp)
 		end
 		tc=g:GetNext()
 	end
+	
+	local dc=dg:GetFirst()
+	while dc do
+		local prevdef=0
+		if dc:GetFlagEffect(385)>0 then prevdef=dc:GetFlagEffectLabel(385) end
+		g5:AddCard(dc)
+		if prevdef>dc:GetDefense() then
+			--g7:AddCard(dc)
+		else
+			--g6:AddCard(dc)
+			if prevdef<=dc:GetBaseDefense() and dc:GetDefense()>dc:GetBaseDefense() then
+				--g8:AddCard(dc)
+			end
+		end
+		dc:ResetFlagEffect(384)
+		dc:ResetFlagEffect(385)
+		if prevdef>0 then
+			dc:RegisterFlagEffect(384,nil,0,1,prevdef)
+		else
+			dc:RegisterFlagEffect(384,nil,0,1,0)
+		end
+		if dc:GetDefense()>0 then
+			dc:RegisterFlagEffect(385,nil,0,1,dc:GetDefense())
+		else
+			dc:RegisterFlagEffect(385,nil,0,1,0)
+		end
+		dc=dg:GetNext()
+	end
+	
 	Duel.RaiseEvent(g1,511001265,re,REASON_EFFECT,rp,ep,0)
 	Duel.RaiseEvent(g1,511001441,re,REASON_EFFECT,rp,ep,0)
 	Duel.RaiseEvent(g2,511000377,re,REASON_EFFECT,rp,ep,0)
@@ -268,6 +141,8 @@ function c419.atkraiseeff(e,tp,eg,ep,ev,re,r,rp)
 	Duel.RaiseEvent(g3,511000883,re,REASON_EFFECT,rp,ep,0)
 	Duel.RaiseEvent(g3,511009110,re,REASON_EFFECT,rp,ep,0)
 	Duel.RaiseEvent(g4,511002546,re,REASON_EFFECT,rp,ep,0)
+	Duel.RaiseEvent(g5,511009053,re,REASON_EFFECT,rp,ep,0)
+	--Duel.RaiseEvent(g5,???,re,REASON_EFFECT,rp,ep,0)
 	
 	local lvg=Duel.GetMatchingGroup(c419.lvcfilter,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
 	local lvc=lvg:GetFirst()
@@ -291,6 +166,12 @@ function c419.atkraiseadj(e,tp,eg,ep,ev,re,r,rp)
 	local g2=Group.CreateGroup() --gain atk
 	local g3=Group.CreateGroup() --lose atk
 	local g4=Group.CreateGroup() --gain atk from original
+	
+	local dg=Duel.GetMatchingGroup(c419.defcfilter,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
+	local g5=Group.CreateGroup() --change def
+	--local g6=Group.CreateGroup() --gain def
+	--local g7=Group.CreateGroup() --lose def
+	--local g8=Group.CreateGroup() --gain def from original
 	local tc=g:GetFirst()
 	while tc do
 		local prevatk=0
@@ -318,10 +199,40 @@ function c419.atkraiseadj(e,tp,eg,ep,ev,re,r,rp)
 		end
 		tc=g:GetNext()
 	end
+	
+	local dc=dg:GetFirst()
+	while dc do
+		local prevdef=0
+		if dc:GetFlagEffect(385)>0 then prevdef=dc:GetFlagEffectLabel(385) end
+		g5:AddCard(dc)
+		if prevdef>dc:GetDefense() then
+			--g7:AddCard(dc)
+		else
+			--g6:AddCard(dc)
+			if prevdef<=dc:GetBaseDefense() and dc:GetDefense()>dc:GetBaseDefense() then
+				--g8:AddCard(dc)
+			end
+		end
+		dc:ResetFlagEffect(284)
+		dc:ResetFlagEffect(285)
+		if prevdef>0 then
+			dc:RegisterFlagEffect(284,nil,0,1,prevdef)
+		else
+			dc:RegisterFlagEffect(284,nil,0,1,0)
+		end
+		if dc:GetAttack()>0 then
+			dc:RegisterFlagEffect(285,nil,0,1,dc:GetAttack())
+		else
+			dc:RegisterFlagEffect(285,nil,0,1,0)
+		end
+		dc=dg:GetNext()
+	end
+	
 	Duel.RaiseEvent(g1,511001265,e,REASON_EFFECT,rp,ep,0)
 	Duel.RaiseEvent(g2,511001762,e,REASON_EFFECT,rp,ep,0)
 	Duel.RaiseEvent(g3,511009110,e,REASON_EFFECT,rp,ep,0)
 	Duel.RaiseEvent(g4,511002546,e,REASON_EFFECT,rp,ep,0)
+	Duel.RaiseEvent(g5,511009053,e,REASON_EFFECT,rp,ep,0)
 	
 	local lvg=Duel.GetMatchingGroup(c419.lvcfilter,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
 	local lvc=lvg:GetFirst()

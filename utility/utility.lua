@@ -35,24 +35,29 @@ end
 local regeff=Card.RegisterEffect
 function Card.RegisterEffect(c,e,forced,...)
 	--1 == 511002571 - access to effects that activate that detach an Xyz Material as cost
+	--2 == 511001692 - access to Cardian Summoning conditions/effects
 	regeff(c,e,forced)
 	local reg={...}
 	local resetflag,resetcount=e:GetReset()
 	for _,val in ipairs(reg) do
+		local prop=EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_SET_AVAILABLE
+		if e:IsHasProperty(EFFECT_FLAG_UNCOPYABLE) then prop=prop+EFFECT_FLAG_UNCOPYABLE end
+		local e2=Effect.CreateEffect(c)
+		e2:SetType(EFFECT_TYPE_SINGLE)
+		e2:SetProperty(prop)
 		if val==1 then
-			local e2=Effect.CreateEffect(c)
-			e2:SetType(EFFECT_TYPE_SINGLE)
-			e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_SET_AVAILABLE)
 			e2:SetCode(511002571)
-			e2:SetLabelObject(e)
-			e2:SetLabel(c:GetOriginalCode())
-			if resetflag and resetcount then
-				e2:SetReset(resetflag,resetcount)
-			elseif resetflag then
-				e2:SetReset(resetflag)
-			end
-			c:RegisterEffect(e2)
+		elseif val==2 then
+			e2:SetCode(511001692)
 		end
+		e2:SetLabelObject(e)
+		e2:SetLabel(c:GetOriginalCode())
+		if resetflag and resetcount then
+			e2:SetReset(resetflag,resetcount)
+		elseif resetflag then
+			e2:SetReset(resetflag)
+		end
+		c:RegisterEffect(e2)
 	end
 end
 
