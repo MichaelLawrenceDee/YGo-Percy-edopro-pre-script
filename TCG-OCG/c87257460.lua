@@ -12,6 +12,7 @@ function c87257460.initial_effect(c)
 	e1:SetTarget(c87257460.eqtg)
 	e1:SetOperation(c87257460.eqop)
 	c:RegisterEffect(e1)
+	aux.AddEREquipLimit(c,c87257460.eqcon,c87257460.eqval,c87257460.equipop,e1)
 	--special summon
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(87257460,1))
@@ -26,10 +27,17 @@ function c87257460.initial_effect(c)
 	e2:SetLabelObject(e1)
 	c:RegisterEffect(e2)
 end
-c87257460.listed_names={23756165}
+c87257460.lvupcount=1
+c87257460.lvup={23756165}
 function c87257460.eqcon(e,tp,eg,ep,ev,re,r,rp)
-	local ec=e:GetLabelObject()
-	return ec==nil or ec:GetFlagEffect(87257460)==0
+	local g=e:GetHandler():GetEquipGroup():Filter(c87257460.eqfilter,nil)
+	return g:GetCount()==0
+end
+function c87257460.eqfilter(c)
+	return c:GetFlagEffect(87257460)~=0 
+end
+function c87257460.eqval(ec,c,tp)
+	return ec:IsControler(1-tp) and ec:IsLevelBelow(3)
 end
 function c87257460.filter(c)
 	return c:IsLevelBelow(3) and c:IsFaceup() and c:IsAbleToChangeControler()
@@ -42,32 +50,22 @@ function c87257460.eqtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local g=Duel.SelectTarget(tp,c87257460.filter,tp,0,LOCATION_MZONE,1,1,nil)
 	Duel.SetOperationInfo(0,CATEGORY_EQUIP,g,1,0,0)
 end
-function c87257460.eqlimit(e,c)
-	return e:GetOwner()==c and not c:IsDisabled()
+function c87257460.equipop(c,e,tp,tc)
+	if not aux.EquipByEffectAndLimitRegister(c,e,tp,tc,87257460) then return end
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_EQUIP)
+	e2:SetCode(EFFECT_DESTROY_SUBSTITUTE)
+	e2:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_OWNER_RELATE)
+	e2:SetReset(RESET_EVENT+0x1fe0000)
+	e2:SetValue(c87257460.repval)
+	tc:RegisterEffect(e2)
 end
 function c87257460.eqop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
-	if tc:IsFaceup() and tc:IsRelateToEffect(e) then
+	if tc and tc:IsFaceup() and tc:IsRelateToEffect(e) then
 		if c:IsFaceup() and c:IsRelateToEffect(e) then
-			if not Duel.Equip(tp,tc,c,false) then return end
-			--Add Equip limit
-			tc:RegisterFlagEffect(87257460,RESET_EVENT+0x1fe0000,0,0)
-			e:SetLabelObject(tc)
-			local e1=Effect.CreateEffect(c)
-			e1:SetType(EFFECT_TYPE_SINGLE)
-			e1:SetProperty(EFFECT_FLAG_COPY_INHERIT+EFFECT_FLAG_OWNER_RELATE)
-			e1:SetCode(EFFECT_EQUIP_LIMIT)
-			e1:SetReset(RESET_EVENT+0x1fe0000)
-			e1:SetValue(c87257460.eqlimit)
-			tc:RegisterEffect(e1)
-			local e2=Effect.CreateEffect(c)
-			e2:SetType(EFFECT_TYPE_EQUIP)
-			e2:SetCode(EFFECT_DESTROY_SUBSTITUTE)
-			e2:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_OWNER_RELATE)
-			e2:SetReset(RESET_EVENT+0x1fe0000)
-			e2:SetValue(c87257460.repval)
-			tc:RegisterEffect(e2)
+			c87257460.equipop(c,e,tp,tc)
 		else Duel.SendtoGrave(tc,REASON_EFFECT) end
 	end
 end
@@ -75,8 +73,8 @@ function c87257460.repval(e,re,r,rp)
 	return bit.band(r,REASON_BATTLE)~=0
 end
 function c87257460.spcon(e,tp,eg,ep,ev,re,r,rp)
-	local ec=e:GetLabelObject():GetLabelObject()
-	return Duel.GetTurnPlayer()==tp and ec and ec:GetFlagEffect(87257460)~=0
+	local g=e:GetHandler():GetEquipGroup():Filter(c87257460.eqfilter,nil)
+	return Duel.GetTurnPlayer()==tp and g:GetCount()==1
 end
 function c87257460.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsAbleToGraveAsCost() end

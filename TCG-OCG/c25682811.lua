@@ -14,6 +14,7 @@ function c25682811.initial_effect(c)
 	e1:SetTarget(c25682811.eqtg)
 	e1:SetOperation(c25682811.eqop)
 	c:RegisterEffect(e1)
+	aux.AddEREquipLimit(c,nil,c25682811.eqval,c25682811.equipop,e1)
 	--atkup
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_SINGLE)
@@ -22,6 +23,9 @@ function c25682811.initial_effect(c)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetValue(c25682811.atkval)
 	c:RegisterEffect(e2)
+end
+function c25682811.eqval(ec,c,tp)
+	return ec:IsControler(tp) and ec:IsSetCard(0x29) and ec:IsRace(RACE_DRAGON)
 end
 function c25682811.eqcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_SYNCHRO)
@@ -39,6 +43,18 @@ function c25682811.eqtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	Duel.SetOperationInfo(0,CATEGORY_LEAVE_GRAVE,g,g:GetCount(),0,0)
 	Duel.SetOperationInfo(0,CATEGORY_EQUIP,g,g:GetCount(),0,0)
 end
+function c25682811.equipop(c,e,tp,tc,chk)
+	local eff=false or chk
+	Duel.Equip(tp,tc,c,false,eff)
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_SINGLE)
+	e1:SetProperty(EFFECT_FLAG_OWNER_RELATE)
+	e1:SetCode(EFFECT_EQUIP_LIMIT)
+	e1:SetReset(RESET_EVENT+0x1fe0000)
+	e1:SetValue(aux.EquipByEffectLimit)
+	e1:SetLabelObject(e:GetLabelObject())
+	tc:RegisterEffect(e1)
+end
 function c25682811.eqop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS)
 	local sg=g:Filter(Card.IsRelateToEffect,nil,e)
@@ -47,19 +63,9 @@ function c25682811.eqop(e,tp,eg,ep,ev,re,r,rp)
 	if c:IsFacedown() or not c:IsRelateToEffect(e) then return end
 	local tc=sg:GetFirst()
 	while tc do
-		Duel.Equip(tp,tc,c,false)
-		local e1=Effect.CreateEffect(c)
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetProperty(EFFECT_FLAG_OWNER_RELATE)
-		e1:SetCode(EFFECT_EQUIP_LIMIT)
-		e1:SetReset(RESET_EVENT+0x1fe0000)
-		e1:SetValue(c25682811.eqlimit)
-		tc:RegisterEffect(e1)
+		c25682811.equipop(c,e,tp,tc,true)
 		tc=sg:GetNext()
 	end
-end
-function c25682811.eqlimit(e,c)
-	return e:GetOwner()==c
 end
 function c25682811.atkval(e,c)
 	return c:GetEquipGroup():FilterCount(Card.IsSetCard,nil,0x29)*300

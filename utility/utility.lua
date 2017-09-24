@@ -419,6 +419,69 @@ function Auxiliary.SpElimFilter(c,mustbefaceup,includemzone)
 	end
 end
 
+--check for Eyes Restrict equip limit
+function Auxiliary.AddEREquipLimit(c,con,equipval,equipop,linkedeff,prop,resetflag,resetcount)
+	local finalprop=EFFECT_FLAG_CANNOT_DISABLE
+	if prop~=nil then
+		finalprop=finalprop+prop
+	end
+	local e1=Effect.CreateEffect(c)
+	if con then
+		e1:SetCondition(con)
+	end
+	e1:SetType(EFFECT_TYPE_SINGLE)
+	e1:SetProperty(finalprop)
+	e1:SetCode(100407001) --to be changed when official code is released
+	e1:SetLabelObject(linkedeff)
+	if resetflag and resetcount then
+		e1:SetReset(resetflag,resetcount)
+	elseif resetflag then
+		e1:SetReset(resetflag)
+	end
+	e1:SetValue(function(ec,c,tp) return equipval(ec,c,tp) end)
+	e1:SetOperation(function(c,e,tp,tc) equipop(c,e,tp,tc) end)
+	c:RegisterEffect(e1)
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_SINGLE)
+	e2:SetProperty(finalprop-EFFECT_FLAG_CANNOT_DISABLE)
+	e2:SetCode(100407001+EFFECT_EQUIP_LIMIT) --to be changed when official code is released
+	if resetflag and resetcount then
+		e2:SetReset(resetflag,resetcount)
+	elseif resetflag then
+		e2:SetReset(resetflag)
+	end
+	c:RegisterEffect(e2)
+	linkedeff:SetLabelObject(e2)
+end
+
+function Auxiliary.EquipByEffectLimit(e,c)
+	if e:GetOwner()~=c then return false end
+	local eff={c:GetCardEffect(100407001+EFFECT_EQUIP_LIMIT)}
+	for _,te in ipairs(eff) do
+		if te==e:GetLabelObject() then return true end
+	end
+	return false
+end
+--register for "Equip to this card by its effect"
+function Auxiliary.EquipByEffectAndLimitRegister(c,e,tp,tc,code,mustbefaceup)
+	local up=false or mustbefaceup
+	if not Duel.Equip(tp,tc,c,up) then return false end
+	--Add Equip limit
+	if code then
+		tc:RegisterFlagEffect(code,RESET_EVENT+0x1fe0000,0,0)
+	end
+	local te=e:GetLabelObject()
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_SINGLE)
+	e1:SetProperty(EFFECT_FLAG_OWNER_RELATE)
+	e1:SetCode(EFFECT_EQUIP_LIMIT)
+	e1:SetReset(RESET_EVENT+0x1fe0000)
+	e1:SetValue(Auxiliary.EquipByEffectLimit)
+	e1:SetLabelObject(te)
+	tc:RegisterEffect(e1)
+	return true
+end
+
 --add procedure to equip spells equipping by rule
 function Auxiliary.AddEquipProcedure(c,p,f,eqlimit,cost,tg,op,con)
 	--Note: p==0 is check equip spell controler, p==1 for opponent's, PLAYER_ALL for both player's monsters

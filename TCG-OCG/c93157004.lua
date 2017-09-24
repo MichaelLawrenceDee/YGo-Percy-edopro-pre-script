@@ -23,6 +23,7 @@ function c93157004.initial_effect(c)
 	e3:SetTarget(c93157004.eqtg)
 	e3:SetOperation(c93157004.eqop)
 	c:RegisterEffect(e3)
+	aux.AddEREquipLimit(c,nil,c93157004.eqval,c93157004.equipop,e3)
 	--negate
 	local e4=Effect.CreateEffect(c)
 	e4:SetDescription(aux.Stringid(93157004,2))
@@ -42,6 +43,9 @@ function c93157004.initial_effect(c)
 	e5:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e5:SetCode(21142671)
 	c:RegisterEffect(e5)
+end
+function c93157004.eqval(ec,c,tp)
+	return ec:IsControler(tp) and ec:IsSetCard(0x30)
 end
 function c93157004.descon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():GetSummonType()==SUMMON_TYPE_SYNCHRO
@@ -71,22 +75,15 @@ function c93157004.eqtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	Duel.SetOperationInfo(0,CATEGORY_LEAVE_GRAVE,g,1,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_EQUIP,g,1,0,0)
 end
+function c93157004.equipop(c,e,tp,tc)
+	aux.EquipByEffectAndLimitRegister(c,e,tp,tc,nil,true)
+end
 function c93157004.eqop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) and c:IsFaceup() and c:IsRelateToEffect(e) then
-		if not Duel.Equip(tp,tc,c) then return end
-		local e1=Effect.CreateEffect(c)
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetProperty(EFFECT_FLAG_COPY_INHERIT+EFFECT_FLAG_OWNER_RELATE)
-		e1:SetCode(EFFECT_EQUIP_LIMIT)
-		e1:SetReset(RESET_EVENT+0x1fe0000)
-		e1:SetValue(c93157004.eqlimit)
-		tc:RegisterEffect(e1)
+	if tc and tc:IsRelateToEffect(e) and c:IsFaceup() and c:IsRelateToEffect(e) then
+		c93157004.equipop(c,e,tp,tc)
 	end
-end
-function c93157004.eqlimit(e,c)
-	return e:GetOwner()==c
 end
 function c93157004.discon(e,tp,eg,ep,ev,re,r,rp)
 	return not e:GetHandler():IsStatus(STATUS_BATTLE_DESTROYED) and re:IsActiveType(TYPE_MONSTER)
@@ -101,7 +98,7 @@ end
 function c93157004.distg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
 	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
-	if re:GetHandler():IsDestructable() and re:GetHandler():IsRelateToEffect(re) then
+	if re:GetHandler():IsRelateToEffect(re) then
 		Duel.SetOperationInfo(0,CATEGORY_DESTROY,eg,1,0,0)
 	end
 end

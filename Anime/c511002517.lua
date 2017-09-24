@@ -2,7 +2,7 @@
 function c511002517.initial_effect(c)
 	--equip
 	local e3=Effect.CreateEffect(c)
-	e3:SetDescription(aux.Stringid(63468625,0))
+	e3:SetDescription(aux.Stringid(511002517,0))
 	e3:SetCategory(CATEGORY_EQUIP)
 	e3:SetType(EFFECT_TYPE_IGNITION)
 	e3:SetProperty(EFFECT_FLAG_CARD_TARGET)
@@ -11,9 +11,10 @@ function c511002517.initial_effect(c)
 	e3:SetTarget(c511002517.eqtg)
 	e3:SetOperation(c511002517.eqop)
 	c:RegisterEffect(e3)
+	aux.AddEREquipLimit(c,nil,c511002517.eqval,c511002517.equipop,e3)
 	--damage
 	local e4=Effect.CreateEffect(c)
-	e4:SetDescription(aux.Stringid(63468625,1))
+	e4:SetDescription(aux.Stringid(511002517,1))
 	e4:SetCategory(CATEGORY_DAMAGE)
 	e4:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
 	e4:SetType(EFFECT_TYPE_TRIGGER_O+EFFECT_TYPE_FIELD)
@@ -41,6 +42,9 @@ function c511002517.initial_effect(c)
 	e2:SetTarget(c511002517.desreptg)
 	c:RegisterEffect(e2)
 end
+function c511002517.eqval(ec,c,tp)
+	return ec:IsType(TYPE_SYNCHRO) and ec:IsControler(1-tp)
+end
 function c511002517.eqfilter(c)
 	return c:IsFaceup() and c:IsType(TYPE_SYNCHRO) and c:IsAbleToChangeControler()
 end
@@ -52,32 +56,23 @@ function c511002517.eqtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local g=Duel.SelectTarget(tp,c511002517.eqfilter,tp,0,LOCATION_MZONE,1,1,nil)
 	Duel.SetOperationInfo(0,CATEGORY_EQUIP,g,1,0,0)
 end
-function c511002517.eqlimit(e,c)
-	return e:GetOwner()==c and not c:IsDisabled()
+function c511002517.equipop(c,e,tp,tc)
+	local atk=tc:GetTextAttack()
+	if atk<0 then atk=0 end
+	if not aux.EquipByEffectAndLimitRegister(c,e,tp,tc,511002517) then return end
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_EQUIP)
+	e2:SetCode(EFFECT_UPDATE_ATTACK)
+	e2:SetReset(RESET_EVENT+0x1fe0000)
+	e2:SetValue(atk)
+	tc:RegisterEffect(e2)
 end
 function c511002517.eqop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
-	if tc:IsFaceup() and tc:IsRelateToEffect(e) and tc:IsType(TYPE_MONSTER) then
+	if tc and tc:IsFaceup() and tc:IsRelateToEffect(e) and tc:IsType(TYPE_MONSTER) then
 		if c:IsFaceup() and c:IsRelateToEffect(e) then
-			local atk=tc:GetTextAttack()
-			if atk<0 then atk=0 end
-			if not Duel.Equip(tp,tc,c,false) then return end
-			--Add Equip limit
-			local e1=Effect.CreateEffect(c)
-			e1:SetType(EFFECT_TYPE_SINGLE)
-			e1:SetProperty(EFFECT_FLAG_COPY_INHERIT)
-			e1:SetCode(EFFECT_EQUIP_LIMIT)
-			e1:SetReset(RESET_EVENT+0x1fe0000)
-			e1:SetValue(c511002517.eqlimit)
-			tc:RegisterEffect(e1)
-			local e2=Effect.CreateEffect(c)
-			e2:SetType(EFFECT_TYPE_EQUIP)
-			e2:SetCode(EFFECT_UPDATE_ATTACK)
-			e2:SetReset(RESET_EVENT+0x1fe0000)
-			e2:SetValue(atk)
-			tc:RegisterEffect(e2)
-			tc:RegisterFlagEffect(63468625,RESET_EVENT+0x1fe0000,0,1)
+			c511002517.equipop(c,e,tp,tc)
 		else Duel.SendtoGrave(tc,REASON_EFFECT) end
 	end
 end
@@ -85,7 +80,7 @@ function c511002517.damcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()==tp
 end
 function c511002517.dcfilter(c)
-	return c:GetFlagEffect(63468625)~=0 and c:IsAbleToGraveAsCost()
+	return c:GetFlagEffect(511002517)~=0 and c:IsAbleToGraveAsCost()
 end
 function c511002517.damcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():GetEquipGroup():IsExists(c511002517.dcfilter,1,nil) end
@@ -129,18 +124,13 @@ function c511002517.effop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c511002517.repfilter(c)
-	if not c:IsSetCard(0x300) or c:IsSetCard(0x13) or not c:IsAbleToRemove() then return false end
-	if Duel.IsPlayerAffectedByEffect(c:GetControler(),69832741) then
-		return c:IsFaceup() and c:IsLocation(LOCATION_MZONE)
-	else
-		return c:IsLocation(LOCATION_GRAVE)
-	end
+	return c:IsSetCard(0x300) and not c:IsSetCard(0x13) and c:IsAbleToRemove() and aux.SpElimFilter(c,true)
 end
 function c511002517.desreptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then return not c:IsReason(REASON_REPLACE) 
 		and Duel.IsExistingMatchingCard(c511002517.repfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,nil) end
-	if Duel.SelectYesNo(tp,aux.Stringid(100000068,0)) then
+	if Duel.SelectEffectYesNo(tp,e:GetHandler(),96) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 		local g=Duel.SelectMatchingCard(tp,c511002517.repfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,1,nil)
 		Duel.Remove(g,POS_FACEUP,REASON_EFFECT+REASON_REPLACE)

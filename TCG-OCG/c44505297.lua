@@ -14,6 +14,7 @@ function c44505297.initial_effect(c)
 	e1:SetTarget(c44505297.eqtg)
 	e1:SetOperation(c44505297.eqop)
 	c:RegisterEffect(e1)
+	aux.AddEREquipLimit(c,nil,aux.FilterBoolFunction(Card.IsType,TYPE_MONSTER),c44505297.equipop,e1)
 	--tograve
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(44505297,1))
@@ -25,14 +26,7 @@ function c44505297.initial_effect(c)
 	e2:SetCost(c44505297.tgcost)
 	e2:SetTarget(c44505297.tgtg)
 	e2:SetOperation(c44505297.tgop)
-	c:RegisterEffect(e2)
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_SINGLE)
-	e3:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_SET_AVAILABLE)
-	e3:SetCode(511002571)
-	e3:SetLabel(c:GetOriginalCode())
-	e3:SetLabelObject(e2)
-	c:RegisterEffect(e3)
+	c:RegisterEffect(e2,false,1)
 end
 function c44505297.eqcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_XYZ)
@@ -48,19 +42,8 @@ function c44505297.eqtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local g=Duel.SelectTarget(tp,c44505297.eqfilter,tp,LOCATION_GRAVE,LOCATION_GRAVE,1,1,nil)
 	Duel.SetOperationInfo(0,CATEGORY_LEAVE_GRAVE,g,1,0,0)
 end
-function c44505297.eqop(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	local tc=Duel.GetFirstTarget()
-	if Duel.GetLocationCount(tp,LOCATION_SZONE)<=0 or c:IsFacedown()
-		or not c:IsRelateToEffect(e) or not tc:IsRelateToEffect(e) then return end
-	Duel.Equip(tp,tc,c,false)
-	local e1=Effect.CreateEffect(c)
-	e1:SetProperty(EFFECT_FLAG_OWNER_RELATE)
-	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetCode(EFFECT_EQUIP_LIMIT)
-	e1:SetReset(RESET_EVENT+0x1fe0000)
-	e1:SetValue(c44505297.eqlimit)
-	tc:RegisterEffect(e1)
+function c44505297.equipop(c,e,tp,tc)
+	if not aux.EquipByEffectAndLimitRegister(c,e,tp,tc) then return end
 	local atk=tc:GetTextAttack()/2
 	if atk<0 then atk=0 end
 	local e2=Effect.CreateEffect(c)
@@ -78,8 +61,12 @@ function c44505297.eqop(e,tp,eg,ep,ev,re,r,rp)
 	e3:SetValue(def)
 	tc:RegisterEffect(e3)
 end
-function c44505297.eqlimit(e,c)
-	return e:GetOwner()==c
+function c44505297.eqop(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	local tc=Duel.GetFirstTarget()
+	if Duel.GetLocationCount(tp,LOCATION_SZONE)<=0 or c:IsFacedown()
+		or not c:IsRelateToEffect(e) or not tc or not tc:IsRelateToEffect(e) then return end
+	c44505297.equipop(c,e,tp,tc)
 end
 function c44505297.tgcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end

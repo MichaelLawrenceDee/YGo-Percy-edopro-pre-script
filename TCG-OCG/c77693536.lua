@@ -24,6 +24,7 @@ function c77693536.initial_effect(c)
 	e2:SetTarget(c77693536.eqtg)
 	e2:SetOperation(c77693536.eqop)
 	c:RegisterEffect(e2)
+	aux.AddEREquipLimit(c,nil,aux.FilterBoolFunction(Card.IsType,TYPE_EFFECT),c77693536.equipop,e2)
 	--equip fusion material
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_FIELD)
@@ -50,33 +51,26 @@ function c77693536.eqtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local g=Duel.SelectTarget(tp,c77693536.eqfilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,e:GetHandler(),tp)
 	Duel.SetOperationInfo(0,CATEGORY_EQUIP,g,1,0,0)
 end
+function c77693536.equipop(c,e,tp,tc)
+	local atk=tc:GetTextAttack()
+	if atk<0 then atk=0 end
+	if not aux.EquipByEffectAndLimitRegister(c,e,tp,tc,nil,true) then return end
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_EQUIP)
+	e1:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_OWNER_RELATE)
+	e1:SetCode(EFFECT_UPDATE_DEFENSE)
+	e1:SetValue(atk)
+	e1:SetReset(RESET_EVENT+0x1fe0000)
+	tc:RegisterEffect(e1)
+end
 function c77693536.eqop(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(tp,LOCATION_SZONE)<=0 then return end
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
 	if not tc or not (tc:IsRelateToEffect(e) and tc:IsFaceup() and tc:IsType(TYPE_EFFECT)) then return end
 	if c:IsFaceup() and c:IsRelateToEffect(e) then
-		local atk=tc:GetTextAttack()
-		if atk<0 then atk=0 end
-		if Duel.Equip(tp,tc,c)==0 then return end
-		local e1=Effect.CreateEffect(c)
-		e1:SetType(EFFECT_TYPE_EQUIP)
-		e1:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_OWNER_RELATE)
-		e1:SetCode(EFFECT_UPDATE_DEFENSE)
-		e1:SetValue(atk)
-		e1:SetReset(RESET_EVENT+0x1fe0000)
-		tc:RegisterEffect(e1)
-		local e2=Effect.CreateEffect(c)
-		e2:SetType(EFFECT_TYPE_SINGLE)
-		e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
-		e2:SetCode(EFFECT_EQUIP_LIMIT)
-		e2:SetValue(c77693536.eqlimit)
-		e2:SetReset(RESET_EVENT+0x1fe0000)
-		tc:RegisterEffect(e2)
+		c77693536.equipop(c,e,tp,tc)
 	else Duel.SendtoGrave(tc,REASON_EFFECT) end
-end
-function c77693536.eqlimit(e,c)
-	return e:GetOwner()==c
 end
 function c77693536.mttg(e,c)
 	return c:GetEquipTarget()==e:GetHandler()

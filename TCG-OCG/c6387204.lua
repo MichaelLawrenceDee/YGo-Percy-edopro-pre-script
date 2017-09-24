@@ -14,6 +14,7 @@ function c6387204.initial_effect(c)
 	e1:SetTarget(c6387204.eqtg)
 	e1:SetOperation(c6387204.eqop)
 	c:RegisterEffect(e1)
+	aux.AddEREquipLimit(c,nil,function(ec,_,tp) return ec:IsControler(1-tp) end,c6387204.equipop,e1)
 	--lp
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(6387204,1))
@@ -22,14 +23,7 @@ function c6387204.initial_effect(c)
 	e2:SetCondition(c6387204.lpcon)
 	e2:SetCost(c6387204.lpcost)
 	e2:SetOperation(c6387204.lpop)
-	c:RegisterEffect(e2)
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_SINGLE)
-	e3:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_SET_AVAILABLE)
-	e3:SetCode(511002571)
-	e3:SetLabel(6387204)
-	e3:SetLabelObject(e2)
-	c:RegisterEffect(e3)
+	c:RegisterEffect(e2,false,1)
 end
 c6387204.xyz_number=6
 function c6387204.eqtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
@@ -40,26 +34,21 @@ function c6387204.eqtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local g=Duel.SelectTarget(tp,Card.IsAbleToChangeControler,tp,0,LOCATION_MZONE,1,1,nil)
 	Duel.SetOperationInfo(0,CATEGORY_EQUIP,g,1,0,0)
 end
+function c6387204.equipop(c,e,tp,tc)
+	if not aux.EquipByEffectAndLimitRegister(c,e,tp,tc,6387204) then return end
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_EQUIP)
+	e2:SetCode(EFFECT_UPDATE_ATTACK)
+	e2:SetReset(RESET_EVENT+0x1fe0000)
+	e2:SetValue(1000)
+	tc:RegisterEffect(e2)
+end
 function c6387204.eqop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
+	if tc and tc:IsRelateToEffect(e) then
 		if c:IsFaceup() and c:IsRelateToEffect(e) then
-			if not Duel.Equip(tp,tc,c,false) then return end
-			local e1=Effect.CreateEffect(c)
-			e1:SetType(EFFECT_TYPE_SINGLE)
-			e1:SetProperty(EFFECT_FLAG_OWNER_RELATE)
-			e1:SetCode(EFFECT_EQUIP_LIMIT)
-			e1:SetReset(RESET_EVENT+0x1fe0000)
-			e1:SetValue(c6387204.eqlimit)
-			tc:RegisterEffect(e1)
-			local e2=Effect.CreateEffect(c)
-			e2:SetType(EFFECT_TYPE_EQUIP)
-			e2:SetCode(EFFECT_UPDATE_ATTACK)
-			e2:SetReset(RESET_EVENT+0x1fe0000)
-			e2:SetValue(1000)
-			tc:RegisterEffect(e2)
-			tc:RegisterFlagEffect(6387204,RESET_EVENT+0x1fe0000,0,0)
+			c6387204.equipop(c,e,tp,tc)
 		else Duel.SendtoGrave(tc,REASON_EFFECT) end
 	end
 	local e3=Effect.CreateEffect(c)
@@ -74,9 +63,6 @@ function c6387204.eqop(e,tp,eg,ep,ev,re,r,rp)
 	e4:SetCode(EFFECT_NO_EFFECT_DAMAGE)
 	e4:SetReset(RESET_PHASE+PHASE_END)
 	Duel.RegisterEffect(e4,tp)
-end
-function c6387204.eqlimit(e,c)
-	return e:GetOwner()==c
 end
 function c6387204.lpcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetLP(1-tp)~=100 and e:GetHandler():GetOverlayGroup():IsExists(Card.IsCode,1,nil,9161357)

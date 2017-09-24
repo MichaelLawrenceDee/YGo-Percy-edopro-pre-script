@@ -25,6 +25,7 @@ function c63465535.initial_effect(c)
 	e2:SetTarget(c63465535.eqtg)
 	e2:SetOperation(c63465535.eqop)
 	c:RegisterEffect(e2)
+	aux.AddEREquipLimit(c,c63465535.eqcon,function(ec,_,tp) return ec:IsControler(1-tp) end,c63465535.equipop,e2)
 	--Destroy replace
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_SINGLE)
@@ -43,9 +44,11 @@ function c63465535.actcon(e)
 	return Duel.GetAttacker()==e:GetHandler()
 end
 function c63465535.eqcon(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	local ec=e:GetLabelObject()
-	return ec==nil or not ec:IsHasCardTarget(c) or ec:GetFlagEffect(63465535)==0
+	local g=e:GetHandler():GetEquipGroup():Filter(c63465535.eqfilter,nil)
+	return g:GetCount()==0
+end
+function c63465535.eqfilter(c)
+	return c:GetFlagEffect(63465535)~=0 
 end
 function c63465535.filter(c)
 	return c:IsFaceup() and c:IsAbleToChangeControler()
@@ -58,35 +61,26 @@ function c63465535.eqtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local g=Duel.SelectTarget(tp,c63465535.filter,tp,0,LOCATION_MZONE,1,1,nil)
 	Duel.SetOperationInfo(0,CATEGORY_EQUIP,g,1,0,0)
 end
-function c63465535.eqlimit(e,c)
-	return e:GetOwner()==c
+function c63465535.equipop(c,e,tp,tc)
+	aux.EquipByEffectAndLimitRegister(c,e,tp,tc,63465535)
 end
 function c63465535.eqop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
-	if tc:IsFaceup() and tc:IsRelateToEffect(e) and tc:IsType(TYPE_MONSTER) then
+	if tc and tc:IsFaceup() and tc:IsRelateToEffect(e) and tc:IsType(TYPE_MONSTER) then
 		if c:IsFaceup() and c:IsRelateToEffect(e) then
-			if not Duel.Equip(tp,tc,c,false) then return end
-			--Add Equip limit
-			tc:RegisterFlagEffect(63465535,RESET_EVENT+0x1fe0000,0,0)
-			e:SetLabelObject(tc)
-			local e1=Effect.CreateEffect(c)
-			e1:SetType(EFFECT_TYPE_SINGLE)
-			e1:SetCode(EFFECT_EQUIP_LIMIT)
-			e1:SetProperty(EFFECT_FLAG_COPY_INHERIT+EFFECT_FLAG_OWNER_RELATE)
-			e1:SetReset(RESET_EVENT+0x1fe0000)
-			e1:SetValue(c63465535.eqlimit)
-			tc:RegisterEffect(e1)
+			c63465535.equipop(c,e,tp,tc)
 		else Duel.SendtoGrave(tc,REASON_EFFECT) end
 	end
 end
 function c63465535.desreptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	local ec=e:GetLabelObject():GetLabelObject()
+	local ec=c:GetEquipGroup():Filter(c63465535.eqfilter,nil):GetFirst()
 	if chk==0 then return c:IsReason(REASON_BATTLE) and ec and ec:IsHasCardTarget(c)
-		and ec:IsDestructable(e) and not ec:IsStatus(STATUS_DESTROY_CONFIRMED) and ec:GetFlagEffect(63465535)~=0 end
+		and ec:IsDestructable(e) and not ec:IsStatus(STATUS_DESTROY_CONFIRMED) end
 	return Duel.SelectEffectYesNo(tp,c,96)
 end
 function c63465535.desrepop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Destroy(e:GetLabelObject():GetLabelObject(),REASON_EFFECT+REASON_REPLACE)
+	local ec=e:GetHandler():GetEquipGroup():Filter(c63465535.eqfilter,nil):GetFirst()
+	Duel.Destroy(ec,REASON_EFFECT+REASON_REPLACE)
 end

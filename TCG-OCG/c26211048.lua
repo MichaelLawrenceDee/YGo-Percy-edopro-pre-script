@@ -14,14 +14,8 @@ function c26211048.initial_effect(c)
 	e1:SetCost(c26211048.eqcost)
 	e1:SetTarget(c26211048.eqtg)
 	e1:SetOperation(c26211048.eqop)
-	c:RegisterEffect(e1)
-	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_SINGLE)
-	e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_SET_AVAILABLE)
-	e2:SetCode(511002571)
-	e2:SetLabelObject(e1)
-	e2:SetLabel(c:GetOriginalCode())
-	c:RegisterEffect(e2)
+	c:RegisterEffect(e1,false,1)
+	aux.AddEREquipLimit(c,nil,function(ec,_,tp) return ec:IsControler(1-tp) end,c26211048.equipop,e1)
 end
 function c26211048.eqcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end
@@ -40,22 +34,8 @@ function c26211048.eqtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 		Duel.SetOperationInfo(0,CATEGORY_LEAVE_GRAVE,g,1,0,0)
 	end
 end
-function c26211048.eqop(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	local tc=Duel.GetFirstTarget()
-	if not tc:IsRelateToEffect(e) or not tc:IsType(TYPE_MONSTER) then return end
-	if Duel.GetLocationCount(tp,LOCATION_SZONE)<=0 or c:IsFacedown() or not c:IsRelateToEffect(e) then
-		if tc:IsLocation(LOCATION_MZONE) then Duel.SendtoGrave(tc,REASON_EFFECT) end
-		return
-	end
-	Duel.Equip(tp,tc,c,false)
-	local e1=Effect.CreateEffect(c)
-	e1:SetProperty(EFFECT_FLAG_COPY_INHERIT+EFFECT_FLAG_OWNER_RELATE)
-	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetCode(EFFECT_EQUIP_LIMIT)
-	e1:SetReset(RESET_EVENT+0x1fe0000)
-	e1:SetValue(c26211048.eqlimit)
-	tc:RegisterEffect(e1)
+function c26211048.equipop(c,e,tp,tc)
+	if not aux.EquipByEffectAndLimitRegister(c,e,tp,tc) then return end
 	if tc:IsFaceup() then
 		local atk=tc:GetTextAttack()/2
 		if atk<0 then atk=0 end
@@ -75,6 +55,13 @@ function c26211048.eqop(e,tp,eg,ep,ev,re,r,rp)
 		tc:RegisterEffect(e3)
 	end
 end
-function c26211048.eqlimit(e,c)
-	return e:GetOwner()==c
+function c26211048.eqop(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	local tc=Duel.GetFirstTarget()
+	if not tc or not tc:IsRelateToEffect(e) or not tc:IsType(TYPE_MONSTER) then return end
+	if Duel.GetLocationCount(tp,LOCATION_SZONE)<=0 or c:IsFacedown() or not c:IsRelateToEffect(e) then
+		if tc:IsLocation(LOCATION_MZONE) then Duel.SendtoGrave(tc,REASON_EFFECT) end
+		return
+	end
+	c26211048.equipop(c,e,tp,tc)
 end

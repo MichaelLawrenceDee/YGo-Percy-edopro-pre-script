@@ -13,6 +13,7 @@ function c511002018.initial_effect(c)
 	e1:SetTarget(c511002018.eqtg)
 	e1:SetOperation(c511002018.eqop)
 	c:RegisterEffect(e1)
+	aux.AddEREquipLimit(c,nil,aux.FilterBoolFunction(Card.IsType,TYPE_MONSTER),c511002018.equipop,e1)
 end
 c511002018.material_setcode={0xc3,0xa9}
 function c511002018.eqcon(e,tp,eg,ep,ev,re,r,rp)
@@ -28,30 +29,23 @@ function c511002018.eqtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetTargetCard(tc)
 	Duel.SetOperationInfo(0,CATEGORY_LEAVE_GRAVE,tc,1,0,0)
 end
+function c511002018.equipop(c,e,tp,tc)
+	if not aux.EquipByEffectAndLimitRegister(c,e,tp,tc) then return end
+	local atk=tc:GetTextAttack()
+	if atk>0 then
+		local e2=Effect.CreateEffect(c)
+		e2:SetType(EFFECT_TYPE_EQUIP)
+		e2:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_OWNER_RELATE)
+		e2:SetCode(EFFECT_UPDATE_ATTACK)
+		e2:SetReset(RESET_EVENT+0x1fe0000)
+		e2:SetValue(atk)
+		tc:RegisterEffect(e2)
+	end
+end
 function c511002018.eqop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
 	if c:IsRelateToEffect(e) and c:IsFaceup() and tc and tc:IsRelateToEffect(e) then
-		if not Duel.Equip(tp,tc,c,false) then return end
-		local e1=Effect.CreateEffect(c)
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetProperty(EFFECT_FLAG_COPY_INHERIT+EFFECT_FLAG_OWNER_RELATE)
-		e1:SetCode(EFFECT_EQUIP_LIMIT)
-		e1:SetReset(RESET_EVENT+0x1fe0000)
-		e1:SetValue(c511002018.eqlimit)
-		tc:RegisterEffect(e1)
-		local atk=tc:GetTextAttack()
-		if atk>0 then
-			local e2=Effect.CreateEffect(c)
-			e2:SetType(EFFECT_TYPE_EQUIP)
-			e2:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_OWNER_RELATE)
-			e2:SetCode(EFFECT_UPDATE_ATTACK)
-			e2:SetReset(RESET_EVENT+0x1fe0000)
-			e2:SetValue(atk)
-			tc:RegisterEffect(e2)
-		end
+		c511002018.equipop(c,e,tp,tc)
 	end
-end
-function c511002018.eqlimit(e,c)
-	return e:GetOwner()==c
 end

@@ -50,6 +50,7 @@ function c511001781.rankupregop(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetOperation(c511001781.eqop)
 	e1:SetReset(RESET_EVENT+0x1fe0000)
 	c:RegisterEffect(e1)
+	aux.AddEREquipLimit(c,nil,aux.FilterBoolFunction(Card.IsSetCard,0x48),c511001781.equipop,e1,nil,RESET_EVENT+0x1fe0000)
 	--equip 2
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(32559361,0))
@@ -60,6 +61,7 @@ function c511001781.rankupregop(e,tp,eg,ep,ev,re,r,rp)
 	e2:SetOperation(c511001781.eqop)
 	e2:SetReset(RESET_EVENT+0x1fe0000)
 	c:RegisterEffect(e2)
+	aux.AddEREquipLimit(c,nil,aux.NOT(aux.FilterBoolFunction(Card.IsType,TYPE_TOKEN)),c511001781.equipop,e2,nil,RESET_EVENT+0x1fe0000)
 	--atkup
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_SINGLE)
@@ -92,7 +94,7 @@ function c511001781.rankupregop(e,tp,eg,ep,ev,re,r,rp)
 	e5:SetTarget(c511001781.lptg)
 	e5:SetOperation(c511001781.lpop)
 	e5:SetReset(RESET_EVENT+0x1fe0000)
-	c:RegisterEffect(e5)
+	c:RegisterEffect(e5,false,1)
 	--spsummon
 	local e6=Effect.CreateEffect(c)
 	e6:SetDescription(aux.Stringid(38107923,1))
@@ -105,14 +107,6 @@ function c511001781.rankupregop(e,tp,eg,ep,ev,re,r,rp)
 	e6:SetOperation(c511001781.spop)
 	e6:SetReset(RESET_EVENT+0x1fe0000)
 	c:RegisterEffect(e6)
-	local e7=Effect.CreateEffect(c)
-	e7:SetType(EFFECT_TYPE_SINGLE)
-	e7:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_SET_AVAILABLE)
-	e7:SetLabel(c:GetOriginalCode())
-	e7:SetCode(511002571)
-	e7:SetLabelObject(e5)
-	e7:SetReset(RESET_EVENT+0x1fe0000)
-	c:RegisterEffect(e7)
 end
 function c511001781.eqfilter(c,tp)
 	return c:IsSetCard(0x48) and (c:IsAbleToChangeControler() or c:IsControler(tp))
@@ -125,25 +119,17 @@ function c511001781.eqtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local g=Duel.SelectTarget(tp,c511001781.eqfilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil,tp)
 	Duel.SetOperationInfo(0,CATEGORY_EQUIP,g,1,0,0)
 end
+function c511001781.equipop(c,e,tp,tc)
+	aux.EquipByEffectAndLimitRegister(c,e,tp,tc,511001781)
+end
 function c511001781.eqop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
 	if tc and tc:IsRelateToEffect(e) then
 		if c:IsFaceup() and c:IsRelateToEffect(e) and tc~=c then
-			if not Duel.Equip(tp,tc,c,false) then return end
-			local e1=Effect.CreateEffect(c)
-			e1:SetType(EFFECT_TYPE_SINGLE)
-			e1:SetProperty(EFFECT_FLAG_OWNER_RELATE)
-			e1:SetCode(EFFECT_EQUIP_LIMIT)
-			e1:SetReset(RESET_EVENT+0x1fe0000)
-			e1:SetValue(c511001781.eqlimit)
-			tc:RegisterEffect(e1)
-			tc:RegisterFlagEffect(511001781,RESET_EVENT+0x1fe0000,0,0)
+			c511001781.equipop(c,e,tp,tc)
 		else Duel.SendtoGrave(tc,REASON_EFFECT) end
 	end
-end
-function c511001781.eqlimit(e,c)
-	return e:GetOwner()==c
 end
 function c511001781.eqtg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()

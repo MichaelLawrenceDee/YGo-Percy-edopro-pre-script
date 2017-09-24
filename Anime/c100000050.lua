@@ -31,6 +31,7 @@ function c100000050.initial_effect(c)
 	e4:SetTarget(c100000050.eqtg)
 	e4:SetOperation(c100000050.eqop)
 	c:RegisterEffect(e4)
+	aux.AddEREquipLimit(c,nil,c100000050.eqval,c100000050.equipop,e4)
 	--only 1 can exists
 	local e5=Effect.CreateEffect(c)
 	e5:SetType(EFFECT_TYPE_SINGLE)
@@ -69,6 +70,9 @@ function c100000050.archchk(e,tp,eg,ep,ev,re,r,rp)
 		Duel.RegisterFlagEffect(0,420,0,0,0)
 	end
 end
+function c100000050.eqval(ec,c,tp)
+	return ec:IsControler(1-tp) and ec:IsType(TYPE_SYNCHRO)
+end
 function c100000050.filter(c)
 	return c:IsFaceup() and (c:IsWisel() or c:IsGranel() or c:IsSkiel())
 end
@@ -96,34 +100,26 @@ function c100000050.eqtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local g=Duel.SelectTarget(tp,c100000050.eqfilter,tp,0,LOCATION_MZONE,1,1,nil)
 	Duel.SetOperationInfo(0,CATEGORY_EQUIP,g,1,0,0)
 end
-function c100000050.eqlimit(e,c)
-	return e:GetOwner()==c
+function c100000050.equipop(c,e,tp,tc)
+	local atk=tc:GetTextAttack()
+	if atk<0 then atk=0 end
+	if not aux.EquipByEffectAndLimitRegister(c,e,tp,tc) then return end
+	if atk>0 then
+		local e2=Effect.CreateEffect(c)
+		e2:SetType(EFFECT_TYPE_EQUIP)
+		e2:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_OWNER_RELATE)
+		e2:SetCode(EFFECT_UPDATE_ATTACK)
+		e2:SetReset(RESET_EVENT+0x1fe0000)
+		e2:SetValue(atk)
+		tc:RegisterEffect(e2)
+	end
 end
 function c100000050.eqop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
 	if tc and tc:IsFaceup() and tc:IsRelateToEffect(e) then
 		if c:IsFaceup() and c:IsRelateToEffect(e) then
-			local atk=tc:GetTextAttack()
-			if atk<0 then atk=0 end
-			if not Duel.Equip(tp,tc,c,false) then return end
-			--Add Equip limit
-			local e1=Effect.CreateEffect(c)
-			e1:SetType(EFFECT_TYPE_SINGLE)
-			e1:SetProperty(EFFECT_FLAG_COPY_INHERIT+EFFECT_FLAG_OWNER_RELATE)
-			e1:SetCode(EFFECT_EQUIP_LIMIT)
-			e1:SetReset(RESET_EVENT+0x1fe0000)
-			e1:SetValue(c100000050.eqlimit)
-			tc:RegisterEffect(e1)
-			if atk>0 then
-				local e2=Effect.CreateEffect(c)
-				e2:SetType(EFFECT_TYPE_EQUIP)
-				e2:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_OWNER_RELATE)
-				e2:SetCode(EFFECT_UPDATE_ATTACK)
-				e2:SetReset(RESET_EVENT+0x1fe0000)
-				e2:SetValue(atk)
-				tc:RegisterEffect(e2)
-			end
+			c100000050.equipop(c,e,tp,tc)
 		else Duel.SendtoGrave(tc,REASON_EFFECT) end
 	end
 end

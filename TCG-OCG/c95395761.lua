@@ -10,6 +10,7 @@ function c95395761.initial_effect(c)
 	e1:SetTarget(c95395761.eqtg)
 	e1:SetOperation(c95395761.eqop)
 	c:RegisterEffect(e1)
+	aux.AddEREquipLimit(c,nil,c95395761.eqval,c95395761.equipop,e1)
 	--equip effect
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_EQUIP)
@@ -34,6 +35,9 @@ function c95395761.initial_effect(c)
 	e5:SetOperation(c95395761.repop)
 	c:RegisterEffect(e5)
 end
+function c95395761.eqval(ec,c,tp)
+	return ec:IsControler(tp) and ec:IsSetCard(0x56)
+end
 function c95395761.filter(c)
 	return c:IsSetCard(0x56) and c:IsType(TYPE_MONSTER) and not c:IsForbidden()
 end
@@ -41,6 +45,9 @@ function c95395761.eqtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_SZONE)>0
 		and Duel.IsExistingMatchingCard(c95395761.filter,tp,LOCATION_GRAVE+LOCATION_HAND,0,1,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_LEAVE_GRAVE,nil,1,tp,LOCATION_GRAVE+LOCATION_HAND)
+end
+function c95395761.equipop(c,e,tp,tc)
+	aux.EquipByEffectAndLimitRegister(c,e,tp,tc,nil,true)
 end
 function c95395761.eqop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
@@ -50,18 +57,8 @@ function c95395761.eqop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(c95395761.filter),tp,LOCATION_GRAVE+LOCATION_HAND,0,1,1,nil)
 	local tc=g:GetFirst()
 	if tc then
-		if not Duel.Equip(tp,tc,c,true) then return end
-		local e1=Effect.CreateEffect(c)
-		e1:SetProperty(EFFECT_FLAG_COPY_INHERIT+EFFECT_FLAG_OWNER_RELATE)
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetCode(EFFECT_EQUIP_LIMIT)
-		e1:SetReset(RESET_EVENT+0x1fe0000)
-		e1:SetValue(c95395761.eqlimit)
-		tc:RegisterEffect(e1)
+		c95395761.equipop(c,e,tp,tc)
 	end
-end
-function c95395761.eqlimit(e,c)
-	return e:GetOwner()==c
 end
 function c95395761.reptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()

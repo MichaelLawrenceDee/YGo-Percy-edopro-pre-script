@@ -13,6 +13,7 @@ function c40418351.initial_effect(c)
 	e1:SetTarget(c40418351.eqtg)
 	e1:SetOperation(c40418351.eqop)
 	c:RegisterEffect(e1)
+	aux.AddEREquipLimit(c,nil,c40418351.eqval,c40418351.equipop,e1)
 	--atkup
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_SINGLE)
@@ -29,6 +30,9 @@ function c40418351.initial_effect(c)
 	e3:SetValue(aux.fuslimit)
 	c:RegisterEffect(e3)
 end
+function c40418351.eqval(ec,c,tp)
+	return ec:IsControler(tp) and ec:IsRace(RACE_DRAGON)
+end
 function c40418351.filter(c)
 	return c:IsRace(RACE_DRAGON) and not c:IsForbidden()
 end
@@ -41,43 +45,35 @@ function c40418351.eqtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	Duel.SetOperationInfo(0,CATEGORY_LEAVE_GRAVE,g,1,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_EQUIP,g,1,0,0)
 end
+function c40418351.equipop(c,e,tp,tc)
+	local atk=tc:GetTextAttack()
+	if atk<0 then atk=0 end
+	if not aux.EquipByEffectAndLimitRegister(c,e,tp,tc,nil,true) then return end
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_EQUIP)
+	e2:SetProperty(EFFECT_FLAG_OWNER_RELATE+EFFECT_FLAG_IGNORE_IMMUNE)
+	e2:SetCode(EFFECT_UPDATE_ATTACK)
+	e2:SetReset(RESET_EVENT+0x1fe0000)
+	e2:SetValue(atk)
+	tc:RegisterEffect(e2)
+	local e3=Effect.CreateEffect(c)
+	e3:SetType(EFFECT_TYPE_EQUIP)
+	e3:SetCode(EFFECT_DESTROY_SUBSTITUTE)
+	e3:SetReset(RESET_EVENT+0x1fe0000)
+	e3:SetValue(c40418351.repval)
+	tc:RegisterEffect(e3)
+end
 function c40418351.eqop(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(tp,LOCATION_SZONE)<=0 then return end
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
 	if c:IsFaceup() and c:IsRelateToEffect(e) and tc and tc:IsRelateToEffect(e) then
-		local atk=tc:GetTextAttack()
-		if atk<0 then atk=0 end
-		if not Duel.Equip(tp,tc,c,false) then return end
-		local e1=Effect.CreateEffect(c)
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetProperty(EFFECT_FLAG_OWNER_RELATE)
-		e1:SetCode(EFFECT_EQUIP_LIMIT)
-		e1:SetReset(RESET_EVENT+0x1fe0000)
-		e1:SetValue(c40418351.eqlimit)
-		tc:RegisterEffect(e1)
-		local e2=Effect.CreateEffect(c)
-		e2:SetType(EFFECT_TYPE_EQUIP)
-		e2:SetProperty(EFFECT_FLAG_OWNER_RELATE+EFFECT_FLAG_IGNORE_IMMUNE)
-		e2:SetCode(EFFECT_UPDATE_ATTACK)
-		e2:SetReset(RESET_EVENT+0x1fe0000)
-		e2:SetValue(atk)
-		tc:RegisterEffect(e2)
-		local e3=Effect.CreateEffect(c)
-		e3:SetType(EFFECT_TYPE_EQUIP)
-		e3:SetCode(EFFECT_DESTROY_SUBSTITUTE)
-		e3:SetReset(RESET_EVENT+0x1fe0000)
-		e3:SetValue(c40418351.repval)
-		tc:RegisterEffect(e3)
+		c40418351.equipop(c,e,tp,tc)
 	end
-end
-function c40418351.eqlimit(e,c)
-	return e:GetOwner()==c
 end
 function c40418351.repval(e,re,r,rp)
 	return bit.band(r,REASON_BATTLE)~=0
 end
 function c40418351.atkval(e,c)
-	local tp=e:GetHandlerPlayer()
-	return Duel.GetMatchingGroupCount(Card.IsType,tp,LOCATION_GRAVE,0,nil,TYPE_MONSTER)*100
+	return Duel.GetMatchingGroupCount(Card.IsType,e:GetHandlerPlayer(),LOCATION_GRAVE,0,nil,TYPE_MONSTER)*100
 end

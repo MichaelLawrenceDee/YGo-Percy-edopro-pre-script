@@ -22,6 +22,7 @@ function c14466224.initial_effect(c)
 	e2:SetTarget(c14466224.eqtg)
 	e2:SetOperation(c14466224.eqop)
 	c:RegisterEffect(e2)
+	aux.AddEREquipLimit(c,c14466224.eqcon,function(ec,_,tp) return ec:IsControler(1-tp) end,c14466224.equipop,e2)
 end
 function c14466224.gfilter(c)
 	return c:IsType(TYPE_MONSTER) and c:IsAbleToRemoveAsCost()
@@ -51,9 +52,11 @@ function c14466224.spop(e,tp,eg,ep,ev,re,r,rp,c)
 	Duel.Remove(g1,POS_FACEUP,REASON_COST)
 end
 function c14466224.eqcon(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	local ec=e:GetLabelObject()
-	return ec==nil or ec:GetFlagEffect(14466224)==0
+	local g=e:GetHandler():GetEquipGroup():Filter(c14466224.eqfilter,nil)
+	return g:GetCount()==0
+end
+function c14466224.eqfilter(c)
+	return c:GetFlagEffect(14466224)~=0 
 end
 function c14466224.filter(c)
 	return c:IsFaceup() and c:IsAbleToChangeControler()
@@ -66,47 +69,37 @@ function c14466224.eqtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local g=Duel.SelectTarget(tp,c14466224.filter,tp,0,LOCATION_MZONE,1,1,nil)
 	Duel.SetOperationInfo(0,CATEGORY_EQUIP,g,1,0,0)
 end
-function c14466224.eqlimit(e,c)
-	return e:GetOwner()==c
+function c14466224.equipop(c,e,tp,tc)
+	local atk=tc:GetTextAttack()
+	local def=tc:GetTextDefense()
+	if atk<0 then atk=0 end
+	if def<0 then def=0 end
+	if not aux.EquipByEffectAndLimitRegister(c,e,tp,tc,14466224) then return end
+	if atk>0 then
+		local e2=Effect.CreateEffect(c)
+		e2:SetType(EFFECT_TYPE_EQUIP)
+		e2:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_OWNER_RELATE)
+		e2:SetCode(EFFECT_UPDATE_ATTACK)
+		e2:SetReset(RESET_EVENT+0x1fe0000)
+		e2:SetValue(atk)
+		tc:RegisterEffect(e2)
+	end
+	if def>0 then
+		local e3=Effect.CreateEffect(c)
+		e3:SetType(EFFECT_TYPE_EQUIP)
+		e3:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_OWNER_RELATE)
+		e3:SetCode(EFFECT_UPDATE_DEFENSE)
+		e3:SetReset(RESET_EVENT+0x1fe0000)
+		e3:SetValue(def)
+		tc:RegisterEffect(e3)
+	end
 end
 function c14466224.eqop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
-	if tc:IsFaceup() and tc:IsRelateToEffect(e) then
+	if tc and tc:IsFaceup() and tc:IsRelateToEffect(e) then
 		if c:IsFaceup() and c:IsRelateToEffect(e) then
-			local atk=tc:GetTextAttack()
-			local def=tc:GetTextDefense()
-			if atk<0 then atk=0 end
-			if def<0 then def=0 end
-			if not Duel.Equip(tp,tc,c,false) then return end
-			--Add Equip limit
-			tc:RegisterFlagEffect(14466224,RESET_EVENT+0x1fe0000,0,0)
-			e:SetLabelObject(tc)
-			local e1=Effect.CreateEffect(c)
-			e1:SetType(EFFECT_TYPE_SINGLE)
-			e1:SetProperty(EFFECT_FLAG_COPY_INHERIT+EFFECT_FLAG_OWNER_RELATE)
-			e1:SetCode(EFFECT_EQUIP_LIMIT)
-			e1:SetReset(RESET_EVENT+0x1fe0000)
-			e1:SetValue(c14466224.eqlimit)
-			tc:RegisterEffect(e1)
-			if atk>0 then
-				local e2=Effect.CreateEffect(c)
-				e2:SetType(EFFECT_TYPE_EQUIP)
-				e2:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_OWNER_RELATE)
-				e2:SetCode(EFFECT_UPDATE_ATTACK)
-				e2:SetReset(RESET_EVENT+0x1fe0000)
-				e2:SetValue(atk)
-				tc:RegisterEffect(e2)
-			end
-			if def>0 then
-				local e3=Effect.CreateEffect(c)
-				e3:SetType(EFFECT_TYPE_EQUIP)
-				e3:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_OWNER_RELATE)
-				e3:SetCode(EFFECT_UPDATE_DEFENSE)
-				e3:SetReset(RESET_EVENT+0x1fe0000)
-				e3:SetValue(def)
-				tc:RegisterEffect(e3)
-			end
+			c14466224.equipop(c,e,tp,tc)
 		else Duel.SendtoGrave(tc,REASON_EFFECT) end
 	end
 end

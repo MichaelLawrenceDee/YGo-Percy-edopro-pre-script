@@ -14,6 +14,7 @@ function c21249921.initial_effect(c)
 	e1:SetTarget(c21249921.eqtg)
 	e1:SetOperation(c21249921.eqop)
 	c:RegisterEffect(e1)
+	aux.AddEREquipLimit(c,nil,c21249921.eqval,aux.EquipByEffectAndLimitRegister,e1)
 	--atk
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(21249921,1))
@@ -24,6 +25,9 @@ function c21249921.initial_effect(c)
 	e2:SetCost(c21249921.atkcost)
 	e2:SetOperation(c21249921.atkop)
 	c:RegisterEffect(e2)
+end
+function c21249921.eqval(ec,c,tp)
+	return ec:IsControler(tp) and ec:IsLevelBelow(3) and ec:IsSetCard(0x29) and ec:IsRace(RACE_DRAGON)
 end
 function c21249921.eqcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_SYNCHRO)
@@ -44,19 +48,9 @@ function c21249921.eqop(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(tp,LOCATION_SZONE)<=0 then return end
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
-	if c:IsFaceup() and c:IsRelateToEffect(e) and tc:IsRelateToEffect(e) then
-		if not Duel.Equip(tp,tc,c,false) then return end
-		local e1=Effect.CreateEffect(c)
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetProperty(EFFECT_FLAG_OWNER_RELATE)
-		e1:SetCode(EFFECT_EQUIP_LIMIT)
-		e1:SetReset(RESET_EVENT+0x1fe0000)
-		e1:SetValue(c21249921.eqlimit)
-		tc:RegisterEffect(e1)
+	if c:IsFaceup() and c:IsRelateToEffect(e) and tc and tc:IsRelateToEffect(e) then
+		aux.EquipByEffectAndLimitRegister(c,e,tp,tc)
 	end
-end
-function c21249921.eqlimit(e,c)
-	return e:GetOwner()==c
 end
 function c21249921.atkcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()

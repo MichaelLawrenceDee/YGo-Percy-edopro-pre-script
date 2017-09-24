@@ -14,7 +14,8 @@ function c56051086.initial_effect(c)
 	e1:SetCost(c56051086.eqcost)
 	e1:SetTarget(c56051086.eqtg)
 	e1:SetOperation(c56051086.eqop)
-	c:RegisterEffect(e1)
+	c:RegisterEffect(e1,false,1)
+	aux.AddEREquipLimit(c,nil,c56051086.eqval,aux.EquipByEffectAndLimitRegister,e1)
 	--
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_SINGLE)
@@ -39,15 +40,11 @@ function c56051086.initial_effect(c)
 	e4:SetTarget(c56051086.damtg)
 	e4:SetOperation(c56051086.damop)
 	c:RegisterEffect(e4)
-	local e5=Effect.CreateEffect(c)
-	e5:SetType(EFFECT_TYPE_SINGLE)
-	e5:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_SET_AVAILABLE)
-	e5:SetCode(511002571)
-	e5:SetLabelObject(e1)
-	e5:SetLabel(c:GetOriginalCode())
-	c:RegisterEffect(e5)
 end
 c56051086.xyz_number=43
+function c56051086.eqval(ec,c,tp)
+	return ec:IsControler(tp) and ec:IsSetCard(0x48)
+end
 function c56051086.eqcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end
 	e:GetHandler():RemoveOverlayCard(tp,1,1,REASON_COST)
@@ -68,19 +65,9 @@ function c56051086.eqop(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(tp,LOCATION_SZONE)<=0 then return end
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
-	if c:IsFaceup() and c:IsRelateToEffect(e) and tc:IsRelateToEffect(e) then
-		if not Duel.Equip(tp,tc,c,false) then return end
-		local e1=Effect.CreateEffect(c)
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetProperty(EFFECT_FLAG_OWNER_RELATE)
-		e1:SetCode(EFFECT_EQUIP_LIMIT)
-		e1:SetReset(RESET_EVENT+0x1fe0000)
-		e1:SetValue(c56051086.eqlimit)
-		tc:RegisterEffect(e1)
+	if c:IsFaceup() and c:IsRelateToEffect(e) and tc and tc:IsRelateToEffect(e) then
+		aux.EquipByEffectAndLimitRegister(c,e,tp,tc)
 	end
-end
-function c56051086.eqlimit(e,c)
-	return c==e:GetOwner()
 end
 function c56051086.indcon(e)
 	return e:GetHandler():GetEquipGroup():IsExists(Card.IsSetCard,1,nil,0x48)

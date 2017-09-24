@@ -14,6 +14,7 @@ function c511002090.initial_effect(c)
 	e1:SetTarget(c511002090.eqtg)
 	e1:SetOperation(c511002090.eqop)
 	c:RegisterEffect(e1)
+	aux.AddEREquipLimit(c,c511002090.eqcon,c511002090.eqval,c511002090.equipop,e1)
 	--lp
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(9161357,1))
@@ -22,7 +23,7 @@ function c511002090.initial_effect(c)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCost(c511002090.lpcost)
 	e2:SetOperation(c511002090.lpop)
-	c:RegisterEffect(e2)
+	c:RegisterEffect(e2,false,1)
 	--lp - 0 materials
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(52090844,0))
@@ -55,13 +56,6 @@ function c511002090.initial_effect(c)
 	e6:SetCode(EFFECT_INDESTRUCTABLE_BATTLE)
 	e6:SetValue(c511002090.indes)
 	c:RegisterEffect(e6)
-	local e7=Effect.CreateEffect(c)
-	e7:SetType(EFFECT_TYPE_SINGLE)
-	e7:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_SET_AVAILABLE)
-	e7:SetCode(511002571)
-	e7:SetLabelObject(e2)
-	e7:SetLabel(c:GetOriginalCode())
-	c:RegisterEffect(e7)
 	if not c511002090.global_check then
 		c511002090.global_check=true
 		c511002090[0]=0
@@ -82,8 +76,11 @@ function c511002090.initial_effect(c)
 	end
 end
 c511002090.xyz_number=6
+function c511002090.eqval(ec,c,tp)
+	return ec:IsControler(tp) and ec:IsSetCard(0x48)
+end
 function c511002090.eqcon(e,tp,eg,ep,ev,re,r,rp)
-	return bit.band(e:GetHandler():GetSummonType(),SUMMON_TYPE_XYZ)==SUMMON_TYPE_XYZ
+	return e:GetHandler():IsSummonType(SUMMON_TYPE_XYZ)
 end
 function c511002090.filter(c)
 	return c:IsSetCard(0x48) and c:IsType(TYPE_MONSTER)
@@ -97,33 +94,26 @@ function c511002090.eqtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	Duel.SetOperationInfo(0,CATEGORY_LEAVE_GRAVE,g,1,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_EQUIP,g,1,0,0)
 end
+function c511002090.equipop(c,e,tp,tc)
+	if not aux.EquipByEffectAndLimitRegister(c,e,tp,tc) then return end
+	local atk=tc:GetBaseAttack()
+	if atk>0 then
+		local e2=Effect.CreateEffect(c)
+		e2:SetType(EFFECT_TYPE_EQUIP)
+		e2:SetProperty(EFFECT_FLAG_OWNER_RELATE+EFFECT_FLAG_IGNORE_IMMUNE)
+		e2:SetCode(EFFECT_UPDATE_ATTACK)
+		e2:SetReset(RESET_EVENT+0x1fe0000)
+		e2:SetValue(atk)
+		tc:RegisterEffect(e2)
+	end
+end
 function c511002090.eqop(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(tp,LOCATION_SZONE)<=0 then return end
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
-	if c:IsFaceup() and c:IsRelateToEffect(e) and tc:IsRelateToEffect(e) then
-		if not Duel.Equip(tp,tc,c,false) then return end
-		local e1=Effect.CreateEffect(c)
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetProperty(EFFECT_FLAG_OWNER_RELATE)
-		e1:SetCode(EFFECT_EQUIP_LIMIT)
-		e1:SetReset(RESET_EVENT+0x1fe0000)
-		e1:SetValue(c511002090.eqlimit)
-		tc:RegisterEffect(e1)
-		local atk=tc:GetBaseAttack()
-		if atk>0 then
-			local e2=Effect.CreateEffect(c)
-			e2:SetType(EFFECT_TYPE_EQUIP)
-			e2:SetProperty(EFFECT_FLAG_OWNER_RELATE+EFFECT_FLAG_IGNORE_IMMUNE)
-			e2:SetCode(EFFECT_UPDATE_ATTACK)
-			e2:SetReset(RESET_EVENT+0x1fe0000)
-			e2:SetValue(atk)
-			tc:RegisterEffect(e2)
-		end
+	if c:IsFaceup() and c:IsRelateToEffect(e) and tc and tc:IsRelateToEffect(e) then
+		c511002090.equipop(c,e,tp,tc)
 	end
-end
-function c511002090.eqlimit(e,c)
-	return e:GetOwner()==c
 end
 function c511002090.lpcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end

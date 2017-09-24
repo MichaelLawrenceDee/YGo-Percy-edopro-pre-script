@@ -15,6 +15,7 @@ function c21140872.initial_effect(c)
 	e1:SetTarget(c21140872.eqtg)
 	e1:SetOperation(c21140872.eqop)
 	c:RegisterEffect(e1)
+	aux.AddEREquipLimit(c,nil,c21140872.eqval,c21140872.equipop,e1)
 	--negate
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(21140872,1))
@@ -48,6 +49,9 @@ function c21140872.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 c21140872.material_setcode=0x3b
+function c21140872.eqval(ec,c,tp)
+	return ec:IsControler(tp) and ec:IsRace(RACE_WARRIOR)
+end
 function c21140872.eqcon(e)
 	return Duel.GetAttacker():IsSetCard(0x3b)
 end
@@ -62,30 +66,23 @@ function c21140872.eqtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local g=Duel.SelectTarget(tp,c21140872.eqfilter,tp,LOCATION_GRAVE,0,1,1,nil,tp)
 	Duel.SetOperationInfo(0,CATEGORY_EQUIP,g,1,0,0)
 end
+function c21140872.equipop(c,e,tp,tc)
+	if not aux.EquipByEffectAndLimitRegister(c,e,tp,tc,nil,true) then return end
+	--atkup
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_EQUIP)
+	e2:SetCode(EFFECT_UPDATE_ATTACK)
+	e2:SetValue(200)
+	e2:SetReset(RESET_EVENT+0x1fe0000)
+	tc:RegisterEffect(e2)
+end
 function c21140872.eqop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if c:IsFacedown() or not c:IsRelateToEffect(e) then return end
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
-		Duel.Equip(tp,tc,c,true)
-		local e1=Effect.CreateEffect(c)
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetCode(EFFECT_EQUIP_LIMIT)
-		e1:SetReset(RESET_EVENT+0x1fe0000)
-		e1:SetValue(c21140872.eqlimit)
-		e1:SetLabelObject(c)
-		tc:RegisterEffect(e1)
-		--atkup
-		local e2=Effect.CreateEffect(c)
-		e2:SetType(EFFECT_TYPE_EQUIP)
-		e2:SetCode(EFFECT_UPDATE_ATTACK)
-		e2:SetValue(200)
-		e2:SetReset(RESET_EVENT+0x1fe0000)
-		tc:RegisterEffect(e2)
+	if tc and tc:IsRelateToEffect(e) then
+		c21140872.equipop(c,e,tp,tc)
 	end
-end
-function c21140872.eqlimit(e,c)
-	return c==e:GetLabelObject()
 end
 function c21140872.ngcfilter(c,tp)
 	return c:IsControler(tp) and c:IsOnField()
@@ -107,7 +104,7 @@ end
 function c21140872.ngtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
 	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
-	if re:GetHandler():IsDestructable() and re:GetHandler():IsRelateToEffect(re) then
+	if re:GetHandler():IsRelateToEffect(re) then
 		Duel.SetOperationInfo(0,CATEGORY_DESTROY,eg,1,0,0)
 	end
 end
