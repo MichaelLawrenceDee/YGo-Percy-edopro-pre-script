@@ -1180,9 +1180,25 @@ function Auxiliary.DarkSynchroCheck2(sg,card1,card2,plv,nlv,sc,tp,f1,f2,...)
 	local tlv1=bit.band(tlv,0xffff)
 	local tlv2=bit.rshift(tlv,16)
 	if card1:GetFlagEffect(100000147)>0 then
-		return tlv1==nlv-lv1 or tlv2==nlv-ntlv1 or tlv1==nlv-ntlv2 or tlv2==nlv-ntlv2
+		if tlv1==nlv-lv1 then return true end
+		if (tlv2>0 or card2:IsStatus(STATUS_NO_LEVEL)) and (ntlv2>0 or card1:IsStatus(STATUS_NO_LEVEL)) then
+			return tlv2==nlv-ntlv1 or tlv1==nlv-ntlv2 or tlv2==nlv-ntlv2
+		elseif tlv2>0 or card2:IsStatus(STATUS_NO_LEVEL) then
+			return tlv2==nlv-ntlv1
+		elseif ntlv2>0 or card1:IsStatus(STATUS_NO_LEVEL) then
+			return tlv1==nlv-ntlv2
+		end
+		return false
 	else
-		return tlv1==plv+ntlv1 or tlv2==plv+ntlv1 or tlv1==plv+ntlv2 or tlv2==plv+ntlv2
+		if tlv1==plv+ntlv1 then return true end
+		if (tlv2>0 or card2:IsStatus(STATUS_NO_LEVEL)) and (ntlv2>0 or card1:IsStatus(STATUS_NO_LEVEL)) then
+			return tlv2==plv+ntlv1 or tlv1==plv+ntlv2 or tlv2==plv+ntlv2
+		elseif tlv2>0 or card2:IsStatus(STATUS_NO_LEVEL) then
+			return tlv2==nlv-ntlv1
+		elseif ntlv2>0 or card1:IsStatus(STATUS_NO_LEVEL) then
+			return tlv1==nlv-ntlv2
+		end
+		return false
 	end
 end
 function Auxiliary.DarkSynCondition(f1,f2,plv,nlv,...)
