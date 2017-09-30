@@ -1,10 +1,10 @@
 --Buster Knuckle
 function c110000109.initial_effect(c)
 	--Piercing
-    local e1=Effect.CreateEffect(c)
-    e1:SetType(EFFECT_TYPE_SINGLE)
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_SINGLE)
 	e1:SetCode(EFFECT_PIERCE)
-    c:RegisterEffect(e1)
+	c:RegisterEffect(e1)
 	--atkup
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_SINGLE)
