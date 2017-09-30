@@ -18,6 +18,30 @@ function c419.initial_effect(c)
 		atkadj:SetCode(EVENT_ADJUST)
 		atkadj:SetOperation(c419.atkraiseadj)
 		Duel.RegisterEffect(atkadj,0)
+		--Armor Monsters
+		local arm1=Effect.CreateEffect(c)
+		arm1:SetType(EFFECT_TYPE_FIELD)
+		arm1:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
+		arm1:SetCode(EFFECT_CANNOT_ATTACK_ANNOUNCE)
+		arm1:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
+		arm1:SetCondition(c419.armatkcon)
+		arm1:SetTarget(c419.armatktg)
+		Duel.RegisterEffect(arm1,0)
+		local arm2=Effect.CreateEffect(c)
+		arm2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		arm2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
+		arm2:SetCode(EVENT_ATTACK_ANNOUNCE)
+		arm2:SetOperation(c419.armcheckop)
+		arm2:SetLabelObject(arm1)
+		Duel.RegisterEffect(arm2,0)
+		local arm3=Effect.CreateEffect(c)
+		arm3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		arm3:SetCode(EVENT_BE_BATTLE_TARGET)
+		arm3:SetCondition(c419.armatcon)
+		arm3:SetOperation(c419.armatop)
+		Duel.RegisterEffect(arm3,0)
+		local arm4=arm3:Clone()
+		Duel.RegisterEffect(arm4,1)
 	end
 end
 
@@ -245,4 +269,59 @@ function c419.atkraiseadj(e,tp,eg,ep,ev,re,r,rp)
 		lvc=lvg:GetNext()
 	end
 	Duel.RaiseEvent(lvg,511002524,e,REASON_EFFECT,rp,ep,0)
+end
+
+function c419.cardianchk(c,tp,eg,ep,ev,re,r,rp)
+	if c:IsSetCard(0xe6) and c:IsType(TYPE_MONSTER) then
+		local eff={c:GetCardEffect(511001692)}
+		for _,te2 in ipairs(eff) do
+			local te=te2:GetLabelObject()
+			local con=te:GetCondition()
+			local cost=te:GetCost()
+			local tg=te:GetTarget()
+			if te:GetType()==EFFECT_TYPE_FIELD then
+				if not con or con(te,c) then
+					return true
+				end
+			else
+				if (not con or con(te,tp,eg,ep,ev,re,r,rp)) and (not cost or cost(te,tp,eg,ep,ev,re,r,rp,0) 
+					and (not tg or tg(te,tp,eg,ep,ev,re,r,rp,0))) then
+					return true
+				end
+			end
+		end
+	end
+	return false
+end
+
+function c419.armatkcon(e)
+	return Duel.GetFlagEffect(e:GetHandlerPlayer(),110000103)~=0 and Duel.GetFlagEffect(1-e:GetHandlerPlayer(),110000103)~=0
+end
+function c419.armatktg(e,c)
+	return c:GetFieldID()~=e:GetLabel() and c:IsType(0x10000000)
+end
+function c419.armcheckop(e,tp,eg,ep,ev,re,r,rp)
+	local a=Duel.GetAttacker()
+	if not a:IsType(0x10000000) then return end
+	if Duel.GetFlagEffect(tp,110000103)~=0 and Duel.GetFlagEffect(1-tp,110000103)~=0 then return end
+	local fid=eg:GetFirst():GetFieldID()
+	Duel.RegisterFlagEffect(tp,110000103,RESET_PHASE+PHASE_END,0,1)
+	Duel.RegisterFlagEffect(1-tp,110000103,RESET_PHASE+PHASE_END,0,1)
+	e:GetLabelObject():SetLabel(fid)
+end
+function c419.armatcon(e,tp,eg,ep,ev,re,r,rp)
+	local at=Duel.GetAttackTarget()
+	return at:IsFaceup() and at:IsControler(tp) and at:IsType(0x10000000)
+end
+function c419.armfilter(c)
+	return c:IsFaceup() and c:IsType(0x10000000)
+end
+function c419.armatop(e,tp,eg,ep,ev,re,r,rp)
+	local atg=Duel.GetAttacker():GetAttackableTarget()
+	local d=Duel.GetAttackTarget()
+	if atg:IsExists(c419.armfilter,1,d) and Duel.SelectYesNo(tp,aux.Stringid(21558682,0)) then
+		local g=atg:FilterSelect(tp,c419.armfilter,1,1,d)
+		Duel.HintSelection(g)
+		Duel.ChangeAttackTarget(g:GetFirst())
+	end
 end

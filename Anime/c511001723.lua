@@ -10,6 +10,7 @@ function c511001723.initial_effect(c)
 	e1:SetTarget(c511001723.sptg)
 	e1:SetOperation(c511001723.spop)
 	c:RegisterEffect(e1,false,2)
+	aux.CallToken(419)
 end
 function c511001723.filter(c,tp)
 	local re=c:GetReasonEffect()
@@ -37,26 +38,7 @@ function c511001723.spop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.Draw(tp,1,REASON_EFFECT)
 		if tc then
 			Duel.ConfirmCards(1-tp,tc)
-			local ok=false
-			if tc:IsSetCard(0xe6) and tc:IsType(TYPE_MONSTER) then
-				local eff={tc:GetCardEffect(511001692)}
-				for _,te2 in ipairs(eff) do
-					local te=te2:GetLabelObject()
-					local con=te:GetCondition()
-					local cost=te:GetCost()
-					local tg=te:GetTarget()
-					if te:GetType()==EFFECT_TYPE_FIELD then
-						if not con or con(te,tc) then
-							ok=true
-						end
-					elseif te:GetType()==EFFECT_TYPE_IGNITION then
-						if (not con or con(te,tp,eg,ep,ev,re,r,rp)) and (not cost or cost(te,tp,eg,ep,ev,re,r,rp,0) 
-							and (not tg or tg(te,tp,eg,ep,ev,re,r,rp,0)))
-					end
-					if ok then break end
-				end
-			end
-			if ok then
+			if c419.cardianchk(tc,tp,eg,ep,ev,re,r,rp) then
 				Duel.ShuffleHand(tp)
 			else
 				Duel.SendtoGrave(tc,REASON_EFFECT)
