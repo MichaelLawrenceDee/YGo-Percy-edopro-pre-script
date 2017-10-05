@@ -29,7 +29,7 @@ function c48156348.initial_effect(c)
 end
 c48156348.material_setcode=0x19
 function c48156348.contactfil(tp)
-	return Duel.GetMatchingGroup(Card.IsAbleToDeckOrExtraAsCost,tp,LOCATION_ONFIELD,0,nil)
+	return Duel.GetMatchingGroup(function(c) return c:IsType(TYPE_MONSTER) and c:IsAbleToDeckOrExtraAsCost() end,tp,LOCATION_ONFIELD,0,nil)
 end
 function c48156348.contactop(g,tp)
 	Duel.ConfirmCards(1-tp,g)

@@ -13,7 +13,7 @@ function c110000108.initial_effect(c)
 end
 function c110000108.ndcon(e,tp,eg,ep,ev,re,r,rp)
 	local d=Duel.GetAttackTarget()
-	return d and d:IsControler(tp) and d:IsFaceup() and d~=e:GetHandler() and d:IsType(0x10000000)
+	return d and d:IsControler(tp) and d:IsFaceup() and d~=e:GetHandler() and d:IsType(TYPE_ARMOR)
 end
 function c110000108.ndcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsReleasable() end

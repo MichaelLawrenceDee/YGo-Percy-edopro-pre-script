@@ -74,7 +74,7 @@ function c83965310.eqfilter(c)
 	return c:GetFlagEffect(83965310)~=0 
 end
 function c83965310.eqcon(e,tp,eg,ep,ev,re,r,rp)
-	local g=c:GetEquipGroup():Filter(c83965310.eqfilter,nil)
+	local g=e:GetHandler():GetEquipGroup():Filter(c83965310.eqfilter,nil)
 	return g:GetCount()==0
 end
 function c83965310.eqtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

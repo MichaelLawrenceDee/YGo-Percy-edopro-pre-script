@@ -18,7 +18,7 @@ function c110000105.initial_effect(c)
 	aux.CallToken(419)
 end
 function c110000105.cfilter(c,tp)
-	return c:IsFaceup() and c:IsType(0x10000000) and c:IsControler(tp) and c:IsLocation(LOCATION_MZONE)
+	return c:IsFaceup() and c:IsType(TYPE_ARMOR) and c:IsControler(tp) and c:IsLocation(LOCATION_MZONE)
 end
 function c110000105.distg(e,c)
 	return c:GetCardTargetCount()>0 and c:IsType(TYPE_TRAP) 

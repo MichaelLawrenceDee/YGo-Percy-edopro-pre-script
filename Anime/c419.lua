@@ -42,6 +42,15 @@ function c419.initial_effect(c)
 		Duel.RegisterEffect(arm3,0)
 		local arm4=arm3:Clone()
 		Duel.RegisterEffect(arm4,1)
+		--Anime card constants
+		TYPE_ARMOR		=	0x10000000
+		TYPE_PLUS		=	0x20000000
+		TYPE_MINUS		=	0x40000000
+		
+		RACE_YOKAI		=	0x80000000
+		RACE_CHARISMA	=	0x100000000
+		
+		ATTRIBUTE_LAUGH	=	0x80
 	end
 end
 
@@ -298,11 +307,11 @@ function c419.armatkcon(e)
 	return Duel.GetFlagEffect(e:GetHandlerPlayer(),110000103)~=0 and Duel.GetFlagEffect(1-e:GetHandlerPlayer(),110000103)~=0
 end
 function c419.armatktg(e,c)
-	return c:GetFieldID()~=e:GetLabel() and c:IsType(0x10000000)
+	return c:GetFieldID()~=e:GetLabel() and c:IsType(TYPE_ARMOR)
 end
 function c419.armcheckop(e,tp,eg,ep,ev,re,r,rp)
 	local a=Duel.GetAttacker()
-	if not a:IsType(0x10000000) then return end
+	if not a:IsType(TYPE_ARMOR) then return end
 	if Duel.GetFlagEffect(tp,110000103)~=0 and Duel.GetFlagEffect(1-tp,110000103)~=0 then return end
 	local fid=eg:GetFirst():GetFieldID()
 	Duel.RegisterFlagEffect(tp,110000103,RESET_PHASE+PHASE_END,0,1)
@@ -311,10 +320,10 @@ function c419.armcheckop(e,tp,eg,ep,ev,re,r,rp)
 end
 function c419.armatcon(e,tp,eg,ep,ev,re,r,rp)
 	local at=Duel.GetAttackTarget()
-	return at:IsFaceup() and at:IsControler(tp) and at:IsType(0x10000000)
+	return at:IsFaceup() and at:IsControler(tp) and at:IsType(TYPE_ARMOR)
 end
 function c419.armfilter(c)
-	return c:IsFaceup() and c:IsType(0x10000000)
+	return c:IsFaceup() and c:IsType(TYPE_ARMOR)
 end
 function c419.armatop(e,tp,eg,ep,ev,re,r,rp)
 	local atg=Duel.GetAttacker():GetAttackableTarget()

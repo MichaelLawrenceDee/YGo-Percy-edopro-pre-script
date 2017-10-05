@@ -29,7 +29,7 @@ function c110000109.initial_effect(c)
 	aux.CallToken(419)
 end
 function c110000109.filter(c)
-	return c:IsFaceup() and c:IsType(0x10000000)
+	return c:IsFaceup() and c:IsType(TYPE_ARMOR)
 end
 function c110000109.atkup(e,c)
 	return Duel.GetMatchingGroupCount(c110000109.filter,c:GetControler(),LOCATION_MZONE,0,nil)*200

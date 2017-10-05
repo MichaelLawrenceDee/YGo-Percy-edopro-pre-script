@@ -44,7 +44,7 @@ function c511009300.splimit(e,se,sp,st)
 	return e:GetHandler():GetLocation()~=LOCATION_EXTRA
 end
 function c511009300.contactfilter(tp)
-	return Duel.GetMatchingGroup(Card.IsAbleToDeckOrExtraAsCost,tp,LOCATION_ONFIELD,0,nil)
+	return Duel.GetMatchingGroup(function(c) return c:IsType(TYPE_MONSTER) and c:IsAbleToDeckOrExtraAsCost() end,tp,LOCATION_ONFIELD,0,nil)
 end
 function c511009300.contactop(g,tp)
 	local cg=g:Filter(Card.IsFacedown,nil)
@@ -54,7 +54,7 @@ function c511009300.contactop(g,tp)
 	Duel.SendtoDeck(g,nil,2,REASON_COST+REASON_MATERIAL)
 end
 function c511009300.hspfilter(c,e,tp)
-	return c:IsSetCard(0x19) and not c:IsCode(511009300) and c:IsCanBeSpecialSummoned(e,0,tp,true,false)
+	return c:IsSetCard(0x19) and not c:IsCode(511009300) and c:IsCanBeSpecialSummoned(e,123,tp,true,false)
 end
 function c511009300.hsptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCountFromEx(tp)>0
@@ -67,7 +67,7 @@ function c511009300.hspop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.SelectMatchingCard(tp,c511009300.hspfilter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp)
 	local tc=g:GetFirst()
 	if tc then
-		Duel.SpecialSummon(tc,0,tp,tp,true,false,POS_FACEUP)
+		Duel.SpecialSummon(tc,123,tp,tp,true,false,POS_FACEUP)
 		tc:RegisterFlagEffect(511009300,RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END,0,1)
 		tc:RegisterFlagEffect(tc:GetOriginalCode(),RESET_EVENT+0x1ff0000,0,0)
 		local e1=Effect.CreateEffect(e:GetHandler())
@@ -98,12 +98,15 @@ function c511009300.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SendtoDeck(c,nil,0,REASON_COST)
 end
 function c511009300.filter(c,e,tp)
-	return c:IsSetCard(0x19) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsSetCard(0x19) and c:IsCanBeSpecialSummoned(e,123,tp,false,false)
 end
 function c511009300.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return not Duel.IsPlayerAffectedByEffect(tp,59822133)
-		and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsExistingMatchingCard(c511009300.filter,tp,LOCATION_DECK,0,2,nil,e,tp) end
+	if chk==0 then
+		local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
+		if e:GetHandler():GetSequence()<5 then ft=ft+1 end
+		return not Duel.IsPlayerAffectedByEffect(tp,59822133) and ft>1
+			and Duel.IsExistingMatchingCard(c511009300.filter,tp,LOCATION_DECK,0,2,nil,e,tp)
+	end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,2,tp,LOCATION_DECK)
 end
 function c511009300.spop(e,tp,eg,ep,ev,re,r,rp)
@@ -115,7 +118,7 @@ function c511009300.spop(e,tp,eg,ep,ev,re,r,rp)
 		local sg=g:Select(tp,2,2,nil)
 		local tc=sg:GetFirst()
 		while tc do
-			Duel.SpecialSummonStep(tc,0,tp,tp,false,false,POS_FACEUP)
+			Duel.SpecialSummonStep(tc,123,tp,tp,false,false,POS_FACEUP)
 			tc:RegisterFlagEffect(tc:GetOriginalCode(),RESET_EVENT+0x1ff0000,0,0)
 			tc=sg:GetNext()
 		end
@@ -131,12 +134,13 @@ end
 function c511009300.atkop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=e:GetHandler()
 	local g=eg:Filter(c511009300.atkfilter,nil,e,tp)
-	if not g:GetCount()==1 then return end
-	local atk=g:GetSum(Card.GetAttack)
-	local e1=Effect.CreateEffect(tc)
-	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetCode(EFFECT_UPDATE_ATTACK)
-	e1:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_BATTLE)
-	e1:SetValue(atk)
-	tc:RegisterEffect(e1)
+	if g:GetCount()>0 then
+		local atk=g:GetSum(Card.GetAttack)
+		local e1=Effect.CreateEffect(tc)
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetCode(EFFECT_UPDATE_ATTACK)
+		e1:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_BATTLE)
+		e1:SetValue(atk)
+		tc:RegisterEffect(e1)
+	end
 end

@@ -6,7 +6,7 @@ function c110000106.initial_effect(c)
 	e1:SetCode(EFFECT_DIRECT_ATTACK)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetTargetRange(LOCATION_MZONE,0)
-	e1:SetTarget(aux.TargetBoolFunction(Card.IsType,0x10000000))
+	e1:SetTarget(function(e,c) return c:IsType(TYPE_ARMOR) end)
 	c:RegisterEffect(e1)
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
@@ -19,7 +19,7 @@ function c110000106.initial_effect(c)
 end
 function c110000106.regcon(e,tp,eg,ep,ev,re,r,rp)
 	local a=Duel.GetAttacker()
-	return not Duel.GetAttackTarget() and a:IsType(0x10000000) and a:IsControler(tp) and a:GetEffectCount(EFFECT_DIRECT_ATTACK)==1 
+	return not Duel.GetAttackTarget() and a:IsType(TYPE_ARMOR) and a:IsControler(tp) and a:GetEffectCount(EFFECT_DIRECT_ATTACK)==1 
 		and e:GetHandler():GetFlagEffect(110000106)==0
 		and Duel.IsExistingMatchingCard(aux.NOT(Card.IsHasEffect),tp,0,LOCATION_MZONE,1,nil,EFFECT_IGNORE_BATTLE_TARGET)
 end
