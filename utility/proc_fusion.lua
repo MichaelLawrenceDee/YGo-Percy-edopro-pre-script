@@ -403,7 +403,7 @@ function Auxiliary.FSelectMixRep(c,tp,mg,sg,fc,sub,sub2,chkf,...)
 	mg:Merge(rg)
 	return res
 end
-function Auxiliary.AddContactFusion(c,group,op,sumcon,condition,sumtype)
+function Auxiliary.AddContactFusion(c,group,op,sumcon,condition,sumtype,desc)
 	local code=c:GetOriginalCode()
 	local mt=_G["c" .. code]
 	local t={}
@@ -414,6 +414,11 @@ function Auxiliary.AddContactFusion(c,group,op,sumcon,condition,sumtype)
 	mt.contactfus=t
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD)
+	if not desc then
+		e1:SetDescription(2)
+	else
+		e1:SetDescription(desc)
+	end
 	e1:SetCode(EFFECT_SPSUMMON_PROC)
 	e1:SetProperty(EFFECT_FLAG_UNCOPYABLE)
 	e1:SetRange(LOCATION_EXTRA)
