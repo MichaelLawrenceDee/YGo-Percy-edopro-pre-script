@@ -2,6 +2,7 @@
 --Ritual Summon, geq fixed lv
 function Auxiliary.AddRitualProcGreater(c,filter)
 	local e1=Effect.CreateEffect(c)
+	e1:SetDescription(1057)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
@@ -74,6 +75,7 @@ end
 --Ritual Summon, equal to fixed lv
 function Auxiliary.AddRitualProcEqual(c,filter)
 	local e1=Effect.CreateEffect(c)
+	e1:SetDescription(1057)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
@@ -146,6 +148,7 @@ end
 --Ritual Summon, equal to monster lv
 function Auxiliary.AddRitualProcEqual2(c,filter)
 	local e1=Effect.CreateEffect(c)
+	e1:SetDescription(1057)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
