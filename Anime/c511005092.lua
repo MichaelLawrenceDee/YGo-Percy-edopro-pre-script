@@ -226,6 +226,7 @@ function c511005092.op(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SendtoDeck(sg,nil,-2,REASON_RULE)
 		return
 	end
+	local startct=Duel.GetFieldGroupCount(tp,LOCATION_HAND,0)
 	Duel.SendtoDeck(Duel.GetFieldGroup(0,0x43,0x43),nil,-2,REASON_RULE)
 	for p=0,1 do
 		local ca=Duel.CreateToken(p,511005092)
@@ -233,7 +234,6 @@ function c511005092.op(e,tp,eg,ep,ev,re,r,rp)
 	end
 	--pack selection
 	local ca=Duel.CreateToken(p,511005092)
-	local startct=Duel.GetFieldGroupCount(tp,LOCATION_HAND,0)
 	local pack1=Duel.CreateToken(tp,511003041)
 	local pack2=Duel.CreateToken(tp,511003042)
 	local pack3=Duel.CreateToken(tp,511003043)
