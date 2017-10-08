@@ -23,25 +23,7 @@ function c511002524.initial_effect(c)
 	e2:SetTarget(c511002524.efftg)
 	e2:SetOperation(c511002524.effop)
 	c:RegisterEffect(e2)
-	if not c511002524.global_check then
-		c511002524.global_check=true
-		--register
-		local ge1=Effect.CreateEffect(c)
-		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-		ge1:SetCode(EVENT_ADJUST)
-		ge1:SetCountLimit(1)
-		ge1:SetProperty(EFFECT_FLAG_NO_TURN_RESET)
-		ge1:SetOperation(c511002524.atkchk)
-		Duel.RegisterEffect(ge1,0)
-	end
-end
-function c511002524.atkchk(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetFlagEffect(tp,419)==0 and Duel.GetFlagEffect(1-tp,419)==0 then
-		Duel.CreateToken(tp,419)
-		Duel.CreateToken(1-tp,419)
-		Duel.RegisterFlagEffect(tp,419,nil,0,1)
-		Duel.RegisterFlagEffect(1-tp,419,nil,0,1)
-	end
+	aux.CallToken(419)
 end
 function c511002524.filter(c)
 	return c:IsFaceup() and c:GetLevel()>0
@@ -50,18 +32,19 @@ function c511002524.lvtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) and c511002524.filter(chkc) end
 	if chk==0 then return Duel.IsExistingTarget(c511002524.filter,tp,0,LOCATION_MZONE,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
-	Duel.SelectTarget(tp,c511002524.filter,tp,0,LOCATION_MZONE,1,1,nil)
-	Duel.Hint(HINT_SELECTMSG,tp,567)
-	local lv=Duel.AnnounceNumber(tp,1,2,3,4,5,6,7,8,9,10,11,12)
-	e:SetLabel(lv)
+	local g=Duel.SelectTarget(tp,c511002524.filter,tp,0,LOCATION_MZONE,1,1,nil)
+	Duel.Hint(HINT_SELECTMSG,tp,HINGMSG_LVRANK)
+	local lv=Duel.AnnounceLevel(tp,1,13,g:GetFirst():GetLevel())
+	Duel.SetTargetParam(lv)
 end
 function c511002524.lvop(e,tp,eg,ep,ev,re,r,rp)
+	local lv=Duel.GetChainInfo(0,CHAININFO_TARGET_PARAM)
 	local tc=Duel.GetFirstTarget()
 	if tc and tc:IsFaceup() and tc:IsRelateToEffect(e) then
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_CHANGE_LEVEL)
-		e1:SetValue(e:GetLabel())
+		e1:SetValue(lv)
 		e1:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_STANDBY+RESET_OPPO_TURN)
 		tc:RegisterEffect(e1)
 	end
