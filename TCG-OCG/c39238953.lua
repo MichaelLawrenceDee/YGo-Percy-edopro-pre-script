@@ -19,8 +19,9 @@ end
 function c39238953.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsAbleToHand,tp,0,LOCATION_DECK,1,nil)
 		or Duel.IsPlayerCanSpecialSummon(tp) end
-	Duel.Hint(HINT_SELECTMSG,tp,564)
-	local ac=Duel.AnnounceCard(tp,TYPE_MONSTER)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CODE)
+	c39238953.announce_filter={TYPE_MONSTER,OPCODE_ISTYPE,TYPE_EXTRA,OPCODE_ISTYPE,OPCODE_NOT,OPCODE_AND}
+  	local ac=Duel.AnnounceCardFilter(tp,table.unpack(c39238953.announce_filter))
 	Duel.SetTargetParam(ac)
 	Duel.SetOperationInfo(0,CATEGORY_ANNOUNCE,nil,0,tp,ANNOUNCE_CARD)
 end
@@ -29,7 +30,7 @@ function c39238953.activate(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetFieldGroup(tp,0,LOCATION_DECK)
 	if g:GetCount()<1 then return end
 	Duel.ConfirmCards(1-tp,g)
-	Duel.Hint(HINT_SELECTMSG,1-tp,526)
+	Duel.Hint(HINT_SELECTMSG,1-tp,HINTMSG_CONFIRM)
 	local sg=g:FilterSelect(1-tp,Card.IsCode,1,1,nil,ac)
 	local tc=sg:GetFirst()
 	if tc then
@@ -39,13 +40,13 @@ function c39238953.activate(e,tp,eg,ep,ev,re,r,rp)
 			and tc:IsCanBeSpecialSummoned(e,0,tp,true,false,POS_FACEUP_ATTACK,tp)
 		local sel=0
 		if b1 and b2 then
-			Duel.Hint(HINT_SELECTMSG,1-tp,555)
+			Duel.Hint(HINT_SELECTMSG,1-tp,HINTMSG_OPTION)
 			sel=Duel.SelectOption(1-tp,aux.Stringid(39238953,0),aux.Stringid(39238953,1))+1
 		elseif b1 then
-			Duel.Hint(HINT_SELECTMSG,1-tp,555)
+			Duel.Hint(HINT_SELECTMSG,1-tp,HINTMSG_OPTION)
 			sel=Duel.SelectOption(1-tp,aux.Stringid(39238953,0))+1
 		elseif b2 then
-			Duel.Hint(HINT_SELECTMSG,1-tp,555)
+			Duel.Hint(HINT_SELECTMSG,1-tp,HINTMSG_OPTION)
 			sel=Duel.SelectOption(1-tp,aux.Stringid(39238953,1))+2
 		end
 		if sel==1 then

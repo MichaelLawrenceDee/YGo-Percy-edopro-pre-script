@@ -20,18 +20,19 @@ function c67556500.lvcon(e,tp,eg,ep,ev,re,r,rp)
 end
 function c67556500.lvtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
-	Duel.Hint(HINT_SELECTMSG,tp,567)
-	local lv=Duel.AnnounceNumber(tp,1,2,3)
-	e:SetLabel(lv)
+	Duel.Hint(HINT_SELECTMSG,tp,HINGMSG_LVRANK)
+	local lv=Duel.AnnounceLevel(tp,1,3,e:GetHandler():GetLevel())
+	Duel.SetTargetParam(lv)
 end
 function c67556500.lvop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local fid=0
+	local lv=Duel.GetChainInfo(0,CHAININFO_TARGET_PARAM)
 	if c:IsFaceup() and c:IsRelateToEffect(e) then
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_CHANGE_LEVEL)
-		e1:SetValue(e:GetLabel())
+		e1:SetValue(lv)
 		e1:SetReset(RESET_EVENT+0x1ff0000)
 		c:RegisterEffect(e1)
 		fid=c:GetRealFieldID()

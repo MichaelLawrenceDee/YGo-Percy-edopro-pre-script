@@ -26,19 +26,12 @@ function c10406322.initial_effect(c)
 	e2:SetCost(c10406322.tdcost)
 	e2:SetTarget(c10406322.tdtg)
 	e2:SetOperation(c10406322.tdop)
-	c:RegisterEffect(e2)
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_SINGLE)
-	e3:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_SET_AVAILABLE)
-	e3:SetCode(511002571)
-	e3:SetLabel(10406322)
-	e3:SetLabelObject(e2)
-	c:RegisterEffect(e3)
+	c:RegisterEffect(e2,false,1)
 end
 function c10406322.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsPlayerCanDiscardDeck(tp,1) end
-	Duel.Hint(HINT_SELECTMSG,tp,564)
-	c10406322.announce_filter={TYPE_FUSION+TYPE_SYNCHRO+TYPE_XYZ+TYPE_LINK,OPCODE_ISTYPE,OPCODE_NOT}
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CODE)
+	c10406322.announce_filter={TYPE_EXTRA,OPCODE_ISTYPE,OPCODE_NOT}
 	local ac=Duel.AnnounceCardFilter(tp,table.unpack(c10406322.announce_filter))
 	Duel.SetTargetParam(ac)
 	Duel.SetOperationInfo(0,CATEGORY_ANNOUNCE,nil,0,tp,ANNOUNCE_CARD_FILTER)

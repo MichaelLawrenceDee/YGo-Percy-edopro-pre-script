@@ -13,7 +13,7 @@ function c64689404.initial_effect(c)
 	e1:SetCost(c64689404.raccost)
 	e1:SetTarget(c64689404.ractg)
 	e1:SetOperation(c64689404.racop)
-	c:RegisterEffect(e1)
+	c:RegisterEffect(e1,false,1)
 	--destroy
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(64689404,1))
@@ -24,14 +24,7 @@ function c64689404.initial_effect(c)
 	e2:SetTarget(c64689404.destg)
 	e2:SetOperation(c64689404.desop)
 	c:RegisterEffect(e2)
-	e1:SetLabelObject(e2)
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_SINGLE)
-	e3:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_SET_AVAILABLE)
-	e3:SetCode(511002571)
-	e3:SetLabelObject(e1)
-	e3:SetLabel(c:GetOriginalCode())
-	c:RegisterEffect(e3)
+	e1:SetLabelObject(e2
 end
 function c64689404.raccost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end
@@ -44,7 +37,7 @@ function c64689404.ractg(e,tp,eg,ep,ev,re,r,rp,chk)
 		e:GetLabelObject():SetLabel(0)
 	end
 	local prc=e:GetLabelObject():GetLabel()
-	Duel.Hint(HINT_SELECTMSG,tp,563)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RACE)
 	local rc=Duel.AnnounceRace(tp,1,RACE_ALL-prc)
 	e:SetLabel(rc)
 end
@@ -67,7 +60,7 @@ function c64689404.destg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function c64689404.desop(e,tp,eg,ep,ev,re,r,rp)
 	local bc=e:GetHandler():GetBattleTarget()
-	if bc:IsRelateToBattle() then
+	if bc and bc:IsRelateToBattle() then
 		Duel.Destroy(bc,REASON_EFFECT)
 	end
 end

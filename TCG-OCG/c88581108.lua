@@ -14,7 +14,7 @@ function c88581108.initial_effect(c)
 	e1:SetCost(c88581108.atcost)
 	e1:SetTarget(c88581108.attg)
 	e1:SetOperation(c88581108.atop)
-	c:RegisterEffect(e1)
+	c:RegisterEffect(e1,false,1)
 	--true king destruction
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
@@ -23,13 +23,6 @@ function c88581108.initial_effect(c)
 	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
 	e2:SetTargetRange(1,0)
 	c:RegisterEffect(e2)
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_SINGLE)
-	e3:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_SET_AVAILABLE)
-	e3:SetCode(511002571)
-	e3:SetLabel(c:GetOriginalCode())
-	e3:SetLabelObject(e1)
-	c:RegisterEffect(e3)
 end
 function c88581108.atcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end
@@ -37,7 +30,7 @@ function c88581108.atcost(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function c88581108.attg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsFaceup,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,562)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATTRIBUTE)
 	local rc=Duel.AnnounceAttribute(tp,1,0xffff)
 	e:SetLabel(rc)
 end
