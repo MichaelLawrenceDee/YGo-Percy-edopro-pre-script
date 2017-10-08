@@ -226,6 +226,7 @@ function c511005092.op(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SendtoDeck(sg,nil,-2,REASON_RULE)
 		return
 	end
+	Duel.SendtoDeck(Duel.GetFieldGroup(0,0x43,0x43),nil,-2,REASON_RULE)
 	for p=0,1 do
 		local ca=Duel.CreateToken(p,511005092)
 		Duel.Remove(ca,POS_FACEUP,REASON_RULE)
