@@ -347,7 +347,7 @@ function c511005092.op(e,tp,eg,ep,ev,re,r,rp)
 	for p=0,1 do
 		--card removal up to 20
 		local ct=Duel.GetFieldGroupCount(p,LOCATION_DECK,0)-20
-		if ct>0 and Duel.SelectYesNo(0,aux.Stringid(4002,7)) then
+		if ct>0 and Duel.SelectYesNo(p,aux.Stringid(4002,7)) then
 			Duel.Hint(HINT_SELECTMSG,p,HINTMSG_REMOVE)
 			local rg=Duel.GetFieldGroup(p,LOCATION_DECK,0):Select(p,1,ct,nil)
 			Duel.SendtoDeck(rg,nil,-2,REASON_RULE)
