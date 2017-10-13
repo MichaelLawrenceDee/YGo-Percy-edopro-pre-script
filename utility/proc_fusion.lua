@@ -57,6 +57,7 @@ function Auxiliary.FConditionMix(insf,sub,...)
 				local contact=chkfnf>>12~=0
 				local sub=(sub or notfusion) and not contact
 				local mustg=g:Filter(aux.FilterMustbemat,nil,SUMMON_TYPE_FUSION,c)
+				if contact then mustg:Clear()
 				local mg=g:Filter(Auxiliary.FConditionFilterMix,c,c,sub,sub,contact,tp,table.unpack(funs))
 				if gc then
 					mustg:AddCard(gc)
@@ -76,6 +77,7 @@ function Auxiliary.FOperationMix(insf,sub,...)
 				local contact=chkfnf>>12~=0
 				local sub=(sub or notfusion) and not contact
 				local mustg=eg:Filter(aux.FilterMustbemat,nil,SUMMON_TYPE_FUSION,c)
+				if contact then mustg:Clear()
 				local mg=eg:Filter(Auxiliary.FConditionFilterMix,c,c,sub,sub,contact,tp,table.unpack(funs))
 				local sg=Group.CreateGroup()
 				if gc then
@@ -239,6 +241,7 @@ function Auxiliary.FConditionMixRep(insf,sub,fun1,minc,maxc,...)
 				local contact=chkfnf>>12~=0
 				local sub=(sub or notfusion) and not contact
 				local mustg=g:Filter(aux.FilterMustbemat,nil,SUMMON_TYPE_FUSION,c)
+				if contact then mustg:Clear()
 				local mg=g:Filter(Auxiliary.FConditionFilterMix,c,c,sub,sub,contact,tp,fun1,table.unpack(funs))
 				if gc then
 					mustg:AddCard(gc)
@@ -258,6 +261,7 @@ function Auxiliary.FOperationMixRep(insf,sub,fun1,minc,maxc,...)
 				local contact=chkfnf>>12~=0
 				local sub=(sub or notfusion) and not contact
 				local mustg=eg:Filter(aux.FilterMustbemat,nil,SUMMON_TYPE_FUSION,c)
+				if contact then mustg:Clear()
 				local mg=eg:Filter(Auxiliary.FConditionFilterMix,c,c,sub,sub,contact,tp,fun1,table.unpack(funs))
 				local sg=Group.CreateGroup()
 				if gc then
