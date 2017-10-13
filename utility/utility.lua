@@ -5,11 +5,11 @@ POS_FACEDOWN_DEFENCE=POS_FACEDOWN_DEFENSE
 RACE_CYBERS=RACE_CYBERSE
 TYPE_EXTRA=TYPE_FUSION+TYPE_SYNCHRO+TYPE_XYZ+TYPE_LINK
 
-function Auxiliary.FilterMustbemat(c,summon_type)
+function Auxiliary.FilterMustbemat(c,summon_type,sc)
 	local eff={c:GetCardEffect(EFFECT_MUST_BE_MATERIAL)}
 	if eff[1]==nil then return false end
 	for i,f in ipairs(eff) do
-		if f:GetValue()(summon_type) then return true end
+		if f:GetValue()(c,summon_type,sc) then return true end
 	end
 	return false
 end
