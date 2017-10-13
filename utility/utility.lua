@@ -9,14 +9,16 @@ function Auxiliary.FilterMustbemat(c,summon_type,sc)
 	local eff={c:GetCardEffect(EFFECT_MUST_BE_MATERIAL)}
 	if eff[1]==nil then return false end
 	for i,f in ipairs(eff) do
-		if f:GetValue()(c,summon_type,sc) then return true end
+		if type(f:GetValue())=='function' then
+			if f:GetValue()(c,summon_type,sc) then return true end
+		end
 	end
 	return false
 end
 function Group.Includes(g1,g2)
 	local g1p=g1:Clone()
 	g1p:Sub(g2)
-	return g1p:Getcount()+g2:GetCount()==g1:GetCount()
+	return g1p:GetCount()+g2:GetCount()==g1:GetCount()
 end
 function Auxiliary.ExtraLinked(c,emc,card,eg)
 	eg:AddCard(c)
