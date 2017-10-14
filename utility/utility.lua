@@ -12,7 +12,6 @@ function Auxiliary.GetMustbematGroup(summon_type,sc,p)
 		for _,eff in ipairs(pe) do
 			if type(eff:GetValue())=='function' then
 				if eff:GetValue()(eff:GetOwner(),summon_type,sc) then
-					Debug.Message(eff:GetOwner():GetCode())
 					rg:AddCard(eff:GetOwner())
 				end
 			end
