@@ -46,6 +46,7 @@ function Auxiliary.LinkCondition(f,minc,maxc,specialchk)
 				local tp=c:GetControler()
 				local mg=Duel.GetMatchingGroup(Auxiliary.LConditionFilter,tp,LOCATION_MZONE,0,nil,f,c,tp)
 				local mustg=aux.GetMustbematGroup(SUMMON_TYPE_LINK,c,tp)
+				if mustg:GetCount()>0 and not mustg:IsExists(Card.IsCanBeFusionMaterial,mustg:GetCount(),nil,c) then return false end
 				local sg=Group.CreateGroup()
 				return mg:IsExists(Auxiliary.LCheckRecursive,1,nil,tp,sg,mg,mustg,c,0,minc,maxc,f,specialchk)
 			end

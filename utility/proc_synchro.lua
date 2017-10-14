@@ -55,11 +55,13 @@ function Auxiliary.SynCondition(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,
 				if c:IsType(TYPE_PENDULUM) and c:IsFaceup() then return false end
 				local tp=c:GetControler()
 				local pg=aux.GetMustbematGroup(SUMMON_TYPE_SYNCHRO,c,tp)
+				if pg:GetCount()>0 and not pg:IsExists(Card.IsCanBeSynchroMaterial,matg:GetCount(),nil,c) then return false end
 				local lv=c:GetLevel()
 				local g
 				local mgchk
 				if mg then
 					g=mg:Filter(Card.IsCanBeSynchroMaterial,c,c)
+					if not g:Includes(pg) then return false end
 					mgchk=true
 				else
 					g=Duel.GetMatchingGroup(function(mc) return mc:IsFaceup() and mc:IsCanBeSynchroMaterial(c) end,tp,LOCATION_MZONE,LOCATION_MZONE,c)
@@ -472,12 +474,14 @@ function Auxiliary.SynTarget(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,reqct1,req
 	return	function(e,tp,eg,ep,ev,re,r,rp,chk,c,smat,mg)
 				local sg=Group.CreateGroup()
 				local pg=aux.GetMustbematGroup(SUMMON_TYPE_SYNCHRO,c,tp)
+				if pg:GetCount()>0 and not pg:IsExists(Card.IsCanBeSynchroMaterial,matg:GetCount(),nil,c) then return false end
 				local lv=c:GetLevel()
 				local mgchk
 				local g
 				if mg then
 					mgchk=true
 					g=mg:Filter(Card.IsCanBeSynchroMaterial,c,c)
+					if not g:Includes(pg) then return false end
 				else
 					mgchk=false
 					g=Duel.GetMatchingGroup(function(mc) return mc:IsFaceup() and mc:IsCanBeSynchroMaterial(c) end,tp,LOCATION_MZONE,LOCATION_MZONE,c)
@@ -887,11 +891,13 @@ function Auxiliary.MajesticSynCondition(f1,cbt1,f2,cbt2,f3,cbt3,...)
 				if c==nil then return true end
 				local tp=c:GetControler()
 				local pg=aux.GetMustbematGroup(SUMMON_TYPE_SYNCHRO,c,tp)
+				if pg:GetCount()>0 and not pg:IsExists(Card.IsCanBeSynchroMaterial,matg:GetCount(),nil,c) then return false end
 				local lv=c:GetLevel()
 				local g
 				local mgchk
 				if mg then
 					g=mg:Filter(Card.IsCanBeSynchroMaterial,c,c)
+					if not g:Includes(pg) then return false end
 					mgchk=true
 				else
 					g=Duel.GetMatchingGroup(function(mc) return mc:IsFaceup() and mc:IsCanBeSynchroMaterial(c) end,tp,LOCATION_MZONE,LOCATION_MZONE,c)
@@ -923,12 +929,14 @@ function Auxiliary.MajesticSynTarget(f1,cbt1,f2,cbt2,f3,cbt3,...)
 	return	function(e,tp,eg,ep,ev,re,r,rp,chk,c,smat,mg)
 				local sg=Group.CreateGroup()
 				local pg=aux.GetMustbematGroup(SUMMON_TYPE_SYNCHRO,c,tp)
+				if pg:GetCount()>0 and not pg:IsExists(Card.IsCanBeSynchroMaterial,matg:GetCount(),nil,c) then return false end
 				local lv=c:GetLevel()
 				local mgchk
 				local g
 				if mg then
 					mgchk=true
 					g=mg:Filter(Card.IsCanBeSynchroMaterial,c,c)
+					if not g:Includes(pg) then return false end
 				else
 					mgchk=false
 					g=Duel.GetMatchingGroup(function(mc) return mc:IsFaceup() and mc:IsCanBeSynchroMaterial(c) end,tp,LOCATION_MZONE,LOCATION_MZONE,c)
@@ -1194,10 +1202,12 @@ function Auxiliary.DarkSynCondition(f1,f2,plv,nlv,...)
 				end
 				local tp=c:GetControler()
 				local pg=aux.GetMustbematGroup(SUMMON_TYPE_SYNCHRO,c,tp)
+				if pg:GetCount()>0 and not pg:IsExists(Card.IsCanBeSynchroMaterial,matg:GetCount(),nil,c) then return false end
 				local g
 				local mgchk
 				if mg then
 					g=mg:Filter(Card.IsCanBeSynchroMaterial,c,c)
+					if not g:Includes(pg) then return false end
 					mgchk=true
 				else
 					g=Duel.GetMatchingGroup(function(mc) return mc:IsFaceup() and mc:IsCanBeSynchroMaterial(c) end,tp,LOCATION_MZONE,LOCATION_MZONE,c)
@@ -1229,6 +1239,7 @@ function Auxiliary.DarkSynTarget(f1,f2,plv,nlv,...)
 	return	function(e,tp,eg,ep,ev,re,r,rp,chk,c,smat,mg)
 				local sg=Group.CreateGroup()
 				local pg=aux.GetMustbematGroup(SUMMON_TYPE_SYNCHRO,c,tp)
+				if pg:GetCount()>0 and not pg:IsExists(Card.IsCanBeSynchroMaterial,matg:GetCount(),nil,c) then return false end
 				local plv=plv
 				local nlv=nlv
 				if plv==nil then
@@ -1242,6 +1253,7 @@ function Auxiliary.DarkSynTarget(f1,f2,plv,nlv,...)
 				if mg then
 					mgchk=true
 					g=mg:Filter(Card.IsCanBeSynchroMaterial,c,c)
+					if not g:Includes(pg) then return false end
 				else
 					mgchk=false
 					g=Duel.GetMatchingGroup(function(mc) return mc:IsFaceup() and mc:IsCanBeSynchroMaterial(c) end,tp,LOCATION_MZONE,LOCATION_MZONE,c)
