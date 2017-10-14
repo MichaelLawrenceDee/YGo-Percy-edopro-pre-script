@@ -383,7 +383,7 @@ function Auxiliary.FCheckSelectMixRepM(c,tp,...)
 	return c:IsControler(tp) and c:IsLocation(LOCATION_MZONE)
 		and Auxiliary.FCheckMixRepTemplate(c,Auxiliary.FCheckSelectMixRep,tp,...)
 end
-function Auxiliary.FSelectMixRep(c,tp,mg,sg,mustg,fc,sub,sub2,chkf,...)
+function Auxiliary.FSelectMixRep(c,tp,mg,sg,mustg,fc,sub,sub2,chkf,fun1,minc,maxc,...)
 	local rg=Group.CreateGroup()
 	if Auxiliary.FCheckExact then
 		if Auxiliary.FCheckExact<minc + #{...} or mustg:GetCount()>Auxiliary.FCheckExact then return false end
