@@ -5,15 +5,20 @@ POS_FACEDOWN_DEFENCE=POS_FACEDOWN_DEFENSE
 RACE_CYBERS=RACE_CYBERSE
 TYPE_EXTRA=TYPE_FUSION+TYPE_SYNCHRO+TYPE_XYZ+TYPE_LINK
 
-function Auxiliary.FilterMustbemat(c,summon_type,sc)
-	local eff={c:GetCardEffect(EFFECT_MUST_BE_MATERIAL)}
-	if eff[1]==nil then return false end
-	for i,f in ipairs(eff) do
-		if type(f:GetValue())=='function' then
-			if f:GetValue()(c,summon_type,sc) then return true end
+function Auxiliary.GetMustbematGroup(summon_type,sc,p)
+	local pe={Duel.GetPlayerEffect(p,EFFECT_MUST_BE_MATERIAL)}
+	local rg=Group.CreateGroup()
+	if pe[1] then
+		for _,eff in ipairs(pe) do
+			if type(eff:GetValue())=='function' then
+				if eff:GetValue()(eff:GetOwner(),summon_type,sc) then
+					Debug.Message(eff:GetOwner():GetCode())
+					rg:AddCard(eff:GetOwner())
+				end
+			end
 		end
 	end
-	return false
+	return rg
 end
 function Group.Includes(g1,g2)
 	local g1p=g1:Clone()

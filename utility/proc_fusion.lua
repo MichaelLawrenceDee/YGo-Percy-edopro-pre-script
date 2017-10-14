@@ -56,7 +56,7 @@ function Auxiliary.FConditionMix(insf,sub,...)
 				local notfusion=(chkfnf>>8)&0xf~=0
 				local contact=chkfnf>>12~=0
 				local sub=(sub or notfusion) and not contact
-				local mustg=g:Filter(aux.FilterMustbemat,nil,SUMMON_TYPE_FUSION,c)
+				local mustg=aux.GetMustbematGroup(SUMMON_TYPE_FUSION,c,tp)
 				if contact then mustg:Clear() end
 				local mg=g:Filter(Auxiliary.FConditionFilterMix,c,c,sub,sub,contact,tp,table.unpack(funs))
 				if gc then
@@ -76,7 +76,7 @@ function Auxiliary.FOperationMix(insf,sub,...)
 				local notfusion=(chkfnf>>8)&0xf~=0
 				local contact=chkfnf>>12~=0
 				local sub=(sub or notfusion) and not contact
-				local mustg=eg:Filter(aux.FilterMustbemat,nil,SUMMON_TYPE_FUSION,c)
+				local mustg=aux.GetMustbematGroup(SUMMON_TYPE_FUSION,c,tp)
 				if contact then mustg:Clear() end
 				local mg=eg:Filter(Auxiliary.FConditionFilterMix,c,c,sub,sub,contact,tp,table.unpack(funs))
 				local sg=Group.CreateGroup()
@@ -232,7 +232,6 @@ end
 function Auxiliary.FConditionMixRep(insf,sub,fun1,minc,maxc,...)
 	local funs={...}
 	return	function(e,g,gc,chkfnf)
-				i=0
 				if g==nil then return insf end
 				local chkf=chkfnf&0xff
 				local c=e:GetHandler()
@@ -240,7 +239,7 @@ function Auxiliary.FConditionMixRep(insf,sub,fun1,minc,maxc,...)
 				local notfusion=(chkfnf>>8)&0xf~=0
 				local contact=chkfnf>>12~=0
 				local sub=(sub or notfusion) and not contact
-				local mustg=g:Filter(aux.FilterMustbemat,nil,SUMMON_TYPE_FUSION,c)
+				local mustg=aux.GetMustbematGroup(SUMMON_TYPE_FUSION,c,tp)
 				if contact then mustg:Clear() end
 				local mg=g:Filter(Auxiliary.FConditionFilterMix,c,c,sub,sub,contact,tp,fun1,table.unpack(funs))
 				if gc then
@@ -260,7 +259,7 @@ function Auxiliary.FOperationMixRep(insf,sub,fun1,minc,maxc,...)
 				local notfusion=(chkfnf>>8)&0xf~=0
 				local contact=chkfnf>>12~=0
 				local sub=(sub or notfusion) and not contact
-				local mustg=eg:Filter(aux.FilterMustbemat,nil,SUMMON_TYPE_FUSION,c)
+				local mustg=aux.GetMustbematGroup(SUMMON_TYPE_FUSION,c,tp)
 				if contact then mustg:Clear() end
 				local mg=eg:Filter(Auxiliary.FConditionFilterMix,c,c,sub,sub,contact,tp,fun1,table.unpack(funs))
 				local sg=Group.CreateGroup()
