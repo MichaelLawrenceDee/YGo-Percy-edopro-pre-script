@@ -385,6 +385,11 @@ function Auxiliary.FCheckSelectMixRepM(c,tp,...)
 end
 function Auxiliary.FSelectMixRep(c,tp,mg,sg,mustg,fc,sub,sub2,chkf,...)
 	local rg=Group.CreateGroup()
+	if Auxiliary.FCheckExact then
+		if Auxiliary.FCheckExact<minc + #{...} or mustg:GetCount()>Auxiliary.FCheckExact then return false end
+		maxc=Auxiliary.FCheckExact-#{...}
+		minc=Auxiliary.FCheckExact-#{...}
+	end
 	--c has the fusion limit
 	if c:IsHasEffect(73941492+TYPE_FUSION) then
 		local eff={c:GetCardEffect(73941492+TYPE_FUSION)}
@@ -413,11 +418,11 @@ function Auxiliary.FSelectMixRep(c,tp,mg,sg,mustg,fc,sub,sub2,chkf,...)
 	local res=false
 	if Auxiliary.FCheckAdditional and not Auxiliary.FCheckAdditional(tp,sg,fc) then
 		res=false
-	elseif Auxiliary.FCheckMixRepGoal(tp,sg,mustg,fc,sub,sub2,chkf,...) then
+	elseif Auxiliary.FCheckMixRepGoal(tp,sg,mustg,fc,sub,sub2,chkf,fun1,minc,maxc,...) then
 		res=true
 	else
 		local g=Group.CreateGroup()
-		res=sg:IsExists(Auxiliary.FCheckMixRepSelected,1,nil,tp,mg,sg,mustg,g,fc,sub,sub2,chkf,...)
+		res=sg:IsExists(Auxiliary.FCheckMixRepSelected,1,nil,tp,mg,sg,mustg,g,fc,sub,sub2,chkf,fun1,minc,maxc,...)
 	end
 	sg:RemoveCard(c)
 	mg:Merge(rg)
