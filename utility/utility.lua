@@ -5,19 +5,17 @@ POS_FACEDOWN_DEFENCE=POS_FACEDOWN_DEFENSE
 RACE_CYBERS=RACE_CYBERSE
 TYPE_EXTRA=TYPE_FUSION+TYPE_SYNCHRO+TYPE_XYZ+TYPE_LINK
 
-function Auxiliary.GetMustbematGroup(summon_type,sc,p)
-	local pe={Duel.GetPlayerEffect(p,EFFECT_MUST_BE_MATERIAL)}
-	local rg=Group.CreateGroup()
-	if pe[1] then
-		for _,eff in ipairs(pe) do
-			if type(eff:GetValue())=='function' then
-				if eff:GetValue()(eff:GetOwner(),summon_type,sc) then
-					rg:AddCard(eff:GetOwner())
-				end
-			end
+function Auxiliary.GetMustBeMaterialGroup(tp,eg,sump,sc,g,r)
+	--- eg all default materials, g - valid materials
+	local eff={Duel.GetPlayerEffect(tp,EFFECT_MUST_BE_MATERIAL)}
+	local g=Group.CreateGroup()
+	for _,te in ipairs(eff) do
+		local val=type(te:GetValue())=='function' and te:GetValue()(te,eg,sump,sc,g) or te:GetValue()
+		if val&r>0 then
+			g:AddCard(te:GetHandler())
 		end
 	end
-	return rg
+	return g
 end
 function Group.Includes(g1,g2)
 	local g1p=g1:Clone()
@@ -303,7 +301,7 @@ function Auxiliary.IsCodeListed(c,...)
 end
 --card effect disable filter(target)
 function Auxiliary.disfilter1(c)
-	return c:IsFaceup() and not c:IsDisabled() and (not c:IsType(TYPE_NORMAL) or bit.band(c:GetOriginalType(),TYPE_EFFECT)~=0)
+	return c:IsFaceup() and not c:IsDisabled() and (not c:IsType(TYPE_NORMAL) or c:GetOriginalType()&TYPE_EFFECT~=0)
 end
 --condition of EVENT_BATTLE_DESTROYING
 function Auxiliary.bdcon(e,tp,eg,ep,ev,re,r,rp)
@@ -369,23 +367,23 @@ function Auxiliary.sumreg(e,tp,eg,ep,ev,re,r,rp)
 end
 --sp_summon condition for fusion monster
 function Auxiliary.fuslimit(e,se,sp,st)
-	return bit.band(st,SUMMON_TYPE_FUSION)==SUMMON_TYPE_FUSION
+	return st&SUMMON_TYPE_FUSION==SUMMON_TYPE_FUSION
 end
 --sp_summon condition for ritual monster
 function Auxiliary.ritlimit(e,se,sp,st)
-	return bit.band(st,SUMMON_TYPE_RITUAL)==SUMMON_TYPE_RITUAL
+	return st&SUMMON_TYPE_RITUAL==SUMMON_TYPE_RITUAL
 end
 --sp_summon condition for synchro monster
 function Auxiliary.synlimit(e,se,sp,st)
-	return bit.band(st,SUMMON_TYPE_SYNCHRO)==SUMMON_TYPE_SYNCHRO
+	return st&SUMMON_TYPE_SYNCHRO==SUMMON_TYPE_SYNCHRO
 end
 --sp_summon condition for xyz monster
 function Auxiliary.xyzlimit(e,se,sp,st)
-	return bit.band(st,SUMMON_TYPE_XYZ)==SUMMON_TYPE_XYZ
+	return st&SUMMON_TYPE_XYZ==SUMMON_TYPE_XYZ
 end
 --sp_summon condition for pendulum monster
 function Auxiliary.penlimit(e,se,sp,st)
-	return bit.band(st,SUMMON_TYPE_PENDULUM)==SUMMON_TYPE_PENDULUM
+	return st&SUMMON_TYPE_PENDULUM==SUMMON_TYPE_PENDULUM
 end
 --effects inflicting damage to tp
 function Auxiliary.damcon1(e,tp,eg,ep,ev,re,r,rp)
