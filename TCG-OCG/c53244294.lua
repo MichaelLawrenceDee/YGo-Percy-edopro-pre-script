@@ -57,8 +57,8 @@ function c53244294.zcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	e:GetHandler():RemoveOverlayCard(tp,1,1,REASON_COST)
 end
 function c53244294.ztg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)+Duel.GetLocationCount(1-tp,LOCATION_MZONE)
-		+Duel.GetLocationCount(tp,LOCATION_SZONE)+Duel.GetLocationCount(1-tp,LOCATION_SZONE)>0 end
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE,nil,LOCATION_REASON_COUNT)+Duel.GetLocationCount(1-tp,LOCATION_MZONE,nil,LOCATION_REASON_COUNT)
+		+Duel.GetLocationCount(tp,LOCATION_SZONE,nil,LOCATION_REASON_COUNT)+Duel.GetLocationCount(1-tp,LOCATION_SZONE,nil,LOCATION_REASON_COUNT)>0 end
 	local dis=Duel.SelectDisableField(tp,1,LOCATION_ONFIELD,LOCATION_ONFIELD,0)
 	e:SetLabel(dis)
 end

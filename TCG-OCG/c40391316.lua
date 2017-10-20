@@ -13,7 +13,7 @@ function c40391316.initial_effect(c)
 end
 c40391316.material_setcode=0xf
 function c40391316.disop(e,tp)
-	local c=Duel.GetLocationCount(1-tp,LOCATION_MZONE)
+	local c=Duel.GetLocationCount(1-tp,LOCATION_MZONE,nil,LOCATION_REASON_COUNT)
 	if c==0 then return end
 	local dis1=Duel.SelectDisableField(tp,1,0,LOCATION_MZONE,0)
 	if c>1 and Duel.SelectYesNo(tp,aux.Stringid(40391316,0)) then
