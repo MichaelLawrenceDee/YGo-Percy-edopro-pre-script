@@ -35,12 +35,12 @@ function (e,c,sump,sumtype,sumpos,targetp,se)
 end
 ```
 
-EFFECT_TUNER_MATERIAL_LIMIT: instead of using the EFFECT_SYNCHRO_MATERIAL_CUSTOM, when the monster only has a materials restriction, this can be used, in the target it accepts functions with these filters: (e,c) where e is the effect, in this case the LIMIT, and c is the generic non tuner material, when the function returns true the material will be able to be used
+EFFECT_TUNER_MATERIAL_LIMIT: instead of using the EFFECT_SYNCHRO_MATERIAL_CUSTOM, when the monster only has a materials restriction, this can be used, in the target it accepts functions with these filters: (e,c) where e is the effect, in this case the LIMIT, and c is the generic non tuner material, when the function returns true the material will be able to be used, but we don't use this function.
 
-EFFECT_TUNE_MAGICIAN_X this effect is a filter for the xyz materials
+EFFECT_TUNE_MAGICIAN_X this effect is a filter for the xyz materials, but we also don't use this.
 
 EFFECT_BECOME_LINKED: This effect, only useful under mr4, accept as value the zone that will be treated as a linked zone, even if there's no link monster
 
 EFFECT_FUSION_MATERIAL now a monster can have more than 1 of this effect
 
-##### Place cards with official card number in TCG-OCG, Beta and Anime Cards in respective folders. Also, all pics (TCG/OCG/Anime/etc) are placed in the pics folder.
+##### Place all scripts in script folder as is. Live2017Links to be synced before the next update, currently synced with LiveMR4Links
