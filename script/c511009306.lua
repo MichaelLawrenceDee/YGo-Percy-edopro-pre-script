@@ -13,14 +13,12 @@ function c511009306.initial_effect(c)
 	c:RegisterEffect(e3)
 	--disable
 	local e4=Effect.CreateEffect(c)
-	e4:SetCategory(CATEGORY_DISABLE)
 	e4:SetDescription(aux.Stringid(74416224,0))
-	e4:SetType(EFFECT_TYPE_QUICK_O)
+	e4:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e4:SetCode(EVENT_FREE_CHAIN)
 	e4:SetRange(LOCATION_SZONE)
 	e4:SetCountLimit(1)
 	e4:SetCondition(c511009306.negcon)
-	e4:SetTarget(c511009306.negtg)
 	e4:SetOperation(c511009306.negop)
 	c:RegisterEffect(e4)
 	--Destroy
@@ -53,13 +51,10 @@ function c511009306.filter(c)
 	return c:IsFaceup() and c:IsSetCard(0x19)
 end
 function c511009306.negcon(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetTurnPlayer()==tp
+	return Duel.GetTurnPlayer()==tp and Duel.IsExistingMatchingCard(aux.disfilter1,tp,0,LOCATION_MZONE,1,nil)
 end
-function c511009306.negtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(aux.disfilter1,tp,0,LOCATION_MZONE,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_DISABLE,nil,1,0,0)
-end
-function c511009306.negop(e,tp,eg,ep,ev,re,r,rp,chk)
+function c511009306.negop(e,tp,eg,ep,ev,re,r,rp)
+	Duel.Hint(HINT_CARD,0,511009306)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
 	local g=Duel.SelectMatchingCard(tp,aux.disfilter1,tp,0,LOCATION_MZONE,1,1,nil)
 	local tc=g:GetFirst()
