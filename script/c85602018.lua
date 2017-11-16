@@ -49,12 +49,8 @@ function c85602018.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	end
 end
 function c85602018.activate(e,tp,eg,ep,ev,re,r,rp)
-	if c85602018[tp] and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsExistingMatchingCard(c85602018.spfilter,tp,LOCATION_DECK,0,1,nil,e,tp)
-		and Duel.SelectYesNo(tp,aux.Stringid(85602018,0)) then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-		local g=Duel.SelectMatchingCard(tp,c85602018.spfilter,tp,LOCATION_DECK,0,1,1,nil,e,tp)
-		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
+	if c85602018.spcon(e,tp,eg,ep,ev,re,r,rp) and Duel.SelectYesNo(tp,aux.Stringid(85602018,0)) then
+		c85602018.spop(e,tp,eg,ep,ev,re,r,rp,true)
 	else
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
@@ -73,8 +69,10 @@ function c85602018.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return c85602018[tp] and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 		and Duel.IsExistingMatchingCard(c85602018.spfilter,tp,LOCATION_DECK,0,1,nil,e,tp)
 end
-function c85602018.spop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_CARD,0,85602018)
+function c85602018.spop(e,tp,eg,ep,ev,re,r,rp,nohint)
+	if not nohint then
+		Duel.Hint(HINT_CARD,0,85602018)
+	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,c85602018.spfilter,tp,LOCATION_DECK,0,1,1,nil,e,tp)
 	Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)

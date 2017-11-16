@@ -58,9 +58,9 @@ function c511000119.initial_effect(c)
 	c:RegisterEffect(e6)
 	--move
 	local e7=Effect.CreateEffect(c)
-	e7:SetType(EFFECT_TYPE_FIELD)
+	e7:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e7:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
-	e7:SetCode(EFFECT_SPSUMMON_PROC_G)
+	e7:SetCode(EVENT_FREE_CHAIN)
 	e7:SetRange(LOCATION_SZONE)
 	e7:SetCondition(c511000119.movecon)
 	e7:SetOperation(c511000119.moveop)
@@ -103,7 +103,7 @@ function c511000119.operation(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetCode(EFFECT_EQUIP_LIMIT)
 		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 		e1:SetValue(1)
-		e1:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
 		c:RegisterEffect(e1)
 		--end
 		local e2=Effect.CreateEffect(c)
@@ -113,9 +113,9 @@ function c511000119.operation(e,tp,eg,ep,ev,re,r,rp)
 		e2:SetCountLimit(1)
 		e2:SetCode(EVENT_PHASE+PHASE_END)
 		e2:SetOperation(c511000119.op)
-		e2:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END)
+		e2:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
 		c:RegisterEffect(e2)
-		c:RegisterFlagEffect(511000118,RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END,0,1)
+		c:RegisterFlagEffect(511000118,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,0,1)
 	end
 end
 function c511000119.op(e,tp,eg,ep,ev,re,r,rp)
@@ -162,8 +162,8 @@ end
 function c511000119.atktg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local a=Duel.GetAttacker()
 	if chk==0 then return true end
-	Duel.SetOperationInfo(0,CATEGORY_RECOVER,nil,0,tp,a:GetAttack())
-	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,a:GetAttack())
+	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,a:GetAttack()/2)
+	Duel.SetOperationInfo(0,CATEGORY_RECOVER,nil,0,tp,a:GetAttack()/2)
 end
 function c511000119.atkop(e,tp,eg,ep,ev,re,r,rp)
 	local a=Duel.GetAttacker()
@@ -171,8 +171,10 @@ function c511000119.atkop(e,tp,eg,ep,ev,re,r,rp)
 	if not a or not tc or a~=tc then return end
 	Duel.NegateAttack()
 	local atk=a:GetAttack()
-	local val=Duel.Recover(tp,atk,REASON_EFFECT)
-	Duel.Damage(1-tp,val,REASON_EFFECT)
+	local val=Duel.Damage(1-tp,atk/2,REASON_EFFECT)
+	if val>0 then
+		Duel.Recover(tp,val,REASON_EFFECT)
+	end
 end
 function c511000119.mtcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()==tp and Duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_GRAVE,0,1,nil,31829185) 
@@ -194,11 +196,10 @@ function c511000119.mvfilter(c,tp)
 		return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 	end
 end
-function c511000119.movecon(e,c,og)
-	if c==nil then return true end
-	return Duel.IsExistingMatchingCard(c511000119.mvfilter,c:GetControler(),LOCATION_ONFIELD,0,1,nil,c:GetControler())
+function c511000119.movecon(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.IsExistingMatchingCard(c511000119.mvfilter,tp,LOCATION_ONFIELD,0,1,nil,tp)
 end
-function c511000119.moveop(e,tp,eg,ep,ev,re,r,rp,c,og)
+function c511000119.moveop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOFIELD)
 	local tc=Duel.SelectMatchingCard(tp,c511000119.mvfilter,tp,LOCATION_ONFIELD,0,1,1,nil):GetFirst()
 	if tc then
@@ -239,7 +240,7 @@ function c511000119.moveop(e,tp,eg,ep,ev,re,r,rp,c,og)
 			e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 			e1:SetReset(RESET_EVENT+0x47c0000)
 			tc:RegisterEffect(e1,true)
-			tc:RegisterFlagEffect(511000119,RESET_EVENT+0x1fe0000,0,1)
+			tc:RegisterFlagEffect(511000119,RESET_EVENT+RESETS_STANDARD,0,1)
 		end
 	end
 	return
@@ -248,11 +249,8 @@ function c511000119.efilter(e,te)
 	local tc=te:GetOwner()
 	return tc~=e:GetOwner() and not tc:IsCode(94212438)
 end
-function c511000119.dirfil(c)
-	return c:GetFlagEffect(511000119)==0
-end
 function c511000119.dirtg(e,c)
-	return not Duel.IsExistingMatchingCard(c511000119.dirfil,c:GetControler(),0,LOCATION_MZONE,1,nil)
+	return not Duel.IsExistingMatchingCard(aux.FilterEqualFunction(Card.GetFlagEffect,0,511000119),c:GetControler(),0,LOCATION_MZONE,1,nil)
 end
 function c511000119.filter(c)
 	return (c:GetType()==TYPE_SPELL or c:IsType(TYPE_QUICKPLAY)) and c:GetActivateEffect() 
@@ -266,20 +264,21 @@ function c511000119.activ(e,tp,eg,ep,ev,re,r,rp)
 			local te=tc:GetActivateEffect()
 			local e1=Effect.CreateEffect(tc)
 			e1:SetCategory(te:GetCategory())
+			e1:SetType(EFFECT_TYPE_ACTIVATE)
 			if tc:GetType()==TYPE_SPELL then
-				e1:SetType(EFFECT_TYPE_IGNITION)	
+				e1:SetCode(EVENT_FREE_CHAIN)
 			else
-				e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_QUICK_O)
 				e1:SetCode(te:GetCode())
 			end
 			e1:SetProperty(te:GetProperty())
 			e1:SetCondition(c511000119.con)
 			e1:SetCost(c511000119.cos)
 			e1:SetTarget(c511000119.tar)
-			e1:SetOperation(c511000119.act)
+			e1:SetOperation(te:GetOperation())
 			e1:SetRange(LOCATION_HAND)
+			e1:SetValue(LOCATION_MZONE)
 			tc:RegisterEffect(e1)
-			tc:RegisterFlagEffect(511000120,RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END,0,1) 	
+			tc:RegisterFlagEffect(511000120,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,0,1)
 		end
 		tc=g:GetNext()
 	end		
@@ -303,8 +302,6 @@ function c511000119.tar(e,tp,eg,ep,ev,re,r,rp,chk)
 	local op=te:GetOperation()
 	if chk==0 then return (not tg or tg(e,tp,eg,ep,ev,re,r,rp,0)) and Duel.GetTurnPlayer()==tp 
 		and Duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_GRAVE,0,1,nil,31829185) end
-	e:SetType(EFFECT_TYPE_ACTIVATE)
-	Duel.MoveToField(c,tp,tp,LOCATION_MZONE,POS_FACEUP_ATTACK,true)
 	c:CreateEffectRelation(e)
 	if tg then tg(e,tp,eg,ep,ev,re,r,rp,1,nil) end
 	e:SetOperation(op)

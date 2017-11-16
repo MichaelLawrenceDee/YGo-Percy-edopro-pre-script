@@ -55,15 +55,18 @@ function c511000264.op(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetOperation(c511000264.imop)
 		e1:SetReset(RESET_PHASE+PHASE_END)
 		Duel.RegisterEffect(e1,tp)
-		local e1=Effect.CreateEffect(c)
-		e1:SetType(EFFECT_TYPE_FIELD)
-		e1:SetCode(EFFECT_SPSUMMON_PROC_G)
-		e1:SetProperty(EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_CANNOT_DISABLE)
-		e1:SetRange(LOCATION_MZONE)
-		e1:SetCondition(c511000264.discon)
-		e1:SetOperation(c511000264.disop)
-		e1:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END)
-		c:RegisterEffect(e1)
+		if c511000264.discon(e,tp,eg,ep,ev,re,r,rp) then
+			c511000264.disop(e,tp,eg,ep,ev,re,r,rp,true)
+		end
+		local e2=Effect.CreateEffect(c)
+		e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		e2:SetCode(EVENT_FREE_CHAIN)
+		e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
+		e2:SetRange(LOCATION_MZONE)
+		e2:SetCondition(c511000264.discon)
+		e2:SetOperation(c511000264.disop)
+		e2:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END)
+		c:RegisterEffect(e2)
 		c:RegisterFlagEffect(511000263,RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END,0,0)
 	end
 end
@@ -120,7 +123,7 @@ function c511000264.regop(e,tp,eg,ep,ev,re,r,rp)
 	local pos=c:GetPreviousPosition()
 	if c:IsReason(REASON_BATTLE) then pos=c:GetBattlePosition() end
 	if c:GetPreviousControler()==tp and c:IsReason(REASON_DESTROY)
-		and c:IsPreviousLocation(LOCATION_ONFIELD) and bit.band(pos,POS_FACEUP)~=0 then
+		and c:IsPreviousLocation(LOCATION_ONFIELD) and pos&POS_FACEUP~=0 then
 		c:RegisterFlagEffect(511000264,RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END,0,1)
 	end
 end
@@ -154,26 +157,23 @@ function c511000264.tgg(c,card)
 	return c:GetCardTarget() and c:GetCardTarget():IsContains(card) and not c:IsDisabled()
 end
 function c511000264.disfilter(c)
-	local eqg=c:GetEquipGroup():Filter(c511000264.dischk,nil)
+	local eqg=c:GetEquipGroup():Filter(aux.NOT(Card.IsDisabled),nil)
 	local tgg=Duel.GetMatchingGroup(c511000264.tgg,0,LOCATION_ONFIELD,LOCATION_ONFIELD,nil,c)
 	eqg:Merge(tgg)
 	return c:IsRace(RACE_DEVINE) and eqg:GetCount()>0
 end
-function c511000264.dischk(c)
-	return not c:IsDisabled()
-end
-function c511000264.discon(e,c,og)
-	if c==nil then return true end
-	local tp=c:GetControler()
+function c511000264.discon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsExistingMatchingCard(c511000264.disfilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil)
 end
-function c511000264.disop(e,tp,eg,ep,ev,re,r,rp,c,og)
-	Duel.Hint(HINT_CARD,0,511000264)
+function c511000264.disop(e,tp,eg,ep,ev,re,r,rp,nohint)
+	if not nohint then
+		Duel.Hint(HINT_CARD,0,511000264)
+	end
 	local g=Duel.GetMatchingGroup(c511000264.disfilter,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
 	local sg=Group.CreateGroup()
 	local tc=g:GetFirst()
 	while tc do
-		local eqg=tc:GetEquipGroup():Filter(c511000264.dischk,nil)
+		local eqg=tc:GetEquipGroup():Filter(aux.NOT(Card.IsDisabled),nil)
 		local tgg=Duel.GetMatchingGroup(c511000264.tgg,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil,tc)
 		sg:Merge(eqg)
 		sg:Merge(tgg)
@@ -208,5 +208,4 @@ function c511000264.disop(e,tp,eg,ep,ev,re,r,rp,c,og)
 		dc=dg:GetNext()
 	end
 	Duel.BreakEffect()
-	return
 end
