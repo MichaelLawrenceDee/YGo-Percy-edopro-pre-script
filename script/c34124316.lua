@@ -79,5 +79,9 @@ function c34124316.operation(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SendtoGrave(gg,REASON_EFFECT)
 	end
 	local fg=Duel.GetMatchingGroup(Card.IsFacedown,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
-	Duel.ShuffleSetCard(fg)
+	local fc=fg:GetFirst()
+	while fc do
+		Duel.ShuffleSetCard(Group.FromCards(fc))
+		fc=fg:GetNext()
+	end
 end
