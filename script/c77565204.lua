@@ -123,14 +123,10 @@ function c77565204.procop(e,tp,eg,ep,ev,re,r,rp)
 			gc:SetReason(REASON_MATERIAL+REASON_FUSION,true)
 			gc=gg:GetNext()
 		end
-		gg:KeepAlive()
 	end
 	Duel.SpecialSummon(tc,SUMMON_TYPE_FUSION,tp,tp,false,false,POS_FACEUP)
 	tc:CompleteProcedure()
 	c:SetCardTarget(tc)
-end
-function c77565204.aclimit(e,re,tp)
-	return re:GetCode()==EVENT_BE_MATERIAL and e:GetLabelObject():IsContains(re:GetHandler())
 end
 function c77565204.desop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=e:GetHandler():GetFirstCardTarget()
