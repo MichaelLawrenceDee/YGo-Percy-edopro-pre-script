@@ -119,7 +119,7 @@ function c77565204.procop(e,tp,eg,ep,ev,re,r,rp)
 		local gg=mg:Filter(c77565204.srfilter,nil,te)
 		local gc=gg:GetFirst()
 		while gc do
-			gc:SetReason(gc:GetReason()|REASON_MATERIAL+REASON_FUSION)
+			gc:SetReason(REASON_MATERIAL+REASON_FUSION,true)
 			gc=gg:GetNext()
 		end
 	end
