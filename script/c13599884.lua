@@ -84,9 +84,8 @@ function c13599884.desop(tc,e,c,check)
 			te:SetLabel(ct)
 			c:SetTurnCounter(ct)
 			if ct==3 and Duel.Destroy(tc,REASON_EFFECT)>0 then
-				--to be added if andre's PRs are merged
-				--tc:SetReasonPlayer(te:GetOwnerPlayer())
-				--tc:SetReasonEffect(te)
+				tc:SetReasonPlayer(te:GetOwnerPlayer())
+				tc:SetReasonEffect(te)
 			end
 		end
 	end

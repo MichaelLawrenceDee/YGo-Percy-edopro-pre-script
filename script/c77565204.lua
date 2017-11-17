@@ -90,7 +90,7 @@ function c77565204.tgop(e,tp,eg,ep,ev,re,r,rp)
 		local code=tc:GetCode()
 		local mat=Duel.SelectFusionMaterial(tp,tc,mg)
 		mat:KeepAlive()
-		Duel.SendtoGrave(mat,REASON_EFFECT+REASON_MATERIAL+REASON_FUSION)
+		Duel.SendtoGrave(mat,REASON_EFFECT)
 		e:SetLabel(code)
 		e:SetLabelObject(mat)
 	end
@@ -101,16 +101,28 @@ end
 function c77565204.procfilter(c,code,e,tp)
 	return c:IsCode(code) and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,false)
 end
+function c77565204.srfilter(c,te)
+	return c:IsLocation(LOCATION_GRAVE) and c:IsReason(REASON_EFFECT) and c:GetReasonEffect()==te
+end
 function c77565204.procop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if not c:IsRelateToEffect(e) or Duel.GetLocationCountFromEx(tp)<=0 then return end
 	local code=e:GetLabelObject():GetLabel()
-	local mg=e:GetLabelObject():GetLabelObject()
+	local te=e:GetLabelObject()
+	local mg=te:GetLabelObject()
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,c77565204.procfilter,tp,LOCATION_EXTRA,0,1,1,nil,code,e,tp)
 	local tc=g:GetFirst()
 	if not tc then return end
-	if mg and mg:GetCount()>0 then tc:SetMaterial(mg) end
+	if mg and mg:GetCount()>0 then
+		tc:SetMaterial(mg)
+		local gg=mg:Filter(c77565204.srfilter,nil,te)
+		local gc=gg:GetFirst()
+		while gc do
+			gc:SetReason(gc:GetReason()|REASON_MATERIAL+REASON_FUSION)
+			gc=gg:GetNext()
+		end
+	end
 	Duel.SpecialSummon(tc,SUMMON_TYPE_FUSION,tp,tp,false,false,POS_FACEUP)
 	tc:CompleteProcedure()
 	c:SetCardTarget(tc)
