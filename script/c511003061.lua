@@ -31,7 +31,6 @@ function c511003061.initial_effect(c)
 	--banish
 	local e4=Effect.CreateEffect(c)
 	e4:SetDescription(aux.Stringid(24696097,2))
-	e4:SetCategory(CATEGORY_REMOVE)
 	e4:SetType(EFFECT_TYPE_QUICK_O)
 	e4:SetCode(EVENT_FREE_CHAIN)
 	e4:SetRange(LOCATION_MZONE)
@@ -62,6 +61,7 @@ function c511003061.syncon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()~=tp and e:GetHandler():IsSynchroSummonable(nil)
 end
 function c511003061.synop(e,tp,eg,ep,ev,re,r,rp)
+	Duel.Hint(HINT_CARD,0,511003061)
 	Duel.SynchroSummon(tp,e:GetHandler(),nil)
 end
 function c511003061.mtcon(e,tp,eg,ep,ev,re,r,rp)
@@ -123,8 +123,8 @@ function c511003061.rmop(e,tp,eg,ep,ev,re,r,rp)
 	if c:IsRelateToEffect(e) then
 		c:RegisterFlagEffect(511003061,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,0,0)
 	end
-	if Duel.GetAttacker() and Duel.GetAttacker():IsControler(1-tp) and Duel.SelectYesNo(tp,94) then
-		Duel.NegateAttack()
+	if c511003061.discon(e,tp,eg,ep,ev,re,r,rp) and Duel.SelectYesNo(tp,94) then
+		c511003061.disop(e,tp,eg,ep,ev,re,r,rp,true)
 	else
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
@@ -140,7 +140,10 @@ end
 function c511003061.discon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetAttacker() and Duel.GetAttacker():IsControler(1-tp)
 end
-function c511003061.disop(e,tp,eg,ep,ev,re,r,rp)
+function c511003061.disop(e,tp,eg,ep,ev,re,r,rp,nohint)
+	if not nohint then
+		Duel.Hint(HINT_CARD,0,511003061)
+	end
 	Duel.NegateAttack()
 end
 function c511003061.rettg(e,tp,eg,ep,ev,re,r,rp,chk)

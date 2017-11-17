@@ -36,7 +36,7 @@ function c511001214.spcon(e,tp,eg,ep,ev,re,r,rp)
 		and Duel.IsExistingMatchingCard(c511001214.spfilter,tp,LOCATION_DECK,0,1,nil,e,tp)
 end
 function c511001214.spop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_CARD,0,511001606)
+	Duel.Hint(HINT_CARD,0,511001214)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,c511001214.spfilter,tp,LOCATION_DECK,0,1,1,nil,e,tp)
 	if Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)>0 then
