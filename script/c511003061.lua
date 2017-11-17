@@ -51,6 +51,12 @@ function c511003061.initial_effect(c)
 	e5:SetTarget(c511003061.rettg)
 	e5:SetOperation(c511003061.retop)
 	c:RegisterEffect(e5)
+	--double tuner check
+	local e6=Effect.CreateEffect(c)
+	e6:SetType(EFFECT_TYPE_SINGLE)
+	e6:SetCode(EFFECT_MATERIAL_CHECK)
+	e6:SetValue(c511003061.valcheck)
+	c:RegisterEffect(e6)
 end
 function c511003061.syncon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()~=tp and e:GetHandler():IsSynchroSummonable(nil)
@@ -143,5 +149,16 @@ end
 function c511003061.retop(e,tp,eg,ep,ev,re,r,rp)
 	if e:GetHandler():IsRelateToEffect(e) then
 		Duel.ReturnToField(e:GetHandler())
+	end
+end
+function c511003061.valcheck(e,c)
+	local g=c:GetMaterial()
+	if g:IsExists(Card.IsType,2,nil,TYPE_TUNER) then
+		local e1=Effect.CreateEffect(c)
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+		e1:SetCode(21142671)
+		e1:SetReset(RESET_EVENT+0xfe0000+RESET_PHASE+PHASE_END)
+		c:RegisterEffect(e1)
 	end
 end
