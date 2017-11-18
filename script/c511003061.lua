@@ -98,15 +98,17 @@ function c511003061.negop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local g=Duel.GetChainInfo(ev,CHAININFO_TARGET_CARDS)
 	local ex,tg,tc=Duel.GetOperationInfo(ev,CATEGORY_DESTROY)
-	if c:IsStatus(STATUS_BATTLE_DESTROYED) or not g or not ex or not tg or not Duel.IsChainNegatable(ev) or not tg:Includes(g) or tc+tg:FilterCount(c511003061.cfilter,c)-tg:GetCount()~=1 
-		or g:FilterCount(c511003061.cfilter,c,tp)~=1 then return false end
+	if c:IsStatus(STATUS_BATTLE_DESTROYED) or not g or not ex or not tg or not Duel.IsChainNegatable(ev) or not tg:Includes(g)
+		or tc+tg:FilterCount(c511003061.cfilter,c)-tg:GetCount()<=1 
+		or g:FilterCount(c511003061.cfilter,c,tp)<=1 then return false end
 	local rc=re:GetHandler()
 	if Duel.NegateActivation(ev) and rc:IsRelateToEffect(re) then
 		Duel.Destroy(rc,REASON_EFFECT)
 	end
 end
 function c511003061.rmcon(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetTurnPlayer()~=tp
+	return Duel.GetTurnPlayer()~=tp and (Duel.IsAbleToEnterBP()
+		or (Duel.GetCurrentPhase()>=PHASE_BATTLE_START and Duel.GetCurrentPhase()<=PHASE_BATTLE))
 end
 function c511003061.rmcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsAbleToRemoveAsCost() end
