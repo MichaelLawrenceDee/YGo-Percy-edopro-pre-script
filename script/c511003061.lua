@@ -23,9 +23,13 @@ function c511003061.initial_effect(c)
 	c:RegisterEffect(e2)
 	--negate  and destroy
 	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e3:SetDescription(aux.Stringid(24696097,1))
+	e3:SetCategory(CATEGORY_NEGATE+CATEGORY_DESTROY)
+	e3:SetType(EFFECT_TYPE_QUICK_F)
 	e3:SetCode(EVENT_CHAIN_SOLVING)
 	e3:SetRange(LOCATION_MZONE)
+	e3:SetCondition(c511003061.negcon)
+	e3:SetTarget(c511003061.negtg)
 	e3:SetOperation(c511003061.negop)
 	c:RegisterEffect(e3)
 	--banish
@@ -94,16 +98,25 @@ end
 function c511003061.cfilter(c,tp)
 	return c:IsOnField() and c:IsControler(tp)
 end
-function c511003061.negop(e,tp,eg,ep,ev,re,r,rp)
+function c511003061.negcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
+	if c:IsStatus(STATUS_BATTLE_DESTROYED) or not Duel.IsChainNegatable(ev) or re:GetHandler()==e:GetHandler() or not re:IsHasProperty(EFFECT_FLAG_CARD_TARGET) 
+		or (re:IsHasCategory(CATEGORY_NEGATE) and Duel.GetChainInfo(ev-1,CHAININFO_TRIGGERING_EFFECT):IsHasType(EFFECT_TYPE_ACTIVATE)) then return false end
 	local g=Duel.GetChainInfo(ev,CHAININFO_TARGET_CARDS)
 	local ex,tg,tc=Duel.GetOperationInfo(ev,CATEGORY_DESTROY)
-	if c:IsStatus(STATUS_BATTLE_DESTROYED) or not g or not ex or not tg or not Duel.IsChainNegatable(ev) or not tg:Includes(g)
-		or tc+tg:FilterCount(c511003061.cfilter,c)-tg:GetCount()<1 
-		or g:FilterCount(c511003061.cfilter,c,tp)<1 then return false end
-	local rc=re:GetHandler()
-	if Duel.NegateActivation(ev) and rc:IsRelateToEffect(re) then
-		Duel.Destroy(rc,REASON_EFFECT)
+	return g and ex and tg and tg:Includes(g) and tc+tg:FilterCount(c511003061.cfilter,c)-tg:GetCount()>0 
+		and g:FilterCount(c511003061.cfilter,c,tp)>0
+end
+function c511003061.negtg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return true end
+	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
+	if re:GetHandler():IsRelateToEffect(re) then
+		Duel.SetOperationInfo(0,CATEGORY_DESTROY,eg,1,0,0)
+	end
+end
+function c511003061.negop(e,tp,eg,ep,ev,re,r,rp)
+	if Duel.NegateActivation(ev) and re:GetHandler():IsRelateToEffect(re) then
+		Duel.Destroy(eg,REASON_EFFECT)
 	end
 end
 function c511003061.rmcon(e,tp,eg,ep,ev,re,r,rp)
