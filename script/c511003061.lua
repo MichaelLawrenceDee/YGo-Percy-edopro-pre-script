@@ -21,13 +21,13 @@ function c511003061.initial_effect(c)
 	e2:SetCondition(c511003061.mtcon)
 	e2:SetOperation(c511003061.mtop)
 	c:RegisterEffect(e2)
-	--negate  and destroy
+	--negate and destroy
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(24696097,1))
 	e3:SetCategory(CATEGORY_NEGATE+CATEGORY_DESTROY)
 	e3:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DAMAGE_CAL)
 	e3:SetType(EFFECT_TYPE_QUICK_F)
-	e3:SetCode(EVENT_CHAIN_SOLVING)
+	e3:SetCode(EVENT_CHAINING)
 	e3:SetRange(LOCATION_MZONE)
 	e3:SetCondition(c511003061.negcon)
 	e3:SetTarget(c511003061.negtg)
@@ -105,13 +105,13 @@ function c511003061.negcon(e,tp,eg,ep,ev,re,r,rp)
 		or (re:IsHasCategory(CATEGORY_NEGATE) and Duel.GetChainInfo(ev-1,CHAININFO_TRIGGERING_EFFECT):IsHasType(EFFECT_TYPE_ACTIVATE)) then return false end
 	local g=Duel.GetChainInfo(ev,CHAININFO_TARGET_CARDS)
 	local ex,tg,tc=Duel.GetOperationInfo(ev,CATEGORY_DESTROY)
-	return g and ex and tg and tg:Includes(g) and tc+tg:FilterCount(c511003061.cfilter,c)-tg:GetCount()>0 
+	return g and ex and tg and tg:Includes(g) and tc+tg:FilterCount(c511003061.cfilter,c,tp)-tg:GetCount()>0 
 		and g:FilterCount(c511003061.cfilter,c,tp)>0
 end
 function c511003061.negtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
 	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
-	if re:GetHandler():IsRelateToEffect(re) then
+	if re:GetHandler():IsDestructable() and re:GetHandler():IsRelateToEffect(re) then
 		Duel.SetOperationInfo(0,CATEGORY_DESTROY,eg,1,0,0)
 	end
 end
