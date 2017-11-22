@@ -8,16 +8,10 @@ function c511000988.initial_effect(c)
 	e1:SetTarget(c511000988.target)
 	e1:SetOperation(c511000988.operation)
 	c:RegisterEffect(e1)
-	local e2=Effect.CreateEffect(c)
-	e2:SetCode(EFFECT_ADD_TYPE)
-	e2:SetType(EFFECT_TYPE_SINGLE)
-	e2:SetProperty(EFFECT_FLAG_IGNORE_RANGE+EFFECT_FLAG_SET_AVAILABLE+EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
-	e2:SetValue(TYPE_NORMAL)
-	c:RegisterEffect(e2)
+	c:Type(TYPE_MONSTER+TYPE_NORMAL+TYPE_EFFECT+TYPE_FLIP)
 end
 c511000988.illegal=true
 function c511000988.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	local c=e:GetHandler()
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and chkc:IsType(TYPE_FLIP) end
 	if chk==0 then return true end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_EFFECT)

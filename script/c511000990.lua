@@ -2,13 +2,8 @@
 function c511000990.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
+	c:Type(TYPE_MONSTER+TYPE_NORMAL+TYPE_FUSION)
 	aux.AddFusionProcMix(c,true,true,78010363,80604091)
-	local e2=Effect.CreateEffect(c)
-	e2:SetCode(EFFECT_ADD_TYPE)
-	e2:SetType(EFFECT_TYPE_SINGLE)
-	e2:SetProperty(EFFECT_FLAG_IGNORE_RANGE+EFFECT_FLAG_SET_AVAILABLE+EFFECT_FLAG_CANNOT_DISABLE)
-	e2:SetValue(TYPE_NORMAL)
-	c:RegisterEffect(e2)
 	if not c511000990.global_check then
 		c511000990.global_check=true
 		local ge2=Effect.CreateEffect(c)
