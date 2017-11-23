@@ -44,7 +44,12 @@ function c511002973.initial_effect(c)
 end
 function c511002973.resetop(e,tp,eg,ep,ev,re,r,rp)
 	if not eg then return end
-	local sg=eg:Filter(aux.OR(Card.IsHasEffect,Card.IsFacedown),nil,511002974)
+	local sg
+	if e:GetCode()==EVENT_CHANGE_POS then
+		sg=eg:Filter(aux.AND(Card.IsHasEffect,Card.IsFacedown),nil,511002974)
+	else
+		sg=eg:Filter(Card.IsHasEffect,nil,511002974)
+	end
 	local tc=sg:GetFirst()
 	while tc do
 		local te=tc:GetCardEffect(511002974)
