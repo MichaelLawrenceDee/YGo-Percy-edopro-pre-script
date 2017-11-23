@@ -14,6 +14,12 @@ function c511002973.initial_effect(c)
 	e2:SetRange(LOCATION_SZONE)
 	e2:SetOperation(c511002973.desop)
 	c:RegisterEffect(e2)
+	local e3=Effect.CreateEffect(c)
+	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
+	e3:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_CANNOT_DISABLE)
+	e3:SetCode(EVENT_LEAVE_FIELD_P)
+	e3:SetOperation(c511002973.resetop2)
+	c:RegisterEffect(e3)
 	--activate
 	local e6=Effect.CreateEffect(c)
 	e6:SetType(EFFECT_TYPE_TRIGGER_O+EFFECT_TYPE_SINGLE)
@@ -57,6 +63,17 @@ function c511002973.resetop(e,tp,eg,ep,ev,re,r,rp)
 		te:Reset()
 		tc:Recreate(code,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,true)
 		tc=sg:GetNext()
+	end
+end
+function c511002973.resetop2(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetMatchingGroup(Card.IsHasEffect,tp,LOCATION_ONFIELD,0,nil,511002974)
+	local tc=g:GetFirst()
+	while tc do
+		local te=tc:GetCardEffect(511002974)
+		local code=te:GetLabel()
+		te:Reset()
+		tc:Recreate(code,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,true)
+		tc=g:GetNext()
 	end
 end
 function c511002973.condition(e,tp,eg,ep,ev,re,r,rp)
