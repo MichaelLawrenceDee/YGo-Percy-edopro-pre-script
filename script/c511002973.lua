@@ -8,32 +8,12 @@ function c511002973.initial_effect(c)
 	c:RegisterEffect(e1)
 	--adjust
 	local e2=Effect.CreateEffect(c)
+	e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e2:SetCode(EVENT_ADJUST)
 	e2:SetRange(LOCATION_SZONE)
 	e2:SetOperation(c511002973.desop)
 	c:RegisterEffect(e2)
-	--name
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_FIELD)
-	e3:SetCode(EFFECT_CHANGE_CODE)
-	e3:SetRange(LOCATION_SZONE)
-	e3:SetTargetRange(LOCATION_SZONE,0)
-	e3:SetTarget(c511002973.gbtg)
-	e3:SetValue(511002974)
-	--c:RegisterEffect(e3)
-	local e4=e3:Clone()
-	e4:SetCode(EFFECT_CHANGE_TYPE)
-	e4:SetValue(TYPE_SPELL+TYPE_CONTINUOUS)
-	c:RegisterEffect(e4)
-	--negate
-	local e5=Effect.CreateEffect(c)
-	e5:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e5:SetCode(EVENT_CHAINING)
-	e5:SetRange(LOCATION_SZONE)
-	e5:SetCondition(c511002973.discon)
-	e5:SetOperation(c511002973.disop)
-	c:RegisterEffect(e5)
 	--activate
 	local e6=Effect.CreateEffect(c)
 	e6:SetType(EFFECT_TYPE_TRIGGER_O+EFFECT_TYPE_SINGLE)
@@ -47,8 +27,32 @@ function c511002973.initial_effect(c)
 	e7:SetType(EFFECT_TYPE_SINGLE)
 	e7:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
 	e7:SetRange(LOCATION_SZONE)
-	e7:SetCode(511002974)
+	e7:SetCode(511002973)
 	c:RegisterEffect(e7)
+	if not c511002973.global_check then
+		c511002973.global_check=true
+		local ge1=Effect.CreateEffect(c)
+		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		ge1:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
+		ge1:SetCode(EVENT_LEAVE_FIELD_P)
+		ge1:SetOperation(c511002973.resetop)
+		Duel.RegisterEffect(ge1,0)
+		local ge2=ge1:Clone()
+		ge2:SetCode(EVENT_CHANGE_POS)
+		Duel.RegisterEffect(ge2,0)
+	end
+end
+function c511002973.resetop(e,tp,eg,ep,ev,re,r,rp)
+	if not eg then return end
+	local sg=eg:Filter(aux.OR(Card.IsHasEffect,Card.IsFacedown),nil,511002974)
+	local tc=sg:GetFirst()
+	while tc do
+		local te=tc:GetCardEffect(511002974)
+		local code=te:GetLabel()
+		te:Reset()
+		tc:Recreate(code,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,true)
+		tc=sg:GetNext()
+	end
 end
 function c511002973.condition(e,tp,eg,ep,ev,re,r,rp)
 	local a=Duel.GetAttacker()
@@ -59,66 +63,45 @@ function c511002973.desfilter(c)
 	return not c:IsSetCard(0x19) or c:IsFacedown()
 end
 function c511002973.filter(c,tid)
-	if not c:IsCode(511002974) or c:GetFlagEffect(511002973)>0 then return false end
-	return not c:IsHasEffect(511002974) or c:GetFieldID()>tid
+	if c:IsHasEffect(511002974) or (c:IsHasEffect(511002973) and c:GetFieldID()<=tid) then return false end
+	return c:IsFaceup() and c:IsSetCard(0x19) and c:GetSequence()<5
 end
 function c511002973.ovfilter(c)
 	return c:IsSetCard(0x19) and c:IsType(TYPE_MONSTER)
 end
 function c511002973.desop(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(c511002973.desfilter,tp,LOCATION_ONFIELD,0,nil)
-	Duel.Destroy(g,REASON_EFFECT)
-	local sg=Duel.GetMatchingGroup(c511002973.filter,tp,LOCATION_SZONE,0,e:GetHandler(),e:GetHandler():GetFieldID())
-	local tc=sg:GetFirst()
-	while tc do
-		local cid=tc:ReplaceEffect(511002974,RESET_EVENT+0x1fe0000)
-		--reset
-		local e1=Effect.CreateEffect(e:GetHandler())
-		e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-		e1:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_CANNOT_DISABLE)
-		e1:SetCode(EVENT_ADJUST)
-		e1:SetRange(LOCATION_SZONE)
-		e1:SetLabel(cid)
-		e1:SetOperation(c511002973.resetop)
-		e1:SetReset(RESET_EVENT+0x1fe0000)
-		tc:RegisterEffect(e1)
-		local og=Duel.SelectMatchingCard(tp,c511002973.ovfilter,tp,LOCATION_DECK,0,1,1,nil)
-		if og:GetCount()>0 then
-			Duel.Overlay(tc,og)
-		end
-		tc:RegisterFlagEffect(511002973,RESET_EVENT+0x1fe0000,0,0)
-		tc=sg:GetNext()
-	end
-end
-function c511002973.gbtg(e,c)
-	if not c:IsSetCard(0x19) or c==e:GetHandler() or c:GetSequence()>=5 then return false end
-	return not c:IsHasEffect(511002974) or c:GetFieldID()>e:GetHandler():GetFieldID()
-end
-function c511002973.cfilter(c)
-	return c:IsFaceup() and c:IsCode(511002973) and not c:IsDisabled()
-end
-function c511002973.resetop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if not Duel.IsExistingMatchingCard(c511002973.cfilter,tp,LOCATION_SZONE,0,1,nil) then
-		c:ResetEffect(e:GetLabel(),RESET_COPY)
-		c:ResetFlagEffect(511002973)
-		e:Reset()
-		if bit.band(c:GetType(),TYPE_CONTINUOUS+TYPE_FIELD)==0 then
-			Duel.SendtoGrave(c,REASON_RULE)
-		elseif not c:IsCode(511002974) then
-			local og=c:GetOverlayGroup()
+	if not c:IsDisabled() then
+		local g=Duel.GetMatchingGroup(c511002973.desfilter,tp,LOCATION_ONFIELD,0,nil)
+		Duel.Destroy(g,REASON_EFFECT)
+		local sg=Duel.GetMatchingGroup(c511002973.filter,tp,LOCATION_SZONE,0,c,c:GetFieldID())
+		local tc=sg:GetFirst()
+		while tc do
+			local code=tc:GetOriginalCode()
+			tc:Recreate(511002974,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,true)
+			local og=Duel.SelectMatchingCard(tp,c511002973.ovfilter,tp,LOCATION_DECK,0,1,1,nil)
 			if og:GetCount()>0 then
-				Duel.SendtoGrave(og,REASON_RULE)
+				Duel.Overlay(tc,og)
 			end
+			local e1=Effect.CreateEffect(c)
+			e1:SetType(EFFECT_TYPE_SINGLE)
+			e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_SET_AVAILABLE+EFFECT_FLAG_IGNORE_IMMUNE)
+			e1:SetCode(511002974)
+			e1:SetLabel(code)
+			tc:RegisterEffect(e1)
+			tc=sg:GetNext()
+		end
+	else
+		local g=Duel.GetMatchingGroup(Card.IsHasEffect,tp,LOCATION_ONFIELD,0,nil,511002974)
+		local tc=g:GetFirst()
+		while tc do
+			local te=tc:GetCardEffect(511002974)
+			local code=te:GetLabel()
+			te:Reset()
+			tc:Recreate(code,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,true)
+			tc=g:GetNext()
 		end
 	end
-end
-function c511002973.discon(e,tp,eg,ep,ev,re,r,rp)
-	return re:IsHasType(EFFECT_TYPE_ACTIVATE) and re:GetHandler():IsControler(tp) and re:GetHandler():IsCode(511002974)
-end
-function c511002973.disop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.NegateEffect(ev)
-	re:GetHandler():CancelToGrave()
 end
 function c511002973.acfilter(c,tp)
 	local te=c:GetActivateEffect()
@@ -144,7 +127,7 @@ function c511002973.acop(e,tp,eg,ep,ev,re,r,rp)
 			e:SetCategory(te:GetCategory())
 			e:SetProperty(te:GetProperty())
 			Duel.ClearTargetCard()
-			if bit.band(tpe,TYPE_FIELD)~=0 then
+			if tpe&TYPE_FIELD~=0 then
 				local fc=Duel.GetFieldCard(1-tp,LOCATION_SZONE,5)
 				if Duel.IsDuelType(DUEL_OBSOLETE_RULING) then
 					if fc then Duel.Destroy(fc,REASON_RULE) end
@@ -158,7 +141,7 @@ function c511002973.acop(e,tp,eg,ep,ev,re,r,rp)
 			Duel.MoveToField(tc,tp,tp,LOCATION_SZONE,POS_FACEUP,true)
 			Duel.Hint(HINT_CARD,0,tc:GetCode())
 			tc:CreateEffectRelation(te)
-			if bit.band(tpe,TYPE_EQUIP+TYPE_CONTINUOUS+TYPE_FIELD)==0 then
+			if tpe&(TYPE_EQUIP+TYPE_CONTINUOUS+TYPE_FIELD)==0 then
 				tc:CancelToGrave(false)
 			end
 			if co then co(te,tp,eg,ep,ev,re,r,rp,1) end
